@@ -153,7 +153,7 @@ export function ZoneInspector({
                 </NativeSelect>
               </ConfigField>
               <ConfigField configKey="zone.player" label="Player">
-                <SteppedValueSlider min={1} max={8} disabled={zone.role !== "Spawn"} value={zone.player} onChange={(event) => {
+                <SteppedValueSlider min={1} max={8} disabled={zone.role !== "Spawn"} value={zone.player ?? 1} onChange={(event) => {
                   onUpdate((draft) => { draft.player = Number(event.currentTarget.value); });
                 }} />
               </ConfigField>

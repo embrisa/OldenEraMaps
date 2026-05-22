@@ -1183,6 +1183,33 @@ describe("React UI shell", () => {
     expect(within(inspector as HTMLElement).getByText(/4 cities/)).toBeTruthy();
   });
 
+  it("assigns a player and updates player count when changing a neutral zone into a spawn", async () => {
+    const user = userEvent.setup();
+    const boardLayout = mockDesignBoardLayout();
+    render(<AppShell />);
+
+    const board = screen.getByLabelText("Schematic design board");
+    fireEvent.pointerDown(board, {
+      clientX: Math.round(BOARD_TEST_WIDTH * 0.5),
+      clientY: Math.round(BOARD_TEST_HEIGHT * 0.5),
+      pointerId: 1
+    });
+
+    const inspector = screen.getByRole("heading", { name: "Zone Inspector" }).closest("section") as HTMLElement;
+    expect(getInputForLabel(inspector, "Name").value).toBe("Neutral-3");
+
+    await chooseSelectOptionInContainer(user, inspector, "Role", "Spawn");
+
+    expect(getInputForLabel(inspector, "Name").value).toBe("Spawn-3");
+    expect(getSliderValueInputForLabel(inspector, "Player").value).toBe("3");
+    expect(getInputForLabel(document.body, "Players").value).toBe("3");
+    expect(screen.queryByText(/Spawn player numbers must be integers/)).toBeNull();
+    expect(screen.queryByText(/Player count is 2/)).toBeNull();
+    expect((screen.getByLabelText("RMG JSON editor") as HTMLTextAreaElement).value).toContain('"spawn": "Player3"');
+
+    boardLayout.restore();
+  });
+
   it("defaults to locking map width and height together", () => {
     render(<AppShell />);
 

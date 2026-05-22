@@ -10,6 +10,7 @@ import {
   designToTemplate,
   duplicateZone,
   getDesignMandatoryContentGroups,
+  MAX_SPAWN_ZONES,
   parseDesignOrTemplateFile,
   parseDesignOrTemplateFileResult,
   serializeDesignFile,
@@ -548,7 +549,10 @@ export function AppShell(): JSX.Element {
     const next = structuredClone(design);
     const zone = next.zones.find((candidate) => candidate.id === selectedZoneId);
     if (!zone) return;
+    const previousRole = zone.role;
+    const previousName = zone.name;
     mutator(zone);
+    reconcileRoleChange(next, zone, previousRole, previousName);
     commit(next, zone.id);
   }
 
@@ -1426,6 +1430,63 @@ function resolveSelectedZoneId(previous: TemplateDesign, next: TemplateDesign, s
   }
 
   return next.zones[0]?.id ?? "";
+}
+
+function reconcileRoleChange(
+  design: TemplateDesign,
+  zone: DesignZone,
+  previousRole: DesignZoneRole,
+  previousName: string
+): void {
+  if (zone.role === previousRole) return;
+
+  if (zone.role === "Spawn") {
+    const usedPlayers = new Set(design.zones
+      .filter((candidate) => candidate.id !== zone.id && candidate.role === "Spawn")
+      .map((candidate) => candidate.player)
+      .filter((player): player is number => typeof player === "number" && Number.isInteger(player) && player >= 1 && player <= MAX_SPAWN_ZONES));
+    const playerIsAvailable = Number.isInteger(zone.player)
+      && zone.player! >= 1
+      && zone.player! <= MAX_SPAWN_ZONES
+      && !usedPlayers.has(zone.player!);
+    if (!playerIsAvailable) {
+      zone.player = firstAvailableSpawnPlayer(usedPlayers) ?? zone.player;
+    }
+
+    if (shouldRenameRoleChangedZone(previousRole, previousName, zone.name) && Number.isInteger(zone.player)) {
+      zone.name = uniqueZoneName(design, zone.id, `Spawn-${zone.player}`);
+    }
+  } else {
+    zone.player = undefined;
+  }
+
+  const spawnCount = design.zones.filter((candidate) => candidate.role === "Spawn").length;
+  if (spawnCount >= 2 && spawnCount <= MAX_SPAWN_ZONES) {
+    design.playerCount = spawnCount;
+  }
+}
+
+function firstAvailableSpawnPlayer(usedPlayers: Set<number>): number | undefined {
+  for (let player = 1; player <= MAX_SPAWN_ZONES; player++) {
+    if (!usedPlayers.has(player)) return player;
+  }
+  return undefined;
+}
+
+function shouldRenameRoleChangedZone(previousRole: DesignZoneRole, previousName: string, currentName: string): boolean {
+  const trimmed = currentName.trim();
+  if (!trimmed) return true;
+  if (previousRole === "Hub" && trimmed === "Hub") return true;
+  return trimmed === previousName && trimmed.startsWith(`${previousRole}-`);
+}
+
+function uniqueZoneName(design: TemplateDesign, zoneId: string, baseName: string): string {
+  const used = new Set(design.zones.filter((zone) => zone.id !== zoneId).map((zone) => zone.name));
+  if (!used.has(baseName)) return baseName;
+  for (let suffix = 2; ; suffix++) {
+    const candidate = `${baseName}-${suffix}`;
+    if (!used.has(candidate)) return candidate;
+  }
 }
 
 function resolveSelectedConnectionId(next: TemplateDesign, selectedConnectionId: string): string {
