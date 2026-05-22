@@ -19,6 +19,7 @@ export function MyMapsPage({
   onRestore,
   onDelete,
   onDownload,
+  onDownloadImage,
   onOpenInBuilder
 }: {
   status: MyMapsStatus;
@@ -30,6 +31,7 @@ export function MyMapsPage({
   onRestore(mapId: string): void;
   onDelete(map: ManagedMapCard): void;
   onDownload(map: ManagedMapCard): void;
+  onDownloadImage(map: ManagedMapCard): void;
   onOpenInBuilder(map: ManagedMapCard): void;
 }): JSX.Element {
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -157,6 +159,7 @@ export function MyMapsPage({
                   <div className="dialog-actions my-map-actions">
                     <Button size="sm" variant="blue" onClick={() => onOpenInBuilder(map)}><Upload size={14} />Open in builder</Button>
                     <Button size="sm" variant="primary" onClick={() => onDownload(map)}><Download size={14} />Download template</Button>
+                    <Button size="sm" variant="ghost" onClick={() => onDownloadImage(map)}><Download size={14} />Download image</Button>
                     <Button size="sm" variant="ghost" onClick={() => startEditing(map)}><Edit3 size={14} />Edit listing</Button>
                     {map.status === "hidden" ? (
                       <Button size="sm" variant="green" onClick={() => onRestore(map.id)}><Eye size={14} />Restore</Button>

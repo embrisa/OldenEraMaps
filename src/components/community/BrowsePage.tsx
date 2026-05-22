@@ -56,6 +56,7 @@ export function BrowsePage({
   canRate,
   viewerUserId,
   onDownload,
+  onDownloadImage,
   onOpenInBuilder,
   onViewDetail,
   onQueryChange,
@@ -80,6 +81,7 @@ export function BrowsePage({
   canRate: boolean;
   viewerUserId: string | null;
   onDownload(map: BrowseMapCard): void;
+  onDownloadImage(map: BrowseMapCard): void;
   onOpenInBuilder(map: BrowseMapCard): void;
   onViewDetail(map: BrowseMapCard): void;
   onQueryChange(query: string): void;
@@ -346,6 +348,7 @@ export function BrowsePage({
                     <div className="dialog-actions community-map-card__actions">
                       <Button variant="blue" onClick={() => onOpenInBuilder(map)}><Upload size={14} />Open in builder</Button>
                       <Button variant="primary" onClick={() => onDownload(map)}><Download size={14} />Download template</Button>
+                      <Button variant="ghost" onClick={() => onDownloadImage(map)}><Download size={14} />Download image</Button>
                     </div>
                   </CardContent>
                 </Card>

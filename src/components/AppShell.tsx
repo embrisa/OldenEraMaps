@@ -638,7 +638,7 @@ export function AppShell(): JSX.Element {
       setCommunityError(undefined);
       const detail = await getMap(map.id);
       if (!detail) return;
-      await downloadCommunityMapFiles(detail);
+      await downloadCommunityTemplateFile(detail);
       setCommunityCatalog((current) => recordCommunityDownload(current, map.id));
       try {
         await recordDownloadApi(map.id);
@@ -646,6 +646,13 @@ export function AppShell(): JSX.Element {
         const message = error instanceof Error ? error.message : "Failed to record download.";
         setCommunityError(message);
       }
+    })();
+  }
+
+  function handleDownloadBrowseMapImage(map: BrowseMapCard): void {
+    void (async () => {
+      setCommunityError(undefined);
+      await downloadCommunityPreviewImage(map);
     })();
   }
 
@@ -782,19 +789,33 @@ export function AppShell(): JSX.Element {
     void (async () => {
       const detail = await getMap(map.id);
       if (!detail) return;
-      await downloadCommunityMapFiles(detail);
+      await downloadCommunityTemplateFile(detail);
+    })();
+  }
+
+  function handleDownloadOwnedMapImage(map: ManagedMapCard): void {
+    void (async () => {
+      setCommunityError(undefined);
+      await downloadCommunityPreviewImage(map);
     })();
   }
 
   function handleDownloadDetailMap(map: MapDetail): void {
     void (async () => {
       setCommunityError(undefined);
-      await downloadCommunityMapFiles(map);
+      await downloadCommunityTemplateFile(map);
       setCommunityCatalog((current) => recordCommunityDownload(current, map.id));
       void recordDownloadApi(map.id).catch((error: unknown) => {
         const message = error instanceof Error ? error.message : "Failed to record download.";
         setCommunityError(message);
       });
+    })();
+  }
+
+  function handleDownloadDetailMapImage(map: MapDetail): void {
+    void (async () => {
+      setCommunityError(undefined);
+      await downloadCommunityPreviewImage(map);
     })();
   }
 
@@ -869,11 +890,14 @@ export function AppShell(): JSX.Element {
     URL.revokeObjectURL(url);
   }
 
-  async function downloadCommunityMapFiles(map: Pick<MapDetail, "slug" | "templateJson" | "previewDesignJson">): Promise<void> {
+  async function downloadCommunityTemplateFile(map: Pick<MapDetail, "slug" | "templateJson">): Promise<void> {
     await download(`${map.slug}.rmg.json`, map.templateJson, "application/json");
+  }
+
+  async function downloadCommunityPreviewImage(map: Pick<MapDetail, "slug" | "previewDesignJson">): Promise<void> {
     try {
       const previewBlob = await renderCommunityMapPreviewImageBlob(map.previewDesignJson);
-      await downloadBlob(`${map.slug}.png`, previewBlob);
+      await downloadBlob(`${map.slug}.png`, previewBlob, { preferSavePicker: true });
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : "Failed to create preview image.";
       setCommunityError(message);
@@ -1105,6 +1129,7 @@ export function AppShell(): JSX.Element {
           canRate={authState.status === "signed-in"}
           viewerUserId={authState.profile?.userId ?? null}
           onDownload={handleDownloadBrowseMap}
+          onDownloadImage={handleDownloadBrowseMapImage}
           onOpenInBuilder={handleOpenBrowseMap}
           onViewDetail={(map) => void handleViewMapDetail(map)}
           onQueryChange={(q) => { setBrowseQuery(q); setBrowsePage(1); }}
@@ -1137,6 +1162,7 @@ export function AppShell(): JSX.Element {
             onRestore={handleRestoreOwnedMap}
             onDelete={handleDeleteOwnedMap}
             onDownload={handleDownloadOwnedMap}
+            onDownloadImage={handleDownloadOwnedMapImage}
             onOpenInBuilder={handleOpenOwnedMap}
           />
         ) : (
@@ -1262,6 +1288,7 @@ export function AppShell(): JSX.Element {
         isOwner={Boolean(detailMap?.ownerId && authState.profile?.userId === detailMap.ownerId)}
         onRate={handleRateMap}
         onDownload={handleDownloadDetailMap}
+        onDownloadImage={handleDownloadDetailMapImage}
         onOpenInBuilder={(map) => {
           setDetailOpen(false);
           handleOpenBrowseMap(map);

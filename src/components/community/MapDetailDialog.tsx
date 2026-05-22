@@ -18,6 +18,7 @@ export function MapDetailDialog({
   isOwner,
   onRate,
   onDownload,
+  onDownloadImage,
   onOpenInBuilder,
   onUpdateListing,
   onHide
@@ -30,6 +31,7 @@ export function MapDetailDialog({
   isOwner: boolean;
   onRate(mapId: string, value: number): void;
   onDownload(map: MapDetail): void;
+  onDownloadImage(map: MapDetail): void;
   onOpenInBuilder(map: MapDetail): void;
   onUpdateListing?(mapId: string, patch: MapListingPatch): void;
   onHide?(mapId: string): void;
@@ -177,6 +179,7 @@ export function MapDetailDialog({
           <div className="dialog-actions">
             <Button variant="blue" onClick={() => onOpenInBuilder(map)}><Upload size={14} />Open in builder</Button>
             <Button variant="primary" onClick={() => onDownload(map)}><Download size={14} />Download template</Button>
+            <Button variant="ghost" onClick={() => onDownloadImage(map)}><Download size={14} />Download image</Button>
           </div>
 
           {isOwner && !editing ? (

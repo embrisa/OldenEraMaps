@@ -1843,7 +1843,44 @@ describe("React UI shell", () => {
     });
   });
 
-  it("downloads a community template with its small preview image", async () => {
+  it("downloads a community template as rmg json", async () => {
+    const user = userEvent.setup();
+    const createObjectURL = vi.fn((_blob: Blob | MediaSource) => "blob:test-download");
+    const revokeObjectURL = vi.fn();
+    const clickedDownloads: string[] = [];
+    Object.defineProperty(URL, "createObjectURL", {
+      value: createObjectURL,
+      writable: true,
+      configurable: true,
+    });
+    Object.defineProperty(URL, "revokeObjectURL", {
+      value: revokeObjectURL,
+      writable: true,
+      configurable: true,
+    });
+    vi.spyOn(HTMLAnchorElement.prototype, "click").mockImplementation(function (this: HTMLAnchorElement) {
+      clickedDownloads.push(this.download);
+    });
+
+    render(<AppShell />);
+
+    await openHeaderMenu(user);
+    await user.click(screen.getByRole("button", { name: "Browse" }));
+    expect(await screen.findByRole("heading", { name: "Browse shared maps" })).toBeTruthy();
+    await screen.findByRole("heading", { name: "Temple Border Clash" });
+
+    await user.click(screen.getAllByRole("button", { name: "Download template" })[0]);
+
+    await waitFor(() => {
+      expect(clickedDownloads).toEqual(["temple-border-clash.rmg.json"]);
+    });
+    expect(createObjectURL).toHaveBeenCalledTimes(1);
+    expect(createObjectURL.mock.calls[0]?.[0]).toBeInstanceOf(Blob);
+    expect((createObjectURL.mock.calls[0]?.[0] as Blob).type).toBe("application/json");
+    expect(revokeObjectURL).toHaveBeenCalledTimes(1);
+  });
+
+  it("downloads a community preview image from a separate button", async () => {
     const user = userEvent.setup();
     const createObjectURL = vi.fn((_blob: Blob | MediaSource) => "blob:test-download");
     const revokeObjectURL = vi.fn();
@@ -1878,19 +1915,16 @@ describe("React UI shell", () => {
     expect(await screen.findByRole("heading", { name: "Browse shared maps" })).toBeTruthy();
     await screen.findByRole("heading", { name: "Temple Border Clash" });
 
-    await user.click(screen.getAllByRole("button", { name: "Download template" })[0]);
+    await user.click(screen.getAllByRole("button", { name: "Download image" })[0]);
 
     await waitFor(() => {
-      expect(clickedDownloads).toHaveLength(2);
+      expect(clickedDownloads).toEqual(["temple-border-clash.png"]);
     });
-    const templateDownload = clickedDownloads.find((name) => name.endsWith(".rmg.json"));
-    expect(templateDownload).toBeTruthy();
-    expect(clickedDownloads).toContain(`${templateDownload?.replace(".rmg.json", "")}.png`);
     expect(previewCanvases).toContainEqual(COMMUNITY_TEMPLATE_PREVIEW_IMAGE_SIZE);
-    expect(createObjectURL).toHaveBeenCalledTimes(2);
-    expect(createObjectURL.mock.calls[1]?.[0]).toBeInstanceOf(Blob);
-    expect((createObjectURL.mock.calls[1]?.[0] as Blob).type).toBe("image/png");
-    expect(revokeObjectURL).toHaveBeenCalledTimes(2);
+    expect(createObjectURL).toHaveBeenCalledTimes(1);
+    expect(createObjectURL.mock.calls[0]?.[0]).toBeInstanceOf(Blob);
+    expect((createObjectURL.mock.calls[0]?.[0] as Blob).type).toBe("image/png");
+    expect(revokeObjectURL).toHaveBeenCalledTimes(1);
   });
 
   it("shows the builder-style preview legend in the community map detail view", async () => {
