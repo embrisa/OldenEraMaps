@@ -1,0 +1,240 @@
+=== sources/olden-era.com/text/en/laws.txt ===
+Laws
+
+1
+
+Resource Riches IProvides a one‑time allotment of 2500 Gold, 5 Wood, and 5 Ore when enacted.
+
+2
+
+Inevitable DestructionWhen destroying artifacts, you gain +10% Alchemical Dust.
+
+1
+
+Depths of MindYour Schism heroes restore +10% mana each morning.
+
+2
+
+Tax CollectorsProduces 250 Gold daily.
+
+2
+
+Mining: MercuryProduces 1 Mercury daily.
+
+4
+
+Generational WisdomYour heroes gain +10% XP.
+
+2
+
+Ice PowerYour heroes gain +1 Spell Power.
+
+2
+
+Resource Riches IIProvides a one‑time allotment of 5000 Gold, 10 Wood, and 10 Ore when enacted.
+
+3
+
+Otherworldly MagicArcane spells of your heroes gain 1 level.
+
+2
+
+Call of the DeepYour Schism heroes’ spells and friendly creatures’ abilities summon +10% units.
+
+3
+
+Survival ConditionsYour cities produce +1 Wood and Ore.
+
+2
+
+Planar ExplorersProduces 250 Astrology points daily.
+
+3
+
+Absolute ZeroThe cooldowns of all the battle spells of enemy heroes are increased by 1 round(s).
+
+6
+
+Cold ShoulderYou can use Involuntary Summons in your Schism cities twice per week.
+
+3
+
+Resource Riches IIIProvides a one‑time allotment of 7500 Gold, 15 Wood, and 15 Ore when enacted.
+
+4
+
+Mind FreezeEach round of battle, the enemy loses 1 Focus Charge(s).
+
+5
+
+The Abyss Stares BackYour Schism heroes start each day with maximum Communion level.
+
+3
+
+The World is OursFriendly creatures treat all Terrains as Native.
+
+1
+
+0
+
+2
+
+5
+
+3
+
+15
+
+4
+
+30
+
+5
+
+50
+
+3
+
+Elite Ra’ShothRa’Shoth growth in your cities increases by 4. They gain 1 Initiative.
+
+2
+
+Unfrozen Strength ITier‑1 friendly creatures gain 10% of their hero’s Attack and Spell Power as Attack, 10% of their Defense and Knowledge as Defense.
+
+3
+
+Frozen HomelandFriendly creatures gain 1 Attack and Defense when they battle on their Native Terrain.
+
+3
+
+Elite CultistsCultist growth in your cities increases by 4. They deal +1 Damage.
+
+3
+
+Elite Aga’Shoth RidersAga’Shoth Rider growth in your cities increases by 2. They gain 5 HP.
+
+2
+
+Unfrozen Strength IITier‑2 friendly creatures gain 10% of their hero’s Attack and Spell Power as Attack, 10% of their Defense and Knowledge as Defense.
+
+2
+
+Unfrozen Strength IIITier‑3 friendly creatures gain 10% of their hero’s Attack and Spell Power as Attack, 10% of their Defense and Knowledge as Defense.
+
+3
+
+Elite Grand ShothGrand Shoth growth in your cities increases by 2. They gain 1 Speed.
+
+2
+
+Unfrozen Strength IVTier‑4 friendly creatures gain 10% of their hero’s Attack and Spell Power as Attack, 10% of their Defense and Knowledge as Defense.
+
+3
+
+Cold TouchAll effects applied by your heroes and friendly creatures last 1 additional round(s).
+
+3
+
+Elite ConcubiConcubus growth in your cities increases by 1. They gain 4 Attack and Defense.
+
+3
+
+Elite ArbitratorsArbitrator growth in your cities increases by 1. They deal +4 Damage.
+
+2
+
+Unfrozen Strength VTier‑5 friendly creatures gain 10% of their hero’s Attack and Spell Power as Attack, 10% of their Defense and Knowledge as Defense.
+
+2
+
+Unfrozen Strength VITier‑6 friendly creatures gain 10% of their hero’s Attack and Spell Power as Attack, 10% of their Defense and Knowledge as Defense.
+
+3
+
+Elite Abyssal EnvoysAbyssal Envoy growth in your cities increases by 1. They gain 3 Speed and Initiative.
+
+2
+
+Unfrozen strength VIITier‑7 friendly creatures gain 10% of their hero’s Attack and Spell Power as Attack, 10% of their Defense and Knowledge as Defense.
+
+4
+
+Ice StormsAll enemy creatures lose 1 Speed and Initiative.
+
+Faction Laws are a completely new mechanic for the Heroes of Might and Magic series. They introduce a separate resource — Law Points, which are spent on powerful passive upgrades to economy, heroes, or army.All laws are divided into two types:
+
+Factional — global improvements affecting the entire faction
+
+Army — combat bonuses directly affecting the army in battles
+
+Law Tiers and Unlock Costs
+
+There are 5 law tiers in the game. The higher the tier, the stronger the effect, but the more expensive it is to unlock.
+
+Initially, only the 1st tier is available. To unlock the next tier, spend a certain amount of Law Points on any already available laws. Exact cost scheme:
+
+2nd tier — 5 Law Points
+
+3rd tier — 15 Law Points
+
+Tier 4 — 30 points
+
+Tier 5 — 50 points
+
+In total, unlocking all tiers requires 100 points — this is the maximum you can realistically gather in one game.
+
+Where Law Points come from
+
+Main sources in the game:
+
+Palace building in cities
+
+Palace I — +1000 points per day (built by default in every city)
+
+Palace II — +2000 per day
+
+Palace III — +3000 per day
+
+Victory in battles Gives approximately as many Law Points as base experience from the fight (without any experience bonuses). Example: 270 base EXP → ~270 Law Points.
+
+Capturing map objects
+
+ []/ []— +600 points
+
+Other mines — +400 points
+
+External creature dwellings — depends on unit tier:
+
+Tier 1 → 400
+
+Tier 2 → 600
+
+Tier 3 → 800
+
+Tier 4 → 1000
+
+Tier 5 → 1200
+
+Tier 6 → 1400
+
+Tier 7 → 1600
+
+ []— +5000 points
+
+Important: you can gather a maximum of 100 Law Points for the entire game. This is not enough to unlock and upgrade all faction laws — you have to make tough priority choices.
+
+How to Get Law Points Faster
+
+Ways to significantly speed up accumulation:
+
+Faction law boosters:2Leaders of the NationYour heroes generate +10% Law points.— increases the amount of points gained from capturing mines and winning battles (applies to all heroes of the faction) Necropolis —2Laws of the ImmortalsYour cities generate +20% Law points.towns generate more points daily
+
+Skill [Advanced Insight]→ sub-skillCivic Innovation:Civic InnovationThe hero gains +100% Law points. This bonus is doubled if the hero knows “Leadership.”When synergized with [Basic Leadership], the hero gains +200% Law Points from all battle victories and object captures.
+
+ [Home]
+
+Laws
+
+Support Site Development
+
+Select Faction

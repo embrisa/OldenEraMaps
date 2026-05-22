@@ -1,0 +1,25 @@
+node_modules/
+dist/
+
+.DS_Store
+.env
+.env.*
+!.env.example
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+coverage/
+.vite/
+.vite-temp/
+.playwright-mcp/
+.vercel
+supabase/.branches/
+supabase/.temp/
+
+# Local generated exports and visual QA artifacts. Keep curated fixtures under
+# tests/fixtures tracked.
+/*.rmg.json
+/*.png

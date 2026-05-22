@@ -1,0 +1,347 @@
+=== sources/olden-era.com/text/en/factions.txt ===
+Factions in Heroes of Might and Magic: Olden Era
+
+At the moment, it is known that Heroes of Might and Magic: Olden Era will feature six factions during the Closed Beta Test. However, the final version of the game and the complete set of unique mechanics for each faction are still subject to change.
+
+Choose one of the factions for a brief overview.
+
+ []
+
+ []
+
+ []
+
+ []
+
+ []
+
+ []
+
+ []
+
+ [Home]
+
+Factions
+
+=== sources/olden-era.com/text/en/factions/dungeon.txt ===
+Dungeon — a Magic-Oriented Faction
+
+is the first confirmed faction, distinguished by its strong focus on magic. From the start, it has access to a Level 5 Mage Guild, making this faction one of the most powerful magically right from the beginning. The Dungeon roster includes the hero [Zakron the Great:]— previously known as Luna from Heroes of Might and Magic III. Now he belongs to the Dungeon faction and retains his magical orientation. The faction's key unit is the [Cave Dragon](tier 7), which has full immunity to level 5 magic. Thanks to this, Dungeon gains a unique gameplay centered around the use of the [Armageddon]spell, once again emphasizing the faction's magical specialization.
+
+Faction ability: [Basic Triumvirate’s Strength]
+
+The faction ability of Dungeon heroes is Triumvirate's Strength. During battle, it allows selecting a bonus to one of three characteristics for one round:
+attackdefencespell power
+The bonus size depends on the ability level and is +2 / +4 / +6.
+
+Unique Mechanics of Dungeon Units
+
+A distinctive feature of the Dungeon faction is that all its units possess an additional ability, “Combat Stance”, which provides an alternative style of combat.
+
+Damage is reduced by 50%.
+
+After upgrading the faction laws — only by 25%.
+
+The game also features the artifact [Нотный лист], which increases ability damage by 50%, and after upgrading with dust — up to 75%. This artifact is especially effective for Dungeon, as the fully assembled Inner Song set allows the hero not to end their turn after using an ability and attack again.
+
+Types of Unit Abilities — Dungeon
+Dungeon unit abilities can be conventionally divided into two types:
+
+Mobile and Tactical Abilities
+
+Allow attacking without retaliation or hinder access to the creature( [Troglodyte], [Infiltrator])
+
+Area Damage Abilities
+
+Severely punish the opponent for poor troop positioning
+
+Unit Descriptions and Their Abilities
+
+ [Troglodyte]Fighting Style: Viscous SpitFighting Style: Viscous SpitPerforms a Long Reach attack, which deals –50% Damage.
+
+Allows attacking both in melee and at range through one hex without retaliation.
+
+ [Infiltrator]Fighting Style: Hit and RunFighting Style: Hit and RunThis creature will return to its original position after attacking, but deal –50% Damage.
+
+Works on the principle of the Harpy from HoMM III: teleports, strikes, and returns to the original hex.
+
+ [Onyx Dancer]Fighting Style: Bouncing GlaivesFighting Style: Bouncing GlaivesChoose two targets for this attack, dealing –50% Damage to each.
+
+Attacks two creatures at once per round, dealing up to 150% damage (with upgraded law).
+
+ [Minotaur]Fighting Style: Grand SlamFighting Style: Grand SlamHits the target and all creatures within two hexes behind it, dealing –50% Damage to each.
+
+Attacks the current target and up to two creatures behind it, dealing up to 225% damage.
+
+ [Medusa]Fighting Style: Arrow BarrageFighting Style: Arrow BarrageHits the target and all enemies adjacent to it, dealing –50% Damage.
+
+Ranged attack on the target and all creatures within one hex radius. Damage — up to 525%.
+
+ [Hydra]—Fighting Style: Whirlwind StrikeFighting Style: Whirlwind StrikeHits all adjacent enemies, dealing –50% Damage to each.
+
+Attacks all hexes around itself, dealing up to 450% damage.
+
+ [Cave Dragon]Fighting Style: Sulfurous AssaultFighting Style: Sulfurous AssaultPerforms a Cone Strike, dealing –50% Damage to each target.
+
+Атака конусом, поражающая до 8 юнитов одновременно с уроном до 600%.Cone attack hitting up to 8 units simultaneously with up to 600% damage.
+
+ [Home]
+
+ [Factions]
+
+Dungeon — a Magic-Oriented Faction
+
+=== sources/olden-era.com/text/en/factions/hive.txt ===
+In development
+
+There is no official information yet.
+
+ [Home]
+
+ [Factions]
+
+In development
+
+=== sources/olden-era.com/text/en/factions/necropolis.txt ===
+Necropolis — an army-focused faction
+
+is an army-oriented castle fully centered around the faction skill Necromancy. Thanks to the undead converter and snowball mechanics (building up critical mass of troops), Necropolis plays on the principle of “quantity dominates quality”. All faction troops have relatively low damage and stat values compared to other factions, but they make up for it with massive weekly growth. Example: [Skeleton]— 30 growth per week, while [Faun]— only 12. The growth difference fully compensates for the lower unit quality.
+
+Main Gameplay
+
+To play Necropolis successfully, focus on [Basic Diplomacy]and buy up economically advantageous neutral creatures. The undead converter transforms them 1:1, regardless of quality. That’s why [Vampire](T7) has twice the weekly growth compared to other top-tier units — to prevent it from being too advantageous to immediately send everything into the converter.
+
+Faction Ability: [Basic Necromancy]
+
+After winning a battle, the strongest creature in the enemy stack turns into undead of the same tier, in the amount of 10–20% of the maximum stack size.
+
+There is a limit in the form of Necromancy points — their cap can be increased weekly via faction laws or subskills. Also (per recent videos), you can disable Necromancy before battle — and after victory, some Necromancy points will be restored.
+
+Powerful Artifacts and Sets for the Faction
+
+The strongest set in the game for Necropolis — Ambassador’s Word, consisting of just two items: ( [Ambassador’s Sash]+ [Diplomatic Gifts]).
+
+It allows you to recruit any troops to your army for free and immediately send them to the undead converter. Once this set is assembled — the opponent is put on a timer: if they don't win the game in 3–4 days, they most likely won't be able to anymore.
+
+Strong Heroes
+
+One of the strongest heroes in the game — [Marl:]. Thanks to the starting specialization in the [Web]spell, he has a powerful overall slowdown of the entire enemy army by -3 with one spell right from the start. This greatly reduces the difficulty of many battles and turns clearing difficult objects into a walk in the park.
+
+ [Home]
+
+ [Factions]
+
+Necropolis — an army-focused faction
+
+=== sources/olden-era.com/text/en/factions/neutral.txt ===
+Neutral — a faction without a castle
+
+— In addition to the six main factions in the game, there is a neutral faction. It includes all units that do not belong to any of the main factions. It’s worth mentioning separately: neutral faction units directly affect gameplay, and you will quite often control some of them. Below is a list of key neutral units and ways to obtain them.
+
+Neutral Units: Ways to Obtain
+
+ [Sentinel of Glory]— one of the strongest units in the game, with high stats and powerful abilities.
+
+How to obtain: find the []object and defeat its guardian [Worldwatcher].
+
+ [Starchild]— an excellent unit with area ranged attack. Temporarily summon: via the [Summon Starchild]spell from the [Advanced Nightshade Magic]branch.
+
+ [Primal Remnant]— a melee fighter with interesting abilities. Temporarily summon: via the [Summon Primal Remnant]spell from the [Expert Primal Magic]branch.
+
+The [Basic Summon Avatar]ability allows summoning a special unit whose stats depend on the hero'sspell powerandintelligence.
+
+ []
+
+Another way to obtain neutral units — Chimerologist's Hut. Exchange any number of your troops for a random stack (including neutrals). At the time of the beta, T8 units like [Lich Dragon]were unavailable for rolling.
+
+Full list of all neutral units
+
+ [Red Dragon]
+
+ [Sentinel of Glory]
+
+ [Lich Dragon]
+
+ [Couatl]
+
+ [Groll]
+
+ [Peasant]
+
+ [Unicorn]
+
+ [Dragon Slayer]
+
+ [Primal Remnant]
+
+ [Kittenhorn]
+
+ [Animated Armour]
+
+ [Worldwatcher]
+
+ [Faerie Dragon]
+
+ [Pixie]
+
+ [Halfling]
+
+ [Giant Toad]
+
+ [Starchild]
+
+ [Ghoul]
+
+ [Home]
+
+ [Factions]
+
+Neutral — a faction without a castle
+
+=== sources/olden-era.com/text/en/factions/schism.txt ===
+Schism — a Magic-Oriented Faction
+
+— another magically oriented faction in Heroes of Might and Magic: Olden Era. Unlike Dungeon, their castle lacks a level 5 Mage Guild, but this is purely for balance purposes. The reason is simple: their tier-7 unit — [Abyssal Envoy]— inherently has full immunity to magic damage. Thanks to this, like Dungeon, the Schism faction can effectively play through [Armageddon].
+
+Magical Start and Faction Laws
+The faction laws of Schism actively encourage players toward a magic-focused playstyle from the early stages. At the second tier of faction laws, the following become available:
+
+Additional2Ice PowerYour heroes gain +1 Spell Power.Spell Power
+
+Or, more importantly,1Depths of MindYour Schism heroes restore +10% mana each morning.daily mana regeneration +20%
+
+This allows Schism heroes to use magic much more aggressively and makes stats likeintelligenceespecially valuable.
+
+Faction Ability: Abyssal Communion
+
+The faction ability [Basic Abyssal Communion]in the current version of the game provides a temporary increase to the Schism faction’s army size during battle: +5% to the base army, with an additional +5% for each victory. This ability cannot be considered weak — on the contrary, in the early stages it helps preserve the army, as Schism’s starting units are relatively vulnerable. However, the very concept of strictly binding heroes to a single faction and actively penalizing the use of non-native heroes makes the system less flexible and limits potential combinations. There is a possibility that this ability will be reworked by the game’s release.
+
+Unique unit mechanic of Schism — Demonology
+
+The key feature of the Schism faction is summoning a permanent army from fallen allies — a kind of evolution of the demonology mechanics from Heroes of Might and Magic III.
+Юниты:
+
+ [Ra'Shoth]Summoning Rite: Ra’ShothSummoning Rite: Ra’ShothOnce per battle, summons a stack of Ra’Shoth in place of a friendly corpse.
+The summon has 50% HP of the corpse’s original stack and no more than [ current amount of summoners ] units. These creatures are permanent and remain after the battle.
+
+ [Grand Shoth]Summoning Rite: Grand ShothSummoning Rite: Grand ShothOnce per battle, summons a stack of Grand Shoth in place of a friendly corpse.
+The summon has 50% HP of the corpse’s original stack and can’t have more than [ current amount of summoners ] units. These creatures are permanent and remain after the battle.
+
+ [Abyssal Envoy]Summoning Rite: EnvoySummoning Rite: EnvoyOnce per battle, summons a stack of Abyssal Envoys in place of a friendly corpse.
+The summon has 50% HP of the corpse’s original stack and can’t have more than [ current amount of summoners ] units. These creatures are permanent and remain after the battle.
+
+upon the death of a friendly stack, they can summon its copy with 50% of the deceased stack's maximum health — permanently.
+This allows:
+
+build up critical mass for one strike stack
+
+Effectively sacrifice less useful native units
+
+Even use units from other factions as “fodder”
+
+Additionally, the new global map object []allows:
+convert the entire army of different units into one random type, then use demonology to convert it into tier-1, 4, or 7 native creatures, which can later be upgraded in the castle.
+
+Additional Summon Enhancements
+
+subskillTheir Name is Legion:Their Name is LegionFriendly creatures’ abilities summon +30% creatures.(in the [Expert Summon Avatar]branch) — +50%
+
+artifact [Soulcaller Ring]— another +50%
+
+In total, this allows summoning a massive number of troops.
+
+Strong Heroes
+
+At the time of beta testing, the strongest hero of the Schism faction is [Sister Keiri:]. Her specialization allows dealing double damage from the [Umbral Grip]spell. Combined with high nativespell power, this enables killing enemy stacks practically without an army. It's also worth noting that this spell deals damage through resistances of units like [Worldwatcher]or [Abyssal Envoy], making it much easier to capture very difficult objects on days 2–3 of the game. With proper leveling and the right artifacts, the cost of this spell can be made nearly free and cast every time as a second spell using [Basic Thaumaturgy].
+
+ [Home]
+
+ [Factions]
+
+Schism — a Magic-Oriented Faction
+
+=== sources/olden-era.com/text/en/factions/sylvan.txt ===
+In development
+
+There is no official information yet.
+
+ [Home]
+
+ [Factions]
+
+In development
+
+=== sources/olden-era.com/text/en/factions/temple.txt ===
+Temple — an army-focused faction
+
+is a faction with a very strong emphasis on its army. They have an excellent balanced troop composition: every unit clearly fulfills its specific role. This allows you to play in the simplest and most aggressive way possible — recruit troops on day one and go win even tough battles without diving into complicated mechanics.
+
+Faction Skill: [Basic Righteousness]
+
+At the time of beta testing, the ability is considered too strong and will most likely be nerfed by release.
+
+ [Advanced Righteousness]
+
++20% Health to all troops
+
++30% Health
+
+ [Expert Righteousness]
+
+Single-unit stacks can hold a block for a very long time.
+
+ [Crossbowman]быстро накапливают огромный урон
+
+You can capture even the toughest objects with almost no losses (for example, [])
+
+There's even acapture strategyfor []: 6 single [Griffin]block all four guards for 3 rounds straight, while [Austringer]shoot down the guard.
+
+ [Crossbowman]quickly build up massive damage
+
+You can capture even the toughest objects with almost no losses (for example, [])
+
+There's even acapture strategyfor []: 6 single [Griffin]block all four guards for 3 rounds straight, while [Austringer]shoot down the guard.
+
+Unique Faction Mechanic
+
+Temple's greatest strength ishigh game tempo. Thanks to the powerful starting army and theexclusive law6Architect’s MasteryYou can construct +1 building(s) daily., you can build all three castles up to max creature tiers in just one week.
+
+Strong Heroes
+
+One of the faction's best heroes is [Pip:]. The castle is heavily focused on tempo and fast play, and Pip's specialization grants very early access to the subskillCivic Innovation:Civic InnovationThe hero gains +100% Law points. This bonus is doubled if the hero knows “Leadership.”from the starting skill [Advanced Insight]. This lets you get the6Architect’s MasteryYou can construct +1 building(s) daily.law (build two structures per day) as early as day 3–4.
+
+Additional perks [Pip:]:
+
+Starting spell [Early Start]is useful in early battles
+
+Specialization grants a large amount of stats already at early levels
+
+Primary stat —intelligence→ huge mana pool
+
+In combination with double construction and high level, you can useTown PortalorDimension Dooras early as day 4–5
+
+All together makes [Pip:]the ideal hero for Temple. Highly recommend trying it out.
+
+Strong Artifacts and Sets for the Faction
+
+Temple has no single set that "wins the game" on its own (morale sets work for almost all factions). But there's one artifact of justEpicrarity that you can realistically grab on day 2 with lucky map generation — that's [Shroomwood Bow].
+
+Why it's so good:
+
+The faction has a ton of very strong shooters
+
+With this bow, Temple play becomes noticeably easier and more carefree
+
+There's also a related setLiving Arrows( [Shroomwood Bow] [Light‑and‑Shade Cloak] [Чуткий колчан]), which is excellent for [Sun Herald]and [Angel].
+
+But, unfortunately, it'salmost useless for shooters:
+
+ [Marksman]do not receive the bonus from removing the penalty.
+
+ [Austringer]remain with two shots (it is unclear whether this is a bug or intended behavior, as the spell [Hksmilla’s Rampage]also does not affect them).
+
+ [Home]
+
+ [Factions]
+
+Temple — an army-focused faction

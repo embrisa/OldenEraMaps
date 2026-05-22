@@ -1,0 +1,814 @@
+=== sources/olden-era.com/text/en/objects-neutral.txt ===
+Neutral Objects
+
+ [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+]
+
+ [Home]
+
+Neutral Objects
+
+=== sources/olden-era.com/text/en/objects-neutral/alchemical_lab.txt ===
+Alchemical Laboratory
+
+Allows exchanging 1 Gem, 1 Crystal, and 1 Mercury for 15 Alchemical Dust.
+
+ [Home]
+
+ [Neutral Objects]
+
+Alchemical Laboratory
+
+=== sources/olden-era.com/text/en/objects-neutral/alchemical_storage.txt ===
+Alchemical Storage
+
+Once per week, gives 20–40 Alchemical Dust to the first visiting hero.
+
+ [Home]
+
+ [Neutral Objects]
+
+Alchemical Storage
+
+=== sources/olden-era.com/text/en/objects-neutral/arborcopia.txt ===
+Arborcopia
+
+Once per game, fully restores creature growth in all towns under player control.
+
+ [Home]
+
+ [Neutral Objects]
+
+Arborcopia
+
+=== sources/olden-era.com/text/en/objects-neutral/arcane_shrine.txt ===
+Arcane Shrine
+
+Allows the visiting hero to learn one random Arcane spell (choose 1 out of 3).
+
+ [Home]
+
+ [Neutral Objects]
+
+Arcane Shrine
+
+=== sources/olden-era.com/text/en/objects-neutral/beer_fountain.txt ===
+Beer Fountain
+
+Increases each visiting hero's Luck by +3 until the end of the week.
+
+ [Home]
+
+ [Neutral Objects]
+
+Beer Fountain
+
+=== sources/olden-era.com/text/en/objects-neutral/chimerologyst.txt ===
+Chimerologist
+
+Allows visiting heroes to exchange their creatures for random other creatures.
+
+ [Home]
+
+ [Neutral Objects]
+
+Chimerologist
+
+=== sources/olden-era.com/text/en/objects-neutral/crystal_storage.txt ===
+Crystal Storage
+
+Once per week, gives 3–5 Crystals to the first visiting hero.
+
+ [Home]
+
+ [Neutral Objects]
+
+Crystal Storage
+
+=== sources/olden-era.com/text/en/objects-neutral/crystal_vein.txt ===
+Crystal Vein
+
+Produces 1 Crystal daily.
+
+ [Home]
+
+ [Neutral Objects]
+
+Crystal Vein
+
+=== sources/olden-era.com/text/en/objects-neutral/daylight_shrine.txt ===
+Daylight Shrine
+
+Allows the visiting hero to learn one random Daylight spell (choose 1 out of 3).
+
+ [Home]
+
+ [Neutral Objects]
+
+Daylight Shrine
+
+=== sources/olden-era.com/text/en/objects-neutral/endless_scroll_of_bronze.txt ===
+Endless Scroll of Bronze
+
+Increases all Primal Magic by 1 level for all heroes while this object is under player control.
+
+ [Home]
+
+ [Neutral Objects]
+
+Endless Scroll of Bronze
+
+=== sources/olden-era.com/text/en/objects-neutral/endless_scroll_of_gold.txt ===
+Endless Scroll of Gold
+
+While under player control, increases the level of all Daylight spells for heroes in the Observatory.
+
+ [Home]
+
+ [Neutral Objects]
+
+Endless Scroll of Gold
+
+=== sources/olden-era.com/text/en/objects-neutral/endless_scroll_of_platinum.txt ===
+Endless Scroll of Platinum
+
+Increases all Arcane Magic by 1 level for all heroes while this object is under player control.
+
+ [Home]
+
+ [Neutral Objects]
+
+Endless Scroll of Platinum
+
+=== sources/olden-era.com/text/en/objects-neutral/endless_scroll_of_silver.txt ===
+Endless Scroll of Silver
+
+Increases all Nightshade Magic by 1 level for all heroes while this object is under player control.
+
+ [Home]
+
+ [Neutral Objects]
+
+Endless Scroll of Silver
+
+=== sources/olden-era.com/text/en/objects-neutral/forge_of_the_second_man.txt ===
+Forge of the Second Man
+
+Allows trading resources for artifacts.
+
+ [Home]
+
+ [Neutral Objects]
+
+Forge of the Second Man
+
+=== sources/olden-era.com/text/en/objects-neutral/fountain.txt ===
+Fountain
+
+Grants +40 movement points to the visiting hero this turn.
+
+ [Home]
+
+ [Neutral Objects]
+
+Fountain
+
+=== sources/olden-era.com/text/en/objects-neutral/four_scholars_observatory.txt ===
+Four Scholars Observatory
+
+For 1000 gold, permanently increases each visiting hero's Spell Power and Knowledge by 2.
+
+ [Home]
+
+ [Neutral Objects]
+
+Four Scholars Observatory
+
+=== sources/olden-era.com/text/en/objects-neutral/four_scholars_shrine.txt ===
+Four Scholars Shrine
+
+Resets all level-up skills and attributes, allowing the hero to be retrained. Usable only once per hero.
+
+ [Home]
+
+ [Neutral Objects]
+
+Four Scholars Shrine
+
+=== sources/olden-era.com/text/en/objects-neutral/gem_mound.txt ===
+Gem Mound
+
+Produces 1 Gem daily.
+
+ [Home]
+
+ [Neutral Objects]
+
+Gem Mound
+
+=== sources/olden-era.com/text/en/objects-neutral/gem_storage.txt ===
+Gem Storage
+
+Once per week, gives 3–5 Gems to the first visiting hero.
+
+ [Home]
+
+ [Neutral Objects]
+
+Gem Storage
+
+=== sources/olden-era.com/text/en/objects-neutral/gingerbread_house.txt ===
+Gingerbread House
+
+Once per week, allows the first visiting hero to choose and receive one valuable resource.
+
+ [Home]
+
+ [Neutral Objects]
+
+Gingerbread House
+
+=== sources/olden-era.com/text/en/objects-neutral/goblin_cache.txt ===
+Goblin Cache
+
+Once per game, grants a random small reward.
+
+ [Home]
+
+ [Neutral Objects]
+
+Goblin Cache
+
+=== sources/olden-era.com/text/en/objects-neutral/gold_mine.txt ===
+Gold Mine
+
+Produces 1000 Gold daily.
+
+ [Home]
+
+ [Neutral Objects]
+
+Gold Mine
+
+=== sources/olden-era.com/text/en/objects-neutral/gold_storage.txt ===
+Gold Storage
+
+Once per week, gives 2500–3500 Gold to the first visiting hero.
+
+ [Home]
+
+ [Neutral Objects]
+
+Gold Storage
+
+=== sources/olden-era.com/text/en/objects-neutral/hero_cage.txt ===
+Hero Cage
+
+Allows releasing a friendly captured hero.
+
+ [Home]
+
+ [Neutral Objects]
+
+Hero Cage
+
+=== sources/olden-era.com/text/en/objects-neutral/knowledge_garden.txt ===
+Knowledge Garden
+
+Permanently increases each visiting hero's Knowledge by 1.
+
+ [Home]
+
+ [Neutral Objects]
+
+Knowledge Garden
+
+=== sources/olden-era.com/text/en/objects-neutral/learing_stone.txt ===
+Learning Stone
+
+Grants +1000 experience to each visiting hero.
+
+ [Home]
+
+ [Neutral Objects]
+
+Learning Stone
+
+=== sources/olden-era.com/text/en/objects-neutral/living_maze.txt ===
+Living Maze
+
+Permanently increases each visiting hero's chosen primary attribute by 2.
+
+ [Home]
+
+ [Neutral Objects]
+
+Living Maze
+
+=== sources/olden-era.com/text/en/objects-neutral/lost_library.txt ===
+Lost Library
+
+Once per game, grants 6000–10000 experience to the visiting hero.
+
+ [Home]
+
+ [Neutral Objects]
+
+Lost Library
+
+=== sources/olden-era.com/text/en/objects-neutral/magic_wheel.txt ===
+Magic Wheel
+
+Permanently increases each visiting hero's Spell Power by 1.
+
+ [Home]
+
+ [Neutral Objects]
+
+Magic Wheel
+
+=== sources/olden-era.com/text/en/objects-neutral/marketplace.txt ===
+Marketplace
+
+Allows trading resources.
+
+ [Home]
+
+ [Neutral Objects]
+
+Marketplace
+
+=== sources/olden-era.com/text/en/objects-neutral/mercenary_guild.txt ===
+Mercenary Guild
+
+Allows the hero to recruit up to 3 random units. Refreshes every week.
+
+ [Home]
+
+ [Neutral Objects]
+
+Mercenary Guild
+
+=== sources/olden-era.com/text/en/objects-neutral/mercury_fissure.txt ===
+Mercury Fissure
+
+Produces 1 Mercury daily.
+
+ [Home]
+
+ [Neutral Objects]
+
+Mercury Fissure
+
+=== sources/olden-era.com/text/en/objects-neutral/mercury_storage.txt ===
+Mercury Storage
+
+Once per week, gives 3–5 Mercury to the first visiting hero.
+
+ [Home]
+
+ [Neutral Objects]
+
+Mercury Storage
+
+=== sources/olden-era.com/text/en/objects-neutral/mirage.txt ===
+Mirage
+
+Defeat your illusory better self to turn the mirage into the Grail. The Grail allows building a unique and wondrous structure in any town.
+
+ [Home]
+
+ [Neutral Objects]
+
+Mirage
+
+=== sources/olden-era.com/text/en/objects-neutral/mountain_monastery.txt ===
+Mountain Monastery
+
+For 5000 gold, permanently increases each visiting hero's Attack, Defense, Spell Power, and Knowledge by 1.
+
+ [Home]
+
+ [Neutral Objects]
+
+Mountain Monastery
+
+=== sources/olden-era.com/text/en/objects-neutral/nightshade_shrine.txt ===
+Nightshade Shrine
+
+Allows the visiting hero to learn one random Nightshade spell (choose 1 out of 3).
+
+ [Home]
+
+ [Neutral Objects]
+
+Nightshade Shrine
+
+=== sources/olden-era.com/text/en/objects-neutral/ore_mine.txt ===
+Ore Mine
+
+Produces 2 Ore daily.
+
+ [Home]
+
+ [Neutral Objects]
+
+Ore Mine
+
+=== sources/olden-era.com/text/en/objects-neutral/ore_storage.txt ===
+Ore Storage
+
+Once per week, gives 6–10 Ore to the first visiting hero.
+
+ [Home]
+
+ [Neutral Objects]
+
+Ore Storage
+
+=== sources/olden-era.com/text/en/objects-neutral/pandora.txt ===
+Pandora's Box
+
+Grants an unpredictable but powerful reward.
+
+ [Home]
+
+ [Neutral Objects]
+
+Pandora's Box
+
+=== sources/olden-era.com/text/en/objects-neutral/pauper_knight_order.txt ===
+Pauper Knight Order
+
+For 1000 gold, permanently increases each visiting hero's Attack or Defense by 2 (player's choice).
+
+ [Home]
+
+ [Neutral Objects]
+
+Pauper Knight Order
+
+=== sources/olden-era.com/text/en/objects-neutral/pile_of_books.txt ===
+Pile of Books
+
+Increases experience gained by each visiting hero by 25% until the end of the week.
+
+ [Home]
+
+ [Neutral Objects]
+
+Pile of Books
+
+=== sources/olden-era.com/text/en/objects-neutral/pit_of_the_glory.txt ===
+Pit of Glory
+
+Allows upgrading the visiting hero's creatures for gold.
+
+ [Home]
+
+ [Neutral Objects]
+
+Pit of Glory
+
+=== sources/olden-era.com/text/en/objects-neutral/primal_shrine.txt ===
+Primal Shrine
+
+Allows the visiting hero to learn one random Primal spell (choose 1 out of 3).
+
+ [Home]
+
+ [Neutral Objects]
+
+Primal Shrine
+
+=== sources/olden-era.com/text/en/objects-neutral/quixs_altar.txt ===
+Quix's Altar
+
+Increases each visiting hero's Morale by +3 until the end of the week.
+
+ [Home]
+
+ [Neutral Objects]
+
+Quix's Altar
+
+=== sources/olden-era.com/text/en/objects-neutral/remote_foothold.txt ===
+Remote Foothold
+
+Allows leaving creatures and artifacts here to instantly transfer them to another Remote Foothold under your control.
+
+ [Home]
+
+ [Neutral Objects]
+
+Remote Foothold
+
+=== sources/olden-era.com/text/en/objects-neutral/sacrificial_stone.txt ===
+Sacrificial Stone
+
+Allows sacrificing artifacts and creatures in exchange for experience.
+
+ [Home]
+
+ [Neutral Objects]
+
+Sacrificial Stone
+
+=== sources/olden-era.com/text/en/objects-neutral/sawmill.txt ===
+Sawmill
+
+Produces 2 Wood daily.
+
+ [Home]
+
+ [Neutral Objects]
+
+Sawmill
+
+=== sources/olden-era.com/text/en/objects-neutral/scales_of_worth.txt ===
+Scales of Worth
+
+Permanently increases the first visiting hero's chosen primary attribute by 4.
+
+ [Home]
+
+ [Neutral Objects]
+
+Scales of Worth
+
+=== sources/olden-era.com/text/en/objects-neutral/stables.txt ===
+Stables
+
+Restores 20% of movement points and grants +20% movement points until the end of the week.
+
+ [Home]
+
+ [Neutral Objects]
+
+Stables
+
+=== sources/olden-era.com/text/en/objects-neutral/stinging_sword.txt ===
+Stinging Sword
+
+Permanently increases each visiting hero's Attack by 1.
+
+ [Home]
+
+ [Neutral Objects]
+
+Stinging Sword
+
+=== sources/olden-era.com/text/en/objects-neutral/summit_automaton.txt ===
+Summit Automaton
+
+Permanently increases each visiting hero's Defense by 1.
+
+ [Home]
+
+ [Neutral Objects]
+
+Summit Automaton
+
+=== sources/olden-era.com/text/en/objects-neutral/tavern.txt ===
+Tavern
+
+Allows recruiting heroes.
+
+ [Home]
+
+ [Neutral Objects]
+
+Tavern
+
+=== sources/olden-era.com/text/en/objects-neutral/the_monty_hall.txt ===
+Monty Hall
+
+Once per game, offers the visiting hero to choose 1 out of 3 random artifacts.
+
+ [Home]
+
+ [Neutral Objects]
+
+Monty Hall
+
+=== sources/olden-era.com/text/en/objects-neutral/three_of_knowledge.txt ===
+Tree of Knowledge
+
+Grants one level to each visiting hero.
+
+ [Home]
+
+ [Neutral Objects]
+
+Tree of Knowledge
+
+=== sources/olden-era.com/text/en/objects-neutral/tomb_of_a_nameless_hero.txt ===
+Tomb of a Nameless Hero
+
+Once per game, grants a random artifact but curses the hero who takes it.
+
+ [Home]
+
+ [Neutral Objects]
+
+Tomb of a Nameless Hero
+
+=== sources/olden-era.com/text/en/objects-neutral/travelling_circus.txt ===
+Travelling Circus
+
+Levels up a random secondary skill for each visiting hero. If no skills can be improved, nothing happens and the building becomes inactive.
+
+ [Home]
+
+ [Neutral Objects]
+
+Travelling Circus
+
+=== sources/olden-era.com/text/en/objects-neutral/trophy_hunters_den.txt ===
+Trophy Hunters’ Den
+
+Once per week, gives the first visiting hero a random reward.
+
+ [Home]
+
+ [Neutral Objects]
+
+Trophy Hunters’ Den
+
+=== sources/olden-era.com/text/en/objects-neutral/university.txt ===
+University
+
+Allows each visiting hero to learn up to 4 random secondary skills for 2500 gold each.
+
+ [Home]
+
+ [Neutral Objects]
+
+University
+
+=== sources/olden-era.com/text/en/objects-neutral/village.txt ===
+Village
+
+Once per week, allows the first visiting hero to choose and receive one common resource.
+
+ [Home]
+
+ [Neutral Objects]
+
+Village
+
+=== sources/olden-era.com/text/en/objects-neutral/well.txt ===
+Well
+
+Fully restores mana to each visiting hero.
+
+ [Home]
+
+ [Neutral Objects]
+
+Well
+
+=== sources/olden-era.com/text/en/objects-neutral/whispering_stone.txt ===
+Whispering Stone
+
+Increases each visiting hero's maximum mana by 50% until the end of the week.
+
+ [Home]
+
+ [Neutral Objects]
+
+Whispering Stone
+
+=== sources/olden-era.com/text/en/objects-neutral/wood_storage.txt ===
+Wood Storage
+
+Once per week, gives 6–10 Wood to the first visiting hero.
+
+ [Home]
+
+ [Neutral Objects]
+
+Wood Storage

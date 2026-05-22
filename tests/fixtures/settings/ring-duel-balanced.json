@@ -1,0 +1,14 @@
+{
+  "templateName": "Golden Ring Duel Balanced",
+  "seed": 21001,
+  "playerCount": 2,
+  "mapWidth": 160,
+  "mapHeight": 160,
+  "topology": "Default",
+  "connectionStyle": "Balanced",
+  "zoneCfg": {
+    "neutralZoneCount": 4,
+    "neutralZoneCastles": 1
+  },
+  "noDirectPlayerConnections": true
+}

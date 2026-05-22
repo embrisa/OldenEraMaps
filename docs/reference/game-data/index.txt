@@ -1,0 +1,11 @@
+=== sources/olden-era.com/text/en/index.txt ===
+Support Site Development
+
+Dear Friends!
+Hi everyone!
+In the near future, I will be actively experimenting with advertising and optimizing the site's performance.
+Our online project has grown significantly, and maintaining it in its current form has become quite expensive. Because of this, ads may appear on the site.
+Please don’t be alarmed by the ads and try to understand the situation. Your support really helps the project continue to develop.
+Thank you for your understanding!
+
+ [Start]

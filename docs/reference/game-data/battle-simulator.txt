@@ -1,0 +1,67 @@
+=== sources/olden-era.com/text/en/battle-simulator.txt ===
+Battle Simulator: The ranked advantage that changes everything
+
+InHeroes of Might and Magic: Olden Erawe’re finally getting a full ranked system and competitive ladder. This is a revolution for the series! Modern multiplayer without ranked is like chess without a clock. But to climb to the top league, you don’t just need to play — you need to play smart.
+
+That’s exactly why we built theBattle Simulator— a tool that gives you a real edge. With one click you get complete info on any unit, hero, their specializations, classes and artifacts — right in the middle of a match, with the timer ticking. The faster you orient yourself, the higher your win chance. Ready to dominate?
+
+Map objects: know your enemy before the fight
+
+There’s no “load save” button in multiplayer. Every detail decides the outcome.
+ Keeping in your head which objects give what reward, what guard is there, how they’re positioned,
+ and which side to approach from — it’s simply impossible. We’re only human.
+
+TheBattle Simulatorsolves this problem once and for all.
+ Choose difficulty, object size, hit “Load” — and here’s the full picture:
+
+Exact enemy placement, composition and stats — everything at your fingertips.
+ Left-click a unit to see its full stats.
+
+Calculate damage before the battle
+
+Attacking an object? Don’t go in blind. In ranked one mistake = game over.
+ Most strong strategies rely on your damage stack one-shotting the enemy.
+ If even 5–10% remain — that’s a disaster that costs you the win.
+
+In-game accurate damage calculation means formulas, attack/defense modifiers,
+ skills like [Expert Offense], [Expert Defense],
+ artifacts and abilities. All that in your head, under timer pressure? Forget it.
+
+In theBattle Simulatorjust drag units ( [Lich Dragon], [Crossbowman]) onto the field, set the count. Upgraded version — left-click the icon. Quantity — click the number. Add your hero stats (attack) and enemy hero if needed (defence) — attackers on the left, defenders on the right.
+
+Drag the attacker icon onto the target — and boom! Top-right corner shows exact damage to the stack.
+ Before the fight even starts.
+
+Why does it matter? Look at the screenshot below and tell me: what happens when your stack one-shots,
+ and what happens when it doesn’t.
+
+118 [Austringer]with hero 9attackalways one-shot
+ 20 [Kittenhorn]with a direct shot.
+ The most stressful fight turns into easy artifact & exp farming. No risk, no surprises.
+
+An advantage that’s borderline cheating
+
+One of the core things in “Heroes” is full battle determinism. Same conditions = same outcome, always.
+ Found the perfect way to clear an object with two damage stacks [Austringer]and [Swordsman]? It will work 100% of the time.
+
+Before you had to memorize and grind hundreds of games. Now it’s easier.
+ In theReplayssection of Battle Simulator pick your faction, spells,
+ damage stacks and filter by objects. Get every possible winning variation — step by step,
+ including enemy moves.
+
+A legal “cheat”: even if you don’t know how to take a hard object,
+ the simulator will write you a perfect plan for your army. Step by step. Ideal for ranked.
+
+Important:After the field size update, Replays data is partially outdated. Unfrozen hasn’t given the current beta yet, so the section is WIP. As soon as we get access — we’ll fill it 100%.
+
+Battle Simulator: your ticket to the top
+
+The game is still in development, but theBattle Simulatorbeta is already live. Become the player who on day 9–10 arrives at the enemy respawn with 20 [Apotheosis], while the opponent hasn’t even broken through GO yet.
+
+Don’t wait for release. Start winning today!
+
+ [Start]
+
+ [Home]
+
+Battle Simulator

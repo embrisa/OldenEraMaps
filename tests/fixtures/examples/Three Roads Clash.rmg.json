@@ -1,0 +1,7577 @@
+{
+  "name": "Three Roads Clash",
+  "gameMode": "Classic",
+  "description": "Generated with Olden Era Template Generator v0.6: Triangle layout, 6 neutral zones, 1 castle per player zone, mixed neutral zone tiers, options: balanced zone placement, natural expansion zones.",
+  "displayWinCondition": "win_condition_1",
+  "sizeX": 144,
+  "sizeZ": 144,
+  "gameRules": {
+    "heroCountMin": 3,
+    "heroCountMax": 8,
+    "heroCountIncrement": 1,
+    "heroHireBan": false,
+    "encounterHoles": false,
+    "factionLawsExpModifier": 1,
+    "astrologyExpModifier": 1,
+    "bonuses": [
+      {
+        "sid": "add_bonus_hero_stat",
+        "receiverSide": -1,
+        "receiverFilter": "all_heroes",
+        "parameters": [
+          "movementBonus",
+          "0"
+        ]
+      }
+    ],
+    "winConditions": {
+      "classic": true,
+      "desertion": true,
+      "desertionDay": 3,
+      "desertionValue": 3000,
+      "heroLighting": true,
+      "heroLightingDay": 1,
+      "lostStartCity": false,
+      "lostStartCityDay": 3,
+      "lostStartHero": false,
+      "cityHold": false,
+      "cityHoldDays": 6
+    }
+  },
+  "variants": [
+    {
+      "orientation": {
+        "zeroAngleZone": "Spawn-A",
+        "baseAngleMin": 45,
+        "baseAngleMax": 45,
+        "randomAngleAmplitude": 360,
+        "randomAngleStep": 27.692307692307693
+      },
+      "border": {
+        "cornerRadius": 0,
+        "obstaclesWidth": 3,
+        "obstaclesNoise": [
+          {
+            "amp": 1,
+            "freq": 12
+          }
+        ],
+        "waterWidth": 0,
+        "waterNoise": [
+          {
+            "amp": 1,
+            "freq": 12
+          }
+        ],
+        "waterType": "water grass"
+      },
+      "zones": [
+        {
+          "name": "Hub",
+          "size": 1,
+          "layout": "zone_layout_center",
+          "guardCutoffValue": 2000,
+          "guardRandomization": 0.05,
+          "guardMultiplier": 1.875,
+          "guardWeeklyIncrement": 0.2,
+          "guardReactionDistribution": [
+            0,
+            10,
+            10,
+            20,
+            10,
+            0
+          ],
+          "diplomacyModifier": -0.5,
+          "guardedContentPool": [
+            "classic_template_pool_random_t3_item",
+            "classic_template_pool_random_t3_pandora",
+            "classic_template_pool_random_t3_hire",
+            "classic_template_pool_random_t3_unit_bank",
+            "classic_template_pool_random_t3_res_bank",
+            "classic_template_pool_random_t3_stat",
+            "classic_template_pool_random_t3_magic"
+          ],
+          "unguardedContentPool": [
+            "classic_template_pool_random_unguarded_t3_item",
+            "classic_template_pool_random_unguarded_t3_pandora",
+            "classic_template_pool_random_unguarded_t3_hire",
+            "classic_template_pool_random_unguarded_t3_unit_bank",
+            "classic_template_pool_random_unguarded_t3_res_bank",
+            "classic_template_pool_random_unguarded_t3_stat",
+            "classic_template_pool_random_unguarded_t3_magic"
+          ],
+          "resourcesContentPool": [
+            "content_pool_general_resources_start_zone_medium"
+          ],
+          "mandatoryContent": [],
+          "contentCountLimits": [
+            "content_limits_side_1_2",
+            "content_limits_side_1_3",
+            "content_limits_side_1_4",
+            "content_limits_side_1_5",
+            "content_limits_side_1_6",
+            "content_limits_side_2_3",
+            "content_limits_side_2_4",
+            "content_limits_side_2_5",
+            "content_limits_side_2_6",
+            "content_limits_side_3_4",
+            "content_limits_side_3_5",
+            "content_limits_side_3_6",
+            "content_limits_side_4_5",
+            "content_limits_side_4_6",
+            "content_limits_side_5_6"
+          ],
+          "guardedContentValue": 195000,
+          "guardedContentValuePerArea": 2206,
+          "unguardedContentValue": 32500,
+          "unguardedContentValuePerArea": 551,
+          "resourcesValue": 23000,
+          "resourcesValuePerArea": 243,
+          "mainObjects": [
+            {
+              "type": "City",
+              "guardChance": 0.5,
+              "guardValue": 20000,
+              "guardWeeklyIncrement": 0.1,
+              "buildingsConstructionSid": "rich_buildings_construction",
+              "faction": {
+                "type": "FromList",
+                "args": []
+              },
+              "placement": "Uniform",
+              "placementArgs": [
+                "true",
+                "0.8",
+                "2"
+              ]
+            }
+          ],
+          "zoneBiome": {
+            "type": "MatchMainObject",
+            "args": [
+              "0"
+            ]
+          },
+          "contentBiome": {
+            "type": "MatchMainObject",
+            "args": [
+              "0"
+            ]
+          },
+          "metaObjectsBiome": {
+            "type": "MatchMainObject",
+            "args": [
+              "0"
+            ]
+          },
+          "crossroadsPosition": 0,
+          "roads": [
+            {
+              "from": {
+                "type": "MainObject",
+                "args": [
+                  "0"
+                ]
+              },
+              "to": {
+                "type": "Connection",
+                "args": [
+                  "TriangleHub-D"
+                ]
+              }
+            },
+            {
+              "from": {
+                "type": "MainObject",
+                "args": [
+                  "0"
+                ]
+              },
+              "to": {
+                "type": "Connection",
+                "args": [
+                  "TriangleHighHub-G"
+                ]
+              }
+            },
+            {
+              "from": {
+                "type": "MainObject",
+                "args": [
+                  "0"
+                ]
+              },
+              "to": {
+                "type": "Connection",
+                "args": [
+                  "TriangleHub-E"
+                ]
+              }
+            },
+            {
+              "from": {
+                "type": "MainObject",
+                "args": [
+                  "0"
+                ]
+              },
+              "to": {
+                "type": "Connection",
+                "args": [
+                  "TriangleHighHub-H"
+                ]
+              }
+            },
+            {
+              "from": {
+                "type": "MainObject",
+                "args": [
+                  "0"
+                ]
+              },
+              "to": {
+                "type": "Connection",
+                "args": [
+                  "TriangleHub-F"
+                ]
+              }
+            },
+            {
+              "from": {
+                "type": "MainObject",
+                "args": [
+                  "0"
+                ]
+              },
+              "to": {
+                "type": "Connection",
+                "args": [
+                  "TriangleHighHub-I"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Spawn-A",
+          "size": 1.2,
+          "layout": "zone_layout_spawns",
+          "guardCutoffValue": 2000,
+          "guardRandomization": 0.06,
+          "guardMultiplier": 1.25,
+          "guardWeeklyIncrement": 0.2,
+          "guardReactionDistribution": [
+            60,
+            20,
+            10,
+            10,
+            2,
+            0
+          ],
+          "diplomacyModifier": -0.5,
+          "guardedContentPool": [
+            "classic_template_pool_random_t2_item",
+            "classic_template_pool_random_t2_pandora",
+            "classic_template_pool_random_t2_hire",
+            "classic_template_pool_random_t2_unit_bank",
+            "classic_template_pool_random_t2_res_bank",
+            "classic_template_pool_random_t2_stat",
+            "classic_template_pool_random_t2_magic"
+          ],
+          "unguardedContentPool": [
+            "classic_template_pool_random_unguarded_t2_item",
+            "classic_template_pool_random_unguarded_t2_pandora",
+            "classic_template_pool_random_unguarded_t2_hire",
+            "classic_template_pool_random_unguarded_t2_unit_bank",
+            "classic_template_pool_random_unguarded_t2_res_bank",
+            "classic_template_pool_random_unguarded_t2_stat",
+            "classic_template_pool_random_unguarded_t2_magic"
+          ],
+          "resourcesContentPool": [
+            "content_pool_general_resources_start_zone_poor"
+          ],
+          "mandatoryContent": [
+            "mandatory_content_side_A"
+          ],
+          "contentCountLimits": [
+            "content_limits_side_1_2",
+            "content_limits_side_1_3",
+            "content_limits_side_1_4",
+            "content_limits_side_1_5",
+            "content_limits_side_1_6",
+            "content_limits_side_2_3",
+            "content_limits_side_2_4",
+            "content_limits_side_2_5",
+            "content_limits_side_2_6",
+            "content_limits_side_3_4",
+            "content_limits_side_3_5",
+            "content_limits_side_3_6",
+            "content_limits_side_4_5",
+            "content_limits_side_4_6",
+            "content_limits_side_5_6"
+          ],
+          "guardedContentValue": 130000,
+          "guardedContentValuePerArea": 1838,
+          "unguardedContentValue": 32500,
+          "unguardedContentValuePerArea": 367,
+          "resourcesValue": 23000,
+          "resourcesValuePerArea": 243,
+          "mainObjects": [
+            {
+              "type": "Spawn",
+              "spawn": "Player1",
+              "guardChance": 1,
+              "guardValue": 6250,
+              "guardWeeklyIncrement": 0.1,
+              "removeGuardIfHasOwner": true,
+              "buildingsConstructionSid": "default_buildings_construction",
+              "placement": "Uniform",
+              "placementArgs": [
+                "true",
+                "0.7",
+                "0"
+              ]
+            }
+          ],
+          "zoneBiome": {
+            "type": "MatchMainObject",
+            "args": [
+              "0"
+            ]
+          },
+          "contentBiome": {
+            "type": "MatchMainObject",
+            "args": [
+              "0"
+            ]
+          },
+          "metaObjectsBiome": {
+            "type": "MatchMainObject",
+            "args": [
+              "0"
+            ]
+          },
+          "crossroadsPosition": 0,
+          "roads": [
+            {
+              "from": {
+                "type": "MainObject",
+                "args": [
+                  "0"
+                ]
+              },
+              "to": {
+                "type": "MandatoryContent",
+                "args": [
+                  "name_remote_foothold_1"
+                ]
+              }
+            },
+            {
+              "from": {
+                "type": "MainObject",
+                "args": [
+                  "0"
+                ]
+              },
+              "to": {
+                "type": "Connection",
+                "args": [
+                  "Triangle-A-D"
+                ]
+              }
+            },
+            {
+              "from": {
+                "type": "MainObject",
+                "args": [
+                  "0"
+                ]
+              },
+              "to": {
+                "type": "Connection",
+                "args": [
+                  "TriangleHigh-A-G"
+                ]
+              }
+            },
+            {
+              "from": {
+                "type": "MainObject",
+                "args": [
+                  "0"
+                ]
+              },
+              "to": {
+                "type": "Connection",
+                "args": [
+                  "Triangle-F-A"
+                ]
+              }
+            },
+            {
+              "from": {
+                "type": "MainObject",
+                "args": [
+                  "0"
+                ]
+              },
+              "to": {
+                "type": "Connection",
+                "args": [
+                  "Natural-A"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Spawn-B",
+          "size": 1.2,
+          "layout": "zone_layout_spawns",
+          "guardCutoffValue": 2000,
+          "guardRandomization": 0.06,
+          "guardMultiplier": 1.25,
+          "guardWeeklyIncrement": 0.2,
+          "guardReactionDistribution": [
+            60,
+            20,
+            10,
+            10,
+            2,
+            0
+          ],
+          "diplomacyModifier": -0.5,
+          "guardedContentPool": [
+            "classic_template_pool_random_t2_item",
+            "classic_template_pool_random_t2_pandora",
+            "classic_template_pool_random_t2_hire",
+            "classic_template_pool_random_t2_unit_bank",
+            "classic_template_pool_random_t2_res_bank",
+            "classic_template_pool_random_t2_stat",
+            "classic_template_pool_random_t2_magic"
+          ],
+          "unguardedContentPool": [
+            "classic_template_pool_random_unguarded_t2_item",
+            "classic_template_pool_random_unguarded_t2_pandora",
+            "classic_template_pool_random_unguarded_t2_hire",
+            "classic_template_pool_random_unguarded_t2_unit_bank",
+            "classic_template_pool_random_unguarded_t2_res_bank",
+            "classic_template_pool_random_unguarded_t2_stat",
+            "classic_template_pool_random_unguarded_t2_magic"
+          ],
+          "resourcesContentPool": [
+            "content_pool_general_resources_start_zone_poor"
+          ],
+          "mandatoryContent": [
+            "mandatory_content_side_B"
+          ],
+          "contentCountLimits": [
+            "content_limits_side_1_2",
+            "content_limits_side_1_3",
+            "content_limits_side_1_4",
+            "content_limits_side_1_5",
+            "content_limits_side_1_6",
+            "content_limits_side_2_3",
+            "content_limits_side_2_4",
+            "content_limits_side_2_5",
+            "content_limits_side_2_6",
+            "content_limits_side_3_4",
+            "content_limits_side_3_5",
+            "content_limits_side_3_6",
+            "content_limits_side_4_5",
+            "content_limits_side_4_6",
+            "content_limits_side_5_6"
+          ],
+          "guardedContentValue": 130000,
+          "guardedContentValuePerArea": 1838,
+          "unguardedContentValue": 32500,
+          "unguardedContentValuePerArea": 367,
+          "resourcesValue": 23000,
+          "resourcesValuePerArea": 243,
+          "mainObjects": [
+            {
+              "type": "Spawn",
+              "spawn": "Player2",
+              "guardChance": 1,
+              "guardValue": 6250,
+              "guardWeeklyIncrement": 0.1,
+              "removeGuardIfHasOwner": true,
+              "buildingsConstructionSid": "default_buildings_construction",
+              "placement": "Uniform",
+              "placementArgs": [
+                "true",
+                "0.7",
+                "0"
+              ]
+            }
+          ],
+          "zoneBiome": {
+            "type": "MatchMainObject",
+            "args": [
+              "0"
+            ]
+          },
+          "contentBiome": {
+            "type": "MatchMainObject",
+            "args": [
+              "0"
+            ]
+          },
+          "metaObjectsBiome": {
+            "type": "MatchMainObject",
+            "args": [
+              "0"
+            ]
+          },
+          "crossroadsPosition": 0,
+          "roads": [
+            {
+              "from": {
+                "type": "MainObject",
+                "args": [
+                  "0"
+                ]
+              },
+              "to": {
+                "type": "MandatoryContent",
+                "args": [
+                  "name_remote_foothold_1"
+                ]
+              }
+            },
+            {
+              "from": {
+                "type": "MainObject",
+                "args": [
+                  "0"
+                ]
+              },
+              "to": {
+                "type": "Connection",
+                "args": [
+                  "Triangle-D-B"
+                ]
+              }
+            },
+            {
+              "from": {
+                "type": "MainObject",
+                "args": [
+                  "0"
+                ]
+              },
+              "to": {
+                "type": "Connection",
+                "args": [
+                  "Triangle-B-E"
+                ]
+              }
+            },
+            {
+              "from": {
+                "type": "MainObject",
+                "args": [
+                  "0"
+                ]
+              },
+              "to": {
+                "type": "Connection",
+                "args": [
+                  "TriangleHigh-B-H"
+                ]
+              }
+            },
+            {
+              "from": {
+                "type": "MainObject",
+                "args": [
+                  "0"
+                ]
+              },
+              "to": {
+                "type": "Connection",
+                "args": [
+                  "Natural-B"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Spawn-C",
+          "size": 1.2,
+          "layout": "zone_layout_spawns",
+          "guardCutoffValue": 2000,
+          "guardRandomization": 0.06,
+          "guardMultiplier": 1.25,
+          "guardWeeklyIncrement": 0.2,
+          "guardReactionDistribution": [
+            60,
+            20,
+            10,
+            10,
+            2,
+            0
+          ],
+          "diplomacyModifier": -0.5,
+          "guardedContentPool": [
+            "classic_template_pool_random_t2_item",
+            "classic_template_pool_random_t2_pandora",
+            "classic_template_pool_random_t2_hire",
+            "classic_template_pool_random_t2_unit_bank",
+            "classic_template_pool_random_t2_res_bank",
+            "classic_template_pool_random_t2_stat",
+            "classic_template_pool_random_t2_magic"
+          ],
+          "unguardedContentPool": [
+            "classic_template_pool_random_unguarded_t2_item",
+            "classic_template_pool_random_unguarded_t2_pandora",
+            "classic_template_pool_random_unguarded_t2_hire",
+            "classic_template_pool_random_unguarded_t2_unit_bank",
+            "classic_template_pool_random_unguarded_t2_res_bank",
+            "classic_template_pool_random_unguarded_t2_stat",
+            "classic_template_pool_random_unguarded_t2_magic"
+          ],
+          "resourcesContentPool": [
+            "content_pool_general_resources_start_zone_poor"
+          ],
+          "mandatoryContent": [
+            "mandatory_content_side_C"
+          ],
+          "contentCountLimits": [
+            "content_limits_side_1_2",
+            "content_limits_side_1_3",
+            "content_limits_side_1_4",
+            "content_limits_side_1_5",
+            "content_limits_side_1_6",
+            "content_limits_side_2_3",
+            "content_limits_side_2_4",
+            "content_limits_side_2_5",
+            "content_limits_side_2_6",
+            "content_limits_side_3_4",
+            "content_limits_side_3_5",
+            "content_limits_side_3_6",
+            "content_limits_side_4_5",
+            "content_limits_side_4_6",
+            "content_limits_side_5_6"
+          ],
+          "guardedContentValue": 130000,
+          "guardedContentValuePerArea": 1838,
+          "unguardedContentValue": 32500,
+          "unguardedContentValuePerArea": 367,
+          "resourcesValue": 23000,
+          "resourcesValuePerArea": 243,
+          "mainObjects": [
+            {
+              "type": "Spawn",
+              "spawn": "Player3",
+              "guardChance": 1,
+              "guardValue": 6250,
+              "guardWeeklyIncrement": 0.1,
+              "removeGuardIfHasOwner": true,
+              "buildingsConstructionSid": "default_buildings_construction",
+              "placement": "Uniform",
+              "placementArgs": [
+                "true",
+                "0.7",
+                "0"
+              ]
+            }
+          ],
+          "zoneBiome": {
+            "type": "MatchMainObject",
+            "args": [
+              "0"
+            ]
+          },
+          "contentBiome": {
+            "type": "MatchMainObject",
+            "args": [
+              "0"
+            ]
+          },
+          "metaObjectsBiome": {
+            "type": "MatchMainObject",
+            "args": [
+              "0"
+            ]
+          },
+          "crossroadsPosition": 0,
+          "roads": [
+            {
+              "from": {
+                "type": "MainObject",
+                "args": [
+                  "0"
+                ]
+              },
+              "to": {
+                "type": "MandatoryContent",
+                "args": [
+                  "name_remote_foothold_1"
+                ]
+              }
+            },
+            {
+              "from": {
+                "type": "MainObject",
+                "args": [
+                  "0"
+                ]
+              },
+              "to": {
+                "type": "Connection",
+                "args": [
+                  "Triangle-E-C"
+                ]
+              }
+            },
+            {
+              "from": {
+                "type": "MainObject",
+                "args": [
+                  "0"
+                ]
+              },
+              "to": {
+                "type": "Connection",
+                "args": [
+                  "Triangle-C-F"
+                ]
+              }
+            },
+            {
+              "from": {
+                "type": "MainObject",
+                "args": [
+                  "0"
+                ]
+              },
+              "to": {
+                "type": "Connection",
+                "args": [
+                  "TriangleHigh-C-I"
+                ]
+              }
+            },
+            {
+              "from": {
+                "type": "MainObject",
+                "args": [
+                  "0"
+                ]
+              },
+              "to": {
+                "type": "Connection",
+                "args": [
+                  "Natural-C"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Neutral-D",
+          "size": 0.95,
+          "layout": "zone_layout_treasure_zone",
+          "guardCutoffValue": 2000,
+          "guardRandomization": 0.06,
+          "guardMultiplier": 1.75,
+          "guardWeeklyIncrement": 0.2,
+          "guardReactionDistribution": [
+            0,
+            10,
+            10,
+            10,
+            10,
+            0
+          ],
+          "diplomacyModifier": -0.5,
+          "guardedContentPool": [
+            "classic_template_pool_random_t3_item",
+            "classic_template_pool_random_t3_pandora",
+            "classic_template_pool_random_t3_hire",
+            "classic_template_pool_random_t3_unit_bank",
+            "classic_template_pool_random_t3_res_bank",
+            "classic_template_pool_random_t3_stat",
+            "classic_template_pool_random_t3_magic"
+          ],
+          "unguardedContentPool": [
+            "classic_template_pool_random_unguarded_t3_item",
+            "classic_template_pool_random_unguarded_t3_pandora",
+            "classic_template_pool_random_unguarded_t3_hire",
+            "classic_template_pool_random_unguarded_t3_unit_bank",
+            "classic_template_pool_random_unguarded_t3_res_bank",
+            "classic_template_pool_random_unguarded_t3_stat",
+            "classic_template_pool_random_unguarded_t3_magic"
+          ],
+          "resourcesContentPool": [
+            "content_pool_general_resources_start_zone_medium"
+          ],
+          "mandatoryContent": [
+            "mandatory_content_neutral_D"
+          ],
+          "contentCountLimits": [
+            "content_limits_side_1_2",
+            "content_limits_side_1_3",
+            "content_limits_side_1_4",
+            "content_limits_side_1_5",
+            "content_limits_side_1_6",
+            "content_limits_side_2_3",
+            "content_limits_side_2_4",
+            "content_limits_side_2_5",
+            "content_limits_side_2_6",
+            "content_limits_side_3_4",
+            "content_limits_side_3_5",
+            "content_limits_side_3_6",
+            "content_limits_side_4_5",
+            "content_limits_side_4_6",
+            "content_limits_side_5_6"
+          ],
+          "guardedContentValue": 156000,
+          "guardedContentValuePerArea": 1838,
+          "unguardedContentValue": 24700,
+          "unguardedContentValuePerArea": 275,
+          "resourcesValue": 15812,
+          "resourcesValuePerArea": 170,
+          "mainObjects": [
+            {
+              "type": "City",
+              "guardChance": 1,
+              "guardValue": 10000,
+              "guardWeeklyIncrement": 0.1,
+              "buildingsConstructionSid": "rich_buildings_construction",
+              "faction": {
+                "type": "FromList",
+                "args": []
+              },
+              "placement": "Uniform",
+              "placementArgs": [
+                "true",
+                "0.8",
+                "2"
+              ]
+            }
+          ],
+          "zoneBiome": {
+            "type": "MatchMainObject",
+            "args": [
+              "0"
+            ]
+          },
+          "contentBiome": {
+            "type": "MatchMainObject",
+            "args": [
+              "0"
+            ]
+          },
+          "metaObjectsBiome": {
+            "type": "MatchMainObject",
+            "args": [
+              "0"
+            ]
+          },
+          "crossroadsPosition": 0,
+          "roads": [
+            {
+              "from": {
+                "type": "MainObject",
+                "args": [
+                  "0"
+                ]
+              },
+              "to": {
+                "type": "MandatoryContent",
+                "args": [
+                  "name_remote_foothold_1"
+                ]
+              }
+            },
+            {
+              "from": {
+                "type": "MainObject",
+                "args": [
+                  "0"
+                ]
+              },
+              "to": {
+                "type": "Connection",
+                "args": [
+                  "Triangle-A-D"
+                ]
+              }
+            },
+            {
+              "from": {
+                "type": "MainObject",
+                "args": [
+                  "0"
+                ]
+              },
+              "to": {
+                "type": "Connection",
+                "args": [
+                  "Triangle-D-B"
+                ]
+              }
+            },
+            {
+              "from": {
+                "type": "MainObject",
+                "args": [
+                  "0"
+                ]
+              },
+              "to": {
+                "type": "Connection",
+                "args": [
+                  "TriangleHub-D"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Neutral-E",
+          "size": 0.95,
+          "layout": "zone_layout_treasure_zone",
+          "guardCutoffValue": 2000,
+          "guardRandomization": 0.06,
+          "guardMultiplier": 1.75,
+          "guardWeeklyIncrement": 0.2,
+          "guardReactionDistribution": [
+            0,
+            10,
+            10,
+            10,
+            10,
+            0
+          ],
+          "diplomacyModifier": -0.5,
+          "guardedContentPool": [
+            "classic_template_pool_random_t3_item",
+            "classic_template_pool_random_t3_pandora",
+            "classic_template_pool_random_t3_hire",
+            "classic_template_pool_random_t3_unit_bank",
+            "classic_template_pool_random_t3_res_bank",
+            "classic_template_pool_random_t3_stat",
+            "classic_template_pool_random_t3_magic"
+          ],
+          "unguardedContentPool": [
+            "classic_template_pool_random_unguarded_t3_item",
+            "classic_template_pool_random_unguarded_t3_pandora",
+            "classic_template_pool_random_unguarded_t3_hire",
+            "classic_template_pool_random_unguarded_t3_unit_bank",
+            "classic_template_pool_random_unguarded_t3_res_bank",
+            "classic_template_pool_random_unguarded_t3_stat",
+            "classic_template_pool_random_unguarded_t3_magic"
+          ],
+          "resourcesContentPool": [
+            "content_pool_general_resources_start_zone_medium"
+          ],
+          "mandatoryContent": [
+            "mandatory_content_neutral_E"
+          ],
+          "contentCountLimits": [
+            "content_limits_side_1_2",
+            "content_limits_side_1_3",
+            "content_limits_side_1_4",
+            "content_limits_side_1_5",
+            "content_limits_side_1_6",
+            "content_limits_side_2_3",
+            "content_limits_side_2_4",
+            "content_limits_side_2_5",
+            "content_limits_side_2_6",
+            "content_limits_side_3_4",
+            "content_limits_side_3_5",
+            "content_limits_side_3_6",
+            "content_limits_side_4_5",
+            "content_limits_side_4_6",
+            "content_limits_side_5_6"
+          ],
+          "guardedContentValue": 156000,
+          "guardedContentValuePerArea": 1838,
+          "unguardedContentValue": 24700,
+          "unguardedContentValuePerArea": 275,
+          "resourcesValue": 15812,
+          "resourcesValuePerArea": 170,
+          "mainObjects": [
+            {
+              "type": "City",
+              "guardChance": 1,
+              "guardValue": 10000,
+              "guardWeeklyIncrement": 0.1,
+              "buildingsConstructionSid": "rich_buildings_construction",
+              "faction": {
+                "type": "FromList",
+                "args": []
+              },
+              "placement": "Uniform",
+              "placementArgs": [
+                "true",
+                "0.8",
+                "2"
+              ]
+            }
+          ],
+          "zoneBiome": {
+            "type": "MatchMainObject",
+            "args": [
+              "0"
+            ]
+          },
+          "contentBiome": {
+            "type": "MatchMainObject",
+            "args": [
+              "0"
+            ]
+          },
+          "metaObjectsBiome": {
+            "type": "MatchMainObject",
+            "args": [
+              "0"
+            ]
+          },
+          "crossroadsPosition": 0,
+          "roads": [
+            {
+              "from": {
+                "type": "MainObject",
+                "args": [
+                  "0"
+                ]
+              },
+              "to": {
+                "type": "MandatoryContent",
+                "args": [
+                  "name_remote_foothold_1"
+                ]
+              }
+            },
+            {
+              "from": {
+                "type": "MainObject",
+                "args": [
+                  "0"
+                ]
+              },
+              "to": {
+                "type": "Connection",
+                "args": [
+                  "Triangle-B-E"
+                ]
+              }
+            },
+            {
+              "from": {
+                "type": "MainObject",
+                "args": [
+                  "0"
+                ]
+              },
+              "to": {
+                "type": "Connection",
+                "args": [
+                  "Triangle-E-C"
+                ]
+              }
+            },
+            {
+              "from": {
+                "type": "MainObject",
+                "args": [
+                  "0"
+                ]
+              },
+              "to": {
+                "type": "Connection",
+                "args": [
+                  "TriangleHub-E"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Neutral-F",
+          "size": 0.95,
+          "layout": "zone_layout_treasure_zone",
+          "guardCutoffValue": 2000,
+          "guardRandomization": 0.06,
+          "guardMultiplier": 1.75,
+          "guardWeeklyIncrement": 0.2,
+          "guardReactionDistribution": [
+            0,
+            10,
+            10,
+            10,
+            10,
+            0
+          ],
+          "diplomacyModifier": -0.5,
+          "guardedContentPool": [
+            "classic_template_pool_random_t3_item",
+            "classic_template_pool_random_t3_pandora",
+            "classic_template_pool_random_t3_hire",
+            "classic_template_pool_random_t3_unit_bank",
+            "classic_template_pool_random_t3_res_bank",
+            "classic_template_pool_random_t3_stat",
+            "classic_template_pool_random_t3_magic"
+          ],
+          "unguardedContentPool": [
+            "classic_template_pool_random_unguarded_t3_item",
+            "classic_template_pool_random_unguarded_t3_pandora",
+            "classic_template_pool_random_unguarded_t3_hire",
+            "classic_template_pool_random_unguarded_t3_unit_bank",
+            "classic_template_pool_random_unguarded_t3_res_bank",
+            "classic_template_pool_random_unguarded_t3_stat",
+            "classic_template_pool_random_unguarded_t3_magic"
+          ],
+          "resourcesContentPool": [
+            "content_pool_general_resources_start_zone_medium"
+          ],
+          "mandatoryContent": [
+            "mandatory_content_neutral_F"
+          ],
+          "contentCountLimits": [
+            "content_limits_side_1_2",
+            "content_limits_side_1_3",
+            "content_limits_side_1_4",
+            "content_limits_side_1_5",
+            "content_limits_side_1_6",
+            "content_limits_side_2_3",
+            "content_limits_side_2_4",
+            "content_limits_side_2_5",
+            "content_limits_side_2_6",
+            "content_limits_side_3_4",
+            "content_limits_side_3_5",
+            "content_limits_side_3_6",
+            "content_limits_side_4_5",
+            "content_limits_side_4_6",
+            "content_limits_side_5_6"
+          ],
+          "guardedContentValue": 156000,
+          "guardedContentValuePerArea": 1838,
+          "unguardedContentValue": 24700,
+          "unguardedContentValuePerArea": 275,
+          "resourcesValue": 15812,
+          "resourcesValuePerArea": 170,
+          "mainObjects": [
+            {
+              "type": "City",
+              "guardChance": 1,
+              "guardValue": 10000,
+              "guardWeeklyIncrement": 0.1,
+              "buildingsConstructionSid": "rich_buildings_construction",
+              "faction": {
+                "type": "FromList",
+                "args": []
+              },
+              "placement": "Uniform",
+              "placementArgs": [
+                "true",
+                "0.8",
+                "2"
+              ]
+            }
+          ],
+          "zoneBiome": {
+            "type": "MatchMainObject",
+            "args": [
+              "0"
+            ]
+          },
+          "contentBiome": {
+            "type": "MatchMainObject",
+            "args": [
+              "0"
+            ]
+          },
+          "metaObjectsBiome": {
+            "type": "MatchMainObject",
+            "args": [
+              "0"
+            ]
+          },
+          "crossroadsPosition": 0,
+          "roads": [
+            {
+              "from": {
+                "type": "MainObject",
+                "args": [
+                  "0"
+                ]
+              },
+              "to": {
+                "type": "MandatoryContent",
+                "args": [
+                  "name_remote_foothold_1"
+                ]
+              }
+            },
+            {
+              "from": {
+                "type": "MainObject",
+                "args": [
+                  "0"
+                ]
+              },
+              "to": {
+                "type": "Connection",
+                "args": [
+                  "Triangle-C-F"
+                ]
+              }
+            },
+            {
+              "from": {
+                "type": "MainObject",
+                "args": [
+                  "0"
+                ]
+              },
+              "to": {
+                "type": "Connection",
+                "args": [
+                  "Triangle-F-A"
+                ]
+              }
+            },
+            {
+              "from": {
+                "type": "MainObject",
+                "args": [
+                  "0"
+                ]
+              },
+              "to": {
+                "type": "Connection",
+                "args": [
+                  "TriangleHub-F"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Neutral-G",
+          "size": 0.95,
+          "layout": "zone_layout_treasure_zone",
+          "guardCutoffValue": 2000,
+          "guardRandomization": 0.06,
+          "guardMultiplier": 2.25,
+          "guardWeeklyIncrement": 0.2,
+          "guardReactionDistribution": [
+            0,
+            10,
+            10,
+            20,
+            10,
+            0
+          ],
+          "diplomacyModifier": -0.5,
+          "guardedContentPool": [
+            "classic_template_pool_random_t4_item",
+            "classic_template_pool_random_t4_pandora",
+            "classic_template_pool_random_t4_hire",
+            "classic_template_pool_random_t4_unit_bank",
+            "classic_template_pool_random_t4_res_bank",
+            "classic_template_pool_random_t4_stat",
+            "classic_template_pool_random_t4_magic",
+            "classic_template_pool_random_t5_item",
+            "classic_template_pool_random_t5_pandora",
+            "classic_template_pool_random_t5_hire",
+            "classic_template_pool_random_t5_unit_bank",
+            "classic_template_pool_random_t5_res_bank",
+            "classic_template_pool_random_t5_stat",
+            "classic_template_pool_random_t5_magic"
+          ],
+          "unguardedContentPool": [
+            "classic_template_pool_random_unguarded_t4_item",
+            "classic_template_pool_random_unguarded_t4_pandora",
+            "classic_template_pool_random_unguarded_t4_hire",
+            "classic_template_pool_random_unguarded_t4_unit_bank",
+            "classic_template_pool_random_unguarded_t4_res_bank",
+            "classic_template_pool_random_unguarded_t4_stat",
+            "classic_template_pool_random_unguarded_t4_magic",
+            "classic_template_pool_random_unguarded_t5_item",
+            "classic_template_pool_random_unguarded_t5_pandora",
+            "classic_template_pool_random_unguarded_t5_hire",
+            "classic_template_pool_random_unguarded_t5_unit_bank",
+            "classic_template_pool_random_unguarded_t5_res_bank",
+            "classic_template_pool_random_unguarded_t5_stat",
+            "classic_template_pool_random_unguarded_t5_magic"
+          ],
+          "resourcesContentPool": [
+            "content_pool_general_resources_start_zone_rich"
+          ],
+          "mandatoryContent": [
+            "mandatory_content_neutral_G"
+          ],
+          "contentCountLimits": [
+            "content_limits_side_1_2",
+            "content_limits_side_1_3",
+            "content_limits_side_1_4",
+            "content_limits_side_1_5",
+            "content_limits_side_1_6",
+            "content_limits_side_2_3",
+            "content_limits_side_2_4",
+            "content_limits_side_2_5",
+            "content_limits_side_2_6",
+            "content_limits_side_3_4",
+            "content_limits_side_3_5",
+            "content_limits_side_3_6",
+            "content_limits_side_4_5",
+            "content_limits_side_4_6",
+            "content_limits_side_5_6"
+          ],
+          "guardedContentValue": 312000,
+          "guardedContentValuePerArea": 2757,
+          "unguardedContentValue": 52000,
+          "unguardedContentValuePerArea": 569,
+          "resourcesValue": 25874,
+          "resourcesValuePerArea": 235,
+          "mainObjects": [],
+          "zoneBiome": {
+            "type": "MatchZone",
+            "args": []
+          },
+          "contentBiome": {
+            "type": "MatchZone",
+            "args": []
+          },
+          "metaObjectsBiome": {
+            "type": "MatchZone",
+            "args": []
+          },
+          "crossroadsPosition": 0,
+          "roads": [
+            {
+              "from": {
+                "type": "Connection",
+                "args": [
+                  "TriangleHigh-A-G"
+                ]
+              },
+              "to": {
+                "type": "Connection",
+                "args": [
+                  "TriangleHighHub-G"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Neutral-H",
+          "size": 0.95,
+          "layout": "zone_layout_treasure_zone",
+          "guardCutoffValue": 2000,
+          "guardRandomization": 0.06,
+          "guardMultiplier": 2.25,
+          "guardWeeklyIncrement": 0.2,
+          "guardReactionDistribution": [
+            0,
+            10,
+            10,
+            20,
+            10,
+            0
+          ],
+          "diplomacyModifier": -0.5,
+          "guardedContentPool": [
+            "classic_template_pool_random_t4_item",
+            "classic_template_pool_random_t4_pandora",
+            "classic_template_pool_random_t4_hire",
+            "classic_template_pool_random_t4_unit_bank",
+            "classic_template_pool_random_t4_res_bank",
+            "classic_template_pool_random_t4_stat",
+            "classic_template_pool_random_t4_magic",
+            "classic_template_pool_random_t5_item",
+            "classic_template_pool_random_t5_pandora",
+            "classic_template_pool_random_t5_hire",
+            "classic_template_pool_random_t5_unit_bank",
+            "classic_template_pool_random_t5_res_bank",
+            "classic_template_pool_random_t5_stat",
+            "classic_template_pool_random_t5_magic"
+          ],
+          "unguardedContentPool": [
+            "classic_template_pool_random_unguarded_t4_item",
+            "classic_template_pool_random_unguarded_t4_pandora",
+            "classic_template_pool_random_unguarded_t4_hire",
+            "classic_template_pool_random_unguarded_t4_unit_bank",
+            "classic_template_pool_random_unguarded_t4_res_bank",
+            "classic_template_pool_random_unguarded_t4_stat",
+            "classic_template_pool_random_unguarded_t4_magic",
+            "classic_template_pool_random_unguarded_t5_item",
+            "classic_template_pool_random_unguarded_t5_pandora",
+            "classic_template_pool_random_unguarded_t5_hire",
+            "classic_template_pool_random_unguarded_t5_unit_bank",
+            "classic_template_pool_random_unguarded_t5_res_bank",
+            "classic_template_pool_random_unguarded_t5_stat",
+            "classic_template_pool_random_unguarded_t5_magic"
+          ],
+          "resourcesContentPool": [
+            "content_pool_general_resources_start_zone_rich"
+          ],
+          "mandatoryContent": [
+            "mandatory_content_neutral_H"
+          ],
+          "contentCountLimits": [
+            "content_limits_side_1_2",
+            "content_limits_side_1_3",
+            "content_limits_side_1_4",
+            "content_limits_side_1_5",
+            "content_limits_side_1_6",
+            "content_limits_side_2_3",
+            "content_limits_side_2_4",
+            "content_limits_side_2_5",
+            "content_limits_side_2_6",
+            "content_limits_side_3_4",
+            "content_limits_side_3_5",
+            "content_limits_side_3_6",
+            "content_limits_side_4_5",
+            "content_limits_side_4_6",
+            "content_limits_side_5_6"
+          ],
+          "guardedContentValue": 312000,
+          "guardedContentValuePerArea": 2757,
+          "unguardedContentValue": 52000,
+          "unguardedContentValuePerArea": 569,
+          "resourcesValue": 25874,
+          "resourcesValuePerArea": 235,
+          "mainObjects": [],
+          "zoneBiome": {
+            "type": "MatchZone",
+            "args": []
+          },
+          "contentBiome": {
+            "type": "MatchZone",
+            "args": []
+          },
+          "metaObjectsBiome": {
+            "type": "MatchZone",
+            "args": []
+          },
+          "crossroadsPosition": 0,
+          "roads": [
+            {
+              "from": {
+                "type": "Connection",
+                "args": [
+                  "TriangleHigh-B-H"
+                ]
+              },
+              "to": {
+                "type": "Connection",
+                "args": [
+                  "TriangleHighHub-H"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Neutral-I",
+          "size": 0.95,
+          "layout": "zone_layout_treasure_zone",
+          "guardCutoffValue": 2000,
+          "guardRandomization": 0.06,
+          "guardMultiplier": 2.25,
+          "guardWeeklyIncrement": 0.2,
+          "guardReactionDistribution": [
+            0,
+            10,
+            10,
+            20,
+            10,
+            0
+          ],
+          "diplomacyModifier": -0.5,
+          "guardedContentPool": [
+            "classic_template_pool_random_t4_item",
+            "classic_template_pool_random_t4_pandora",
+            "classic_template_pool_random_t4_hire",
+            "classic_template_pool_random_t4_unit_bank",
+            "classic_template_pool_random_t4_res_bank",
+            "classic_template_pool_random_t4_stat",
+            "classic_template_pool_random_t4_magic",
+            "classic_template_pool_random_t5_item",
+            "classic_template_pool_random_t5_pandora",
+            "classic_template_pool_random_t5_hire",
+            "classic_template_pool_random_t5_unit_bank",
+            "classic_template_pool_random_t5_res_bank",
+            "classic_template_pool_random_t5_stat",
+            "classic_template_pool_random_t5_magic"
+          ],
+          "unguardedContentPool": [
+            "classic_template_pool_random_unguarded_t4_item",
+            "classic_template_pool_random_unguarded_t4_pandora",
+            "classic_template_pool_random_unguarded_t4_hire",
+            "classic_template_pool_random_unguarded_t4_unit_bank",
+            "classic_template_pool_random_unguarded_t4_res_bank",
+            "classic_template_pool_random_unguarded_t4_stat",
+            "classic_template_pool_random_unguarded_t4_magic",
+            "classic_template_pool_random_unguarded_t5_item",
+            "classic_template_pool_random_unguarded_t5_pandora",
+            "classic_template_pool_random_unguarded_t5_hire",
+            "classic_template_pool_random_unguarded_t5_unit_bank",
+            "classic_template_pool_random_unguarded_t5_res_bank",
+            "classic_template_pool_random_unguarded_t5_stat",
+            "classic_template_pool_random_unguarded_t5_magic"
+          ],
+          "resourcesContentPool": [
+            "content_pool_general_resources_start_zone_rich"
+          ],
+          "mandatoryContent": [
+            "mandatory_content_neutral_I"
+          ],
+          "contentCountLimits": [
+            "content_limits_side_1_2",
+            "content_limits_side_1_3",
+            "content_limits_side_1_4",
+            "content_limits_side_1_5",
+            "content_limits_side_1_6",
+            "content_limits_side_2_3",
+            "content_limits_side_2_4",
+            "content_limits_side_2_5",
+            "content_limits_side_2_6",
+            "content_limits_side_3_4",
+            "content_limits_side_3_5",
+            "content_limits_side_3_6",
+            "content_limits_side_4_5",
+            "content_limits_side_4_6",
+            "content_limits_side_5_6"
+          ],
+          "guardedContentValue": 312000,
+          "guardedContentValuePerArea": 2757,
+          "unguardedContentValue": 52000,
+          "unguardedContentValuePerArea": 569,
+          "resourcesValue": 25874,
+          "resourcesValuePerArea": 235,
+          "mainObjects": [],
+          "zoneBiome": {
+            "type": "MatchZone",
+            "args": []
+          },
+          "contentBiome": {
+            "type": "MatchZone",
+            "args": []
+          },
+          "metaObjectsBiome": {
+            "type": "MatchZone",
+            "args": []
+          },
+          "crossroadsPosition": 0,
+          "roads": [
+            {
+              "from": {
+                "type": "Connection",
+                "args": [
+                  "TriangleHigh-C-I"
+                ]
+              },
+              "to": {
+                "type": "Connection",
+                "args": [
+                  "TriangleHighHub-I"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Natural-A",
+          "size": 0.95,
+          "layout": "zone_layout_sides",
+          "guardCutoffValue": 2000,
+          "guardRandomization": 0.06,
+          "guardMultiplier": 1.375,
+          "guardWeeklyIncrement": 0.2,
+          "guardReactionDistribution": [
+            0,
+            10,
+            10,
+            10,
+            10,
+            0
+          ],
+          "diplomacyModifier": -0.5,
+          "guardedContentPool": [
+            "classic_template_pool_random_t2_item",
+            "classic_template_pool_random_t2_pandora",
+            "classic_template_pool_random_t2_hire",
+            "classic_template_pool_random_t2_unit_bank",
+            "classic_template_pool_random_t2_res_bank",
+            "classic_template_pool_random_t2_stat",
+            "classic_template_pool_random_t2_magic"
+          ],
+          "unguardedContentPool": [
+            "classic_template_pool_random_unguarded_t2_item",
+            "classic_template_pool_random_unguarded_t2_pandora",
+            "classic_template_pool_random_unguarded_t2_hire",
+            "classic_template_pool_random_unguarded_t2_unit_bank",
+            "classic_template_pool_random_unguarded_t2_res_bank",
+            "classic_template_pool_random_unguarded_t2_stat",
+            "classic_template_pool_random_unguarded_t2_magic"
+          ],
+          "resourcesContentPool": [
+            "content_pool_general_resources_start_zone_poor"
+          ],
+          "mandatoryContent": [
+            "mandatory_content_natural_A"
+          ],
+          "contentCountLimits": [
+            "content_limits_side_1_2",
+            "content_limits_side_1_3",
+            "content_limits_side_1_4",
+            "content_limits_side_1_5",
+            "content_limits_side_1_6",
+            "content_limits_side_2_3",
+            "content_limits_side_2_4",
+            "content_limits_side_2_5",
+            "content_limits_side_2_6",
+            "content_limits_side_3_4",
+            "content_limits_side_3_5",
+            "content_limits_side_3_6",
+            "content_limits_side_4_5",
+            "content_limits_side_4_6",
+            "content_limits_side_5_6"
+          ],
+          "guardedContentValue": 78000,
+          "guardedContentValuePerArea": 919,
+          "unguardedContentValue": 16250,
+          "unguardedContentValuePerArea": 183,
+          "resourcesValue": 8625,
+          "resourcesValuePerArea": 97,
+          "mainObjects": [
+            {
+              "type": "City",
+              "guardChance": 1,
+              "guardValue": 5000,
+              "guardWeeklyIncrement": 0.1,
+              "buildingsConstructionSid": "poor_buildings_construction",
+              "faction": {
+                "type": "Match",
+                "args": [
+                  "0",
+                  "Spawn-A"
+                ]
+              },
+              "placement": "Uniform",
+              "placementArgs": [
+                "true",
+                "0.8",
+                "2"
+              ]
+            }
+          ],
+          "zoneBiome": {
+            "type": "MatchMainObject",
+            "args": [
+              "0"
+            ]
+          },
+          "contentBiome": {
+            "type": "MatchMainObject",
+            "args": [
+              "0"
+            ]
+          },
+          "metaObjectsBiome": {
+            "type": "MatchMainObject",
+            "args": [
+              "0"
+            ]
+          },
+          "crossroadsPosition": 0,
+          "roads": [
+            {
+              "from": {
+                "type": "MainObject",
+                "args": [
+                  "0"
+                ]
+              },
+              "to": {
+                "type": "MandatoryContent",
+                "args": [
+                  "name_remote_foothold_1"
+                ]
+              }
+            },
+            {
+              "from": {
+                "type": "MainObject",
+                "args": [
+                  "0"
+                ]
+              },
+              "to": {
+                "type": "Connection",
+                "args": [
+                  "Natural-A"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Natural-B",
+          "size": 0.95,
+          "layout": "zone_layout_sides",
+          "guardCutoffValue": 2000,
+          "guardRandomization": 0.06,
+          "guardMultiplier": 1.375,
+          "guardWeeklyIncrement": 0.2,
+          "guardReactionDistribution": [
+            0,
+            10,
+            10,
+            10,
+            10,
+            0
+          ],
+          "diplomacyModifier": -0.5,
+          "guardedContentPool": [
+            "classic_template_pool_random_t2_item",
+            "classic_template_pool_random_t2_pandora",
+            "classic_template_pool_random_t2_hire",
+            "classic_template_pool_random_t2_unit_bank",
+            "classic_template_pool_random_t2_res_bank",
+            "classic_template_pool_random_t2_stat",
+            "classic_template_pool_random_t2_magic"
+          ],
+          "unguardedContentPool": [
+            "classic_template_pool_random_unguarded_t2_item",
+            "classic_template_pool_random_unguarded_t2_pandora",
+            "classic_template_pool_random_unguarded_t2_hire",
+            "classic_template_pool_random_unguarded_t2_unit_bank",
+            "classic_template_pool_random_unguarded_t2_res_bank",
+            "classic_template_pool_random_unguarded_t2_stat",
+            "classic_template_pool_random_unguarded_t2_magic"
+          ],
+          "resourcesContentPool": [
+            "content_pool_general_resources_start_zone_poor"
+          ],
+          "mandatoryContent": [
+            "mandatory_content_natural_B"
+          ],
+          "contentCountLimits": [
+            "content_limits_side_1_2",
+            "content_limits_side_1_3",
+            "content_limits_side_1_4",
+            "content_limits_side_1_5",
+            "content_limits_side_1_6",
+            "content_limits_side_2_3",
+            "content_limits_side_2_4",
+            "content_limits_side_2_5",
+            "content_limits_side_2_6",
+            "content_limits_side_3_4",
+            "content_limits_side_3_5",
+            "content_limits_side_3_6",
+            "content_limits_side_4_5",
+            "content_limits_side_4_6",
+            "content_limits_side_5_6"
+          ],
+          "guardedContentValue": 78000,
+          "guardedContentValuePerArea": 919,
+          "unguardedContentValue": 16250,
+          "unguardedContentValuePerArea": 183,
+          "resourcesValue": 8625,
+          "resourcesValuePerArea": 97,
+          "mainObjects": [
+            {
+              "type": "City",
+              "guardChance": 1,
+              "guardValue": 5000,
+              "guardWeeklyIncrement": 0.1,
+              "buildingsConstructionSid": "poor_buildings_construction",
+              "faction": {
+                "type": "Match",
+                "args": [
+                  "0",
+                  "Spawn-B"
+                ]
+              },
+              "placement": "Uniform",
+              "placementArgs": [
+                "true",
+                "0.8",
+                "2"
+              ]
+            }
+          ],
+          "zoneBiome": {
+            "type": "MatchMainObject",
+            "args": [
+              "0"
+            ]
+          },
+          "contentBiome": {
+            "type": "MatchMainObject",
+            "args": [
+              "0"
+            ]
+          },
+          "metaObjectsBiome": {
+            "type": "MatchMainObject",
+            "args": [
+              "0"
+            ]
+          },
+          "crossroadsPosition": 0,
+          "roads": [
+            {
+              "from": {
+                "type": "MainObject",
+                "args": [
+                  "0"
+                ]
+              },
+              "to": {
+                "type": "MandatoryContent",
+                "args": [
+                  "name_remote_foothold_1"
+                ]
+              }
+            },
+            {
+              "from": {
+                "type": "MainObject",
+                "args": [
+                  "0"
+                ]
+              },
+              "to": {
+                "type": "Connection",
+                "args": [
+                  "Natural-B"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Natural-C",
+          "size": 0.95,
+          "layout": "zone_layout_sides",
+          "guardCutoffValue": 2000,
+          "guardRandomization": 0.06,
+          "guardMultiplier": 1.375,
+          "guardWeeklyIncrement": 0.2,
+          "guardReactionDistribution": [
+            0,
+            10,
+            10,
+            10,
+            10,
+            0
+          ],
+          "diplomacyModifier": -0.5,
+          "guardedContentPool": [
+            "classic_template_pool_random_t2_item",
+            "classic_template_pool_random_t2_pandora",
+            "classic_template_pool_random_t2_hire",
+            "classic_template_pool_random_t2_unit_bank",
+            "classic_template_pool_random_t2_res_bank",
+            "classic_template_pool_random_t2_stat",
+            "classic_template_pool_random_t2_magic"
+          ],
+          "unguardedContentPool": [
+            "classic_template_pool_random_unguarded_t2_item",
+            "classic_template_pool_random_unguarded_t2_pandora",
+            "classic_template_pool_random_unguarded_t2_hire",
+            "classic_template_pool_random_unguarded_t2_unit_bank",
+            "classic_template_pool_random_unguarded_t2_res_bank",
+            "classic_template_pool_random_unguarded_t2_stat",
+            "classic_template_pool_random_unguarded_t2_magic"
+          ],
+          "resourcesContentPool": [
+            "content_pool_general_resources_start_zone_poor"
+          ],
+          "mandatoryContent": [
+            "mandatory_content_natural_C"
+          ],
+          "contentCountLimits": [
+            "content_limits_side_1_2",
+            "content_limits_side_1_3",
+            "content_limits_side_1_4",
+            "content_limits_side_1_5",
+            "content_limits_side_1_6",
+            "content_limits_side_2_3",
+            "content_limits_side_2_4",
+            "content_limits_side_2_5",
+            "content_limits_side_2_6",
+            "content_limits_side_3_4",
+            "content_limits_side_3_5",
+            "content_limits_side_3_6",
+            "content_limits_side_4_5",
+            "content_limits_side_4_6",
+            "content_limits_side_5_6"
+          ],
+          "guardedContentValue": 78000,
+          "guardedContentValuePerArea": 919,
+          "unguardedContentValue": 16250,
+          "unguardedContentValuePerArea": 183,
+          "resourcesValue": 8625,
+          "resourcesValuePerArea": 97,
+          "mainObjects": [
+            {
+              "type": "City",
+              "guardChance": 1,
+              "guardValue": 5000,
+              "guardWeeklyIncrement": 0.1,
+              "buildingsConstructionSid": "poor_buildings_construction",
+              "faction": {
+                "type": "Match",
+                "args": [
+                  "0",
+                  "Spawn-C"
+                ]
+              },
+              "placement": "Uniform",
+              "placementArgs": [
+                "true",
+                "0.8",
+                "2"
+              ]
+            }
+          ],
+          "zoneBiome": {
+            "type": "MatchMainObject",
+            "args": [
+              "0"
+            ]
+          },
+          "contentBiome": {
+            "type": "MatchMainObject",
+            "args": [
+              "0"
+            ]
+          },
+          "metaObjectsBiome": {
+            "type": "MatchMainObject",
+            "args": [
+              "0"
+            ]
+          },
+          "crossroadsPosition": 0,
+          "roads": [
+            {
+              "from": {
+                "type": "MainObject",
+                "args": [
+                  "0"
+                ]
+              },
+              "to": {
+                "type": "MandatoryContent",
+                "args": [
+                  "name_remote_foothold_1"
+                ]
+              }
+            },
+            {
+              "from": {
+                "type": "MainObject",
+                "args": [
+                  "0"
+                ]
+              },
+              "to": {
+                "type": "Connection",
+                "args": [
+                  "Natural-C"
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "connections": [
+        {
+          "name": "Triangle-A-D",
+          "from": "Spawn-A",
+          "to": "Neutral-D",
+          "connectionType": "Direct",
+          "guardZone": "Neutral-D",
+          "guardEscape": false,
+          "simTurnSquad": true,
+          "guardValue": 39000,
+          "guardWeeklyIncrement": 0.15,
+          "guardMatchGroup": "triangle_guard_A_D"
+        },
+        {
+          "name": "Triangle-D-B",
+          "from": "Neutral-D",
+          "to": "Spawn-B",
+          "connectionType": "Direct",
+          "guardZone": "Neutral-D",
+          "guardEscape": false,
+          "simTurnSquad": true,
+          "guardValue": 39000,
+          "guardWeeklyIncrement": 0.15,
+          "guardMatchGroup": "triangle_guard_D_B"
+        },
+        {
+          "name": "TriangleHub-D",
+          "from": "Hub",
+          "to": "Neutral-D",
+          "connectionType": "Direct",
+          "guardZone": "Hub",
+          "guardEscape": false,
+          "simTurnSquad": true,
+          "guardValue": 45500,
+          "guardWeeklyIncrement": 0.15,
+          "guardMatchGroup": "triangle_hub_guard_D"
+        },
+        {
+          "name": "TriangleHigh-A-G",
+          "from": "Spawn-A",
+          "to": "Neutral-G",
+          "connectionType": "Direct",
+          "guardZone": "Neutral-G",
+          "guardEscape": false,
+          "simTurnSquad": true,
+          "guardValue": 52000,
+          "guardWeeklyIncrement": 0.15,
+          "guardMatchGroup": "triangle_high_guard_A_G"
+        },
+        {
+          "name": "TriangleHighHub-G",
+          "from": "Hub",
+          "to": "Neutral-G",
+          "connectionType": "Direct",
+          "guardZone": "Hub",
+          "guardEscape": false,
+          "simTurnSquad": true,
+          "guardValue": 65000,
+          "guardWeeklyIncrement": 0.15,
+          "guardMatchGroup": "triangle_high_hub_guard_G"
+        },
+        {
+          "name": "Triangle-B-E",
+          "from": "Spawn-B",
+          "to": "Neutral-E",
+          "connectionType": "Direct",
+          "guardZone": "Neutral-E",
+          "guardEscape": false,
+          "simTurnSquad": true,
+          "guardValue": 39000,
+          "guardWeeklyIncrement": 0.15,
+          "guardMatchGroup": "triangle_guard_B_E"
+        },
+        {
+          "name": "Triangle-E-C",
+          "from": "Neutral-E",
+          "to": "Spawn-C",
+          "connectionType": "Direct",
+          "guardZone": "Neutral-E",
+          "guardEscape": false,
+          "simTurnSquad": true,
+          "guardValue": 39000,
+          "guardWeeklyIncrement": 0.15,
+          "guardMatchGroup": "triangle_guard_E_C"
+        },
+        {
+          "name": "TriangleHub-E",
+          "from": "Hub",
+          "to": "Neutral-E",
+          "connectionType": "Direct",
+          "guardZone": "Hub",
+          "guardEscape": false,
+          "simTurnSquad": true,
+          "guardValue": 45500,
+          "guardWeeklyIncrement": 0.15,
+          "guardMatchGroup": "triangle_hub_guard_E"
+        },
+        {
+          "name": "TriangleHigh-B-H",
+          "from": "Spawn-B",
+          "to": "Neutral-H",
+          "connectionType": "Direct",
+          "guardZone": "Neutral-H",
+          "guardEscape": false,
+          "simTurnSquad": true,
+          "guardValue": 52000,
+          "guardWeeklyIncrement": 0.15,
+          "guardMatchGroup": "triangle_high_guard_B_H"
+        },
+        {
+          "name": "TriangleHighHub-H",
+          "from": "Hub",
+          "to": "Neutral-H",
+          "connectionType": "Direct",
+          "guardZone": "Hub",
+          "guardEscape": false,
+          "simTurnSquad": true,
+          "guardValue": 65000,
+          "guardWeeklyIncrement": 0.15,
+          "guardMatchGroup": "triangle_high_hub_guard_H"
+        },
+        {
+          "name": "Triangle-C-F",
+          "from": "Spawn-C",
+          "to": "Neutral-F",
+          "connectionType": "Direct",
+          "guardZone": "Neutral-F",
+          "guardEscape": false,
+          "simTurnSquad": true,
+          "guardValue": 39000,
+          "guardWeeklyIncrement": 0.15,
+          "guardMatchGroup": "triangle_guard_C_F"
+        },
+        {
+          "name": "Triangle-F-A",
+          "from": "Neutral-F",
+          "to": "Spawn-A",
+          "connectionType": "Direct",
+          "guardZone": "Neutral-F",
+          "guardEscape": false,
+          "simTurnSquad": true,
+          "guardValue": 39000,
+          "guardWeeklyIncrement": 0.15,
+          "guardMatchGroup": "triangle_guard_F_A"
+        },
+        {
+          "name": "TriangleHub-F",
+          "from": "Hub",
+          "to": "Neutral-F",
+          "connectionType": "Direct",
+          "guardZone": "Hub",
+          "guardEscape": false,
+          "simTurnSquad": true,
+          "guardValue": 45500,
+          "guardWeeklyIncrement": 0.15,
+          "guardMatchGroup": "triangle_hub_guard_F"
+        },
+        {
+          "name": "TriangleHigh-C-I",
+          "from": "Spawn-C",
+          "to": "Neutral-I",
+          "connectionType": "Direct",
+          "guardZone": "Neutral-I",
+          "guardEscape": false,
+          "simTurnSquad": true,
+          "guardValue": 52000,
+          "guardWeeklyIncrement": 0.15,
+          "guardMatchGroup": "triangle_high_guard_C_I"
+        },
+        {
+          "name": "TriangleHighHub-I",
+          "from": "Hub",
+          "to": "Neutral-I",
+          "connectionType": "Direct",
+          "guardZone": "Hub",
+          "guardEscape": false,
+          "simTurnSquad": true,
+          "guardValue": 65000,
+          "guardWeeklyIncrement": 0.15,
+          "guardMatchGroup": "triangle_high_hub_guard_I"
+        },
+        {
+          "name": "Natural-A",
+          "from": "Spawn-A",
+          "to": "Natural-A",
+          "connectionType": "Direct",
+          "guardZone": "Natural-A",
+          "guardEscape": false,
+          "simTurnSquad": true,
+          "guardValue": 15600,
+          "guardWeeklyIncrement": 0.15,
+          "guardMatchGroup": "natural_guard_A"
+        },
+        {
+          "name": "Natural-B",
+          "from": "Spawn-B",
+          "to": "Natural-B",
+          "connectionType": "Direct",
+          "guardZone": "Natural-B",
+          "guardEscape": false,
+          "simTurnSquad": true,
+          "guardValue": 15600,
+          "guardWeeklyIncrement": 0.15,
+          "guardMatchGroup": "natural_guard_B"
+        },
+        {
+          "name": "Natural-C",
+          "from": "Spawn-C",
+          "to": "Natural-C",
+          "connectionType": "Direct",
+          "guardZone": "Natural-C",
+          "guardEscape": false,
+          "simTurnSquad": true,
+          "guardValue": 15600,
+          "guardWeeklyIncrement": 0.15,
+          "guardMatchGroup": "natural_guard_C"
+        }
+      ]
+    }
+  ],
+  "zoneLayouts": [
+    {
+      "name": "zone_layout_spawns",
+      "obstaclesFill": 0.24,
+      "obstaclesFillVoid": 0.48,
+      "lakesFill": 0.3,
+      "minLakeArea": 16,
+      "elevationClusterScale": 0.16,
+      "elevationModes": [
+        {
+          "weight": 2,
+          "minElevatedFraction": 0.2,
+          "maxElevatedFraction": 0.4
+        },
+        {
+          "weight": 1,
+          "minElevatedFraction": 0.6,
+          "maxElevatedFraction": 0.8
+        }
+      ],
+      "roadClusterArea": 160,
+      "guardedEncounterResourceFractions": {
+        "countBounds": [],
+        "fractions": [
+          0.66
+        ]
+      },
+      "ambientPickupDistribution": {
+        "repulsion": 1,
+        "noise": 0.4,
+        "roadAttraction": -0.3,
+        "obstacleAttraction": 0,
+        "groupSizeWeights": [
+          20,
+          2,
+          1
+        ]
+      }
+    },
+    {
+      "name": "zone_layout_sides",
+      "obstaclesFill": 0.36,
+      "obstaclesFillVoid": 0.5,
+      "lakesFill": 0.25,
+      "minLakeArea": 16,
+      "elevationClusterScale": 0.128,
+      "elevationModes": [
+        {
+          "weight": 2,
+          "minElevatedFraction": 0.2,
+          "maxElevatedFraction": 0.4
+        },
+        {
+          "weight": 1,
+          "minElevatedFraction": 0.6,
+          "maxElevatedFraction": 0.8
+        }
+      ],
+      "roadClusterArea": 128,
+      "guardedEncounterResourceFractions": {
+        "countBounds": [],
+        "fractions": [
+          0.66
+        ]
+      },
+      "ambientPickupDistribution": {
+        "repulsion": 1,
+        "noise": 0.3,
+        "roadAttraction": -0.3,
+        "obstacleAttraction": 0,
+        "groupSizeWeights": [
+          20,
+          2,
+          1
+        ]
+      }
+    },
+    {
+      "name": "zone_layout_treasure_zone",
+      "obstaclesFill": 0.5,
+      "obstaclesFillVoid": 0.5,
+      "lakesFill": 0.45,
+      "minLakeArea": 12,
+      "elevationClusterScale": 0.12,
+      "elevationModes": [
+        {
+          "weight": 2,
+          "minElevatedFraction": 0.2,
+          "maxElevatedFraction": 0.4
+        },
+        {
+          "weight": 1,
+          "minElevatedFraction": 0.6,
+          "maxElevatedFraction": 0.8
+        }
+      ],
+      "roadClusterArea": 96,
+      "guardedEncounterResourceFractions": {
+        "countBounds": [],
+        "fractions": [
+          0.66
+        ]
+      },
+      "ambientPickupDistribution": {
+        "repulsion": 1,
+        "noise": 0.3,
+        "roadAttraction": -0.3,
+        "obstacleAttraction": 0,
+        "groupSizeWeights": [
+          12,
+          3,
+          1
+        ]
+      }
+    },
+    {
+      "name": "zone_layout_center",
+      "obstaclesFill": 0.56,
+      "obstaclesFillVoid": 0.6,
+      "lakesFill": 0.3,
+      "minLakeArea": 10,
+      "elevationClusterScale": 0.128,
+      "elevationModes": [
+        {
+          "weight": 2,
+          "minElevatedFraction": 0.2,
+          "maxElevatedFraction": 0.4
+        },
+        {
+          "weight": 1,
+          "minElevatedFraction": 0.6,
+          "maxElevatedFraction": 0.8
+        }
+      ],
+      "roadClusterArea": 96,
+      "guardedEncounterResourceFractions": {
+        "countBounds": [],
+        "fractions": [
+          0.66
+        ]
+      },
+      "ambientPickupDistribution": {
+        "repulsion": 1,
+        "noise": 0.3,
+        "roadAttraction": -0.25,
+        "obstacleAttraction": 0,
+        "groupSizeWeights": [
+          12,
+          4,
+          1
+        ]
+      }
+    }
+  ],
+  "mandatoryContent": [
+    {
+      "name": "mandatory_content_side_A",
+      "content": [
+        {
+          "name": "name_remote_foothold_1",
+          "sid": "remote_foothold",
+          "isGuarded": false,
+          "rules": [
+            {
+              "type": "Crossroads",
+              "args": [],
+              "targetMin": 0.2,
+              "targetMax": 0.3,
+              "weight": 0
+            },
+            {
+              "type": "MainObject",
+              "args": [
+                "0"
+              ],
+              "targetMin": 0.2,
+              "targetMax": 0.4,
+              "weight": 0
+            }
+          ]
+        },
+        {
+          "name": "name_mine_wood",
+          "sid": "mine_wood",
+          "isGuarded": true,
+          "isMine": true,
+          "rules": [
+            {
+              "type": "MainObject",
+              "args": [
+                "0"
+              ],
+              "targetMin": 0.15,
+              "targetMax": 0.35,
+              "weight": 1
+            },
+            {
+              "type": "Crossroads",
+              "args": [],
+              "targetMin": 0.15,
+              "targetMax": 0.3,
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "name": "name_mine_ore",
+          "sid": "mine_ore",
+          "isGuarded": true,
+          "isMine": true,
+          "rules": [
+            {
+              "type": "MainObject",
+              "args": [
+                "0"
+              ],
+              "targetMin": 0.15,
+              "targetMax": 0.35,
+              "weight": 1
+            },
+            {
+              "type": "Crossroads",
+              "args": [],
+              "targetMin": 0.15,
+              "targetMax": 0.3,
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "sid": "mine_gold",
+          "isMine": true,
+          "rules": [
+            {
+              "type": "Crossroads",
+              "args": [],
+              "targetMin": 0.1,
+              "targetMax": 0.3,
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "name": "name_mine_crystals",
+          "sid": "mine_crystals",
+          "isMine": true,
+          "rules": [
+            {
+              "type": "Road",
+              "args": [],
+              "targetMin": 0.05,
+              "targetMax": 0.1,
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "name": "name_mine_mercury",
+          "sid": "mine_mercury",
+          "isMine": true,
+          "rules": [
+            {
+              "type": "Road",
+              "args": [],
+              "targetMin": 0.05,
+              "targetMax": 0.1,
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "name": "name_mine_gemstones",
+          "sid": "mine_gemstones",
+          "isMine": true,
+          "rules": [
+            {
+              "type": "Road",
+              "args": [],
+              "targetMin": 0.05,
+              "targetMax": 0.1,
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "name": "name_alchemy_lab",
+          "sid": "alchemy_lab",
+          "isMine": true,
+          "rules": [
+            {
+              "type": "Road",
+              "args": [],
+              "targetMin": 0.2,
+              "targetMax": 0.3,
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "sid": "watchtower"
+        },
+        {
+          "sid": "market",
+          "isGuarded": true,
+          "rules": [
+            {
+              "type": "Road",
+              "args": [],
+              "targetMin": 0.15,
+              "targetMax": 0.3,
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "sid": "mana_well",
+          "rules": [
+            {
+              "type": "Road",
+              "args": [],
+              "targetMin": 0.15,
+              "targetMax": 0.3,
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_hero_stats_and_skills_tier_2"
+          ]
+        },
+        {
+          "includeLists": [
+            "content_list_building_uncommon_hero_banks"
+          ]
+        },
+        {
+          "includeLists": [
+            "content_list_building_random_hires_low_tier"
+          ]
+        },
+        {
+          "includeLists": [
+            "content_list_building_random_hires_low_tier"
+          ]
+        },
+        {
+          "includeLists": [
+            "content_list_building_random_hires_high_tier"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_random_hires"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_guarded_resource_banks_tier_1"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_guarded_resource_banks_tier_1"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_guarded_resource_banks_tier_2"
+          ]
+        },
+        {
+          "sid": "random_item_epic",
+          "soloEncounter": true
+        },
+        {
+          "sid": "pandora_box",
+          "soloEncounter": true
+        },
+        {
+          "includeLists": [
+            "content_list_pickup_pandora_box_army_low_tier"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "mandatory_content_side_B",
+      "content": [
+        {
+          "name": "name_remote_foothold_1",
+          "sid": "remote_foothold",
+          "isGuarded": false,
+          "rules": [
+            {
+              "type": "Crossroads",
+              "args": [],
+              "targetMin": 0.2,
+              "targetMax": 0.3,
+              "weight": 0
+            },
+            {
+              "type": "MainObject",
+              "args": [
+                "0"
+              ],
+              "targetMin": 0.2,
+              "targetMax": 0.4,
+              "weight": 0
+            }
+          ]
+        },
+        {
+          "name": "name_mine_wood",
+          "sid": "mine_wood",
+          "isGuarded": true,
+          "isMine": true,
+          "rules": [
+            {
+              "type": "MainObject",
+              "args": [
+                "0"
+              ],
+              "targetMin": 0.15,
+              "targetMax": 0.35,
+              "weight": 1
+            },
+            {
+              "type": "Crossroads",
+              "args": [],
+              "targetMin": 0.15,
+              "targetMax": 0.3,
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "name": "name_mine_ore",
+          "sid": "mine_ore",
+          "isGuarded": true,
+          "isMine": true,
+          "rules": [
+            {
+              "type": "MainObject",
+              "args": [
+                "0"
+              ],
+              "targetMin": 0.15,
+              "targetMax": 0.35,
+              "weight": 1
+            },
+            {
+              "type": "Crossroads",
+              "args": [],
+              "targetMin": 0.15,
+              "targetMax": 0.3,
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "sid": "mine_gold",
+          "isMine": true,
+          "rules": [
+            {
+              "type": "Crossroads",
+              "args": [],
+              "targetMin": 0.1,
+              "targetMax": 0.3,
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "name": "name_mine_crystals",
+          "sid": "mine_crystals",
+          "isMine": true,
+          "rules": [
+            {
+              "type": "Road",
+              "args": [],
+              "targetMin": 0.05,
+              "targetMax": 0.1,
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "name": "name_mine_mercury",
+          "sid": "mine_mercury",
+          "isMine": true,
+          "rules": [
+            {
+              "type": "Road",
+              "args": [],
+              "targetMin": 0.05,
+              "targetMax": 0.1,
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "name": "name_mine_gemstones",
+          "sid": "mine_gemstones",
+          "isMine": true,
+          "rules": [
+            {
+              "type": "Road",
+              "args": [],
+              "targetMin": 0.05,
+              "targetMax": 0.1,
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "name": "name_alchemy_lab",
+          "sid": "alchemy_lab",
+          "isMine": true,
+          "rules": [
+            {
+              "type": "Road",
+              "args": [],
+              "targetMin": 0.2,
+              "targetMax": 0.3,
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "sid": "watchtower"
+        },
+        {
+          "sid": "market",
+          "isGuarded": true,
+          "rules": [
+            {
+              "type": "Road",
+              "args": [],
+              "targetMin": 0.15,
+              "targetMax": 0.3,
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "sid": "mana_well",
+          "rules": [
+            {
+              "type": "Road",
+              "args": [],
+              "targetMin": 0.15,
+              "targetMax": 0.3,
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_hero_stats_and_skills_tier_2"
+          ]
+        },
+        {
+          "includeLists": [
+            "content_list_building_uncommon_hero_banks"
+          ]
+        },
+        {
+          "includeLists": [
+            "content_list_building_random_hires_low_tier"
+          ]
+        },
+        {
+          "includeLists": [
+            "content_list_building_random_hires_low_tier"
+          ]
+        },
+        {
+          "includeLists": [
+            "content_list_building_random_hires_high_tier"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_random_hires"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_guarded_resource_banks_tier_1"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_guarded_resource_banks_tier_1"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_guarded_resource_banks_tier_2"
+          ]
+        },
+        {
+          "sid": "random_item_epic",
+          "soloEncounter": true
+        },
+        {
+          "sid": "pandora_box",
+          "soloEncounter": true
+        },
+        {
+          "includeLists": [
+            "content_list_pickup_pandora_box_army_low_tier"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "mandatory_content_side_C",
+      "content": [
+        {
+          "name": "name_remote_foothold_1",
+          "sid": "remote_foothold",
+          "isGuarded": false,
+          "rules": [
+            {
+              "type": "Crossroads",
+              "args": [],
+              "targetMin": 0.2,
+              "targetMax": 0.3,
+              "weight": 0
+            },
+            {
+              "type": "MainObject",
+              "args": [
+                "0"
+              ],
+              "targetMin": 0.2,
+              "targetMax": 0.4,
+              "weight": 0
+            }
+          ]
+        },
+        {
+          "name": "name_mine_wood",
+          "sid": "mine_wood",
+          "isGuarded": true,
+          "isMine": true,
+          "rules": [
+            {
+              "type": "MainObject",
+              "args": [
+                "0"
+              ],
+              "targetMin": 0.15,
+              "targetMax": 0.35,
+              "weight": 1
+            },
+            {
+              "type": "Crossroads",
+              "args": [],
+              "targetMin": 0.15,
+              "targetMax": 0.3,
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "name": "name_mine_ore",
+          "sid": "mine_ore",
+          "isGuarded": true,
+          "isMine": true,
+          "rules": [
+            {
+              "type": "MainObject",
+              "args": [
+                "0"
+              ],
+              "targetMin": 0.15,
+              "targetMax": 0.35,
+              "weight": 1
+            },
+            {
+              "type": "Crossroads",
+              "args": [],
+              "targetMin": 0.15,
+              "targetMax": 0.3,
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "sid": "mine_gold",
+          "isMine": true,
+          "rules": [
+            {
+              "type": "Crossroads",
+              "args": [],
+              "targetMin": 0.1,
+              "targetMax": 0.3,
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "name": "name_mine_crystals",
+          "sid": "mine_crystals",
+          "isMine": true,
+          "rules": [
+            {
+              "type": "Road",
+              "args": [],
+              "targetMin": 0.05,
+              "targetMax": 0.1,
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "name": "name_mine_mercury",
+          "sid": "mine_mercury",
+          "isMine": true,
+          "rules": [
+            {
+              "type": "Road",
+              "args": [],
+              "targetMin": 0.05,
+              "targetMax": 0.1,
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "name": "name_mine_gemstones",
+          "sid": "mine_gemstones",
+          "isMine": true,
+          "rules": [
+            {
+              "type": "Road",
+              "args": [],
+              "targetMin": 0.05,
+              "targetMax": 0.1,
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "name": "name_alchemy_lab",
+          "sid": "alchemy_lab",
+          "isMine": true,
+          "rules": [
+            {
+              "type": "Road",
+              "args": [],
+              "targetMin": 0.2,
+              "targetMax": 0.3,
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "sid": "watchtower"
+        },
+        {
+          "sid": "market",
+          "isGuarded": true,
+          "rules": [
+            {
+              "type": "Road",
+              "args": [],
+              "targetMin": 0.15,
+              "targetMax": 0.3,
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "sid": "mana_well",
+          "rules": [
+            {
+              "type": "Road",
+              "args": [],
+              "targetMin": 0.15,
+              "targetMax": 0.3,
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_hero_stats_and_skills_tier_2"
+          ]
+        },
+        {
+          "includeLists": [
+            "content_list_building_uncommon_hero_banks"
+          ]
+        },
+        {
+          "includeLists": [
+            "content_list_building_random_hires_low_tier"
+          ]
+        },
+        {
+          "includeLists": [
+            "content_list_building_random_hires_low_tier"
+          ]
+        },
+        {
+          "includeLists": [
+            "content_list_building_random_hires_high_tier"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_random_hires"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_guarded_resource_banks_tier_1"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_guarded_resource_banks_tier_1"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_guarded_resource_banks_tier_2"
+          ]
+        },
+        {
+          "sid": "random_item_epic",
+          "soloEncounter": true
+        },
+        {
+          "sid": "pandora_box",
+          "soloEncounter": true
+        },
+        {
+          "includeLists": [
+            "content_list_pickup_pandora_box_army_low_tier"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "mandatory_content_natural_A",
+      "content": [
+        {
+          "name": "name_remote_foothold_1",
+          "sid": "remote_foothold",
+          "isGuarded": false,
+          "rules": [
+            {
+              "type": "Crossroads",
+              "args": [],
+              "targetMin": 0.2,
+              "targetMax": 0.3,
+              "weight": 0
+            },
+            {
+              "type": "MainObject",
+              "args": [
+                "0"
+              ],
+              "targetMin": 0.2,
+              "targetMax": 0.4,
+              "weight": 0
+            }
+          ]
+        },
+        {
+          "name": "name_mine_by_biome_1",
+          "isMine": true,
+          "includeLists": [
+            "basic_content_list_rare_mines_by_biome"
+          ]
+        },
+        {
+          "isMine": true,
+          "includeLists": [
+            "basic_content_list_rare_mines"
+          ]
+        },
+        {
+          "sid": "market",
+          "isGuarded": true,
+          "rules": [
+            {
+              "type": "Crossroads",
+              "args": [],
+              "targetMin": 0.15,
+              "targetMax": 0.2,
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_vision_buildings_tier_1"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_hero_buff_tier_1"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_hero_buff_tier_1"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_hero_stats_and_skills_tier_1"
+          ]
+        },
+        {
+          "includeLists": [
+            "content_list_building_random_hires_low_tier"
+          ]
+        },
+        {
+          "includeLists": [
+            "content_list_building_random_hires_low_tier"
+          ]
+        },
+        {
+          "sid": "pandora_box",
+          "soloEncounter": true
+        },
+        {
+          "includeLists": [
+            "content_list_pickup_pandora_box_army_low_tier"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_pickup_random_items"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_magic_tier_1"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "mandatory_content_natural_B",
+      "content": [
+        {
+          "name": "name_remote_foothold_1",
+          "sid": "remote_foothold",
+          "isGuarded": false,
+          "rules": [
+            {
+              "type": "Crossroads",
+              "args": [],
+              "targetMin": 0.2,
+              "targetMax": 0.3,
+              "weight": 0
+            },
+            {
+              "type": "MainObject",
+              "args": [
+                "0"
+              ],
+              "targetMin": 0.2,
+              "targetMax": 0.4,
+              "weight": 0
+            }
+          ]
+        },
+        {
+          "name": "name_mine_by_biome_1",
+          "isMine": true,
+          "includeLists": [
+            "basic_content_list_rare_mines_by_biome"
+          ]
+        },
+        {
+          "isMine": true,
+          "includeLists": [
+            "basic_content_list_rare_mines"
+          ]
+        },
+        {
+          "sid": "market",
+          "isGuarded": true,
+          "rules": [
+            {
+              "type": "Crossroads",
+              "args": [],
+              "targetMin": 0.15,
+              "targetMax": 0.2,
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_vision_buildings_tier_1"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_hero_buff_tier_1"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_hero_buff_tier_1"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_hero_stats_and_skills_tier_1"
+          ]
+        },
+        {
+          "includeLists": [
+            "content_list_building_random_hires_low_tier"
+          ]
+        },
+        {
+          "includeLists": [
+            "content_list_building_random_hires_low_tier"
+          ]
+        },
+        {
+          "sid": "pandora_box",
+          "soloEncounter": true
+        },
+        {
+          "includeLists": [
+            "content_list_pickup_pandora_box_army_low_tier"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_pickup_random_items"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_magic_tier_1"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "mandatory_content_natural_C",
+      "content": [
+        {
+          "name": "name_remote_foothold_1",
+          "sid": "remote_foothold",
+          "isGuarded": false,
+          "rules": [
+            {
+              "type": "Crossroads",
+              "args": [],
+              "targetMin": 0.2,
+              "targetMax": 0.3,
+              "weight": 0
+            },
+            {
+              "type": "MainObject",
+              "args": [
+                "0"
+              ],
+              "targetMin": 0.2,
+              "targetMax": 0.4,
+              "weight": 0
+            }
+          ]
+        },
+        {
+          "name": "name_mine_by_biome_1",
+          "isMine": true,
+          "includeLists": [
+            "basic_content_list_rare_mines_by_biome"
+          ]
+        },
+        {
+          "isMine": true,
+          "includeLists": [
+            "basic_content_list_rare_mines"
+          ]
+        },
+        {
+          "sid": "market",
+          "isGuarded": true,
+          "rules": [
+            {
+              "type": "Crossroads",
+              "args": [],
+              "targetMin": 0.15,
+              "targetMax": 0.2,
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_vision_buildings_tier_1"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_hero_buff_tier_1"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_hero_buff_tier_1"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_hero_stats_and_skills_tier_1"
+          ]
+        },
+        {
+          "includeLists": [
+            "content_list_building_random_hires_low_tier"
+          ]
+        },
+        {
+          "includeLists": [
+            "content_list_building_random_hires_low_tier"
+          ]
+        },
+        {
+          "sid": "pandora_box",
+          "soloEncounter": true
+        },
+        {
+          "includeLists": [
+            "content_list_pickup_pandora_box_army_low_tier"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_pickup_random_items"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_magic_tier_1"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "mandatory_content_neutral_D",
+      "content": [
+        {
+          "name": "name_remote_foothold_1",
+          "sid": "remote_foothold",
+          "isGuarded": false,
+          "rules": [
+            {
+              "type": "Crossroads",
+              "args": [],
+              "targetMin": 0.2,
+              "targetMax": 0.3,
+              "weight": 0
+            },
+            {
+              "type": "MainObject",
+              "args": [
+                "0"
+              ],
+              "targetMin": 0.2,
+              "targetMax": 0.4,
+              "weight": 0
+            }
+          ]
+        },
+        {
+          "name": "name_mine_crystals",
+          "sid": "mine_crystals",
+          "isMine": true,
+          "rules": [
+            {
+              "type": "Road",
+              "args": [],
+              "targetMin": 0.05,
+              "targetMax": 0.1,
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "name": "name_mine_mercury",
+          "sid": "mine_mercury",
+          "isMine": true,
+          "rules": [
+            {
+              "type": "Road",
+              "args": [],
+              "targetMin": 0.05,
+              "targetMax": 0.1,
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "name": "name_mine_gemstones",
+          "sid": "mine_gemstones",
+          "isMine": true,
+          "rules": [
+            {
+              "type": "Road",
+              "args": [],
+              "targetMin": 0.05,
+              "targetMax": 0.1,
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "sid": "mine_gold",
+          "isMine": true,
+          "rules": [
+            {
+              "type": "Road",
+              "args": [],
+              "targetMin": 0.15,
+              "targetMax": 0.2,
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "sid": "alchemy_lab",
+          "isMine": true,
+          "rules": [
+            {
+              "type": "Road",
+              "args": [],
+              "targetMin": 0.2,
+              "targetMax": 0.3,
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "sid": "watchtower",
+          "isGuarded": true
+        },
+        {
+          "includeLists": [
+            "basic_content_list_vision_buildings_tier_1"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_hero_buff_tier_1"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_hero_stats_and_skills_tier_1"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_hero_stats_and_skills_tier_2"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_magic_tier_1"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_magic_tier_2"
+          ]
+        },
+        {
+          "includeLists": [
+            "content_list_building_random_hires_low_tier"
+          ]
+        },
+        {
+          "includeLists": [
+            "content_list_building_random_hires_high_tier"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_guarded_units_banks_only_biome_restriction"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_guarded_resource_banks_tier_2"
+          ]
+        },
+        {
+          "sid": "random_item_epic",
+          "soloEncounter": true
+        },
+        {
+          "sid": "random_item_epic"
+        },
+        {
+          "sid": "pandora_box",
+          "soloEncounter": true
+        },
+        {
+          "sid": "pandora_box"
+        },
+        {
+          "includeLists": [
+            "content_list_pickup_pandora_box_army_low_tier"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "mandatory_content_neutral_E",
+      "content": [
+        {
+          "name": "name_remote_foothold_1",
+          "sid": "remote_foothold",
+          "isGuarded": false,
+          "rules": [
+            {
+              "type": "Crossroads",
+              "args": [],
+              "targetMin": 0.2,
+              "targetMax": 0.3,
+              "weight": 0
+            },
+            {
+              "type": "MainObject",
+              "args": [
+                "0"
+              ],
+              "targetMin": 0.2,
+              "targetMax": 0.4,
+              "weight": 0
+            }
+          ]
+        },
+        {
+          "name": "name_mine_crystals",
+          "sid": "mine_crystals",
+          "isMine": true,
+          "rules": [
+            {
+              "type": "Road",
+              "args": [],
+              "targetMin": 0.05,
+              "targetMax": 0.1,
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "name": "name_mine_mercury",
+          "sid": "mine_mercury",
+          "isMine": true,
+          "rules": [
+            {
+              "type": "Road",
+              "args": [],
+              "targetMin": 0.05,
+              "targetMax": 0.1,
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "name": "name_mine_gemstones",
+          "sid": "mine_gemstones",
+          "isMine": true,
+          "rules": [
+            {
+              "type": "Road",
+              "args": [],
+              "targetMin": 0.05,
+              "targetMax": 0.1,
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "sid": "mine_gold",
+          "isMine": true,
+          "rules": [
+            {
+              "type": "Road",
+              "args": [],
+              "targetMin": 0.15,
+              "targetMax": 0.2,
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "sid": "alchemy_lab",
+          "isMine": true,
+          "rules": [
+            {
+              "type": "Road",
+              "args": [],
+              "targetMin": 0.2,
+              "targetMax": 0.3,
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "sid": "watchtower",
+          "isGuarded": true
+        },
+        {
+          "includeLists": [
+            "basic_content_list_vision_buildings_tier_1"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_hero_buff_tier_1"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_hero_stats_and_skills_tier_1"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_hero_stats_and_skills_tier_2"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_magic_tier_1"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_magic_tier_2"
+          ]
+        },
+        {
+          "includeLists": [
+            "content_list_building_random_hires_low_tier"
+          ]
+        },
+        {
+          "includeLists": [
+            "content_list_building_random_hires_high_tier"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_guarded_units_banks_only_biome_restriction"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_guarded_resource_banks_tier_2"
+          ]
+        },
+        {
+          "sid": "random_item_epic",
+          "soloEncounter": true
+        },
+        {
+          "sid": "random_item_epic"
+        },
+        {
+          "sid": "pandora_box",
+          "soloEncounter": true
+        },
+        {
+          "sid": "pandora_box"
+        },
+        {
+          "includeLists": [
+            "content_list_pickup_pandora_box_army_low_tier"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "mandatory_content_neutral_F",
+      "content": [
+        {
+          "name": "name_remote_foothold_1",
+          "sid": "remote_foothold",
+          "isGuarded": false,
+          "rules": [
+            {
+              "type": "Crossroads",
+              "args": [],
+              "targetMin": 0.2,
+              "targetMax": 0.3,
+              "weight": 0
+            },
+            {
+              "type": "MainObject",
+              "args": [
+                "0"
+              ],
+              "targetMin": 0.2,
+              "targetMax": 0.4,
+              "weight": 0
+            }
+          ]
+        },
+        {
+          "name": "name_mine_crystals",
+          "sid": "mine_crystals",
+          "isMine": true,
+          "rules": [
+            {
+              "type": "Road",
+              "args": [],
+              "targetMin": 0.05,
+              "targetMax": 0.1,
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "name": "name_mine_mercury",
+          "sid": "mine_mercury",
+          "isMine": true,
+          "rules": [
+            {
+              "type": "Road",
+              "args": [],
+              "targetMin": 0.05,
+              "targetMax": 0.1,
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "name": "name_mine_gemstones",
+          "sid": "mine_gemstones",
+          "isMine": true,
+          "rules": [
+            {
+              "type": "Road",
+              "args": [],
+              "targetMin": 0.05,
+              "targetMax": 0.1,
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "sid": "mine_gold",
+          "isMine": true,
+          "rules": [
+            {
+              "type": "Road",
+              "args": [],
+              "targetMin": 0.15,
+              "targetMax": 0.2,
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "sid": "alchemy_lab",
+          "isMine": true,
+          "rules": [
+            {
+              "type": "Road",
+              "args": [],
+              "targetMin": 0.2,
+              "targetMax": 0.3,
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "sid": "watchtower",
+          "isGuarded": true
+        },
+        {
+          "includeLists": [
+            "basic_content_list_vision_buildings_tier_1"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_hero_buff_tier_1"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_hero_stats_and_skills_tier_1"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_hero_stats_and_skills_tier_2"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_magic_tier_1"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_magic_tier_2"
+          ]
+        },
+        {
+          "includeLists": [
+            "content_list_building_random_hires_low_tier"
+          ]
+        },
+        {
+          "includeLists": [
+            "content_list_building_random_hires_high_tier"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_guarded_units_banks_only_biome_restriction"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_guarded_resource_banks_tier_2"
+          ]
+        },
+        {
+          "sid": "random_item_epic",
+          "soloEncounter": true
+        },
+        {
+          "sid": "random_item_epic"
+        },
+        {
+          "sid": "pandora_box",
+          "soloEncounter": true
+        },
+        {
+          "sid": "pandora_box"
+        },
+        {
+          "includeLists": [
+            "content_list_pickup_pandora_box_army_low_tier"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "mandatory_content_neutral_G",
+      "content": [
+        {
+          "name": "name_remote_foothold_1",
+          "sid": "remote_foothold",
+          "isGuarded": false,
+          "rules": [
+            {
+              "type": "Crossroads",
+              "args": [],
+              "targetMin": 0.2,
+              "targetMax": 0.3,
+              "weight": 0
+            }
+          ]
+        },
+        {
+          "includeLists": [
+            "content_list_building_utopia"
+          ]
+        },
+        {
+          "includeLists": [
+            "content_list_building_utopia"
+          ]
+        },
+        {
+          "includeLists": [
+            "content_list_building_epic_guarded_resource_banks"
+          ]
+        },
+        {
+          "includeLists": [
+            "content_list_building_epic_guarded_resource_banks"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_vision_buildings_tier_1"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_hero_buff_tier_1"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_hero_stats_and_skills_tier_2"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_hero_stats_and_skills_tier_3"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_hero_stats_and_skills_tier_3"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_magic_tier_2"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_magic_tier_2"
+          ]
+        },
+        {
+          "includeLists": [
+            "content_list_building_random_hires_high_tier"
+          ]
+        },
+        {
+          "includeLists": [
+            "content_list_building_random_hires_high_tier"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_random_hires"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_guarded_units_banks_only_biome_restriction"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_guarded_units_banks_no_biome_restriction"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_guarded_units_banks_no_biome_restriction"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_guarded_resource_banks_tier_2"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_guarded_resource_banks_tier_3"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_pickup_mythic_scroll_box"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_pickup_mythic_scroll_box"
+          ]
+        },
+        {
+          "sid": "random_item_legendary",
+          "soloEncounter": true
+        },
+        {
+          "sid": "random_item_legendary"
+        },
+        {
+          "sid": "random_item_epic"
+        },
+        {
+          "sid": "pandora_box",
+          "soloEncounter": true
+        },
+        {
+          "sid": "pandora_box"
+        },
+        {
+          "sid": "pandora_box"
+        },
+        {
+          "includeLists": [
+            "content_list_pickup_pandora_box_army_high_tier"
+          ]
+        },
+        {
+          "includeLists": [
+            "content_list_pickup_pandora_box_army_high_tier"
+          ]
+        },
+        {
+          "sid": "mine_gold",
+          "isMine": true,
+          "rules": [
+            {
+              "type": "Crossroads",
+              "args": [],
+              "targetMin": 0.1,
+              "targetMax": 0.3,
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "sid": "mine_gold",
+          "isMine": true
+        },
+        {
+          "sid": "mine_gold",
+          "isMine": true
+        },
+        {
+          "sid": "mine_crystals",
+          "isMine": true
+        },
+        {
+          "sid": "mine_mercury",
+          "isMine": true
+        },
+        {
+          "sid": "mine_gemstones",
+          "isMine": true
+        },
+        {
+          "sid": "alchemy_lab",
+          "isMine": true
+        },
+        {
+          "sid": "alchemy_lab",
+          "isMine": true
+        }
+      ]
+    },
+    {
+      "name": "mandatory_content_neutral_H",
+      "content": [
+        {
+          "name": "name_remote_foothold_1",
+          "sid": "remote_foothold",
+          "isGuarded": false,
+          "rules": [
+            {
+              "type": "Crossroads",
+              "args": [],
+              "targetMin": 0.2,
+              "targetMax": 0.3,
+              "weight": 0
+            }
+          ]
+        },
+        {
+          "includeLists": [
+            "content_list_building_utopia"
+          ]
+        },
+        {
+          "includeLists": [
+            "content_list_building_utopia"
+          ]
+        },
+        {
+          "includeLists": [
+            "content_list_building_epic_guarded_resource_banks"
+          ]
+        },
+        {
+          "includeLists": [
+            "content_list_building_epic_guarded_resource_banks"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_vision_buildings_tier_1"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_hero_buff_tier_1"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_hero_stats_and_skills_tier_2"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_hero_stats_and_skills_tier_3"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_hero_stats_and_skills_tier_3"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_magic_tier_2"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_magic_tier_2"
+          ]
+        },
+        {
+          "includeLists": [
+            "content_list_building_random_hires_high_tier"
+          ]
+        },
+        {
+          "includeLists": [
+            "content_list_building_random_hires_high_tier"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_random_hires"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_guarded_units_banks_only_biome_restriction"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_guarded_units_banks_no_biome_restriction"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_guarded_units_banks_no_biome_restriction"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_guarded_resource_banks_tier_2"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_guarded_resource_banks_tier_3"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_pickup_mythic_scroll_box"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_pickup_mythic_scroll_box"
+          ]
+        },
+        {
+          "sid": "random_item_legendary",
+          "soloEncounter": true
+        },
+        {
+          "sid": "random_item_legendary"
+        },
+        {
+          "sid": "random_item_epic"
+        },
+        {
+          "sid": "pandora_box",
+          "soloEncounter": true
+        },
+        {
+          "sid": "pandora_box"
+        },
+        {
+          "sid": "pandora_box"
+        },
+        {
+          "includeLists": [
+            "content_list_pickup_pandora_box_army_high_tier"
+          ]
+        },
+        {
+          "includeLists": [
+            "content_list_pickup_pandora_box_army_high_tier"
+          ]
+        },
+        {
+          "sid": "mine_gold",
+          "isMine": true,
+          "rules": [
+            {
+              "type": "Crossroads",
+              "args": [],
+              "targetMin": 0.1,
+              "targetMax": 0.3,
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "sid": "mine_gold",
+          "isMine": true
+        },
+        {
+          "sid": "mine_gold",
+          "isMine": true
+        },
+        {
+          "sid": "mine_crystals",
+          "isMine": true
+        },
+        {
+          "sid": "mine_mercury",
+          "isMine": true
+        },
+        {
+          "sid": "mine_gemstones",
+          "isMine": true
+        },
+        {
+          "sid": "alchemy_lab",
+          "isMine": true
+        },
+        {
+          "sid": "alchemy_lab",
+          "isMine": true
+        }
+      ]
+    },
+    {
+      "name": "mandatory_content_neutral_I",
+      "content": [
+        {
+          "name": "name_remote_foothold_1",
+          "sid": "remote_foothold",
+          "isGuarded": false,
+          "rules": [
+            {
+              "type": "Crossroads",
+              "args": [],
+              "targetMin": 0.2,
+              "targetMax": 0.3,
+              "weight": 0
+            }
+          ]
+        },
+        {
+          "includeLists": [
+            "content_list_building_utopia"
+          ]
+        },
+        {
+          "includeLists": [
+            "content_list_building_utopia"
+          ]
+        },
+        {
+          "includeLists": [
+            "content_list_building_epic_guarded_resource_banks"
+          ]
+        },
+        {
+          "includeLists": [
+            "content_list_building_epic_guarded_resource_banks"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_vision_buildings_tier_1"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_hero_buff_tier_1"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_hero_stats_and_skills_tier_2"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_hero_stats_and_skills_tier_3"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_hero_stats_and_skills_tier_3"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_magic_tier_2"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_magic_tier_2"
+          ]
+        },
+        {
+          "includeLists": [
+            "content_list_building_random_hires_high_tier"
+          ]
+        },
+        {
+          "includeLists": [
+            "content_list_building_random_hires_high_tier"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_random_hires"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_guarded_units_banks_only_biome_restriction"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_guarded_units_banks_no_biome_restriction"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_guarded_units_banks_no_biome_restriction"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_guarded_resource_banks_tier_2"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_building_guarded_resource_banks_tier_3"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_pickup_mythic_scroll_box"
+          ]
+        },
+        {
+          "includeLists": [
+            "basic_content_list_pickup_mythic_scroll_box"
+          ]
+        },
+        {
+          "sid": "random_item_legendary",
+          "soloEncounter": true
+        },
+        {
+          "sid": "random_item_legendary"
+        },
+        {
+          "sid": "random_item_epic"
+        },
+        {
+          "sid": "pandora_box",
+          "soloEncounter": true
+        },
+        {
+          "sid": "pandora_box"
+        },
+        {
+          "sid": "pandora_box"
+        },
+        {
+          "includeLists": [
+            "content_list_pickup_pandora_box_army_high_tier"
+          ]
+        },
+        {
+          "includeLists": [
+            "content_list_pickup_pandora_box_army_high_tier"
+          ]
+        },
+        {
+          "sid": "mine_gold",
+          "isMine": true,
+          "rules": [
+            {
+              "type": "Crossroads",
+              "args": [],
+              "targetMin": 0.1,
+              "targetMax": 0.3,
+              "weight": 1
+            }
+          ]
+        },
+        {
+          "sid": "mine_gold",
+          "isMine": true
+        },
+        {
+          "sid": "mine_gold",
+          "isMine": true
+        },
+        {
+          "sid": "mine_crystals",
+          "isMine": true
+        },
+        {
+          "sid": "mine_mercury",
+          "isMine": true
+        },
+        {
+          "sid": "mine_gemstones",
+          "isMine": true
+        },
+        {
+          "sid": "alchemy_lab",
+          "isMine": true
+        },
+        {
+          "sid": "alchemy_lab",
+          "isMine": true
+        }
+      ]
+    }
+  ],
+  "contentCountLimits": [
+    {
+      "name": "content_limits_side",
+      "limits": [
+        {
+          "sid": "black_tower",
+          "maxCount": 0
+        },
+        {
+          "sid": "fountain",
+          "maxCount": 2
+        },
+        {
+          "sid": "fountain_2",
+          "maxCount": 2
+        },
+        {
+          "sid": "mana_well",
+          "maxCount": 2
+        },
+        {
+          "sid": "beer_fountain",
+          "maxCount": 2
+        },
+        {
+          "sid": "market",
+          "maxCount": 1
+        },
+        {
+          "sid": "forge",
+          "maxCount": 2
+        },
+        {
+          "sid": "stables",
+          "maxCount": 1
+        },
+        {
+          "sid": "watchtower",
+          "maxCount": 2
+        },
+        {
+          "sid": "wind_rose",
+          "maxCount": 1
+        },
+        {
+          "sid": "quixs_path",
+          "maxCount": 2
+        },
+        {
+          "sid": "crystal_trail",
+          "maxCount": 3
+        },
+        {
+          "sid": "mysterious_stone",
+          "maxCount": 2
+        },
+        {
+          "sid": "university",
+          "maxCount": 2
+        },
+        {
+          "sid": "wise_owl",
+          "maxCount": 4
+        },
+        {
+          "sid": "celestial_sphere",
+          "maxCount": 2
+        },
+        {
+          "sid": "pile_of_books",
+          "maxCount": 2
+        },
+        {
+          "sid": "insaras_eye",
+          "maxCount": 2
+        },
+        {
+          "sid": "tear_of_truth",
+          "maxCount": 3
+        },
+        {
+          "sid": "tree_of_abundance",
+          "maxCount": 2
+        },
+        {
+          "sid": "huntsmans_camp",
+          "maxCount": 2
+        },
+        {
+          "sid": "shady_den",
+          "maxCount": 2
+        },
+        {
+          "sid": "random_hire_1",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_2",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_3",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_4",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_5",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_6",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_7",
+          "maxCount": 6
+        },
+        {
+          "sid": "arena",
+          "maxCount": 2
+        },
+        {
+          "sid": "sacrificial_shrine",
+          "maxCount": 2
+        },
+        {
+          "sid": "chimerologist",
+          "maxCount": 2
+        },
+        {
+          "sid": "circus",
+          "maxCount": 2
+        },
+        {
+          "sid": "infernal_cirque",
+          "maxCount": 2
+        },
+        {
+          "sid": "flattering_mirror",
+          "maxCount": 2
+        },
+        {
+          "sid": "fickle_shrine",
+          "maxCount": 1
+        },
+        {
+          "sid": "point_of_balance",
+          "maxCount": 3
+        },
+        {
+          "sid": "pandora_box",
+          "maxCount": 4
+        },
+        {
+          "sid": "ritual_pyre",
+          "maxCount": 3
+        },
+        {
+          "sid": "boreal_call",
+          "maxCount": 3
+        },
+        {
+          "sid": "jousting_range",
+          "maxCount": 1
+        },
+        {
+          "sid": "unforgotten_grave",
+          "maxCount": 1
+        },
+        {
+          "sid": "petrified_memorial",
+          "maxCount": 1
+        },
+        {
+          "sid": "the_gorge",
+          "maxCount": 1
+        }
+      ]
+    },
+    {
+      "name": "content_limits_side_0_0",
+      "playerMin": 0,
+      "playerMax": 0,
+      "limits": [
+        {
+          "sid": "black_tower",
+          "maxCount": 0
+        },
+        {
+          "sid": "fountain",
+          "maxCount": 2
+        },
+        {
+          "sid": "fountain_2",
+          "maxCount": 2
+        },
+        {
+          "sid": "mana_well",
+          "maxCount": 2
+        },
+        {
+          "sid": "beer_fountain",
+          "maxCount": 2
+        },
+        {
+          "sid": "market",
+          "maxCount": 1
+        },
+        {
+          "sid": "forge",
+          "maxCount": 2
+        },
+        {
+          "sid": "stables",
+          "maxCount": 1
+        },
+        {
+          "sid": "watchtower",
+          "maxCount": 2
+        },
+        {
+          "sid": "wind_rose",
+          "maxCount": 1
+        },
+        {
+          "sid": "quixs_path",
+          "maxCount": 2
+        },
+        {
+          "sid": "crystal_trail",
+          "maxCount": 3
+        },
+        {
+          "sid": "mysterious_stone",
+          "maxCount": 2
+        },
+        {
+          "sid": "university",
+          "maxCount": 2
+        },
+        {
+          "sid": "wise_owl",
+          "maxCount": 4
+        },
+        {
+          "sid": "celestial_sphere",
+          "maxCount": 2
+        },
+        {
+          "sid": "pile_of_books",
+          "maxCount": 2
+        },
+        {
+          "sid": "insaras_eye",
+          "maxCount": 2
+        },
+        {
+          "sid": "tear_of_truth",
+          "maxCount": 3
+        },
+        {
+          "sid": "tree_of_abundance",
+          "maxCount": 2
+        },
+        {
+          "sid": "huntsmans_camp",
+          "maxCount": 2
+        },
+        {
+          "sid": "shady_den",
+          "maxCount": 2
+        },
+        {
+          "sid": "random_hire_1",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_2",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_3",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_4",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_5",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_6",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_7",
+          "maxCount": 6
+        },
+        {
+          "sid": "arena",
+          "maxCount": 2
+        },
+        {
+          "sid": "sacrificial_shrine",
+          "maxCount": 2
+        },
+        {
+          "sid": "chimerologist",
+          "maxCount": 2
+        },
+        {
+          "sid": "circus",
+          "maxCount": 2
+        },
+        {
+          "sid": "infernal_cirque",
+          "maxCount": 2
+        },
+        {
+          "sid": "flattering_mirror",
+          "maxCount": 2
+        },
+        {
+          "sid": "fickle_shrine",
+          "maxCount": 1
+        },
+        {
+          "sid": "point_of_balance",
+          "maxCount": 3
+        },
+        {
+          "sid": "pandora_box",
+          "maxCount": 4
+        },
+        {
+          "sid": "ritual_pyre",
+          "maxCount": 3
+        },
+        {
+          "sid": "boreal_call",
+          "maxCount": 3
+        },
+        {
+          "sid": "jousting_range",
+          "maxCount": 1
+        },
+        {
+          "sid": "unforgotten_grave",
+          "maxCount": 1
+        },
+        {
+          "sid": "petrified_memorial",
+          "maxCount": 1
+        },
+        {
+          "sid": "the_gorge",
+          "maxCount": 1
+        }
+      ]
+    },
+    {
+      "name": "content_limits_side_1_2",
+      "playerMin": 1,
+      "playerMax": 2,
+      "limits": [
+        {
+          "sid": "black_tower",
+          "maxCount": 0
+        },
+        {
+          "sid": "fountain",
+          "maxCount": 2
+        },
+        {
+          "sid": "fountain_2",
+          "maxCount": 2
+        },
+        {
+          "sid": "mana_well",
+          "maxCount": 2
+        },
+        {
+          "sid": "beer_fountain",
+          "maxCount": 2
+        },
+        {
+          "sid": "market",
+          "maxCount": 1
+        },
+        {
+          "sid": "forge",
+          "maxCount": 2
+        },
+        {
+          "sid": "stables",
+          "maxCount": 1
+        },
+        {
+          "sid": "watchtower",
+          "maxCount": 2
+        },
+        {
+          "sid": "wind_rose",
+          "maxCount": 1
+        },
+        {
+          "sid": "quixs_path",
+          "maxCount": 2
+        },
+        {
+          "sid": "crystal_trail",
+          "maxCount": 3
+        },
+        {
+          "sid": "mysterious_stone",
+          "maxCount": 2
+        },
+        {
+          "sid": "university",
+          "maxCount": 2
+        },
+        {
+          "sid": "wise_owl",
+          "maxCount": 4
+        },
+        {
+          "sid": "celestial_sphere",
+          "maxCount": 2
+        },
+        {
+          "sid": "pile_of_books",
+          "maxCount": 2
+        },
+        {
+          "sid": "insaras_eye",
+          "maxCount": 2
+        },
+        {
+          "sid": "tear_of_truth",
+          "maxCount": 3
+        },
+        {
+          "sid": "tree_of_abundance",
+          "maxCount": 2
+        },
+        {
+          "sid": "huntsmans_camp",
+          "maxCount": 2
+        },
+        {
+          "sid": "shady_den",
+          "maxCount": 2
+        },
+        {
+          "sid": "random_hire_1",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_2",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_3",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_4",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_5",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_6",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_7",
+          "maxCount": 6
+        },
+        {
+          "sid": "arena",
+          "maxCount": 2
+        },
+        {
+          "sid": "sacrificial_shrine",
+          "maxCount": 2
+        },
+        {
+          "sid": "chimerologist",
+          "maxCount": 2
+        },
+        {
+          "sid": "circus",
+          "maxCount": 2
+        },
+        {
+          "sid": "infernal_cirque",
+          "maxCount": 2
+        },
+        {
+          "sid": "flattering_mirror",
+          "maxCount": 2
+        },
+        {
+          "sid": "fickle_shrine",
+          "maxCount": 1
+        },
+        {
+          "sid": "point_of_balance",
+          "maxCount": 3
+        },
+        {
+          "sid": "pandora_box",
+          "maxCount": 4
+        },
+        {
+          "sid": "ritual_pyre",
+          "maxCount": 3
+        },
+        {
+          "sid": "boreal_call",
+          "maxCount": 3
+        },
+        {
+          "sid": "jousting_range",
+          "maxCount": 1
+        },
+        {
+          "sid": "unforgotten_grave",
+          "maxCount": 1
+        },
+        {
+          "sid": "petrified_memorial",
+          "maxCount": 1
+        },
+        {
+          "sid": "the_gorge",
+          "maxCount": 1
+        }
+      ]
+    },
+    {
+      "name": "content_limits_side_1_3",
+      "playerMin": 1,
+      "playerMax": 3,
+      "limits": [
+        {
+          "sid": "black_tower",
+          "maxCount": 0
+        },
+        {
+          "sid": "fountain",
+          "maxCount": 2
+        },
+        {
+          "sid": "fountain_2",
+          "maxCount": 2
+        },
+        {
+          "sid": "mana_well",
+          "maxCount": 2
+        },
+        {
+          "sid": "beer_fountain",
+          "maxCount": 2
+        },
+        {
+          "sid": "market",
+          "maxCount": 1
+        },
+        {
+          "sid": "forge",
+          "maxCount": 2
+        },
+        {
+          "sid": "stables",
+          "maxCount": 1
+        },
+        {
+          "sid": "watchtower",
+          "maxCount": 2
+        },
+        {
+          "sid": "wind_rose",
+          "maxCount": 1
+        },
+        {
+          "sid": "quixs_path",
+          "maxCount": 2
+        },
+        {
+          "sid": "crystal_trail",
+          "maxCount": 3
+        },
+        {
+          "sid": "mysterious_stone",
+          "maxCount": 2
+        },
+        {
+          "sid": "university",
+          "maxCount": 2
+        },
+        {
+          "sid": "wise_owl",
+          "maxCount": 4
+        },
+        {
+          "sid": "celestial_sphere",
+          "maxCount": 2
+        },
+        {
+          "sid": "pile_of_books",
+          "maxCount": 2
+        },
+        {
+          "sid": "insaras_eye",
+          "maxCount": 2
+        },
+        {
+          "sid": "tear_of_truth",
+          "maxCount": 3
+        },
+        {
+          "sid": "tree_of_abundance",
+          "maxCount": 2
+        },
+        {
+          "sid": "huntsmans_camp",
+          "maxCount": 2
+        },
+        {
+          "sid": "shady_den",
+          "maxCount": 2
+        },
+        {
+          "sid": "random_hire_1",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_2",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_3",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_4",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_5",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_6",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_7",
+          "maxCount": 6
+        },
+        {
+          "sid": "arena",
+          "maxCount": 2
+        },
+        {
+          "sid": "sacrificial_shrine",
+          "maxCount": 2
+        },
+        {
+          "sid": "chimerologist",
+          "maxCount": 2
+        },
+        {
+          "sid": "circus",
+          "maxCount": 2
+        },
+        {
+          "sid": "infernal_cirque",
+          "maxCount": 2
+        },
+        {
+          "sid": "flattering_mirror",
+          "maxCount": 2
+        },
+        {
+          "sid": "fickle_shrine",
+          "maxCount": 1
+        },
+        {
+          "sid": "point_of_balance",
+          "maxCount": 3
+        },
+        {
+          "sid": "pandora_box",
+          "maxCount": 4
+        },
+        {
+          "sid": "ritual_pyre",
+          "maxCount": 3
+        },
+        {
+          "sid": "boreal_call",
+          "maxCount": 3
+        },
+        {
+          "sid": "jousting_range",
+          "maxCount": 1
+        },
+        {
+          "sid": "unforgotten_grave",
+          "maxCount": 1
+        },
+        {
+          "sid": "petrified_memorial",
+          "maxCount": 1
+        },
+        {
+          "sid": "the_gorge",
+          "maxCount": 1
+        }
+      ]
+    },
+    {
+      "name": "content_limits_side_1_4",
+      "playerMin": 1,
+      "playerMax": 4,
+      "limits": [
+        {
+          "sid": "black_tower",
+          "maxCount": 0
+        },
+        {
+          "sid": "fountain",
+          "maxCount": 2
+        },
+        {
+          "sid": "fountain_2",
+          "maxCount": 2
+        },
+        {
+          "sid": "mana_well",
+          "maxCount": 2
+        },
+        {
+          "sid": "beer_fountain",
+          "maxCount": 2
+        },
+        {
+          "sid": "market",
+          "maxCount": 1
+        },
+        {
+          "sid": "forge",
+          "maxCount": 2
+        },
+        {
+          "sid": "stables",
+          "maxCount": 1
+        },
+        {
+          "sid": "watchtower",
+          "maxCount": 2
+        },
+        {
+          "sid": "wind_rose",
+          "maxCount": 1
+        },
+        {
+          "sid": "quixs_path",
+          "maxCount": 2
+        },
+        {
+          "sid": "crystal_trail",
+          "maxCount": 3
+        },
+        {
+          "sid": "mysterious_stone",
+          "maxCount": 2
+        },
+        {
+          "sid": "university",
+          "maxCount": 2
+        },
+        {
+          "sid": "wise_owl",
+          "maxCount": 4
+        },
+        {
+          "sid": "celestial_sphere",
+          "maxCount": 2
+        },
+        {
+          "sid": "pile_of_books",
+          "maxCount": 2
+        },
+        {
+          "sid": "insaras_eye",
+          "maxCount": 2
+        },
+        {
+          "sid": "tear_of_truth",
+          "maxCount": 3
+        },
+        {
+          "sid": "tree_of_abundance",
+          "maxCount": 2
+        },
+        {
+          "sid": "huntsmans_camp",
+          "maxCount": 2
+        },
+        {
+          "sid": "shady_den",
+          "maxCount": 2
+        },
+        {
+          "sid": "random_hire_1",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_2",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_3",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_4",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_5",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_6",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_7",
+          "maxCount": 6
+        },
+        {
+          "sid": "arena",
+          "maxCount": 2
+        },
+        {
+          "sid": "sacrificial_shrine",
+          "maxCount": 2
+        },
+        {
+          "sid": "chimerologist",
+          "maxCount": 2
+        },
+        {
+          "sid": "circus",
+          "maxCount": 2
+        },
+        {
+          "sid": "infernal_cirque",
+          "maxCount": 2
+        },
+        {
+          "sid": "flattering_mirror",
+          "maxCount": 2
+        },
+        {
+          "sid": "fickle_shrine",
+          "maxCount": 1
+        },
+        {
+          "sid": "point_of_balance",
+          "maxCount": 3
+        },
+        {
+          "sid": "pandora_box",
+          "maxCount": 4
+        },
+        {
+          "sid": "ritual_pyre",
+          "maxCount": 3
+        },
+        {
+          "sid": "boreal_call",
+          "maxCount": 3
+        },
+        {
+          "sid": "jousting_range",
+          "maxCount": 1
+        },
+        {
+          "sid": "unforgotten_grave",
+          "maxCount": 1
+        },
+        {
+          "sid": "petrified_memorial",
+          "maxCount": 1
+        },
+        {
+          "sid": "the_gorge",
+          "maxCount": 1
+        }
+      ]
+    },
+    {
+      "name": "content_limits_side_1_5",
+      "playerMin": 1,
+      "playerMax": 5,
+      "limits": [
+        {
+          "sid": "black_tower",
+          "maxCount": 0
+        },
+        {
+          "sid": "fountain",
+          "maxCount": 2
+        },
+        {
+          "sid": "fountain_2",
+          "maxCount": 2
+        },
+        {
+          "sid": "mana_well",
+          "maxCount": 2
+        },
+        {
+          "sid": "beer_fountain",
+          "maxCount": 2
+        },
+        {
+          "sid": "market",
+          "maxCount": 1
+        },
+        {
+          "sid": "forge",
+          "maxCount": 2
+        },
+        {
+          "sid": "stables",
+          "maxCount": 1
+        },
+        {
+          "sid": "watchtower",
+          "maxCount": 2
+        },
+        {
+          "sid": "wind_rose",
+          "maxCount": 1
+        },
+        {
+          "sid": "quixs_path",
+          "maxCount": 2
+        },
+        {
+          "sid": "crystal_trail",
+          "maxCount": 3
+        },
+        {
+          "sid": "mysterious_stone",
+          "maxCount": 2
+        },
+        {
+          "sid": "university",
+          "maxCount": 2
+        },
+        {
+          "sid": "wise_owl",
+          "maxCount": 4
+        },
+        {
+          "sid": "celestial_sphere",
+          "maxCount": 2
+        },
+        {
+          "sid": "pile_of_books",
+          "maxCount": 2
+        },
+        {
+          "sid": "insaras_eye",
+          "maxCount": 2
+        },
+        {
+          "sid": "tear_of_truth",
+          "maxCount": 3
+        },
+        {
+          "sid": "tree_of_abundance",
+          "maxCount": 2
+        },
+        {
+          "sid": "huntsmans_camp",
+          "maxCount": 2
+        },
+        {
+          "sid": "shady_den",
+          "maxCount": 2
+        },
+        {
+          "sid": "random_hire_1",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_2",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_3",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_4",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_5",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_6",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_7",
+          "maxCount": 6
+        },
+        {
+          "sid": "arena",
+          "maxCount": 2
+        },
+        {
+          "sid": "sacrificial_shrine",
+          "maxCount": 2
+        },
+        {
+          "sid": "chimerologist",
+          "maxCount": 2
+        },
+        {
+          "sid": "circus",
+          "maxCount": 2
+        },
+        {
+          "sid": "infernal_cirque",
+          "maxCount": 2
+        },
+        {
+          "sid": "flattering_mirror",
+          "maxCount": 2
+        },
+        {
+          "sid": "fickle_shrine",
+          "maxCount": 1
+        },
+        {
+          "sid": "point_of_balance",
+          "maxCount": 3
+        },
+        {
+          "sid": "pandora_box",
+          "maxCount": 4
+        },
+        {
+          "sid": "ritual_pyre",
+          "maxCount": 3
+        },
+        {
+          "sid": "boreal_call",
+          "maxCount": 3
+        },
+        {
+          "sid": "jousting_range",
+          "maxCount": 1
+        },
+        {
+          "sid": "unforgotten_grave",
+          "maxCount": 1
+        },
+        {
+          "sid": "petrified_memorial",
+          "maxCount": 1
+        },
+        {
+          "sid": "the_gorge",
+          "maxCount": 1
+        }
+      ]
+    },
+    {
+      "name": "content_limits_side_1_6",
+      "playerMin": 1,
+      "playerMax": 6,
+      "limits": [
+        {
+          "sid": "black_tower",
+          "maxCount": 0
+        },
+        {
+          "sid": "fountain",
+          "maxCount": 2
+        },
+        {
+          "sid": "fountain_2",
+          "maxCount": 2
+        },
+        {
+          "sid": "mana_well",
+          "maxCount": 2
+        },
+        {
+          "sid": "beer_fountain",
+          "maxCount": 2
+        },
+        {
+          "sid": "market",
+          "maxCount": 1
+        },
+        {
+          "sid": "forge",
+          "maxCount": 2
+        },
+        {
+          "sid": "stables",
+          "maxCount": 1
+        },
+        {
+          "sid": "watchtower",
+          "maxCount": 2
+        },
+        {
+          "sid": "wind_rose",
+          "maxCount": 1
+        },
+        {
+          "sid": "quixs_path",
+          "maxCount": 2
+        },
+        {
+          "sid": "crystal_trail",
+          "maxCount": 3
+        },
+        {
+          "sid": "mysterious_stone",
+          "maxCount": 2
+        },
+        {
+          "sid": "university",
+          "maxCount": 2
+        },
+        {
+          "sid": "wise_owl",
+          "maxCount": 4
+        },
+        {
+          "sid": "celestial_sphere",
+          "maxCount": 2
+        },
+        {
+          "sid": "pile_of_books",
+          "maxCount": 2
+        },
+        {
+          "sid": "insaras_eye",
+          "maxCount": 2
+        },
+        {
+          "sid": "tear_of_truth",
+          "maxCount": 3
+        },
+        {
+          "sid": "tree_of_abundance",
+          "maxCount": 2
+        },
+        {
+          "sid": "huntsmans_camp",
+          "maxCount": 2
+        },
+        {
+          "sid": "shady_den",
+          "maxCount": 2
+        },
+        {
+          "sid": "random_hire_1",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_2",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_3",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_4",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_5",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_6",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_7",
+          "maxCount": 6
+        },
+        {
+          "sid": "arena",
+          "maxCount": 2
+        },
+        {
+          "sid": "sacrificial_shrine",
+          "maxCount": 2
+        },
+        {
+          "sid": "chimerologist",
+          "maxCount": 2
+        },
+        {
+          "sid": "circus",
+          "maxCount": 2
+        },
+        {
+          "sid": "infernal_cirque",
+          "maxCount": 2
+        },
+        {
+          "sid": "flattering_mirror",
+          "maxCount": 2
+        },
+        {
+          "sid": "fickle_shrine",
+          "maxCount": 1
+        },
+        {
+          "sid": "point_of_balance",
+          "maxCount": 3
+        },
+        {
+          "sid": "pandora_box",
+          "maxCount": 4
+        },
+        {
+          "sid": "ritual_pyre",
+          "maxCount": 3
+        },
+        {
+          "sid": "boreal_call",
+          "maxCount": 3
+        },
+        {
+          "sid": "jousting_range",
+          "maxCount": 1
+        },
+        {
+          "sid": "unforgotten_grave",
+          "maxCount": 1
+        },
+        {
+          "sid": "petrified_memorial",
+          "maxCount": 1
+        },
+        {
+          "sid": "the_gorge",
+          "maxCount": 1
+        }
+      ]
+    },
+    {
+      "name": "content_limits_side_2_3",
+      "playerMin": 2,
+      "playerMax": 3,
+      "limits": [
+        {
+          "sid": "black_tower",
+          "maxCount": 0
+        },
+        {
+          "sid": "fountain",
+          "maxCount": 2
+        },
+        {
+          "sid": "fountain_2",
+          "maxCount": 2
+        },
+        {
+          "sid": "mana_well",
+          "maxCount": 2
+        },
+        {
+          "sid": "beer_fountain",
+          "maxCount": 2
+        },
+        {
+          "sid": "market",
+          "maxCount": 1
+        },
+        {
+          "sid": "forge",
+          "maxCount": 2
+        },
+        {
+          "sid": "stables",
+          "maxCount": 1
+        },
+        {
+          "sid": "watchtower",
+          "maxCount": 2
+        },
+        {
+          "sid": "wind_rose",
+          "maxCount": 1
+        },
+        {
+          "sid": "quixs_path",
+          "maxCount": 2
+        },
+        {
+          "sid": "crystal_trail",
+          "maxCount": 3
+        },
+        {
+          "sid": "mysterious_stone",
+          "maxCount": 2
+        },
+        {
+          "sid": "university",
+          "maxCount": 2
+        },
+        {
+          "sid": "wise_owl",
+          "maxCount": 4
+        },
+        {
+          "sid": "celestial_sphere",
+          "maxCount": 2
+        },
+        {
+          "sid": "pile_of_books",
+          "maxCount": 2
+        },
+        {
+          "sid": "insaras_eye",
+          "maxCount": 2
+        },
+        {
+          "sid": "tear_of_truth",
+          "maxCount": 3
+        },
+        {
+          "sid": "tree_of_abundance",
+          "maxCount": 2
+        },
+        {
+          "sid": "huntsmans_camp",
+          "maxCount": 2
+        },
+        {
+          "sid": "shady_den",
+          "maxCount": 2
+        },
+        {
+          "sid": "random_hire_1",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_2",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_3",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_4",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_5",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_6",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_7",
+          "maxCount": 6
+        },
+        {
+          "sid": "arena",
+          "maxCount": 2
+        },
+        {
+          "sid": "sacrificial_shrine",
+          "maxCount": 2
+        },
+        {
+          "sid": "chimerologist",
+          "maxCount": 2
+        },
+        {
+          "sid": "circus",
+          "maxCount": 2
+        },
+        {
+          "sid": "infernal_cirque",
+          "maxCount": 2
+        },
+        {
+          "sid": "flattering_mirror",
+          "maxCount": 2
+        },
+        {
+          "sid": "fickle_shrine",
+          "maxCount": 1
+        },
+        {
+          "sid": "point_of_balance",
+          "maxCount": 3
+        },
+        {
+          "sid": "pandora_box",
+          "maxCount": 4
+        },
+        {
+          "sid": "ritual_pyre",
+          "maxCount": 3
+        },
+        {
+          "sid": "boreal_call",
+          "maxCount": 3
+        },
+        {
+          "sid": "jousting_range",
+          "maxCount": 1
+        },
+        {
+          "sid": "unforgotten_grave",
+          "maxCount": 1
+        },
+        {
+          "sid": "petrified_memorial",
+          "maxCount": 1
+        },
+        {
+          "sid": "the_gorge",
+          "maxCount": 1
+        }
+      ]
+    },
+    {
+      "name": "content_limits_side_2_4",
+      "playerMin": 2,
+      "playerMax": 4,
+      "limits": [
+        {
+          "sid": "black_tower",
+          "maxCount": 0
+        },
+        {
+          "sid": "fountain",
+          "maxCount": 2
+        },
+        {
+          "sid": "fountain_2",
+          "maxCount": 2
+        },
+        {
+          "sid": "mana_well",
+          "maxCount": 2
+        },
+        {
+          "sid": "beer_fountain",
+          "maxCount": 2
+        },
+        {
+          "sid": "market",
+          "maxCount": 1
+        },
+        {
+          "sid": "forge",
+          "maxCount": 2
+        },
+        {
+          "sid": "stables",
+          "maxCount": 1
+        },
+        {
+          "sid": "watchtower",
+          "maxCount": 2
+        },
+        {
+          "sid": "wind_rose",
+          "maxCount": 1
+        },
+        {
+          "sid": "quixs_path",
+          "maxCount": 2
+        },
+        {
+          "sid": "crystal_trail",
+          "maxCount": 3
+        },
+        {
+          "sid": "mysterious_stone",
+          "maxCount": 2
+        },
+        {
+          "sid": "university",
+          "maxCount": 2
+        },
+        {
+          "sid": "wise_owl",
+          "maxCount": 4
+        },
+        {
+          "sid": "celestial_sphere",
+          "maxCount": 2
+        },
+        {
+          "sid": "pile_of_books",
+          "maxCount": 2
+        },
+        {
+          "sid": "insaras_eye",
+          "maxCount": 2
+        },
+        {
+          "sid": "tear_of_truth",
+          "maxCount": 3
+        },
+        {
+          "sid": "tree_of_abundance",
+          "maxCount": 2
+        },
+        {
+          "sid": "huntsmans_camp",
+          "maxCount": 2
+        },
+        {
+          "sid": "shady_den",
+          "maxCount": 2
+        },
+        {
+          "sid": "random_hire_1",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_2",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_3",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_4",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_5",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_6",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_7",
+          "maxCount": 6
+        },
+        {
+          "sid": "arena",
+          "maxCount": 2
+        },
+        {
+          "sid": "sacrificial_shrine",
+          "maxCount": 2
+        },
+        {
+          "sid": "chimerologist",
+          "maxCount": 2
+        },
+        {
+          "sid": "circus",
+          "maxCount": 2
+        },
+        {
+          "sid": "infernal_cirque",
+          "maxCount": 2
+        },
+        {
+          "sid": "flattering_mirror",
+          "maxCount": 2
+        },
+        {
+          "sid": "fickle_shrine",
+          "maxCount": 1
+        },
+        {
+          "sid": "point_of_balance",
+          "maxCount": 3
+        },
+        {
+          "sid": "pandora_box",
+          "maxCount": 4
+        },
+        {
+          "sid": "ritual_pyre",
+          "maxCount": 3
+        },
+        {
+          "sid": "boreal_call",
+          "maxCount": 3
+        },
+        {
+          "sid": "jousting_range",
+          "maxCount": 1
+        },
+        {
+          "sid": "unforgotten_grave",
+          "maxCount": 1
+        },
+        {
+          "sid": "petrified_memorial",
+          "maxCount": 1
+        },
+        {
+          "sid": "the_gorge",
+          "maxCount": 1
+        }
+      ]
+    },
+    {
+      "name": "content_limits_side_2_5",
+      "playerMin": 2,
+      "playerMax": 5,
+      "limits": [
+        {
+          "sid": "black_tower",
+          "maxCount": 0
+        },
+        {
+          "sid": "fountain",
+          "maxCount": 2
+        },
+        {
+          "sid": "fountain_2",
+          "maxCount": 2
+        },
+        {
+          "sid": "mana_well",
+          "maxCount": 2
+        },
+        {
+          "sid": "beer_fountain",
+          "maxCount": 2
+        },
+        {
+          "sid": "market",
+          "maxCount": 1
+        },
+        {
+          "sid": "forge",
+          "maxCount": 2
+        },
+        {
+          "sid": "stables",
+          "maxCount": 1
+        },
+        {
+          "sid": "watchtower",
+          "maxCount": 2
+        },
+        {
+          "sid": "wind_rose",
+          "maxCount": 1
+        },
+        {
+          "sid": "quixs_path",
+          "maxCount": 2
+        },
+        {
+          "sid": "crystal_trail",
+          "maxCount": 3
+        },
+        {
+          "sid": "mysterious_stone",
+          "maxCount": 2
+        },
+        {
+          "sid": "university",
+          "maxCount": 2
+        },
+        {
+          "sid": "wise_owl",
+          "maxCount": 4
+        },
+        {
+          "sid": "celestial_sphere",
+          "maxCount": 2
+        },
+        {
+          "sid": "pile_of_books",
+          "maxCount": 2
+        },
+        {
+          "sid": "insaras_eye",
+          "maxCount": 2
+        },
+        {
+          "sid": "tear_of_truth",
+          "maxCount": 3
+        },
+        {
+          "sid": "tree_of_abundance",
+          "maxCount": 2
+        },
+        {
+          "sid": "huntsmans_camp",
+          "maxCount": 2
+        },
+        {
+          "sid": "shady_den",
+          "maxCount": 2
+        },
+        {
+          "sid": "random_hire_1",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_2",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_3",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_4",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_5",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_6",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_7",
+          "maxCount": 6
+        },
+        {
+          "sid": "arena",
+          "maxCount": 2
+        },
+        {
+          "sid": "sacrificial_shrine",
+          "maxCount": 2
+        },
+        {
+          "sid": "chimerologist",
+          "maxCount": 2
+        },
+        {
+          "sid": "circus",
+          "maxCount": 2
+        },
+        {
+          "sid": "infernal_cirque",
+          "maxCount": 2
+        },
+        {
+          "sid": "flattering_mirror",
+          "maxCount": 2
+        },
+        {
+          "sid": "fickle_shrine",
+          "maxCount": 1
+        },
+        {
+          "sid": "point_of_balance",
+          "maxCount": 3
+        },
+        {
+          "sid": "pandora_box",
+          "maxCount": 4
+        },
+        {
+          "sid": "ritual_pyre",
+          "maxCount": 3
+        },
+        {
+          "sid": "boreal_call",
+          "maxCount": 3
+        },
+        {
+          "sid": "jousting_range",
+          "maxCount": 1
+        },
+        {
+          "sid": "unforgotten_grave",
+          "maxCount": 1
+        },
+        {
+          "sid": "petrified_memorial",
+          "maxCount": 1
+        },
+        {
+          "sid": "the_gorge",
+          "maxCount": 1
+        }
+      ]
+    },
+    {
+      "name": "content_limits_side_2_6",
+      "playerMin": 2,
+      "playerMax": 6,
+      "limits": [
+        {
+          "sid": "black_tower",
+          "maxCount": 0
+        },
+        {
+          "sid": "fountain",
+          "maxCount": 2
+        },
+        {
+          "sid": "fountain_2",
+          "maxCount": 2
+        },
+        {
+          "sid": "mana_well",
+          "maxCount": 2
+        },
+        {
+          "sid": "beer_fountain",
+          "maxCount": 2
+        },
+        {
+          "sid": "market",
+          "maxCount": 1
+        },
+        {
+          "sid": "forge",
+          "maxCount": 2
+        },
+        {
+          "sid": "stables",
+          "maxCount": 1
+        },
+        {
+          "sid": "watchtower",
+          "maxCount": 2
+        },
+        {
+          "sid": "wind_rose",
+          "maxCount": 1
+        },
+        {
+          "sid": "quixs_path",
+          "maxCount": 2
+        },
+        {
+          "sid": "crystal_trail",
+          "maxCount": 3
+        },
+        {
+          "sid": "mysterious_stone",
+          "maxCount": 2
+        },
+        {
+          "sid": "university",
+          "maxCount": 2
+        },
+        {
+          "sid": "wise_owl",
+          "maxCount": 4
+        },
+        {
+          "sid": "celestial_sphere",
+          "maxCount": 2
+        },
+        {
+          "sid": "pile_of_books",
+          "maxCount": 2
+        },
+        {
+          "sid": "insaras_eye",
+          "maxCount": 2
+        },
+        {
+          "sid": "tear_of_truth",
+          "maxCount": 3
+        },
+        {
+          "sid": "tree_of_abundance",
+          "maxCount": 2
+        },
+        {
+          "sid": "huntsmans_camp",
+          "maxCount": 2
+        },
+        {
+          "sid": "shady_den",
+          "maxCount": 2
+        },
+        {
+          "sid": "random_hire_1",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_2",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_3",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_4",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_5",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_6",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_7",
+          "maxCount": 6
+        },
+        {
+          "sid": "arena",
+          "maxCount": 2
+        },
+        {
+          "sid": "sacrificial_shrine",
+          "maxCount": 2
+        },
+        {
+          "sid": "chimerologist",
+          "maxCount": 2
+        },
+        {
+          "sid": "circus",
+          "maxCount": 2
+        },
+        {
+          "sid": "infernal_cirque",
+          "maxCount": 2
+        },
+        {
+          "sid": "flattering_mirror",
+          "maxCount": 2
+        },
+        {
+          "sid": "fickle_shrine",
+          "maxCount": 1
+        },
+        {
+          "sid": "point_of_balance",
+          "maxCount": 3
+        },
+        {
+          "sid": "pandora_box",
+          "maxCount": 4
+        },
+        {
+          "sid": "ritual_pyre",
+          "maxCount": 3
+        },
+        {
+          "sid": "boreal_call",
+          "maxCount": 3
+        },
+        {
+          "sid": "jousting_range",
+          "maxCount": 1
+        },
+        {
+          "sid": "unforgotten_grave",
+          "maxCount": 1
+        },
+        {
+          "sid": "petrified_memorial",
+          "maxCount": 1
+        },
+        {
+          "sid": "the_gorge",
+          "maxCount": 1
+        }
+      ]
+    },
+    {
+      "name": "content_limits_side_3_4",
+      "playerMin": 3,
+      "playerMax": 4,
+      "limits": [
+        {
+          "sid": "black_tower",
+          "maxCount": 0
+        },
+        {
+          "sid": "fountain",
+          "maxCount": 2
+        },
+        {
+          "sid": "fountain_2",
+          "maxCount": 2
+        },
+        {
+          "sid": "mana_well",
+          "maxCount": 2
+        },
+        {
+          "sid": "beer_fountain",
+          "maxCount": 2
+        },
+        {
+          "sid": "market",
+          "maxCount": 1
+        },
+        {
+          "sid": "forge",
+          "maxCount": 2
+        },
+        {
+          "sid": "stables",
+          "maxCount": 1
+        },
+        {
+          "sid": "watchtower",
+          "maxCount": 2
+        },
+        {
+          "sid": "wind_rose",
+          "maxCount": 1
+        },
+        {
+          "sid": "quixs_path",
+          "maxCount": 2
+        },
+        {
+          "sid": "crystal_trail",
+          "maxCount": 3
+        },
+        {
+          "sid": "mysterious_stone",
+          "maxCount": 2
+        },
+        {
+          "sid": "university",
+          "maxCount": 2
+        },
+        {
+          "sid": "wise_owl",
+          "maxCount": 4
+        },
+        {
+          "sid": "celestial_sphere",
+          "maxCount": 2
+        },
+        {
+          "sid": "pile_of_books",
+          "maxCount": 2
+        },
+        {
+          "sid": "insaras_eye",
+          "maxCount": 2
+        },
+        {
+          "sid": "tear_of_truth",
+          "maxCount": 3
+        },
+        {
+          "sid": "tree_of_abundance",
+          "maxCount": 2
+        },
+        {
+          "sid": "huntsmans_camp",
+          "maxCount": 2
+        },
+        {
+          "sid": "shady_den",
+          "maxCount": 2
+        },
+        {
+          "sid": "random_hire_1",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_2",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_3",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_4",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_5",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_6",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_7",
+          "maxCount": 6
+        },
+        {
+          "sid": "arena",
+          "maxCount": 2
+        },
+        {
+          "sid": "sacrificial_shrine",
+          "maxCount": 2
+        },
+        {
+          "sid": "chimerologist",
+          "maxCount": 2
+        },
+        {
+          "sid": "circus",
+          "maxCount": 2
+        },
+        {
+          "sid": "infernal_cirque",
+          "maxCount": 2
+        },
+        {
+          "sid": "flattering_mirror",
+          "maxCount": 2
+        },
+        {
+          "sid": "fickle_shrine",
+          "maxCount": 1
+        },
+        {
+          "sid": "point_of_balance",
+          "maxCount": 3
+        },
+        {
+          "sid": "pandora_box",
+          "maxCount": 4
+        },
+        {
+          "sid": "ritual_pyre",
+          "maxCount": 3
+        },
+        {
+          "sid": "boreal_call",
+          "maxCount": 3
+        },
+        {
+          "sid": "jousting_range",
+          "maxCount": 1
+        },
+        {
+          "sid": "unforgotten_grave",
+          "maxCount": 1
+        },
+        {
+          "sid": "petrified_memorial",
+          "maxCount": 1
+        },
+        {
+          "sid": "the_gorge",
+          "maxCount": 1
+        }
+      ]
+    },
+    {
+      "name": "content_limits_side_3_5",
+      "playerMin": 3,
+      "playerMax": 5,
+      "limits": [
+        {
+          "sid": "black_tower",
+          "maxCount": 0
+        },
+        {
+          "sid": "fountain",
+          "maxCount": 2
+        },
+        {
+          "sid": "fountain_2",
+          "maxCount": 2
+        },
+        {
+          "sid": "mana_well",
+          "maxCount": 2
+        },
+        {
+          "sid": "beer_fountain",
+          "maxCount": 2
+        },
+        {
+          "sid": "market",
+          "maxCount": 1
+        },
+        {
+          "sid": "forge",
+          "maxCount": 2
+        },
+        {
+          "sid": "stables",
+          "maxCount": 1
+        },
+        {
+          "sid": "watchtower",
+          "maxCount": 2
+        },
+        {
+          "sid": "wind_rose",
+          "maxCount": 1
+        },
+        {
+          "sid": "quixs_path",
+          "maxCount": 2
+        },
+        {
+          "sid": "crystal_trail",
+          "maxCount": 3
+        },
+        {
+          "sid": "mysterious_stone",
+          "maxCount": 2
+        },
+        {
+          "sid": "university",
+          "maxCount": 2
+        },
+        {
+          "sid": "wise_owl",
+          "maxCount": 4
+        },
+        {
+          "sid": "celestial_sphere",
+          "maxCount": 2
+        },
+        {
+          "sid": "pile_of_books",
+          "maxCount": 2
+        },
+        {
+          "sid": "insaras_eye",
+          "maxCount": 2
+        },
+        {
+          "sid": "tear_of_truth",
+          "maxCount": 3
+        },
+        {
+          "sid": "tree_of_abundance",
+          "maxCount": 2
+        },
+        {
+          "sid": "huntsmans_camp",
+          "maxCount": 2
+        },
+        {
+          "sid": "shady_den",
+          "maxCount": 2
+        },
+        {
+          "sid": "random_hire_1",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_2",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_3",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_4",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_5",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_6",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_7",
+          "maxCount": 6
+        },
+        {
+          "sid": "arena",
+          "maxCount": 2
+        },
+        {
+          "sid": "sacrificial_shrine",
+          "maxCount": 2
+        },
+        {
+          "sid": "chimerologist",
+          "maxCount": 2
+        },
+        {
+          "sid": "circus",
+          "maxCount": 2
+        },
+        {
+          "sid": "infernal_cirque",
+          "maxCount": 2
+        },
+        {
+          "sid": "flattering_mirror",
+          "maxCount": 2
+        },
+        {
+          "sid": "fickle_shrine",
+          "maxCount": 1
+        },
+        {
+          "sid": "point_of_balance",
+          "maxCount": 3
+        },
+        {
+          "sid": "pandora_box",
+          "maxCount": 4
+        },
+        {
+          "sid": "ritual_pyre",
+          "maxCount": 3
+        },
+        {
+          "sid": "boreal_call",
+          "maxCount": 3
+        },
+        {
+          "sid": "jousting_range",
+          "maxCount": 1
+        },
+        {
+          "sid": "unforgotten_grave",
+          "maxCount": 1
+        },
+        {
+          "sid": "petrified_memorial",
+          "maxCount": 1
+        },
+        {
+          "sid": "the_gorge",
+          "maxCount": 1
+        }
+      ]
+    },
+    {
+      "name": "content_limits_side_3_6",
+      "playerMin": 3,
+      "playerMax": 6,
+      "limits": [
+        {
+          "sid": "black_tower",
+          "maxCount": 0
+        },
+        {
+          "sid": "fountain",
+          "maxCount": 2
+        },
+        {
+          "sid": "fountain_2",
+          "maxCount": 2
+        },
+        {
+          "sid": "mana_well",
+          "maxCount": 2
+        },
+        {
+          "sid": "beer_fountain",
+          "maxCount": 2
+        },
+        {
+          "sid": "market",
+          "maxCount": 1
+        },
+        {
+          "sid": "forge",
+          "maxCount": 2
+        },
+        {
+          "sid": "stables",
+          "maxCount": 1
+        },
+        {
+          "sid": "watchtower",
+          "maxCount": 2
+        },
+        {
+          "sid": "wind_rose",
+          "maxCount": 1
+        },
+        {
+          "sid": "quixs_path",
+          "maxCount": 2
+        },
+        {
+          "sid": "crystal_trail",
+          "maxCount": 3
+        },
+        {
+          "sid": "mysterious_stone",
+          "maxCount": 2
+        },
+        {
+          "sid": "university",
+          "maxCount": 2
+        },
+        {
+          "sid": "wise_owl",
+          "maxCount": 4
+        },
+        {
+          "sid": "celestial_sphere",
+          "maxCount": 2
+        },
+        {
+          "sid": "pile_of_books",
+          "maxCount": 2
+        },
+        {
+          "sid": "insaras_eye",
+          "maxCount": 2
+        },
+        {
+          "sid": "tear_of_truth",
+          "maxCount": 3
+        },
+        {
+          "sid": "tree_of_abundance",
+          "maxCount": 2
+        },
+        {
+          "sid": "huntsmans_camp",
+          "maxCount": 2
+        },
+        {
+          "sid": "shady_den",
+          "maxCount": 2
+        },
+        {
+          "sid": "random_hire_1",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_2",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_3",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_4",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_5",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_6",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_7",
+          "maxCount": 6
+        },
+        {
+          "sid": "arena",
+          "maxCount": 2
+        },
+        {
+          "sid": "sacrificial_shrine",
+          "maxCount": 2
+        },
+        {
+          "sid": "chimerologist",
+          "maxCount": 2
+        },
+        {
+          "sid": "circus",
+          "maxCount": 2
+        },
+        {
+          "sid": "infernal_cirque",
+          "maxCount": 2
+        },
+        {
+          "sid": "flattering_mirror",
+          "maxCount": 2
+        },
+        {
+          "sid": "fickle_shrine",
+          "maxCount": 1
+        },
+        {
+          "sid": "point_of_balance",
+          "maxCount": 3
+        },
+        {
+          "sid": "pandora_box",
+          "maxCount": 4
+        },
+        {
+          "sid": "ritual_pyre",
+          "maxCount": 3
+        },
+        {
+          "sid": "boreal_call",
+          "maxCount": 3
+        },
+        {
+          "sid": "jousting_range",
+          "maxCount": 1
+        },
+        {
+          "sid": "unforgotten_grave",
+          "maxCount": 1
+        },
+        {
+          "sid": "petrified_memorial",
+          "maxCount": 1
+        },
+        {
+          "sid": "the_gorge",
+          "maxCount": 1
+        }
+      ]
+    },
+    {
+      "name": "content_limits_side_4_5",
+      "playerMin": 4,
+      "playerMax": 5,
+      "limits": [
+        {
+          "sid": "black_tower",
+          "maxCount": 0
+        },
+        {
+          "sid": "fountain",
+          "maxCount": 2
+        },
+        {
+          "sid": "fountain_2",
+          "maxCount": 2
+        },
+        {
+          "sid": "mana_well",
+          "maxCount": 2
+        },
+        {
+          "sid": "beer_fountain",
+          "maxCount": 2
+        },
+        {
+          "sid": "market",
+          "maxCount": 1
+        },
+        {
+          "sid": "forge",
+          "maxCount": 2
+        },
+        {
+          "sid": "stables",
+          "maxCount": 1
+        },
+        {
+          "sid": "watchtower",
+          "maxCount": 2
+        },
+        {
+          "sid": "wind_rose",
+          "maxCount": 1
+        },
+        {
+          "sid": "quixs_path",
+          "maxCount": 2
+        },
+        {
+          "sid": "crystal_trail",
+          "maxCount": 3
+        },
+        {
+          "sid": "mysterious_stone",
+          "maxCount": 2
+        },
+        {
+          "sid": "university",
+          "maxCount": 2
+        },
+        {
+          "sid": "wise_owl",
+          "maxCount": 4
+        },
+        {
+          "sid": "celestial_sphere",
+          "maxCount": 2
+        },
+        {
+          "sid": "pile_of_books",
+          "maxCount": 2
+        },
+        {
+          "sid": "insaras_eye",
+          "maxCount": 2
+        },
+        {
+          "sid": "tear_of_truth",
+          "maxCount": 3
+        },
+        {
+          "sid": "tree_of_abundance",
+          "maxCount": 2
+        },
+        {
+          "sid": "huntsmans_camp",
+          "maxCount": 2
+        },
+        {
+          "sid": "shady_den",
+          "maxCount": 2
+        },
+        {
+          "sid": "random_hire_1",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_2",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_3",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_4",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_5",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_6",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_7",
+          "maxCount": 6
+        },
+        {
+          "sid": "arena",
+          "maxCount": 2
+        },
+        {
+          "sid": "sacrificial_shrine",
+          "maxCount": 2
+        },
+        {
+          "sid": "chimerologist",
+          "maxCount": 2
+        },
+        {
+          "sid": "circus",
+          "maxCount": 2
+        },
+        {
+          "sid": "infernal_cirque",
+          "maxCount": 2
+        },
+        {
+          "sid": "flattering_mirror",
+          "maxCount": 2
+        },
+        {
+          "sid": "fickle_shrine",
+          "maxCount": 1
+        },
+        {
+          "sid": "point_of_balance",
+          "maxCount": 3
+        },
+        {
+          "sid": "pandora_box",
+          "maxCount": 4
+        },
+        {
+          "sid": "ritual_pyre",
+          "maxCount": 3
+        },
+        {
+          "sid": "boreal_call",
+          "maxCount": 3
+        },
+        {
+          "sid": "jousting_range",
+          "maxCount": 1
+        },
+        {
+          "sid": "unforgotten_grave",
+          "maxCount": 1
+        },
+        {
+          "sid": "petrified_memorial",
+          "maxCount": 1
+        },
+        {
+          "sid": "the_gorge",
+          "maxCount": 1
+        }
+      ]
+    },
+    {
+      "name": "content_limits_side_4_6",
+      "playerMin": 4,
+      "playerMax": 6,
+      "limits": [
+        {
+          "sid": "black_tower",
+          "maxCount": 0
+        },
+        {
+          "sid": "fountain",
+          "maxCount": 2
+        },
+        {
+          "sid": "fountain_2",
+          "maxCount": 2
+        },
+        {
+          "sid": "mana_well",
+          "maxCount": 2
+        },
+        {
+          "sid": "beer_fountain",
+          "maxCount": 2
+        },
+        {
+          "sid": "market",
+          "maxCount": 1
+        },
+        {
+          "sid": "forge",
+          "maxCount": 2
+        },
+        {
+          "sid": "stables",
+          "maxCount": 1
+        },
+        {
+          "sid": "watchtower",
+          "maxCount": 2
+        },
+        {
+          "sid": "wind_rose",
+          "maxCount": 1
+        },
+        {
+          "sid": "quixs_path",
+          "maxCount": 2
+        },
+        {
+          "sid": "crystal_trail",
+          "maxCount": 3
+        },
+        {
+          "sid": "mysterious_stone",
+          "maxCount": 2
+        },
+        {
+          "sid": "university",
+          "maxCount": 2
+        },
+        {
+          "sid": "wise_owl",
+          "maxCount": 4
+        },
+        {
+          "sid": "celestial_sphere",
+          "maxCount": 2
+        },
+        {
+          "sid": "pile_of_books",
+          "maxCount": 2
+        },
+        {
+          "sid": "insaras_eye",
+          "maxCount": 2
+        },
+        {
+          "sid": "tear_of_truth",
+          "maxCount": 3
+        },
+        {
+          "sid": "tree_of_abundance",
+          "maxCount": 2
+        },
+        {
+          "sid": "huntsmans_camp",
+          "maxCount": 2
+        },
+        {
+          "sid": "shady_den",
+          "maxCount": 2
+        },
+        {
+          "sid": "random_hire_1",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_2",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_3",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_4",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_5",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_6",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_7",
+          "maxCount": 6
+        },
+        {
+          "sid": "arena",
+          "maxCount": 2
+        },
+        {
+          "sid": "sacrificial_shrine",
+          "maxCount": 2
+        },
+        {
+          "sid": "chimerologist",
+          "maxCount": 2
+        },
+        {
+          "sid": "circus",
+          "maxCount": 2
+        },
+        {
+          "sid": "infernal_cirque",
+          "maxCount": 2
+        },
+        {
+          "sid": "flattering_mirror",
+          "maxCount": 2
+        },
+        {
+          "sid": "fickle_shrine",
+          "maxCount": 1
+        },
+        {
+          "sid": "point_of_balance",
+          "maxCount": 3
+        },
+        {
+          "sid": "pandora_box",
+          "maxCount": 4
+        },
+        {
+          "sid": "ritual_pyre",
+          "maxCount": 3
+        },
+        {
+          "sid": "boreal_call",
+          "maxCount": 3
+        },
+        {
+          "sid": "jousting_range",
+          "maxCount": 1
+        },
+        {
+          "sid": "unforgotten_grave",
+          "maxCount": 1
+        },
+        {
+          "sid": "petrified_memorial",
+          "maxCount": 1
+        },
+        {
+          "sid": "the_gorge",
+          "maxCount": 1
+        }
+      ]
+    },
+    {
+      "name": "content_limits_side_5_6",
+      "playerMin": 5,
+      "playerMax": 6,
+      "limits": [
+        {
+          "sid": "black_tower",
+          "maxCount": 0
+        },
+        {
+          "sid": "fountain",
+          "maxCount": 2
+        },
+        {
+          "sid": "fountain_2",
+          "maxCount": 2
+        },
+        {
+          "sid": "mana_well",
+          "maxCount": 2
+        },
+        {
+          "sid": "beer_fountain",
+          "maxCount": 2
+        },
+        {
+          "sid": "market",
+          "maxCount": 1
+        },
+        {
+          "sid": "forge",
+          "maxCount": 2
+        },
+        {
+          "sid": "stables",
+          "maxCount": 1
+        },
+        {
+          "sid": "watchtower",
+          "maxCount": 2
+        },
+        {
+          "sid": "wind_rose",
+          "maxCount": 1
+        },
+        {
+          "sid": "quixs_path",
+          "maxCount": 2
+        },
+        {
+          "sid": "crystal_trail",
+          "maxCount": 3
+        },
+        {
+          "sid": "mysterious_stone",
+          "maxCount": 2
+        },
+        {
+          "sid": "university",
+          "maxCount": 2
+        },
+        {
+          "sid": "wise_owl",
+          "maxCount": 4
+        },
+        {
+          "sid": "celestial_sphere",
+          "maxCount": 2
+        },
+        {
+          "sid": "pile_of_books",
+          "maxCount": 2
+        },
+        {
+          "sid": "insaras_eye",
+          "maxCount": 2
+        },
+        {
+          "sid": "tear_of_truth",
+          "maxCount": 3
+        },
+        {
+          "sid": "tree_of_abundance",
+          "maxCount": 2
+        },
+        {
+          "sid": "huntsmans_camp",
+          "maxCount": 2
+        },
+        {
+          "sid": "shady_den",
+          "maxCount": 2
+        },
+        {
+          "sid": "random_hire_1",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_2",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_3",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_4",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_5",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_6",
+          "maxCount": 6
+        },
+        {
+          "sid": "random_hire_7",
+          "maxCount": 6
+        },
+        {
+          "sid": "arena",
+          "maxCount": 2
+        },
+        {
+          "sid": "sacrificial_shrine",
+          "maxCount": 2
+        },
+        {
+          "sid": "chimerologist",
+          "maxCount": 2
+        },
+        {
+          "sid": "circus",
+          "maxCount": 2
+        },
+        {
+          "sid": "infernal_cirque",
+          "maxCount": 2
+        },
+        {
+          "sid": "flattering_mirror",
+          "maxCount": 2
+        },
+        {
+          "sid": "fickle_shrine",
+          "maxCount": 1
+        },
+        {
+          "sid": "point_of_balance",
+          "maxCount": 3
+        },
+        {
+          "sid": "pandora_box",
+          "maxCount": 4
+        },
+        {
+          "sid": "ritual_pyre",
+          "maxCount": 3
+        },
+        {
+          "sid": "boreal_call",
+          "maxCount": 3
+        },
+        {
+          "sid": "jousting_range",
+          "maxCount": 1
+        },
+        {
+          "sid": "unforgotten_grave",
+          "maxCount": 1
+        },
+        {
+          "sid": "petrified_memorial",
+          "maxCount": 1
+        },
+        {
+          "sid": "the_gorge",
+          "maxCount": 1
+        }
+      ]
+    }
+  ],
+  "contentPools": [],
+  "contentLists": []
+}

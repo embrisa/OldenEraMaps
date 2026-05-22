@@ -1,0 +1,1370 @@
+=== sources/olden-era.com/text/en/classes.txt ===
+Classes
+
+Classes and subclasses are one of the most interesting and at the same time most challenging new mechanics in Olden Era. Every hero belongs to one of two global types: Warrior or Mage. Within each faction, each type has its own unique class — and it is this class that determines which skills the hero receives most often and which subclass they can unlock.
+
+Each class has two unique subclasses. When activated, the hero gains a very powerful signature bonus — in spirit reminiscent of the legendary abilities from Heroes V. But this is not just a nice bonus — it is a true game-changing mechanic of the late game that can completely flip the match.
+
+How to Unlock a Subclass
+
+To unlock a subclass, the hero must meet a rather harsh condition:
+
+Upgrade exactly 5 specific skills to Expert level.
+
+Theoretically, the earliest possible subclass unlock is level 14 — if the hero starts with at least one of the required skills and gets exactly the needed skills on every subsequent level-up. In practice this happens very rarely — subclasses usually open between levels 16–20+.
+
+Why It’s So Hard: Skill Roll Chances
+
+The main problem is that the chances of getting the required skills vary greatly between classes.
+
+Even if you know perfectly well which 5 skills you need, there is no guarantee the system will give you exactly those. Some classes have only a 2% chance on key skills!
+
+Classic example: the heroine [Kestrel:](Swashbuckler class). She needs the [Basic Nightshade Magic]skill for her subclass — with just a 2% chance to roll it. This means that even with perfect play, in many games you will simply never see this skill at all.
+
+For detailed information on each hero and the chances of receiving specific skills, you can see it here ( [Selecting the hero you need]).
+
+When is it even worth playing for a subclass
+
+The correct strategy in most games is to not aim for a subclass at all. Playing for one is only worthwhile in very rare, ideal situations.
+
+Signs that it’s “now or never”:
+
+By levels 2–3 the hero already received one of the key (very rare) subclass skills
+
+By levels 5–8 already 2–3 out of the five required skills are obtained
+
+Only 1–2 skills left, each with 10–15% chance
+
+You are willing to sacrifice the hero’s early-game power for a potential massive power spike at levels 18–22
+
+Important: if you are deliberately going for a subclass, you cannot take any unrelated skills. Every “foreign” skill severely worsens the probabilities — already low chances drop even further. This means that until subclass activation, the hero will have to play with a minimal set of skills, often missing the strongest combat abilities.
+
+Short: pros and cons of playing for a subclass
+
+ProsCons
+
+Enormous power after activation (game changer)Extremely low success chance
+
+Can completely smash the late gameHero is weak during mid-game
+
+Looks incredibly cool when it actually landsOften simply doesn’t happen
+
+Where to View All Subclasses and Heroes
+
+The full list of subclasses, what exactly they provide, and which heroes belong to them is in the right-hand menu. Just select the subclass you’re interested in and view the sorted heroes + bonus descriptions.
+
+Classes and subclasses are one of the most interesting and at the same time most challenging new mechanics in Olden Era. Every hero belongs to one of two global types: Warrior or Mage. Within each faction, each type has its own unique class — and it is this class that determines which skills the hero receives most often and which subclass they can unlock.
+
+ [Home]
+
+Classes
+
+Support Site Development
+
+Select Faction
+
+Select Class
+
+ [
+
+Warden]
+
+ [
+
+Druid]
+
+ [
+
+Enforcer]
+
+ [
+
+Herald]
+
+ [
+
+Overlord]
+
+ [
+
+Warlock]
+
+ [
+
+Death Knight]
+
+ [
+
+Necromancer]
+
+ [
+
+Oathkeeper]
+
+ [
+
+Riftspeaker]
+
+ [
+
+Cleric]
+
+ [
+
+Knight]
+
+=== sources/olden-era.com/text/en/classes/cleric.txt ===
+Classes
+
+Cleric
+
+Faction:Temple
+
+Available Subclasses
+
+Grand Inquisitor
+
+Enemy hero can only use each spell once per battle.
+
+Ascendant
+
+All the hero's spells always cost 0 mana.
+
+Heroes of this Class
+
+ [
+
+Merry Elias
+] [
+
+Pip
+] [
+
+Zenith
+] [
+
+Lia the Untethered One
+] [
+
+Julius
+] [
+
+Vesper
+] [
+
+Anastasia the Meek
+] [
+
+Nadir
+] [
+
+Clarissa
+]
+
+ [Home]
+
+ [Classes]
+
+Cleric
+
+Support Site Development
+
+Select Faction
+
+Select Class
+
+ [
+
+Warden]
+
+ [
+
+Druid]
+
+ [
+
+Enforcer]
+
+ [
+
+Herald]
+
+ [
+
+Overlord]
+
+ [
+
+Warlock]
+
+ [
+
+Death Knight]
+
+ [
+
+Necromancer]
+
+ [
+
+Oathkeeper]
+
+ [
+
+Riftspeaker]
+
+ [
+
+Cleric]
+
+ [
+
+Knight]
+
+=== sources/olden-era.com/text/en/classes/death_knight.txt ===
+Classes
+
+Death Knight
+
+Faction:Necropolis
+
+Available Subclasses
+
+Walking Rot
+
+All enemies always have minimum Morale.
+
+Harbinger of Doom
+
+Enemy creatures in battle have the minimum possible Luck and always land an Unlucky Strike when attacking.
+
+Heroes of this Class
+
+ [
+
+Bulwark
+] [
+
+King-of-Kings
+] [
+
+Onkos
+] [
+
+Kel'Ghul
+] [
+
+Natalida
+] [
+
+Artorius Veritas
+] [
+
+Marl
+] [
+
+Tarius
+] [
+
+Zam
+]
+
+ [Home]
+
+ [Classes]
+
+Death Knight
+
+Support Site Development
+
+Select Faction
+
+Select Class
+
+ [
+
+Death Knight]
+
+ [
+
+Necromancer]
+
+=== sources/olden-era.com/text/en/classes/druid.txt ===
+Classes
+
+Druid
+
+Faction:Sylvan
+
+Available Subclasses
+
+Celestial Envoy
+
+The hero can use all spells.
+
+Heaven’s Fury
+
+Heroic Strike deals Damage to all enemies in a 1‑hex radius.
+
+Heroes of this Class
+
+ [
+
+Vatawna
+] [
+
+Elder Tss'kish
+] [
+
+Aeliniel
+] [
+
+Glacia
+] [
+
+Vim
+] [
+
+Halon
+] [
+
+Echolily
+] [
+
+Sullie
+] [
+
+The Minstrel
+]
+
+ [Home]
+
+ [Classes]
+
+Druid
+
+Support Site Development
+
+Select Faction
+
+Select Class
+
+ [
+
+Warden]
+
+ [
+
+Druid]
+
+ [
+
+Enforcer]
+
+ [
+
+Herald]
+
+ [
+
+Overlord]
+
+ [
+
+Warlock]
+
+ [
+
+Death Knight]
+
+ [
+
+Necromancer]
+
+ [
+
+Oathkeeper]
+
+ [
+
+Riftspeaker]
+
+ [
+
+Cleric]
+
+ [
+
+Knight]
+
+=== sources/olden-era.com/text/en/classes/enforcer.txt ===
+Classes
+
+Enforcer
+
+Faction:Hive
+
+Available Subclasses
+
+Broodmother
+
+Doubles the base stats of summoned Fire Larvae.
+
+Soul Eater
+
+Grants a new battle ability. It allows the hero to consume a target corpse, gaining bonus Attack, Defense, and Spell Power until the end of battle.
+
+Heroes of this Class
+
+ [
+
+Niev
+] [
+
+Maelstrom
+] [
+
+Nor
+] [
+
+Zoran, the Self‑Founded
+] [
+
+Curson, Duke of Rage
+] [
+
+Tavi
+] [
+
+Lo
+] [
+
+Goldentongue
+] [
+
+Abigor, Duke of Battle
+]
+
+ [Home]
+
+ [Classes]
+
+Enforcer
+
+Support Site Development
+
+Select Faction
+
+Select Class
+
+ [
+
+Warden]
+
+ [
+
+Druid]
+
+ [
+
+Enforcer]
+
+ [
+
+Herald]
+
+ [
+
+Overlord]
+
+ [
+
+Warlock]
+
+ [
+
+Death Knight]
+
+ [
+
+Necromancer]
+
+ [
+
+Oathkeeper]
+
+ [
+
+Riftspeaker]
+
+ [
+
+Cleric]
+
+ [
+
+Knight]
+
+=== sources/olden-era.com/text/en/classes/herald.txt ===
+Classes
+
+Herald
+
+Faction:Hive
+
+Available Subclasses
+
+Progenitor
+
++200% creature growth in all your cities.
+
+Lord of Chaos
+
+Heroic Strike deals +2 Damage per each hero attribute point.
+
+Heroes of this Class
+
+ [
+
+Fleu
+] [
+
+Xirr
+] [
+
+Bathym, Duke of Jewels
+] [
+
+Leira
+] [
+
+Groo
+] [
+
+Mila
+] [
+
+Oriax
+] [
+
+Khariseth
+] [
+
+Pauper
+]
+
+ [Home]
+
+ [Classes]
+
+Herald
+
+Support Site Development
+
+Select Faction
+
+Select Class
+
+ [
+
+Warden]
+
+ [
+
+Druid]
+
+ [
+
+Enforcer]
+
+ [
+
+Herald]
+
+ [
+
+Overlord]
+
+ [
+
+Warlock]
+
+ [
+
+Death Knight]
+
+ [
+
+Necromancer]
+
+ [
+
+Oathkeeper]
+
+ [
+
+Riftspeaker]
+
+ [
+
+Cleric]
+
+ [
+
+Knight]
+
+=== sources/olden-era.com/text/en/classes/knight.txt ===
+Classes
+
+Knight
+
+Faction:Temple
+
+Available Subclasses
+
+Paragon
+
+All allies deal maximum damage and take minimum damage.
+
+Swashbuckler
+
+Heroic Strike deals +200 damage.
+
+Heroes of this Class
+
+ [
+
+Ister
+] [
+
+Leon Sticky-Fingers
+] [
+
+John Johnson
+] [
+
+Kestrel
+] [
+
+Aeos the Exalted
+] [
+
+Heretic Avis
+] [
+
+Keandra
+] [
+
+Lord Edgar
+] [
+
+Old Lord Mandall
+]
+
+ [Home]
+
+ [Classes]
+
+Knight
+
+Support Site Development
+
+Select Faction
+
+Select Class
+
+ [
+
+Warden]
+
+ [
+
+Druid]
+
+ [
+
+Enforcer]
+
+ [
+
+Herald]
+
+ [
+
+Overlord]
+
+ [
+
+Warlock]
+
+ [
+
+Death Knight]
+
+ [
+
+Necromancer]
+
+ [
+
+Oathkeeper]
+
+ [
+
+Riftspeaker]
+
+ [
+
+Cleric]
+
+ [
+
+Knight]
+
+=== sources/olden-era.com/text/en/classes/necromancer.txt ===
+Classes
+
+Necromancer
+
+Faction:Necropolis
+
+Available Subclasses
+
+Chronomancer
+
+Necromancy works for all creatures and not just the Undead.
+
+Soulweaver
+
+After an enemy stack is killed in battle, a temporary stack of friendly Wights appears in their place.
+
+Heroes of this Class
+
+ [
+
+Mag
+] [
+
+Adahn
+] [
+
+Ethric
+] [
+
+Guildmaster Klastor
+] [
+
+Shadespinner Oona
+] [
+
+Laura
+] [
+
+Lord Rufus
+] [
+
+Funerella
+] [
+
+Milossa The Golden
+]
+
+ [Home]
+
+ [Classes]
+
+Necromancer
+
+Support Site Development
+
+Select Faction
+
+Select Class
+
+ [
+
+Warden]
+
+ [
+
+Druid]
+
+ [
+
+Enforcer]
+
+ [
+
+Herald]
+
+ [
+
+Overlord]
+
+ [
+
+Warlock]
+
+ [
+
+Death Knight]
+
+ [
+
+Necromancer]
+
+ [
+
+Oathkeeper]
+
+ [
+
+Riftspeaker]
+
+ [
+
+Cleric]
+
+ [
+
+Knight]
+
+=== sources/olden-era.com/text/en/classes/oathkeeper.txt ===
+Classes
+
+Oathkeeper
+
+Faction:Schism
+
+Available Subclasses
+
+Unfeeling
+
+Enemy loses all Focus Charges at the beginning of each battle round.
+
+Unbound
+
+Increases the level of all hero's spells to their maximum.
+
+Heroes of this Class
+
+ [
+
+Nihil
+] [
+
+Blackhorn
+] [
+
+Matastala the White
+] [
+
+Jänhei
+] [
+
+Mara Matha
+] [
+
+Iron Master
+] [
+
+Walkha
+] [
+
+Changeling Urgo
+] [
+
+Martyr Tho
+]
+
+ [Home]
+
+ [Classes]
+
+Oathkeeper
+
+Support Site Development
+
+Select Faction
+
+Select Class
+
+ [
+
+Warden]
+
+ [
+
+Druid]
+
+ [
+
+Enforcer]
+
+ [
+
+Herald]
+
+ [
+
+Overlord]
+
+ [
+
+Warlock]
+
+ [
+
+Death Knight]
+
+ [
+
+Necromancer]
+
+ [
+
+Oathkeeper]
+
+ [
+
+Riftspeaker]
+
+ [
+
+Cleric]
+
+ [
+
+Knight]
+
+=== sources/olden-era.com/text/en/classes/overlord.txt ===
+Classes
+
+Overlord
+
+Faction:Dungeon
+
+Available Subclasses
+
+Balthazar's Bodyguard
+
++100% Attack.
+
+Silvertongue's Envoy
+
++100% Defence.
+
+Heroes of this Class
+
+ [
+
+Enatee
+] [
+
+Tellaris the Betrayed
+] [
+
+Stinger
+] [
+
+Kieran
+] [
+
+Mouaren
+] [
+
+Devir, son of Devir
+] [
+
+Creta, daughter of Navarr
+] [
+
+Rhea
+] [
+
+Gleard the Grey
+]
+
+ [Home]
+
+ [Classes]
+
+Overlord
+
+Support Site Development
+
+Select Faction
+
+Select Class
+
+ [
+
+Warden]
+
+ [
+
+Druid]
+
+ [
+
+Enforcer]
+
+ [
+
+Herald]
+
+ [
+
+Overlord]
+
+ [
+
+Warlock]
+
+ [
+
+Death Knight]
+
+ [
+
+Necromancer]
+
+ [
+
+Oathkeeper]
+
+ [
+
+Riftspeaker]
+
+ [
+
+Cleric]
+
+ [
+
+Knight]
+
+=== sources/olden-era.com/text/en/classes/riftspeaker.txt ===
+Classes
+
+Riftspeaker
+
+Faction:Schism
+
+Available Subclasses
+
+Unfathomable
+
+All enemies always deal minimum and take maximum Damage.
+
+Unstoppable
+
++10 to the hero’s Attack, Defence, Spell Power, and Knowledge.
+
+Heroes of this Class
+
+ [
+
+Grellekh the Betrayer
+] [
+
+Icequeen Hel'Ghat
+] [
+
+Kwinri
+] [
+
+The Eye Collective
+] [
+
+Tölketh
+] [
+
+Ulkuth
+] [
+
+Ra'Davok
+] [
+
+Sister Keiri
+] [
+
+Dhüvri
+]
+
+ [Home]
+
+ [Classes]
+
+Riftspeaker
+
+Support Site Development
+
+Select Faction
+
+Select Class
+
+ [
+
+Warden]
+
+ [
+
+Druid]
+
+ [
+
+Enforcer]
+
+ [
+
+Herald]
+
+ [
+
+Overlord]
+
+ [
+
+Warlock]
+
+ [
+
+Death Knight]
+
+ [
+
+Necromancer]
+
+ [
+
+Oathkeeper]
+
+ [
+
+Riftspeaker]
+
+ [
+
+Cleric]
+
+ [
+
+Knight]
+
+=== sources/olden-era.com/text/en/classes/warden.txt ===
+Classes
+
+Warden
+
+Faction:Sylvan
+
+Available Subclasses
+
+Wellspring of Vigor
+
+Generates maximum Focus Charges at the beginning of each round.
+
+Fortune’s Favored
+
+Friendly creatures have their maximum possible Luck and will always land a Lucky Strike when attacking.
+
+Heroes of this Class
+
+ [
+
+Eith
+] [
+
+Gorel Spearhead
+] [
+
+Gingertail
+] [
+
+Old Piligrim
+] [
+
+Octavia
+] [
+
+Mreowa
+] [
+
+Faleor
+] [
+
+Alluring Sh'a
+] [
+
+Autn Daliar
+]
+
+ [Home]
+
+ [Classes]
+
+Warden
+
+Support Site Development
+
+Select Faction
+
+Select Class
+
+ [
+
+Warden]
+
+ [
+
+Druid]
+
+ [
+
+Enforcer]
+
+ [
+
+Herald]
+
+ [
+
+Overlord]
+
+ [
+
+Warlock]
+
+ [
+
+Death Knight]
+
+ [
+
+Necromancer]
+
+ [
+
+Oathkeeper]
+
+ [
+
+Riftspeaker]
+
+ [
+
+Cleric]
+
+ [
+
+Knight]
+
+=== sources/olden-era.com/text/en/classes/warlock.txt ===
+Classes
+
+Warlock
+
+Faction:Dungeon
+
+Available Subclasses
+
+Amelchia's Heir
+
++100% spell power.
+
+Great Merchant
+
+Grant +10000 gold daily.
+
+Heroes of this Class
+
+ [
+
+Kelarr, son of Navarr
+] [
+
+Zakron the Great
+] [
+
+Sister Deira
+] [
+
+Motley
+] [
+
+Ylwari
+] [
+
+Glastor
+] [
+
+Typhona
+] [
+
+Sunny Rauktol
+] [
+
+Lodos
+]
+
+ [Home]
+
+ [Classes]
+
+Warlock
+
+Support Site Development
+
+Select Faction
+
+Select Class
+
+ [
+
+Warden]
+
+ [
+
+Druid]
+
+ [
+
+Enforcer]
+
+ [
+
+Herald]
+
+ [
+
+Overlord]
+
+ [
+
+Warlock]
+
+ [
+
+Death Knight]
+
+ [
+
+Necromancer]
+
+ [
+
+Oathkeeper]
+
+ [
+
+Riftspeaker]
+
+ [
+
+Cleric]
+
+ [
+
+Knight]

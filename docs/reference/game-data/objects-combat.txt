@@ -1,0 +1,1038 @@
+=== sources/olden-era.com/text/en/objects-combat.txt ===
+Combat Objects
+
+ [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+]
+
+ [Home]
+
+Combat Objects
+
+=== sources/olden-era.com/text/en/objects-combat/abandoned_mansion.txt ===
+Abandoned Mansion
+
+To customize formations, add spells, or record your own battle, go to the Battle Simulator [here].
+
+For defeating [] [] [] [] []you will receive a reward depending on the object tier
+
+1
+
+2
+
+3
+
+4
+
+Reward
+
+1500Gold
+
+40
+
+40
+
+15
+
+Important note:
+Information on this page may be partially inaccurate, as Heroes of Might & Magic: Olden Era is still in beta testing and demo version (full Early Access is scheduled for 2026). The garrison calculation formula, rounding method, and current data after recent grid size changes have not been fully disclosed and may change. By the game's release, all information will be clarified and updated.
+
+ [Home]
+
+ [Combat Objects]
+
+Abandoned Mansion
+
+=== sources/olden-era.com/text/en/objects-combat/abnormal_structure.txt ===
+Abnormal Structure
+
+To customize formations, add spells, or record your own battle, go to the Battle Simulator [here].
+
+For defeating [] [] [] [] []you will receive a reward depending on the object tier
+
+1
+
+2
+
+3
+
+Reward
+
+1Random Rare
+
+1Random Rare
+
+13
+
+13
+
+1
+
+8
+
+8
+
+Important note:
+Information on this page may be partially inaccurate, as Heroes of Might & Magic: Olden Era is still in beta testing and demo version (full Early Access is scheduled for 2026). The garrison calculation formula, rounding method, and current data after recent grid size changes have not been fully disclosed and may change. By the game's release, all information will be clarified and updated.
+
+ [Home]
+
+ [Combat Objects]
+
+Abnormal Structure
+
+=== sources/olden-era.com/text/en/objects-combat/alvar_outpost.txt ===
+Alvar Outpost
+
+To customize formations, add spells, or record your own battle, go to the Battle Simulator [here].
+
+For defeating [] [] [] [] [] []you will receive a reward depending on the object tier
+
+1
+
+2
+
+3
+
+4
+
+Reward
+
+4Ore
+
+4Wood
+
+2Gems
+
+2Crystal
+
+2Mercury
+
+16
+
+8
+
+8
+
+16
+
+16
+
+Important note:
+Information on this page may be partially inaccurate, as Heroes of Might & Magic: Olden Era is still in beta testing and demo version (full Early Access is scheduled for 2026). The garrison calculation formula, rounding method, and current data after recent grid size changes have not been fully disclosed and may change. By the game's release, all information will be clarified and updated.
+
+ [Home]
+
+ [Combat Objects]
+
+Alvar Outpost
+
+=== sources/olden-era.com/text/en/objects-combat/ancient_crypt.txt ===
+Ancient Crypt
+
+To customize formations, add spells, or record your own battle, go to the Battle Simulator [here].
+
+For defeating []you will receive a reward depending on the object tier
+
+1
+
+2
+
+3
+
+4
+
+Reward
+
+1000Gold
+
+1Random Rare
+
+20
+
+20
+
+20
+
+20
+
+Important note:
+Information on this page may be partially inaccurate, as Heroes of Might & Magic: Olden Era is still in beta testing and demo version (full Early Access is scheduled for 2026). The garrison calculation formula, rounding method, and current data after recent grid size changes have not been fully disclosed and may change. By the game's release, all information will be clarified and updated.
+
+ [Home]
+
+ [Combat Objects]
+
+Ancient Crypt
+
+=== sources/olden-era.com/text/en/objects-combat/black_tower.txt ===
+Black Tower
+
+To customize formations, add spells, or record your own battle, go to the Battle Simulator [here].
+
+For defeating []you will receive a reward depending on the object tier
+
+Reward
+
+Variant1:
+
+12Ore
+
+12Wood
+
+1Random Common
+
+Variant2:
+
+4Gems
+
+4Crystal
+
+4Mercury
+
+1Random Common
+
+Variant3:
+
+30000Gold
+
+1Random Common
+
+Variant4:
+
+1Random Rare
+
+Variant5:
+
+6000Gold
+
+1
+
+Important note:
+Information on this page may be partially inaccurate, as Heroes of Might & Magic: Olden Era is still in beta testing and demo version (full Early Access is scheduled for 2026). The garrison calculation formula, rounding method, and current data after recent grid size changes have not been fully disclosed and may change. By the game's release, all information will be clarified and updated.
+
+ [Home]
+
+ [Combat Objects]
+
+Black Tower
+
+=== sources/olden-era.com/text/en/objects-combat/boreal_call.txt ===
+Boreal Call
+
+To customize formations, add spells, or record your own battle, go to the Battle Simulator [here].
+
+For defeating [] [] []you will receive a reward depending on the object tier
+
+1
+
+2
+
+3
+
+4
+
+Reward
+
+1Abyssal Envoy
+
+11
+
+11
+
+11
+
+11
+
+11
+
+Important note:
+Information on this page may be partially inaccurate, as Heroes of Might & Magic: Olden Era is still in beta testing and demo version (full Early Access is scheduled for 2026). The garrison calculation formula, rounding method, and current data after recent grid size changes have not been fully disclosed and may change. By the game's release, all information will be clarified and updated.
+
+ [Home]
+
+ [Combat Objects]
+
+Boreal Call
+
+=== sources/olden-era.com/text/en/objects-combat/carrion_pile.txt ===
+Carrion Pile
+
+To customize formations, add spells, or record your own battle, go to the Battle Simulator [here].
+
+For defeating [] [] []you will receive a reward depending on the object tier
+
+1
+
+2
+
+3
+
+4
+
+Reward
+
+3Waurms
+
+18
+
+18
+
+18
+
+18
+
+18
+
+Important note:
+Information on this page may be partially inaccurate, as Heroes of Might & Magic: Olden Era is still in beta testing and demo version (full Early Access is scheduled for 2026). The garrison calculation formula, rounding method, and current data after recent grid size changes have not been fully disclosed and may change. By the game's release, all information will be clarified and updated.
+
+ [Home]
+
+ [Combat Objects]
+
+Carrion Pile
+
+=== sources/olden-era.com/text/en/objects-combat/circle_of_life.txt ===
+Circle of Life
+
+To customize formations, add spells, or record your own battle, go to the Battle Simulator [here].
+
+For defeating [] [] [] [] [] []you will receive a reward depending on the object tier
+
+1
+
+2
+
+3
+
+4
+
+Reward
+
+1500Gold
+
+4Crystal
+
+12
+
+12
+
+12
+
+12
+
+12
+
+Important note:
+Information on this page may be partially inaccurate, as Heroes of Might & Magic: Olden Era is still in beta testing and demo version (full Early Access is scheduled for 2026). The garrison calculation formula, rounding method, and current data after recent grid size changes have not been fully disclosed and may change. By the game's release, all information will be clarified and updated.
+
+ [Home]
+
+ [Combat Objects]
+
+Circle of Life
+
+=== sources/olden-era.com/text/en/objects-combat/colosseum.txt ===
+Colosseum
+
+To customize formations, add spells, or record your own battle, go to the Battle Simulator [here].
+
+For defeating [] [] []you will receive a reward depending on the object tier
+
+1
+
+2
+
+3
+
+4
+
+Reward
+
+4Cavalry
+
+7
+
+7
+
+7
+
+7
+
+7
+
+Important note:
+Information on this page may be partially inaccurate, as Heroes of Might & Magic: Olden Era is still in beta testing and demo version (full Early Access is scheduled for 2026). The garrison calculation formula, rounding method, and current data after recent grid size changes have not been fully disclosed and may change. By the game's release, all information will be clarified and updated.
+
+ [Home]
+
+ [Combat Objects]
+
+Colosseum
+
+=== sources/olden-era.com/text/en/objects-combat/cursed_old_house.txt ===
+Cursed Old House
+
+To customize formations, add spells, or record your own battle, go to the Battle Simulator [here].
+
+For defeating [] [] [] [] [] [] []you will receive a reward depending on the object tier
+
+1
+
+2
+
+3
+
+Reward
+
+1Random Rare
+
+18
+
+18
+
+8
+
+12
+
+18
+
+18
+
+12
+
+Important note:
+Information on this page may be partially inaccurate, as Heroes of Might & Magic: Olden Era is still in beta testing and demo version (full Early Access is scheduled for 2026). The garrison calculation formula, rounding method, and current data after recent grid size changes have not been fully disclosed and may change. By the game's release, all information will be clarified and updated.
+
+ [Home]
+
+ [Combat Objects]
+
+Cursed Old House
+
+=== sources/olden-era.com/text/en/objects-combat/dragon_utopia.txt ===
+Dragon Utopia
+
+To customize formations, add spells, or record your own battle, go to the Battle Simulator [here].
+
+For defeating [] [] []you will receive a reward depending on the object tier
+
+1
+
+2
+
+3
+
+4
+
+Reward
+
+15000Gold
+
+1Random Common
+
+1Random Rare
+
+1Random Epic
+
+1Random Legendary
+
+2
+
+2
+
+2
+
+2
+
+2
+
+2
+
+Important note:
+Information on this page may be partially inaccurate, as Heroes of Might & Magic: Olden Era is still in beta testing and demo version (full Early Access is scheduled for 2026). The garrison calculation formula, rounding method, and current data after recent grid size changes have not been fully disclosed and may change. By the game's release, all information will be clarified and updated.
+
+ [Home]
+
+ [Combat Objects]
+
+Dragon Utopia
+
+=== sources/olden-era.com/text/en/objects-combat/iridicent_abbey.txt ===
+Iridescent Abbey
+
+To customize formations, add spells, or record your own battle, go to the Battle Simulator [here].
+
+For defeating [] [] []you will receive a reward depending on the object tier
+
+1
+
+2
+
+3
+
+4
+
+Reward
+
+1500Gold
+
+4Gems
+
+5
+
+5
+
+5
+
+2
+
+Important note:
+Information on this page may be partially inaccurate, as Heroes of Might & Magic: Olden Era is still in beta testing and demo version (full Early Access is scheduled for 2026). The garrison calculation formula, rounding method, and current data after recent grid size changes have not been fully disclosed and may change. By the game's release, all information will be clarified and updated.
+
+ [Home]
+
+ [Combat Objects]
+
+Iridescent Abbey
+
+=== sources/olden-era.com/text/en/objects-combat/legions_memorial.txt ===
+Legion’s Memorial
+
+To customize formations, add spells, or record your own battle, go to the Battle Simulator [here].
+
+For defeating [] [] [] []you will receive a reward depending on the object tier
+
+1
+
+2
+
+3
+
+4
+
+Reward
+
+1000Gold
+
+6Ore
+
+6Wood
+
+16
+
+16
+
+16
+
+16
+
+16
+
+Important note:
+Information on this page may be partially inaccurate, as Heroes of Might & Magic: Olden Era is still in beta testing and demo version (full Early Access is scheduled for 2026). The garrison calculation formula, rounding method, and current data after recent grid size changes have not been fully disclosed and may change. By the game's release, all information will be clarified and updated.
+
+ [Home]
+
+ [Combat Objects]
+
+Legion’s Memorial
+
+=== sources/olden-era.com/text/en/objects-combat/meareas_altar.txt ===
+Altar of Meareas
+
+To customize formations, add spells, or record your own battle, go to the Battle Simulator [here].
+
+For defeating []you will receive a reward depending on the object tier
+
+1
+
+2
+
+3
+
+4
+
+Reward
+
+3000Gold
+
+3
+
+Important note:
+Information on this page may be partially inaccurate, as Heroes of Might & Magic: Olden Era is still in beta testing and demo version (full Early Access is scheduled for 2026). The garrison calculation formula, rounding method, and current data after recent grid size changes have not been fully disclosed and may change. By the game's release, all information will be clarified and updated.
+
+ [Home]
+
+ [Combat Objects]
+
+Altar of Meareas
+
+=== sources/olden-era.com/text/en/objects-combat/overgrown_vori_ruins.txt ===
+Overgrown Vori Ruins
+
+To customize formations, add spells, or record your own battle, go to the Battle Simulator [here].
+
+For defeating []you will receive a reward depending on the object tier
+
+1
+
+2
+
+3
+
+4
+
+Reward
+
+10000Gold
+
+8Wood
+
+8Ore
+
+8Mercury
+
+8Crystal
+
+8Gems
+
+80Alchemical Dust
+
+2
+
+2
+
+2
+
+Important note:
+Information on this page may be partially inaccurate, as Heroes of Might & Magic: Olden Era is still in beta testing and demo version (full Early Access is scheduled for 2026). The garrison calculation formula, rounding method, and current data after recent grid size changes have not been fully disclosed and may change. By the game's release, all information will be clarified and updated.
+
+ [Home]
+
+ [Combat Objects]
+
+Overgrown Vori Ruins
+
+=== sources/olden-era.com/text/en/objects-combat/petrified_memorial.txt ===
+Petrified Memorial
+
+To customize formations, add spells, or record your own battle, go to the Battle Simulator [here].
+
+For defeating [] [] []you will receive a reward depending on the object tier
+
+1
+
+2
+
+3
+
+4
+
+Reward
+
+7Medusa
+
+5
+
+5
+
+5
+
+5
+
+Important note:
+Information on this page may be partially inaccurate, as Heroes of Might & Magic: Olden Era is still in beta testing and demo version (full Early Access is scheduled for 2026). The garrison calculation formula, rounding method, and current data after recent grid size changes have not been fully disclosed and may change. By the game's release, all information will be clarified and updated.
+
+ [Home]
+
+ [Combat Objects]
+
+Petrified Memorial
+
+=== sources/olden-era.com/text/en/objects-combat/point_of_balance.txt ===
+Point of Balance
+
+To customize formations, add spells, or record your own battle, go to the Battle Simulator [here].
+
+For defeating []you will receive a reward depending on the object tier
+
+1
+
+2
+
+3
+
+4
+
+Reward
+
+1Sentinel of Glory
+
+4
+
+4
+
+4
+
+4
+
+Important note:
+Information on this page may be partially inaccurate, as Heroes of Might & Magic: Olden Era is still in beta testing and demo version (full Early Access is scheduled for 2026). The garrison calculation formula, rounding method, and current data after recent grid size changes have not been fully disclosed and may change. By the game's release, all information will be clarified and updated.
+
+ [Home]
+
+ [Combat Objects]
+
+Point of Balance
+
+=== sources/olden-era.com/text/en/objects-combat/prismatic_nest.txt ===
+Prismatic Nest
+
+To customize formations, add spells, or record your own battle, go to the Battle Simulator [here].
+
+For defeating [] []you will receive a reward depending on the object tier
+
+1
+
+2
+
+3
+
+4
+
+Reward
+
+3Gems
+
+3Crystal
+
+3Mercury
+
+30Alchemical Dust
+
+3
+
+3
+
+3
+
+3
+
+10
+
+Important note:
+Information on this page may be partially inaccurate, as Heroes of Might & Magic: Olden Era is still in beta testing and demo version (full Early Access is scheduled for 2026). The garrison calculation formula, rounding method, and current data after recent grid size changes have not been fully disclosed and may change. By the game's release, all information will be clarified and updated.
+
+ [Home]
+
+ [Combat Objects]
+
+Prismatic Nest
+
+=== sources/olden-era.com/text/en/objects-combat/raiders_camp.txt ===
+Raiders’ Camp
+
+To customize formations, add spells, or record your own battle, go to the Battle Simulator [here].
+
+For defeating [] []you will receive a reward depending on the object tier
+
+1
+
+2
+
+3
+
+4
+
+Reward
+
+4000Gold
+
+16
+
+16
+
+20
+
+Important note:
+Information on this page may be partially inaccurate, as Heroes of Might & Magic: Olden Era is still in beta testing and demo version (full Early Access is scheduled for 2026). The garrison calculation formula, rounding method, and current data after recent grid size changes have not been fully disclosed and may change. By the game's release, all information will be clarified and updated.
+
+ [Home]
+
+ [Combat Objects]
+
+Raiders’ Camp
+
+=== sources/olden-era.com/text/en/objects-combat/research_laboratory.txt ===
+Research Laboratory
+
+To customize formations, add spells, or record your own battle, go to the Battle Simulator [here].
+
+For defeating []you will receive a reward depending on the object tier
+
+1
+
+2
+
+3
+
+4
+
+Reward
+
+20000Gold
+
+1Random Epic
+
+1
+
+1
+
+Important note:
+Information on this page may be partially inaccurate, as Heroes of Might & Magic: Olden Era is still in beta testing and demo version (full Early Access is scheduled for 2026). The garrison calculation formula, rounding method, and current data after recent grid size changes have not been fully disclosed and may change. By the game's release, all information will be clarified and updated.
+
+ [Home]
+
+ [Combat Objects]
+
+Research Laboratory
+
+=== sources/olden-era.com/text/en/objects-combat/ritual_pyre.txt ===
+Ritual Pyre
+
+To customize formations, add spells, or record your own battle, go to the Battle Simulator [here].
+
+For defeating [] [] []you will receive a reward depending on the object tier
+
+1
+
+2
+
+3
+
+4
+
+Reward
+
+1Phoenix
+
+5
+
+5
+
+5
+
+5
+
+Important note:
+Information on this page may be partially inaccurate, as Heroes of Might & Magic: Olden Era is still in beta testing and demo version (full Early Access is scheduled for 2026). The garrison calculation formula, rounding method, and current data after recent grid size changes have not been fully disclosed and may change. By the game's release, all information will be clarified and updated.
+
+ [Home]
+
+ [Combat Objects]
+
+Ritual Pyre
+
+=== sources/olden-era.com/text/en/objects-combat/tomb_of_vigilance.txt ===
+Tomb of Vigilance
+
+To customize formations, add spells, or record your own battle, go to the Battle Simulator [here].
+
+For defeating [] [] []you will receive a reward depending on the object tier
+
+1
+
+2
+
+3
+
+4
+
+Reward
+
+4Dread Knight
+
+13
+
+13
+
+13
+
+13
+
+13
+
+13
+
+Important note:
+Information on this page may be partially inaccurate, as Heroes of Might & Magic: Olden Era is still in beta testing and demo version (full Early Access is scheduled for 2026). The garrison calculation formula, rounding method, and current data after recent grid size changes have not been fully disclosed and may change. By the game's release, all information will be clarified and updated.
+
+ [Home]
+
+ [Combat Objects]
+
+Tomb of Vigilance
+
+=== sources/olden-era.com/text/en/objects-combat/troglodyte_throne.txt ===
+Troglodyte Throne
+
+To customize formations, add spells, or record your own battle, go to the Battle Simulator [here].
+
+For defeating [] [] [] [] [] [] [] [] [] []you will receive a reward depending on the object tier
+
+1
+
+2
+
+3
+
+4
+
+Reward
+
+6000Gold
+
+8
+
+8
+
+8
+
+8
+
+1
+
+Important note:
+Information on this page may be partially inaccurate, as Heroes of Might & Magic: Olden Era is still in beta testing and demo version (full Early Access is scheduled for 2026). The garrison calculation formula, rounding method, and current data after recent grid size changes have not been fully disclosed and may change. By the game's release, all information will be clarified and updated.
+
+ [Home]
+
+ [Combat Objects]
+
+Troglodyte Throne
+
+=== sources/olden-era.com/text/en/objects-combat/twilight_bloom.txt ===
+Twilight Bloom
+
+To customize formations, add spells, or record your own battle, go to the Battle Simulator [here].
+
+For defeating []you will receive a reward depending on the object tier
+
+1
+
+2
+
+3
+
+4
+
+Reward
+
+10000Gold
+
+1Random Common
+
+1
+
+1
+
+1
+
+1
+
+Important note:
+Information on this page may be partially inaccurate, as Heroes of Might & Magic: Olden Era is still in beta testing and demo version (full Early Access is scheduled for 2026). The garrison calculation formula, rounding method, and current data after recent grid size changes have not been fully disclosed and may change. By the game's release, all information will be clarified and updated.
+
+ [Home]
+
+ [Combat Objects]
+
+Twilight Bloom
+
+=== sources/olden-era.com/text/en/objects-combat/uncanny_rite.txt ===
+Uncanny Rite
+
+To customize formations, add spells, or record your own battle, go to the Battle Simulator [here].
+
+For defeating [] [] [] []you will receive a reward depending on the object tier
+
+1
+
+2
+
+3
+
+4
+
+Reward
+
+1500Gold
+
+4Mercury
+
+1
+
+3
+
+1
+
+36
+
+Important note:
+Information on this page may be partially inaccurate, as Heroes of Might & Magic: Olden Era is still in beta testing and demo version (full Early Access is scheduled for 2026). The garrison calculation formula, rounding method, and current data after recent grid size changes have not been fully disclosed and may change. By the game's release, all information will be clarified and updated.
+
+ [Home]
+
+ [Combat Objects]
+
+Uncanny Rite

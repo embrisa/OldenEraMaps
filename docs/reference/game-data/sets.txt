@@ -1,0 +1,398 @@
+=== sources/olden-era.com/text/en/sets.txt ===
+Artifact Sets in Heroes of Might and Magic: Olden Era
+
+Tranquil Glass
+
+ [
+
+] [
+
+] [
+
+]
+
+3Items:Fully restores the hero’s mana at the start of each day.
+
+Shamanic Soul
+
+ [
+
+] [
+
+] [
+
+] [
+
+]
+
+2Items:+25% maximum mana.
+
+4Items:All spells in the Spellbook have maximum level. (If all spells must have minimum level due to another effect, neither is active.)
+
+Knight’s Honor
+
+ [
+
+] [
+
+] [
+
+] [
+
+] [
+
+]
+
+3Items:+1 Morale and Luck.
+
+5Items:+3% chance of Morale and Luck triggering for each point of them the wearer has.
+
+Ukhtabar Signet
+
+ [
+
+] [
+
+]
+
+2Items:+100% XP gain.
+
+Milos’s Curse
+
+ [
+
+] [
+
+] [
+
+]
+
+3Items:+4000 Gold daily.
+
+Pauper’s Glory
+
+ [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+]
+
+2Items:+1 Attack, Defense, Spell Power, Knowledge, Morale, and Luck.
+
+4Items:+1 more Attack, Defense, Spell Power, Knowledge, Morale, and Luck.
+
+6Items:+1 more Attack, Defense, Spell Power, Knowledge, Morale, and Luck.
+
+Angelic Alliance
+
+ [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+]
+
+3Items:Creatures from different factions do not lower each other’s Morale.
+
+6Items:+3 Initiative and Speed to all friendly creatures.
+
+Dwarven Fortitude
+
+ [
+
+] [
+
+] [
+
+] [
+
+]
+
+3Items:–1 level(s) to all enemy Magic School spells.
+
+4Items:Makes the wearer immune to all negative effects in battle and on the global map.
+
+Anesthesia
+
+ [
+
+] [
+
+] [
+
+]
+
+2Items:Friendly creatures heal 2.5% of their starting HP at the start of each round. This can revive fallen units.
+
+3Items:+25% maximum HP to all friendly creatures.
+
+Shadow of Death
+
+ [
+
+] [
+
+] [
+
+] [
+
+]
+
+2Items:–1 Morale and Luck to all enemy creatures.
+
+3Items:–1 Initiative and Speed to all enemy creatures.
+
+4Items:All enemy creatures deal minimal Damage. (If enemy creatures must deal maximum Damage due to another effect, neither is active.)
+
+Wanderer’s Way
+
+ [
+
+] [
+
+]
+
+2Items:Eliminates all terrain penalties.
+
+Living Arrows
+
+ [
+
+] [
+
+] [
+
+]
+
+2Items:+1 Initiative to all friendly creatures.
+
+3Items:Creatures with Ranged attacks gain “Double Shot.”
+
+Duelist’s Pride
+
+ [
+
+] [
+
+] [
+
+]
+
+2Items:+3 Attack and Defense.
+
+3Items:All friendly creatures have unlimited counterattacks.
+
+Запредельное знание
+
+ [
+
+] [
+
+] [
+
+] [
+
+]
+
+0Items:+3 к силе магии и знаниям.
+
+0Items:Все эффекты, накладываемые героем и дружественными существами, длятся бесконечно.
+
+Песнь души
+
+ [
+
+] [
+
+] [
+
+]
+
+0Items:Использование способностей дружественными существами не завершает их ход.
+
+Мощь короля драконов
+
+ [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+] [
+
+]
+
+0Items:+2 ко всем характеристикам.
+
+0Items:Дружественные существа неуязвимы для всех отрицательных эффектов.
+
+0Items:Дружественные существа неуязвимы для магического урона.
+
+Избранник Вельзевула
+
+ [
+
+] [
+
+] [
+
+] [
+
+]
+
+0Items:+1 к скорости дружественных существ.
+
+0Items:Дружественные существа всегда наносят максимальный урон. Если на них действует эффект, снижающий их урон до минимального, оба эффекта нивелируются.
+
+Правление кукловодов
+
+ [
+
+] [
+
+] [
+
+] [
+
+]
+
+0Items:Увеличивает время восстановления всех заклинаний героя противника на несколько раундов: 1.
+
+0Items:Все заклинания в книге магии героя противника получают минимальный уровень. Если на него действует эффект, повышающий их уровень до максимального, оба эффекта нивелируются.
+
+Слово дипломата
+
+ [
+
+] [
+
+]
+
+0Items:Нейтральные армии присоединяются к армии героя бесплатно.
+
+Сила воителя
+
+ [
+
+] [
+
+]
+
+0Items:+4 к атаке.
+
+Стойкость хранителя
+
+ [
+
+] [
+
+]
+
+0Items:+4 к защите.
+
+Могущество волшебника
+
+ [
+
+] [
+
+]
+
+0Items:+4 к силе магии.
+
+Мудрость ученого
+
+ [
+
+] [
+
+]
+
+0Items:+4 к знаниям.
+
+Artifact sets are the heart of Olden Era's strategic depth. They don't just slightly boost a hero's stats like single artifacts — they radically transform your playstyle, unlock new tactics, and let you adapt to any situation. Collect a full set — and your hero gains unique abilities capable of turning the tide of an entire campaign!
+
+What are sets and how to collect them?
+
+The principle is simple and brilliant: the game features artifacts (if you don't know what they are — [read here]). Each artifact belongs to a specific set — an additional category. Some artifacts do not belong to any set.
+
+How to see a set? After finding an artifact from a set, simply hover over it — the set name and all bonuses granted upon completion will be displayed.
+
+How do set bonuses work?
+
+Minimal sets (2 artifacts): Equip both on the hero — an additional set bonus activates on top of the individual artifact effects.
+
+Expanded sets (up to 8 artifacts): Bonuses activate in stages — usually at 3, 5, and 8 items (numbers may vary).
+
+All bonuses stacking: They do not replace each other — when the full set is assembled, they work together, creating powerful synergy!
+
+Why do sets change everything?
+
+Complete transformation of playstyle
+
+Imagine Tranquil Glass — an artifact that fully restores the hero's mana every day. Perfect for magic-focused heroes with large mana pools: use powerful adventure spells to speed up the game pace or spend massive amounts of mana on devastating combat spells that were previously unaffordable.
+
+Breakthrough in late game
+
+After level 20, hero development slows down — each new level costs a fortune and gives minimal power growth. Sets allow you to break through these limits, massively amplifying the hero. They help catch up to a lagging opponent or solidify an advantage, making your army unstoppable.
+
+Sets add variety and replayability, turning every game into a unique challenge.
+
+How to collect sets:
+
+Here you can obtain common and rare artifacts:
+
+Raiders’ Camp
+
+Black Tower
+
+Ancient Crypt
+
+Here you can obtain legendary and epic artifacts:
+
+Twilight Bloom
+
+Research Laboratory
+
+Dragon Utopia
+
+Alternative sources
+
+Build the Artifact Merchant in your towns
+
+Search for artifacts directly on the map
+
+Visiting special objects:
+
+ []
+
+ []
+
+Below you can view the full list of sets in the game
+
+ [Home]
+
+Sets

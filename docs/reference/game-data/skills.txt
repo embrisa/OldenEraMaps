@@ -1,0 +1,18000 @@
+=== sources/olden-era.com/text/en/skills.txt ===
+Skills
+
+Skills are one of the most important mechanics in Heroes of Might and Magic: Olden Era. It is they who turn an ordinary hero into an army-destroying machine or an economic monster. Every skill has three levels: Basic, Advanced, and Expert. The higher the level — the stronger the effect.Every hero starts the game with a faction-specific skill (unique to their faction, for example [Basic Necromancy]for Necropolis or [Basic Righteousness]for Temple). In addition, they receive one extra regular skill. Some heroes get their faction skill at Advanced level right away instead of a second regular skill — this is their “signature trait”. You can check starting skills for all heroes here [by selecting the desired hero].A hero can have a maximum of 8 skills (including the faction one). Each level-up gives you a choice of three offered skills — you pick one.
+
+How does the game decide which three skills to offer?
+
+The system is not completely random — there is clear logic to prevent the hero from getting stuck without progression.
+
+Bottom slot— always an upgrade for an existing skill. If you have at least one skill below Expert, it will appear here. If several qualify, the game picks one randomly.
+
+Top slot— new skills. As long as the hero has free slots (fewer than 8), new skills available to their class will be offered here.
+
+Middle slot— “joker”. It can offer either an upgrade to an existing skill or a completely new one (roughly 50/50, exact numbers not disclosed).
+
+Which new skills can be offered depends on the hero’s class. For example, the heroine [Enatee:]belongs to the Overlord class. Each class has its own percentage chances for every skill — you can check them here [by selecting the desired hero]or here [by selecting the desired class].
+
+Important: classes are divided into Warriors and Mages. Warriors will never be offered [Basic Thaumaturgy](this is a purely magical skill), and Mages will never be offered [Basic Recruitment](a purely warrior skill).
+
+Sub-skills — additional bonuses
+
+At Basic you get just the base skill effect. When upgrading to Advanced — a choice of 3 sub-skills appears. To Expert — a choice of 2 sub-skills.
+
+Sub-skills are additional improvements to the main skill. They are always the same set for a given skill (not random). Example: the skill [Expert Offense]can offer the sub-skillShadow Blades:Shadow BladesFriendly creatures deal +1 Damage.— +1 damage to all creatures.
+
+Synergy — skill combos
+
+Synergy activates automatically if the hero has learned the required additional skill. Example:
+
+You have [Expert Offense]+ sub-skillShadow Blades:Shadow BladesFriendly creatures deal +1 Damage.→ +1 damage to all units.
+
+You add [Basic Nightshade Magic]→ synergy triggers → bonus becomes +2 damage!
+
+All possible synergies for each skill are shown separately in the right-side menu.
+
+Relics — artifacts that grant all sub-skills at once
+
+There are special artifacts — Relics. They instantly activate all available sub-skills for 4 fixed skills (normally you can only pick 2 sub-skills throughout the entire game). This is a huge boost if your progression is built around a specific relic.
+
+Example: [Holy Sigil of Roph]
+
+If such an artifact is on the map — it makes sense to build your progression specifically around it.
+
+Other ways to gain or upgrade skills
+
+ []— free upgrade of one existing skill to the next level (once per game; if nothing to upgrade — nothing happens)
+
+WISE_OWL — grants a fixed skill to every hero who visits it
+
+ []— offers 4 random skills, each can be learned for 2500 gold
+
+INFERNAL_CIRQUE — up to 4 random Expert-level skills for 5000 gold each
+
+Reset all skills and levels
+
+If you leveled up the wrong way — you can completely reset all hero skills and levels. To do this, visit []. Or build the special building in theHive castle.
+
+ [Home]
+
+Skills
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/advanced_abyssal_communion.txt ===
+Skill
+
+Advanced Abyssal Communion
+
+After each battle victory, the hero increases their Communion level by 1 (up to a max. of 5). Each level increases the number of friendly Schism units by 3% until the end of the battle. Each morning, all heroes’ Communion level is halved.
+
+Subskills
+
+Our True Home
+
+Friendly Schism creatures deal +10% and take –10% Damage on Native Terrain.
+
+Comprehensible Depths
+
+The hero’s maximum Communion level increases by 1.
+
+Call of the Void
+
+Each morning, before the Communion level is halved, restores 3 mana per Communion level.
+
+ [Home]
+
+ [Skills]
+
+Advanced Abyssal Communion
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Basic Abyssal Communion]
+
+ [
+
+Advanced Abyssal Communion]
+
+ [
+
+Expert Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/advanced_arcane_magic.txt ===
+Skill
+
+Advanced Arcane Magic
+
+The hero can learn tier‑5 Arcane spells. Arcane spells gain +1 level(s).
+
+Subskills
+
+Arcane Time
+
+The cooldowns of all the hero’s Arcane spells are reduced by 1 round(s).
+
+All Life is Endless
+
++30% healing and revival from friendly creature abilities and hero spells in battle. This bonus is doubled if the hero knows “Summon Avatar.”
+
+Purest Thought
+
+–1 level(s) to all enemy Arcane spells.
+
+Synergy →
+
+Daylight Magic
+
+Scholar Synergy: Arina
+
++6 Spell Power when casting Daylight spells. Gain an additional +3 for each other Magic School skill known.
+
+Primal Magic
+
+Scholar Synergy: Hksmilla
+
++6 Spell Power when casting Primal spells. Gain an additional +3 for each other Magic School skill known.
+
+Nightshade Magic
+
+Scholar Synergy: Naira
+
++6 Spell Power when casting Nightshade spells. Gain an additional +3 for each other Magic School skill known.
+
+Logistics
+
+Careful Planning
+
+Every day, the hero saves up to 50 unused Movement points for the next day. This bonus is doubled if the hero knows “Arcane Magic.”
+
+← Synergy
+
+Summon Avatar
+
+All Life is Endless
+
++30% healing and revival from friendly creature abilities and hero spells in battle. This bonus is doubled if the hero knows “Summon Avatar.”
+
+Requires Subclass
+
+Warden
+
+Wellspring of Vigor
+
+Generates maximum Focus Charges at the beginning of each round.
+
+Druid
+
+Celestial Envoy
+
+The hero can use all spells.
+
+Herald
+
+Progenitor
+
++200% creature growth in all your cities.
+
+Cleric
+
+Grand Inquisitor
+
+Enemy hero can only use each spell once per battle.
+
+Warlock
+
+Great Merchant
+
+Grant +10000 gold daily.
+
+Necromancer
+
+Soulweaver
+
+After an enemy stack is killed in battle, a temporary stack of friendly Wights appears in their place.
+
+Riftspeaker
+
+Unfathomable
+
+All enemies always deal minimum and take maximum Damage.
+
+ [Home]
+
+ [Skills]
+
+Advanced Arcane Magic
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Basic Arcane Magic]
+
+ [
+
+Advanced Arcane Magic]
+
+ [
+
+Expert Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/advanced_ascension.txt ===
+Skill
+
+Advanced Righteousness
+
+All who fall in battle do so in the hero’s name! Whenever a friendly creature dies or kills an enemy, the hero’s Attack, Defense, Spell Power and Knowledge increase by 1 for three rounds. This effect is stackable.
+
+Subskills
+
+Fields of Serenity
+
+Friendly Temple creatures deal +10% and take –10% Damage on Native Terrain.
+
+Righteous Sacrifice
+
+Whenever a friendly stack dies or kills an enemy stack, the hero gains 3 temporary mana.
+
+Purging Touch
+
+Grants a new ability. It dispels all negative effects from the target.
+
+ [Home]
+
+ [Skills]
+
+Advanced Righteousness
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Basic Righteousness]
+
+ [
+
+Advanced Righteousness]
+
+ [
+
+Expert Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/advanced_battle_magic.txt ===
+Skill
+
+Advanced Battle Magic
+
+Friendly creatures’ Attack and Defense increase by 25% of the hero’s Spell Power and Knowledge respectively.
+
+Subskills
+
+Aura of Destruction
+
+Every time the hero uses a spell in a battle, their Attack increases by 1 until the end of that battle.
+
+Aura of Protection
+
+Every time the hero uses a spell in a battle, their Defense increases by 1 until the end of that battle.
+
+Aura of Wizardry
+
+Every time the hero uses a spell in a battle, their Spell Power increases by 1 until the end of that battle.
+
+Synergy →
+
+Primal Magic
+
+Chaos Reigns
+
+The hero and friendly creatures deal 50% more Damage with Lucky Strikes. This bonus is doubled if the hero knows “Battle Magic.”
+
+Battlecraft
+
+Battle Focus
+
+Generates +1 Focus Charge(s) at the beginning of each round. This bonus is doubled if the hero knows “Battle Magic.”
+
+← Synergy
+
+Sorcery
+
+Battle Mage’s Authority
+
+Friendly creatures’ Attack increases by 20% of their hero’s Spell Power. Doubled if the hero knows Sorcery.
+
+Resistance
+
+Mage Protector’s Authority
+
+Friendly creatures’ Defence increases by 20% of their hero’s Knowledge. Doubled if the hero knows Resistance.
+
+Requires Subclass
+
+Warden
+
+Wellspring of Vigor
+
+Generates maximum Focus Charges at the beginning of each round.
+
+Enforcer
+
+Soul Eater
+
+Grants a new battle ability. It allows the hero to consume a target corpse, gaining bonus Attack, Defense, and Spell Power until the end of battle.
+
+Cleric
+
+Grand Inquisitor
+
+Enemy hero can only use each spell once per battle.
+
+Warlock
+
+Great Merchant
+
+Grant +10000 gold daily.
+
+Necromancer
+
+Chronomancer
+
+Necromancy works for all creatures and not just the Undead.
+
+Riftspeaker
+
+Unstoppable
+
++10 to the hero’s Attack, Defence, Spell Power, and Knowledge.
+
+ [Home]
+
+ [Skills]
+
+Advanced Battle Magic
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Basic Battle Magic]
+
+ [
+
+Advanced Battle Magic]
+
+ [
+
+Expert Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/advanced_battlecraft.txt ===
+Skill
+
+Advanced Battlecraft
+
+When a friendly creature waits on their turn, they gain +30% Attack until the end of the round. When they skip turn, they gain +30% Defense until the end of the round.
+
+Subskills
+
+Melee Mastery
+
+Friendly creatures deal +10% and take –10% Melee Damage.
+
+Ranged Mastery
+
+Friendly creatures deal +10% and take –10% Ranged and Long Reach Damage.
+
+Overwatch
+
+Friendly creatures gain overwatch when they choose to wait in battle. While overwatching, they will counterattack when an enemy moves into their Melee Range.
+
+Synergy →
+
+Leadership
+
+Resolve
+
+Friendly creatures’ chance to take an additional turn increases by 1% for each point of Morale. This bonus is doubled if the hero knows “Battlecraft.”
+
+Diplomacy
+
+Larger Than Life
+
+Neutral squads view the hero’s army as +25% more powerful than it is, increasing the chance that they will join or flee. This bonus is doubled if the hero knows “Battlecraft.”
+
+← Synergy
+
+Battle Magic
+
+Battle Focus
+
+Generates +1 Focus Charge(s) at the beginning of each round. This bonus is doubled if the hero knows “Battle Magic.”
+
+Recruitment
+
+Manacraft
+
+The hero’s maximum mana increases by 2 per their Attack and Defense. This bonus is doubled if the hero knows “Recruitment.”
+
+Requires Subclass
+
+Druid
+
+Heaven’s Fury
+
+Heroic Strike deals Damage to all enemies in a 1‑hex radius.
+
+Enforcer
+
+Broodmother
+
+Doubles the base stats of summoned Fire Larvae.
+
+Knight
+
+Paragon
+
+All allies deal maximum damage and take minimum damage.
+
+Warlock
+
+Amelchia's Heir
+
++100% spell power.
+
+Necromancer
+
+Soulweaver
+
+After an enemy stack is killed in battle, a temporary stack of friendly Wights appears in their place.
+
+Riftspeaker
+
+Unstoppable
+
++10 to the hero’s Attack, Defence, Spell Power, and Knowledge.
+
+ [Home]
+
+ [Skills]
+
+Advanced Battlecraft
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+Basic Battlecraft]
+
+ [
+
+Advanced Battlecraft]
+
+ [
+
+Expert Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/advanced_combat.txt ===
+Skill
+
+Advanced Combat
+
+Heroic Strike deals +15 basic Damage.
+
+Subskills
+
+Effortless Strike
+
+Heroic Strike costs 1 fewer Focus Charge(s).
+
+Revenge
+
+Once per round, after the first death of a friendly stack, allows to use Heroic Strike again.
+
+Mighty Strike
+
+Heroic Strike deals +10% Damage (based on the hero’s level).
+
+ [Home]
+
+ [Skills]
+
+Advanced Combat
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Basic Combat]
+
+ [
+
+Advanced Combat]
+
+ [
+
+Expert Combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/advanced_daylight_magic.txt ===
+Skill
+
+Advanced Daylight Magic
+
+The hero can learn tier‑5 Daylight spells. Daylight spells gain +1 level(s).
+
+Subskills
+
+Daylight Time
+
+The cooldowns of all the hero’s Daylight spells are reduced by 1 round(s).
+
+Luminous Focus
+
+Generates 1 Focus Charge(s) at the start of every battle.
+
+Brightest Sun
+
+–1 level(s) to all enemy Daylight spells.
+
+Synergy →
+
+Arcane Magic
+
+Scholar Synergy: Doreath
+
++6 Spell Power when casting Arcane spells. Gain an additional +3 for each other Magic School skill known.
+
+Primal Magic
+
+Scholar Synergy: Hksmilla
+
++6 Spell Power when casting Primal spells. Gain an additional +3 for each other Magic School skill known.
+
+Nightshade Magic
+
+Scholar Synergy: Naira
+
++6 Spell Power when casting Nightshade spells. Gain an additional +3 for each other Magic School skill known.
+
+← Synergy
+
+Logistics
+
+Speed of Light
+
++10 Movement points. This bonus is doubled if the hero knows “Logistics.”
+
+Requires Subclass
+
+Enforcer
+
+Soul Eater
+
+Grants a new battle ability. It allows the hero to consume a target corpse, gaining bonus Attack, Defense, and Spell Power until the end of battle.
+
+Knight
+
+Paragon
+
+All allies deal maximum damage and take minimum damage.
+
+Overlord
+
+Silvertongue's Envoy
+
++100% Defence.
+
+Necromancer
+
+Chronomancer
+
+Necromancy works for all creatures and not just the Undead.
+
+Oathkeeper
+
+Unbound
+
+Increases the level of all hero's spells to their maximum.
+
+ [Home]
+
+ [Skills]
+
+Advanced Daylight Magic
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Basic Daylight Magic]
+
+ [
+
+Advanced Daylight Magic]
+
+ [
+
+Expert Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/advanced_defence.txt ===
+Skill
+
+Advanced Defense
+
+Friendly creatures take –20% Damage from basic attacks.
+
+Subskills
+
+Cover
+
+Friendly creatures take –20% Damage from Ranged and Long Reach attacks.
+
+Hymn to the Martyrs
+
+Friendly creatures generate +1 Focus Point(s) when they take Damage. This bonus is doubled if the hero knows “Recruitment.”
+
+As Luck Would Have It
+
+Friendly creatures gain +2 Defense for each point of Luck.
+
+Synergy →
+
+Tactics
+
+All for One
+
+Friendly creatures gain +2 Defense for each adjacent ally. This bonus is doubled if the hero knows “Defense.”
+
+Summon Avatar
+
+Avatar of Toughness
+
+Avatar’s Defense increases by 25% of the hero’s Knowledge. This bonus is doubled if the hero knows “Defense.”
+
+← Synergy
+
+Diplomacy
+
+Wizard Contract
+
+Friendly creatures take –10% Magic Damage. This bonus is doubled if the hero knows “Diplomacy.”
+
+Recruitment
+
+Hymn to the Martyrs
+
+Friendly creatures generate +1 Focus Point(s) when they take Damage. This bonus is doubled if the hero knows “Recruitment.”
+
+Requires Subclass
+
+Warden
+
+Wellspring of Vigor
+
+Generates maximum Focus Charges at the beginning of each round.
+
+Druid
+
+Celestial Envoy
+
+The hero can use all spells.
+
+Herald
+
+Progenitor
+
++200% creature growth in all your cities.
+
+Cleric
+
+Grand Inquisitor
+
+Enemy hero can only use each spell once per battle.
+
+Overlord
+
+Silvertongue's Envoy
+
++100% Defence.
+
+Death Knight
+
+Harbinger of Doom
+
+Enemy creatures in battle have the minimum possible Luck and always land an Unlucky Strike when attacking.
+
+Riftspeaker
+
+Unfathomable
+
+All enemies always deal minimum and take maximum Damage.
+
+ [Home]
+
+ [Skills]
+
+Advanced Defense
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Basic Defense]
+
+ [
+
+Advanced Defense]
+
+ [
+
+Expert Defense]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/advanced_diplomacy.txt ===
+Skill
+
+Advanced Diplomacy
+
+Provides a chance of neutral squads offering to join the hero’s army for Gold instead of fighting them. +25% Persuasion Power in Diplomacy.
+
+Subskills
+
+Larger Than Life
+
+Neutral squads view the hero’s army as +25% more powerful than it is, increasing the chance that they will join or flee. This bonus is doubled if the hero knows “Battlecraft.”
+
+Eloquence
+
+–75% to the cost of surrendering.
+
+Folk Hero
+
++50% Persuasion Power in Diplomacy with neutral squads from the hero’s faction.
+
+Synergy →
+
+Defence
+
+Wizard Contract
+
+Friendly creatures take –10% Magic Damage. This bonus is doubled if the hero knows “Diplomacy.”
+
+← Synergy
+
+Battlecraft
+
+Larger Than Life
+
+Neutral squads view the hero’s army as +25% more powerful than it is, increasing the chance that they will join or flee. This bonus is doubled if the hero knows “Battlecraft.”
+
+Economy
+
+Art of the Deal
+
+Neutral squads take –15% Gold to recruit. This bonus is doubled if the hero knows “Economy.”
+
+Requires Subclass
+
+Warden
+
+Fortune’s Favored
+
+Friendly creatures have their maximum possible Luck and will always land a Lucky Strike when attacking.
+
+Herald
+
+Progenitor
+
++200% creature growth in all your cities.
+
+Knight
+
+Paragon
+
+All allies deal maximum damage and take minimum damage.
+
+Overlord
+
+Balthazar's Bodyguard
+
++100% Attack.
+
+Death Knight
+
+Walking Rot
+
+All enemies always have minimum Morale.
+
+Oathkeeper
+
+Unfeeling
+
+Enemy loses all Focus Charges at the beginning of each battle round.
+
+ [Home]
+
+ [Skills]
+
+Advanced Diplomacy
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Basic Diplomacy]
+
+ [
+
+Advanced Diplomacy]
+
+ [
+
+Expert Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/advanced_economy.txt ===
+Skill
+
+Advanced Economy
+
++750 Gold daily.
+
+Subskills
+
+Tax Collector
+
++250 Gold daily. This bonus is doubled if the hero knows “Logistics.”
+
+Smuggler
+
++1 Crystal, Gem, or Mercury daily (depending on the hero’s faction).
+
+Master Builder
+
++1 Wood and Ore daily.
+
+Synergy →
+
+Diplomacy
+
+Art of the Deal
+
+Neutral squads take –15% Gold to recruit. This bonus is doubled if the hero knows “Economy.”
+
+Luck
+
+Always Heads
+
+The hero gains +25% Gold and resources from piles on the global map. This bonus is doubled if the hero knows “Economy.”
+
+← Synergy
+
+Logistics
+
+Tax Collector
+
++250 Gold daily. This bonus is doubled if the hero knows “Logistics.”
+
+Insight
+
+Experimenter
+
++5 Alchemical Dust daily. This bonus is doubled if the hero knows “Insight.”
+
+Requires Subclass
+
+Druid
+
+Celestial Envoy
+
+The hero can use all spells.
+
+Enforcer
+
+Broodmother
+
+Doubles the base stats of summoned Fire Larvae.
+
+Cleric
+
+Ascendant
+
+All the hero's spells always cost 0 mana.
+
+Warlock
+
+Great Merchant
+
+Grant +10000 gold daily.
+
+Necromancer
+
+Chronomancer
+
+Necromancy works for all creatures and not just the Undead.
+
+Oathkeeper
+
+Unfeeling
+
+Enemy loses all Focus Charges at the beginning of each battle round.
+
+ [Home]
+
+ [Skills]
+
+Advanced Economy
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Basic Economy]
+
+ [
+
+Advanced Economy]
+
+ [
+
+Expert Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/advanced_insight.txt ===
+Skill
+
+Advanced Insight
+
+The hero gains +30% more XP.
+
+Subskills
+
+Enlightenment
+
+The hero gains an additional +10% XP.
+
+Civic Innovation
+
+The hero gains +100% Law points. This bonus is doubled if the hero knows “Leadership.”
+
+Sagacity
+
+Shows the intentions of all neutral squads within [ 300% × hero sight radius ] square(s) of the hero.
+
+Synergy →
+
+Summon Avatar
+
+Avatar of Celerity
+
+Avatar’s Speed and Initiative increase by 1. This bonus is doubled if the hero knows “Insight.”
+
+Economy
+
+Experimenter
+
++5 Alchemical Dust daily. This bonus is doubled if the hero knows “Insight.”
+
+← Synergy
+
+Leadership
+
+Civic Innovation
+
+The hero gains +100% Law points. This bonus is doubled if the hero knows “Leadership.”
+
+Tactics
+
+Endless Charisma
+
++1 Attack, Defense, Spell Power, and Knowledge. This bonus is doubled if the hero knows “Tactics.”
+
+Requires Subclass
+
+Warden
+
+Wellspring of Vigor
+
+Generates maximum Focus Charges at the beginning of each round.
+
+Enforcer
+
+Soul Eater
+
+Grants a new battle ability. It allows the hero to consume a target corpse, gaining bonus Attack, Defense, and Spell Power until the end of battle.
+
+Cleric
+
+Grand Inquisitor
+
+Enemy hero can only use each spell once per battle.
+
+Warlock
+
+Amelchia's Heir
+
++100% spell power.
+
+Necromancer
+
+Soulweaver
+
+After an enemy stack is killed in battle, a temporary stack of friendly Wights appears in their place.
+
+Riftspeaker
+
+Unstoppable
+
++10 to the hero’s Attack, Defence, Spell Power, and Knowledge.
+
+ [Home]
+
+ [Skills]
+
+Advanced Insight
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Basic Insight]
+
+ [
+
+Advanced Insight]
+
+ [
+
+Expert Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/advanced_intelligence.txt ===
+Skill
+
+Advanced Wisdom
+
+The hero can learn up to tier‑4 spells without knowing the corresponding Magic School skill.
+
+Subskills
+
+Rite of Magic
+
+Grants a new global map spell. It allows the hero to convert all of their current Movement points into mana.
+
+Between the Lines
+
+The hero may learn high Neutral magic, regardless of their level.
+
+Seeing Through
+
+Heroic Strike instantly kills all temporary units in the target stack.
+
+Synergy →
+
+Sorcery
+
+Sticky Magic
+
+Effects applied by the hero last +2 round(s). This bonus is doubled if the hero knows “Wisdom.”
+
+Scouting
+
+Familiar Paths
+
++10 Movement points when the hero starts the day in an area you control. This bonus is doubled if the hero knows “Wisdom.”
+
+← Synergy
+
+Sorcery
+
+Rhythmic Cadence
+
++30% maximum mana. This bonus is doubled if the hero knows “Sorcery.”
+
+Requires Subclass
+
+Warden
+
+Fortune’s Favored
+
+Friendly creatures have their maximum possible Luck and will always land a Lucky Strike when attacking.
+
+Enforcer
+
+Broodmother
+
+Doubles the base stats of summoned Fire Larvae.
+
+Knight
+
+Swashbuckler
+
+Heroic Strike deals +200 damage.
+
+Overlord
+
+Balthazar's Bodyguard
+
++100% Attack.
+
+Death Knight
+
+Walking Rot
+
+All enemies always have minimum Morale.
+
+Oathkeeper
+
+Unfeeling
+
+Enemy loses all Focus Charges at the beginning of each battle round.
+
+ [Home]
+
+ [Skills]
+
+Advanced Wisdom
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Basic Wisdom]
+
+ [
+
+Advanced Wisdom]
+
+ [
+
+Expert Wisdom]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/advanced_leadership.txt ===
+Skill
+
+Advanced Leadership
+
+The hero gains 2 Morale.
+
+Subskills
+
+Resolve
+
+Friendly creatures’ chance to take an additional turn increases by 1% for each point of Morale. This bonus is doubled if the hero knows “Battlecraft.”
+
+Where the Sun Never Sets
+
+Attack, Defense, Spell Power, and sight radius increase by 2 when in an area you do not control. This bonus is doubled if the hero knows “Daylight Magic.”
+
+Hero of Legends
+
+Enemy Morale is reduced by 1 in battle.
+
+Synergy →
+
+Summon Avatar
+
+Avatar of Fury
+
+Avatar’s Attack increases by 25% of the hero’s Spell Power. This bonus is doubled if the hero knows “Leadership.”
+
+Insight
+
+Civic Innovation
+
+The hero gains +100% Law points. This bonus is doubled if the hero knows “Leadership.”
+
+← Synergy
+
+Battlecraft
+
+Resolve
+
+Friendly creatures’ chance to take an additional turn increases by 1% for each point of Morale. This bonus is doubled if the hero knows “Battlecraft.”
+
+Daylight Magic
+
+Where Sun Never Sets
+
+Attack, Defence, and Spell Power increase by 1, and sight radius increases by 3 when in an area you do not control. This bonus is doubled if the hero knows Daylight Magic.
+
+Requires Subclass
+
+Enforcer
+
+Broodmother
+
+Doubles the base stats of summoned Fire Larvae.
+
+Knight
+
+Swashbuckler
+
+Heroic Strike deals +200 damage.
+
+Overlord
+
+Balthazar's Bodyguard
+
++100% Attack.
+
+Oathkeeper
+
+Unbound
+
+Increases the level of all hero's spells to their maximum.
+
+ [Home]
+
+ [Skills]
+
+Advanced Leadership
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Basic Leadership]
+
+ [
+
+Advanced Leadership]
+
+ [
+
+Expert Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/advanced_logistics.txt ===
+Skill
+
+Advanced Logistics
+
++15% Movement points on the global map.
+
+Subskills
+
+Leaps and Bounds
+
+The hero restores 5 Movement point(s) after each victory in battle.
+
+Strong Mounts
+
+Neutral Global Map spells cost –4 mana. This bonus is doubled if the hero knows “Scouting.”
+
+Careful Planning
+
+Every day, the hero saves up to 50 unused Movement points for the next day. This bonus is doubled if the hero knows “Arcane Magic.”
+
+Synergy →
+
+Daylight Magic
+
+Speed of Light
+
++10 Movement points. This bonus is doubled if the hero knows “Logistics.”
+
+Economy
+
+Tax Collector
+
++250 Gold daily. This bonus is doubled if the hero knows “Logistics.”
+
+← Synergy
+
+Scouting
+
+Strong Mounts
+
+Neutral Global Map spells cost –4 mana. This bonus is doubled if the hero knows “Scouting.”
+
+Arcane Magic
+
+Careful Planning
+
+Every day, the hero saves up to 50 unused Movement points for the next day. This bonus is doubled if the hero knows “Arcane Magic.”
+
+Requires Subclass
+
+Druid
+
+Heaven’s Fury
+
+Heroic Strike deals Damage to all enemies in a 1‑hex radius.
+
+Enforcer
+
+Soul Eater
+
+Grants a new battle ability. It allows the hero to consume a target corpse, gaining bonus Attack, Defense, and Spell Power until the end of battle.
+
+Cleric
+
+Ascendant
+
+All the hero's spells always cost 0 mana.
+
+Warlock
+
+Great Merchant
+
+Grant +10000 gold daily.
+
+Necromancer
+
+Soulweaver
+
+After an enemy stack is killed in battle, a temporary stack of friendly Wights appears in their place.
+
+Riftspeaker
+
+Unfathomable
+
+All enemies always deal minimum and take maximum Damage.
+
+ [Home]
+
+ [Skills]
+
+Advanced Logistics
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Basic Logistics]
+
+ [
+
+Advanced Logistics]
+
+ [
+
+Expert Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/advanced_luck.txt ===
+Skill
+
+Advanced Luck
+
+The hero gains 2 Luck.
+
+Subskills
+
+Beastly Confidence
+
+Friendly creatures have a 1% higher chance to land a Lucky Strike for each point of Luck. This bonus is doubled if the hero knows “Primal Magic.”
+
+Always Heads
+
+The hero gains +25% Gold and resources from piles on the global map. This bonus is doubled if the hero knows “Economy.”
+
+Mearea’s Chosen
+
+Enemy Luck is reduced by 1 in battle.
+
+Synergy →
+
+Scouting
+
+Long‑Sight
+
+Sight radius increases by an additional 1. This bonus is doubled if the hero knows “Luck.”
+
+Offence
+
+Battle March
+
+Friendly creatures generate +1 Focus Point(s) per attack. This bonus is doubled if the hero knows “Luck.”
+
+← Synergy
+
+Primal Magic
+
+Beastly Confidence
+
+Friendly creatures have a 1% higher chance to land a Lucky Strike for each point of Luck. This bonus is doubled if the hero knows “Primal Magic.”
+
+Economy
+
+Always Heads
+
+The hero gains +25% Gold and resources from piles on the global map. This bonus is doubled if the hero knows “Economy.”
+
+Requires Subclass
+
+Warden
+
+Fortune’s Favored
+
+Friendly creatures have their maximum possible Luck and will always land a Lucky Strike when attacking.
+
+Herald
+
+Lord of Chaos
+
+Heroic Strike deals +2 Damage per each hero attribute point.
+
+Knight
+
+Swashbuckler
+
+Heroic Strike deals +200 damage.
+
+Overlord
+
+Silvertongue's Envoy
+
++100% Defence.
+
+Death Knight
+
+Harbinger of Doom
+
+Enemy creatures in battle have the minimum possible Luck and always land an Unlucky Strike when attacking.
+
+Riftspeaker
+
+Unfathomable
+
+All enemies always deal minimum and take maximum Damage.
+
+ [Home]
+
+ [Skills]
+
+Advanced Luck
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+Basic Luck]
+
+ [
+
+Advanced Luck]
+
+ [
+
+Expert Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/advanced_murmuring.txt ===
+Skill
+
+Advanced Murmuring
+
+Generates 2 Focus Charge(s) at the start of every battle.
+
+Subskills
+
+Mycelium Grounds
+
+Friendly Grove creatures deal +10% and take –10% Damage on Native Terrain.
+
+Life Essence
+
+Focus Charge limit increases by 1.
+
+Child of the Woods
+
++30 maximum mana.
+
+ [Home]
+
+ [Skills]
+
+Advanced Murmuring
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Basic Murmuring]
+
+ [
+
+Advanced Murmuring]
+
+ [
+
+Expert Murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/advanced_necromancy.txt ===
+Skill
+
+Advanced Necromancy
+
+After winning a battle, transforms 15% of the strongest enemy stack into friendly Undead of the same tier. This requires Necromantic Energy, which stores up to 1250 and refills each week or when the hero has no stack of that tier in their army.
+
+Subskills
+
+Gravesoil
+
+Friendly Necropolis creatures deal +10% and take –10% Damage on Native Terrain.
+
+Soul Harvest
+
+Restores 4 mana after a battle victory.
+
+Death Herald
+
++500 to the hero’s maximum Necromantic Energy.
+
+ [Home]
+
+ [Skills]
+
+Advanced Necromancy
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Basic Necromancy]
+
+ [
+
+Advanced Necromancy]
+
+ [
+
+Expert Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/advanced_nightshade_magic.txt ===
+Skill
+
+Advanced Nightshade Magic
+
+The hero can learn tier‑5 Nightshade spells. Nightshade spells gain +1 level(s).
+
+Subskills
+
+Nightshade Time
+
+The cooldowns of all the hero’s Nightshade spells are reduced by 1 round(s).
+
+Chronic Weakness
+
+Enemy creature maximum HP reduces by 1. This effect is doubled if the hero knows “Resistance.”
+
+Darkest Night
+
+–1 level(s) to all enemy Nightshade spells.
+
+Synergy →
+
+Daylight Magic
+
+Scholar Synergy: Arina
+
++6 Spell Power when casting Daylight spells. Gain an additional +3 for each other Magic School skill known.
+
+Arcane Magic
+
+Scholar Synergy: Doreath
+
++6 Spell Power when casting Arcane spells. Gain an additional +3 for each other Magic School skill known.
+
+Primal Magic
+
+Scholar Synergy: Hksmilla
+
++6 Spell Power when casting Primal spells. Gain an additional +3 for each other Magic School skill known.
+
+Offence
+
+Reality Wardens
+
+Friendly creatures deal +50% Damage to summoned enemy creatures. This bonus is doubled if the hero knows “Nightshade Magic.”
+
+← Synergy
+
+Resistance
+
+Chronic Weakness
+
+Enemy creature maximum HP reduces by 1. This effect is doubled if the hero knows “Resistance.”
+
+Requires Subclass
+
+Druid
+
+Heaven’s Fury
+
+Heroic Strike deals Damage to all enemies in a 1‑hex radius.
+
+Enforcer
+
+Broodmother
+
+Doubles the base stats of summoned Fire Larvae.
+
+Knight
+
+Swashbuckler
+
+Heroic Strike deals +200 damage.
+
+Overlord
+
+Balthazar's Bodyguard
+
++100% Attack.
+
+Death Knight
+
+Walking Rot
+
+All enemies always have minimum Morale.
+
+Oathkeeper
+
+Unfeeling
+
+Enemy loses all Focus Charges at the beginning of each battle round.
+
+ [Home]
+
+ [Skills]
+
+Advanced Nightshade Magic
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Basic Nightshade Magic]
+
+ [
+
+Advanced Nightshade Magic]
+
+ [
+
+Expert Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/advanced_offence.txt ===
+Skill
+
+Advanced Offense
+
+Friendly creatures’ basic attacks deal +20% Damage.
+
+Subskills
+
+Archery
+
+Friendly creatures’ Ranged and Long Reach attacks deal +15% Damage.
+
+Battle March
+
+Friendly creatures generate +1 Focus Point(s) per attack. This bonus is doubled if the hero knows “Luck.”
+
+Battle Frenzy
+
+Friendly creatures gain +2 Attack for each point of Morale.
+
+Synergy →
+
+Tactics
+
+One for All
+
+Friendly creatures gain +2 Attack for each adjacent enemy. This bonus is doubled if the hero knows “Offense.”
+
+Sorcery
+
+Raw Energy
+
++10% more Magic Damage dealt. This bonus is doubled if the hero knows “Offense.”
+
+← Synergy
+
+Nightshade Magic
+
+Reality Wardens
+
+Friendly creatures deal +50% Damage to summoned enemy creatures. This bonus is doubled if the hero knows “Nightshade Magic.”
+
+Requires Subclass
+
+Warden
+
+Fortune’s Favored
+
+Friendly creatures have their maximum possible Luck and will always land a Lucky Strike when attacking.
+
+Herald
+
+Lord of Chaos
+
+Heroic Strike deals +2 Damage per each hero attribute point.
+
+Knight
+
+Swashbuckler
+
+Heroic Strike deals +200 damage.
+
+Overlord
+
+Balthazar's Bodyguard
+
++100% Attack.
+
+Necromancer
+
+Chronomancer
+
+Necromancy works for all creatures and not just the Undead.
+
+Oathkeeper
+
+Unbound
+
+Increases the level of all hero's spells to their maximum.
+
+ [Home]
+
+ [Skills]
+
+Advanced Offense
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Basic Offense]
+
+ [
+
+Advanced Offense]
+
+ [
+
+Expert Offense]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/advanced_primal_magic.txt ===
+Skill
+
+Advanced Primal Magic
+
+The hero can learn tier‑5 Primal spells. Primal spells gain +1 level(s).
+
+Subskills
+
+Primal Time
+
+The cooldowns of all the hero’s Primal spells are reduced by 1 round(s).
+
+Primal Force
+
+Negative and positive effects used by the hero and friendly creatures last 1 additional round(s).
+
+Sharpest Teeth
+
+–1 level(s) to all enemy Primal spells.
+
+Synergy →
+
+Daylight Magic
+
+Scholar Synergy: Arina
+
++6 Spell Power when casting Daylight spells. Gain an additional +3 for each other Magic School skill known.
+
+Arcane Magic
+
+Scholar Synergy: Doreath
+
++6 Spell Power when casting Arcane spells. Gain an additional +3 for each other Magic School skill known.
+
+Nightshade Magic
+
+Scholar Synergy: Naira
+
++6 Spell Power when casting Nightshade spells. Gain an additional +3 for each other Magic School skill known.
+
+Luck
+
+Beastly Confidence
+
+Friendly creatures have a 1% higher chance to land a Lucky Strike for each point of Luck. This bonus is doubled if the hero knows “Primal Magic.”
+
+← Synergy
+
+Battle Magic
+
+Chaos Reigns
+
+The hero and friendly creatures deal 50% more Damage with Lucky Strikes. This bonus is doubled if the hero knows “Battle Magic.”
+
+Requires Subclass
+
+Warden
+
+Fortune’s Favored
+
+Friendly creatures have their maximum possible Luck and will always land a Lucky Strike when attacking.
+
+Herald
+
+Lord of Chaos
+
+Heroic Strike deals +2 Damage per each hero attribute point.
+
+Cleric
+
+Ascendant
+
+All the hero's spells always cost 0 mana.
+
+Warlock
+
+Amelchia's Heir
+
++100% spell power.
+
+Death Knight
+
+Harbinger of Doom
+
+Enemy creatures in battle have the minimum possible Luck and always land an Unlucky Strike when attacking.
+
+Riftspeaker
+
+Unstoppable
+
++10 to the hero’s Attack, Defence, Spell Power, and Knowledge.
+
+ [Home]
+
+ [Skills]
+
+Advanced Primal Magic
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Basic Primal Magic]
+
+ [
+
+Advanced Primal Magic]
+
+ [
+
+Expert Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/advanced_recruitment.txt ===
+Skill
+
+Advanced Recruitment
+
++4 to tier‑1 and +3 to tier‑2 creature growth in all your cities.
+
+Subskills
+
+Direct Supervision
+
+If the hero is in a city at the start of a week, growth of all creatures in that city increases by an additional 50% growth.
+
+Elite Guards
+
+Tier‑1, tier‑2 and tier‑3 friendly creatures gain 25% of the hero’s Attack and Defense as Attack and Defense. This bonus is doubled if the hero knows “Tactics.”
+
+Veterans
+
+Tier‑4 creature growth in all your cities increases by 2. This bonus is doubled if the hero knows “Diplomacy.”
+
+Synergy →
+
+Battlecraft
+
+Manacraft
+
+The hero’s maximum mana increases by 2 per their Attack and Defense. This bonus is doubled if the hero knows “Recruitment.”
+
+Defence
+
+Hymn to the Martyrs
+
+Friendly creatures generate +1 Focus Point(s) when they take Damage. This bonus is doubled if the hero knows “Recruitment.”
+
+← Synergy
+
+Tactics
+
+Elite Guards
+
+Tier‑1, tier‑2 and tier‑3 friendly creatures gain 25% of the hero’s Attack and Defense as Attack and Defense. This bonus is doubled if the hero knows “Tactics.”
+
+Diplomacy
+
+Veterans
+
+Tier‑4 creature growth in all your cities increases by 2. This bonus is doubled if the hero knows “Diplomacy.”
+
+ [Home]
+
+ [Skills]
+
+Advanced Recruitment
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Basic Recruitment]
+
+ [
+
+Advanced Recruitment]
+
+ [
+
+Expert Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/advanced_resistance.txt ===
+Skill
+
+Advanced Resistance
+
+Friendly creatures take –25% Magic Damage.
+
+Subskills
+
+Obstruction
+
+Enemy spells cost 20% more mana. If the hero knows a Magic School skill, the cost of enemy spells from that School increases by an additional 20%.
+
+Hindrance Aura
+
+Enemy loses 1 Focus Charge(s) at the beginning of each battle round.
+
+Fast Metabolism
+
+All negative effects on friendly creatures last for 2 fewer rounds (no less than 1).
+
+Synergy →
+
+Nightshade Magic
+
+Chronic Weakness
+
+Enemy creature maximum HP reduces by 1. This effect is doubled if the hero knows “Resistance.”
+
+Requires Subclass
+
+Enforcer
+
+Soul Eater
+
+Grants a new battle ability. It allows the hero to consume a target corpse, gaining bonus Attack, Defense, and Spell Power until the end of battle.
+
+Cleric
+
+Ascendant
+
+All the hero's spells always cost 0 mana.
+
+Warlock
+
+Great Merchant
+
+Grant +10000 gold daily.
+
+Death Knight
+
+Walking Rot
+
+All enemies always have minimum Morale.
+
+Oathkeeper
+
+Unfeeling
+
+Enemy loses all Focus Charges at the beginning of each battle round.
+
+ [Home]
+
+ [Skills]
+
+Advanced Resistance
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Basic Resistance]
+
+ [
+
+Advanced Resistance]
+
+ [
+
+Expert Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/advanced_scouting.txt ===
+Skill
+
+Advanced Scouting
+
+The hero gains 2 sight radius.
+
+Subskills
+
+Long‑Sight
+
+Sight radius increases by an additional 1. This bonus is doubled if the hero knows “Luck.”
+
+Familiar Paths
+
++10 Movement points when the hero starts the day in an area you control. This bonus is doubled if the hero knows “Wisdom.”
+
+Pathfinding
+
+Terrain penalties are reduced by 50%.
+
+Synergy →
+
+Logistics
+
+Strong Mounts
+
+Neutral Global Map spells cost –4 mana. This bonus is doubled if the hero knows “Scouting.”
+
+← Synergy
+
+Luck
+
+Long‑Sight
+
+Sight radius increases by an additional 1. This bonus is doubled if the hero knows “Luck.”
+
+Intelligence
+
+Familiar Paths
+
++10 Movement points when the hero starts the day in an area you control. This bonus is doubled if the hero knows “Wisdom.”
+
+Requires Subclass
+
+Warden
+
+Wellspring of Vigor
+
+Generates maximum Focus Charges at the beginning of each round.
+
+Druid
+
+Celestial Envoy
+
+The hero can use all spells.
+
+Herald
+
+Lord of Chaos
+
+Heroic Strike deals +2 Damage per each hero attribute point.
+
+Cleric
+
+Grand Inquisitor
+
+Enemy hero can only use each spell once per battle.
+
+Overlord
+
+Silvertongue's Envoy
+
++100% Defence.
+
+Death Knight
+
+Harbinger of Doom
+
+Enemy creatures in battle have the minimum possible Luck and always land an Unlucky Strike when attacking.
+
+Oathkeeper
+
+Unbound
+
+Increases the level of all hero's spells to their maximum.
+
+ [Home]
+
+ [Skills]
+
+Advanced Scouting
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Basic Scouting]
+
+ [
+
+Advanced Scouting]
+
+ [
+
+Expert Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/advanced_siegecraft.txt ===
+Skill
+
+Advanced Siegecraft
+
+The catapult deals +100 Damage.
+
+Subskills
+
+Relentless Assault
+
+While besieging a city, friendly creatures gain +1 Speed and Initiative.
+
+Forward Observers
+
+Ranged Damage of friendly creatures is not reduced by walls during a siege.
+
+Barrage
+
+Grants a new siege ability. It attacks a chosen hex and all adjacent hexes. Usable once per round.
+
+ [Home]
+
+ [Skills]
+
+Advanced Siegecraft
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Basic Siegecraft]
+
+ [
+
+Advanced Siegecraft]
+
+ [
+
+Expert Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/advanced_sorcery.txt ===
+Skill
+
+Advanced Sorcery
+
++20% Magic Damage dealt.
+
+Subskills
+
+Magical Influence
+
+The cooldowns of all friendly creature abilities are reduced by 1 round(s).
+
+Magic Arrow
+
+Grants a new battle spell. It deals Magic Damage to a single target, has no cooldown, and costs no mana.
+
+Raw Energy
+
++10% more Magic Damage dealt. This bonus is doubled if the hero knows “Offense.”
+
+Synergy →
+
+Intelligence
+
+Rhythmic Cadence
+
++30% maximum mana. This bonus is doubled if the hero knows “Sorcery.”
+
+← Synergy
+
+Intelligence
+
+Sticky Magic
+
+Effects applied by the hero last +2 round(s). This bonus is doubled if the hero knows “Wisdom.”
+
+Offence
+
+Raw Energy
+
++10% more Magic Damage dealt. This bonus is doubled if the hero knows “Offense.”
+
+Requires Subclass
+
+Druid
+
+Heaven’s Fury
+
+Heroic Strike deals Damage to all enemies in a 1‑hex radius.
+
+Herald
+
+Lord of Chaos
+
+Heroic Strike deals +2 Damage per each hero attribute point.
+
+Cleric
+
+Ascendant
+
+All the hero's spells always cost 0 mana.
+
+Overlord
+
+Silvertongue's Envoy
+
++100% Defence.
+
+Death Knight
+
+Harbinger of Doom
+
+Enemy creatures in battle have the minimum possible Luck and always land an Unlucky Strike when attacking.
+
+Oathkeeper
+
+Unbound
+
+Increases the level of all hero's spells to their maximum.
+
+ [Home]
+
+ [Skills]
+
+Advanced Sorcery
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Basic Sorcery]
+
+ [
+
+Advanced Sorcery]
+
+ [
+
+Expert Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/advanced_summon_avatar.txt ===
+Skill
+
+Advanced Summon Avatar
+
+Grants a new battle spell. It summons an Avatar that scales more strongly with the hero’s Spell Power and Knowledge.
+
+Subskills
+
+Avatar of Fury
+
+Avatar’s Attack increases by 25% of the hero’s Spell Power. This bonus is doubled if the hero knows “Leadership.”
+
+Avatar of Toughness
+
+Avatar’s Defense increases by 25% of the hero’s Knowledge. This bonus is doubled if the hero knows “Defense.”
+
+Avatar of Celerity
+
+Avatar’s Speed and Initiative increase by 1. This bonus is doubled if the hero knows “Insight.”
+
+Synergy →
+
+Arcane Magic
+
+All Life is Endless
+
++30% healing and revival from friendly creature abilities and hero spells in battle. This bonus is doubled if the hero knows “Summon Avatar.”
+
+← Synergy
+
+Leadership
+
+Avatar of Fury
+
+Avatar’s Attack increases by 25% of the hero’s Spell Power. This bonus is doubled if the hero knows “Leadership.”
+
+Defence
+
+Avatar of Toughness
+
+Avatar’s Defense increases by 25% of the hero’s Knowledge. This bonus is doubled if the hero knows “Defense.”
+
+Insight
+
+Avatar of Celerity
+
+Avatar’s Speed and Initiative increase by 1. This bonus is doubled if the hero knows “Insight.”
+
+Requires Subclass
+
+Druid
+
+Celestial Envoy
+
+The hero can use all spells.
+
+Herald
+
+Progenitor
+
++200% creature growth in all your cities.
+
+Knight
+
+Paragon
+
+All allies deal maximum damage and take minimum damage.
+
+Warlock
+
+Amelchia's Heir
+
++100% spell power.
+
+Necromancer
+
+Soulweaver
+
+After an enemy stack is killed in battle, a temporary stack of friendly Wights appears in their place.
+
+Riftspeaker
+
+Unfathomable
+
+All enemies always deal minimum and take maximum Damage.
+
+ [Home]
+
+ [Skills]
+
+Advanced Summon Avatar
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+Basic Summon Avatar]
+
+ [
+
+Advanced Summon Avatar]
+
+ [
+
+Expert Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/advanced_summon_swarm.txt ===
+Skill
+
+Advanced Summon Swarm
+
+Once per round, lays eggs on the battlefield. At the start of next round, they spawn a stack of Fire Larvae. The stack has 12% of the total HP of all Hive Spawns in its army, and the strength of its abilities scales with the hero’s level.
+
+Subskills
+
+Warmth of the Nest
+
+Friendly Hive creatures deal +10% and take –10% Damage on Native Terrain.
+
+Thy Children
+
++1 Fire Larvae spawned for every hero level.
+
+Ravage
+
+Fire Larvae deal +1 Damage.
+
+ [Home]
+
+ [Skills]
+
+Advanced Summon Swarm
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Basic Summon Swarm]
+
+ [
+
+Advanced Summon Swarm]
+
+ [
+
+Expert Summon Swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/advanced_tactics.txt ===
+Skill
+
+Advanced Tactics
+
+In the Tactics Phase, creatures can be placed within a 4‑line area. If the enemy also knows “Tactics”, their area of placement reduces by 2 line(s).
+
+Subskills
+
+One for All
+
+Friendly creatures gain +2 Attack for each adjacent enemy. This bonus is doubled if the hero knows “Offense.”
+
+Easy Prey
+
+Once per round, when an enemy waits, friendly creatures gain +2 Initiative until the end of round. This effect does not stack.
+
+Energizing Mana
+
+Generate +1 Focus Charge each time your enemy uses a spell.
+
+Synergy →
+
+Insight
+
+Endless Charisma
+
++1 Attack, Defense, Spell Power, and Knowledge. This bonus is doubled if the hero knows “Tactics.”
+
+← Synergy
+
+Offence
+
+One for All
+
+Friendly creatures gain +2 Attack for each adjacent enemy. This bonus is doubled if the hero knows “Offense.”
+
+Defence
+
+All for One
+
+Friendly creatures gain +2 Defense for each adjacent ally. This bonus is doubled if the hero knows “Defense.”
+
+Requires Subclass
+
+Druid
+
+Heaven’s Fury
+
+Heroic Strike deals Damage to all enemies in a 1‑hex radius.
+
+Herald
+
+Progenitor
+
++200% creature growth in all your cities.
+
+Knight
+
+Paragon
+
+All allies deal maximum damage and take minimum damage.
+
+Warlock
+
+Amelchia's Heir
+
++100% spell power.
+
+Death Knight
+
+Walking Rot
+
+All enemies always have minimum Morale.
+
+Necromancer
+
+Chronomancer
+
+Necromancy works for all creatures and not just the Undead.
+
+Riftspeaker
+
+Unstoppable
+
++10 to the hero’s Attack, Defence, Spell Power, and Knowledge.
+
+ [Home]
+
+ [Skills]
+
+Advanced Tactics
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+基础战术]
+
+ [
+
+Advanced Tactics]
+
+ [
+
+Expert Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/advanced_thaumaturgy.txt ===
+Skill
+
+Advanced Thaumaturgy
+
+The hero can use the Spellbook one more time per battle round, but only to cast a spell of a Magic School that hasn’t been used this round. Spells cost +75% mana for each use after the first.
+
+Subskills
+
+Antimage
+
+Enemy spells cost +4 mana.
+
+Ancient Scrolls
+
+Adds all tier‑1 spells to the hero’s Spellbook.
+
+Practical Incantations
+
+Heroic Strike deals +10 Damage.
+
+ [Home]
+
+ [Skills]
+
+Advanced Thaumaturgy
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Basic Thaumaturgy]
+
+ [
+
+Advanced Thaumaturgy]
+
+ [
+
+Expert Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/advanced_triumvirates_strength.txt ===
+Skill
+
+Advanced Triumvirate’s Strength
+
+Once per round, the hero can activate one of the three Stances in battle. The active Stance grants the hero +<current_skill_faction_dungeon> to the Stance’s corresponding attribute.
+
+Subskills
+
+Underground Passages
+
+Friendly Dungeon creatures deal +10% and take –10% Damage on Native Terrain.
+
+Alvarian Expertise
+
+When selecting a Stance, the corresponding attribute of enemy hero partially decreases while the Stance is active.
+
+Underground Mana Pools
+
+When selecting a Stance, the hero gains 3 temporary mana.
+
+ [Home]
+
+ [Skills]
+
+Advanced Triumvirate’s Strength
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+ [
+
+Basic Triumvirate’s Strength]
+
+ [
+
+Advanced Triumvirate’s Strength]
+
+ [
+
+Expert Triumvirate’s Strength]
+
+=== sources/olden-era.com/text/en/skills/basic_abyssal_communion.txt ===
+Skill
+
+Basic Abyssal Communion
+
+After each battle victory, the hero increases their Communion level by 1 (up to a max. of 4). Each level increases the number of friendly Schism units by 3% until the end of the battle. Each morning, all heroes’ Communion level is halved.
+
+ [Home]
+
+ [Skills]
+
+Basic Abyssal Communion
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Basic Abyssal Communion]
+
+ [
+
+Advanced Abyssal Communion]
+
+ [
+
+Expert Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/basic_arcane_magic.txt ===
+Skill
+
+Basic Arcane Magic
+
+The hero can learn tier‑5 Arcane spells.
+
+Synergy →
+
+Daylight Magic
+
+Scholar Synergy: Arina
+
++6 Spell Power when casting Daylight spells. Gain an additional +3 for each other Magic School skill known.
+
+Primal Magic
+
+Scholar Synergy: Hksmilla
+
++6 Spell Power when casting Primal spells. Gain an additional +3 for each other Magic School skill known.
+
+Nightshade Magic
+
+Scholar Synergy: Naira
+
++6 Spell Power when casting Nightshade spells. Gain an additional +3 for each other Magic School skill known.
+
+Logistics
+
+Careful Planning
+
+Every day, the hero saves up to 50 unused Movement points for the next day. This bonus is doubled if the hero knows “Arcane Magic.”
+
+← Synergy
+
+Summon Avatar
+
+All Life is Endless
+
++30% healing and revival from friendly creature abilities and hero spells in battle. This bonus is doubled if the hero knows “Summon Avatar.”
+
+Requires Subclass
+
+Warden
+
+Wellspring of Vigor
+
+Generates maximum Focus Charges at the beginning of each round.
+
+Druid
+
+Celestial Envoy
+
+The hero can use all spells.
+
+Herald
+
+Progenitor
+
++200% creature growth in all your cities.
+
+Cleric
+
+Grand Inquisitor
+
+Enemy hero can only use each spell once per battle.
+
+Warlock
+
+Great Merchant
+
+Grant +10000 gold daily.
+
+Necromancer
+
+Soulweaver
+
+After an enemy stack is killed in battle, a temporary stack of friendly Wights appears in their place.
+
+Riftspeaker
+
+Unfathomable
+
+All enemies always deal minimum and take maximum Damage.
+
+ [Home]
+
+ [Skills]
+
+Basic Arcane Magic
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Basic Arcane Magic]
+
+ [
+
+Advanced Arcane Magic]
+
+ [
+
+Expert Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/basic_ascension.txt ===
+Skill
+
+Basic Righteousness
+
+All who fall in battle do so in the hero’s name! Whenever a friendly creature dies or kills an enemy, the hero’s Attack, Defense, Spell Power and Knowledge increase by 1 for two rounds. This effect is stackable.
+
+ [Home]
+
+ [Skills]
+
+Basic Righteousness
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Basic Righteousness]
+
+ [
+
+Advanced Righteousness]
+
+ [
+
+Expert Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/basic_battle_magic.txt ===
+Skill
+
+Basic Battle Magic
+
+Friendly creatures’ Attack and Defense increase by 15% of the hero’s Spell Power and Knowledge respectively.
+
+Synergy →
+
+Primal Magic
+
+Chaos Reigns
+
+The hero and friendly creatures deal 50% more Damage with Lucky Strikes. This bonus is doubled if the hero knows “Battle Magic.”
+
+Battlecraft
+
+Battle Focus
+
+Generates +1 Focus Charge(s) at the beginning of each round. This bonus is doubled if the hero knows “Battle Magic.”
+
+← Synergy
+
+Sorcery
+
+Battle Mage’s Authority
+
+Friendly creatures’ Attack increases by 20% of their hero’s Spell Power. Doubled if the hero knows Sorcery.
+
+Resistance
+
+Mage Protector’s Authority
+
+Friendly creatures’ Defence increases by 20% of their hero’s Knowledge. Doubled if the hero knows Resistance.
+
+Requires Subclass
+
+Warden
+
+Wellspring of Vigor
+
+Generates maximum Focus Charges at the beginning of each round.
+
+Enforcer
+
+Soul Eater
+
+Grants a new battle ability. It allows the hero to consume a target corpse, gaining bonus Attack, Defense, and Spell Power until the end of battle.
+
+Cleric
+
+Grand Inquisitor
+
+Enemy hero can only use each spell once per battle.
+
+Warlock
+
+Great Merchant
+
+Grant +10000 gold daily.
+
+Necromancer
+
+Chronomancer
+
+Necromancy works for all creatures and not just the Undead.
+
+Riftspeaker
+
+Unstoppable
+
++10 to the hero’s Attack, Defence, Spell Power, and Knowledge.
+
+ [Home]
+
+ [Skills]
+
+Basic Battle Magic
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Basic Battle Magic]
+
+ [
+
+Advanced Battle Magic]
+
+ [
+
+Expert Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/basic_battlecraft.txt ===
+Skill
+
+Basic Battlecraft
+
+When a friendly creature waits on their turn, they gain +20% Attack until the end of the round. When they skip turn, they gain +20% Defense until the end of the round.
+
+Synergy →
+
+Leadership
+
+Resolve
+
+Friendly creatures’ chance to take an additional turn increases by 1% for each point of Morale. This bonus is doubled if the hero knows “Battlecraft.”
+
+Diplomacy
+
+Larger Than Life
+
+Neutral squads view the hero’s army as +25% more powerful than it is, increasing the chance that they will join or flee. This bonus is doubled if the hero knows “Battlecraft.”
+
+← Synergy
+
+Battle Magic
+
+Battle Focus
+
+Generates +1 Focus Charge(s) at the beginning of each round. This bonus is doubled if the hero knows “Battle Magic.”
+
+Recruitment
+
+Manacraft
+
+The hero’s maximum mana increases by 2 per their Attack and Defense. This bonus is doubled if the hero knows “Recruitment.”
+
+Requires Subclass
+
+Druid
+
+Heaven’s Fury
+
+Heroic Strike deals Damage to all enemies in a 1‑hex radius.
+
+Enforcer
+
+Broodmother
+
+Doubles the base stats of summoned Fire Larvae.
+
+Knight
+
+Paragon
+
+All allies deal maximum damage and take minimum damage.
+
+Warlock
+
+Amelchia's Heir
+
++100% spell power.
+
+Necromancer
+
+Soulweaver
+
+After an enemy stack is killed in battle, a temporary stack of friendly Wights appears in their place.
+
+Riftspeaker
+
+Unstoppable
+
++10 to the hero’s Attack, Defence, Spell Power, and Knowledge.
+
+ [Home]
+
+ [Skills]
+
+Basic Battlecraft
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+Basic Battlecraft]
+
+ [
+
+Advanced Battlecraft]
+
+ [
+
+Expert Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/basic_combat.txt ===
+Skill
+
+Basic Combat
+
+Heroic Strike deals +10 basic Damage.
+
+ [Home]
+
+ [Skills]
+
+Basic Combat
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Basic Combat]
+
+ [
+
+Advanced Combat]
+
+ [
+
+Expert Combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/basic_daylight_magic.txt ===
+Skill
+
+Basic Daylight Magic
+
+The hero can learn tier‑5 Daylight spells.
+
+Synergy →
+
+Arcane Magic
+
+Scholar Synergy: Doreath
+
++6 Spell Power when casting Arcane spells. Gain an additional +3 for each other Magic School skill known.
+
+Primal Magic
+
+Scholar Synergy: Hksmilla
+
++6 Spell Power when casting Primal spells. Gain an additional +3 for each other Magic School skill known.
+
+Nightshade Magic
+
+Scholar Synergy: Naira
+
++6 Spell Power when casting Nightshade spells. Gain an additional +3 for each other Magic School skill known.
+
+← Synergy
+
+Logistics
+
+Speed of Light
+
++10 Movement points. This bonus is doubled if the hero knows “Logistics.”
+
+Requires Subclass
+
+Enforcer
+
+Soul Eater
+
+Grants a new battle ability. It allows the hero to consume a target corpse, gaining bonus Attack, Defense, and Spell Power until the end of battle.
+
+Knight
+
+Paragon
+
+All allies deal maximum damage and take minimum damage.
+
+Overlord
+
+Silvertongue's Envoy
+
++100% Defence.
+
+Necromancer
+
+Chronomancer
+
+Necromancy works for all creatures and not just the Undead.
+
+Oathkeeper
+
+Unbound
+
+Increases the level of all hero's spells to their maximum.
+
+ [Home]
+
+ [Skills]
+
+Basic Daylight Magic
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Basic Daylight Magic]
+
+ [
+
+Advanced Daylight Magic]
+
+ [
+
+Expert Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/basic_defence.txt ===
+Skill
+
+Basic Defense
+
+Friendly creatures take –15% Damage from basic attacks.
+
+Synergy →
+
+Tactics
+
+All for One
+
+Friendly creatures gain +2 Defense for each adjacent ally. This bonus is doubled if the hero knows “Defense.”
+
+Summon Avatar
+
+Avatar of Toughness
+
+Avatar’s Defense increases by 25% of the hero’s Knowledge. This bonus is doubled if the hero knows “Defense.”
+
+← Synergy
+
+Diplomacy
+
+Wizard Contract
+
+Friendly creatures take –10% Magic Damage. This bonus is doubled if the hero knows “Diplomacy.”
+
+Recruitment
+
+Hymn to the Martyrs
+
+Friendly creatures generate +1 Focus Point(s) when they take Damage. This bonus is doubled if the hero knows “Recruitment.”
+
+Requires Subclass
+
+Warden
+
+Wellspring of Vigor
+
+Generates maximum Focus Charges at the beginning of each round.
+
+Druid
+
+Celestial Envoy
+
+The hero can use all spells.
+
+Herald
+
+Progenitor
+
++200% creature growth in all your cities.
+
+Cleric
+
+Grand Inquisitor
+
+Enemy hero can only use each spell once per battle.
+
+Overlord
+
+Silvertongue's Envoy
+
++100% Defence.
+
+Death Knight
+
+Harbinger of Doom
+
+Enemy creatures in battle have the minimum possible Luck and always land an Unlucky Strike when attacking.
+
+Riftspeaker
+
+Unfathomable
+
+All enemies always deal minimum and take maximum Damage.
+
+ [Home]
+
+ [Skills]
+
+Basic Defense
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Basic Defense]
+
+ [
+
+Advanced Defense]
+
+ [
+
+Expert Defense]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/basic_diplomacy.txt ===
+Skill
+
+Basic Diplomacy
+
+Provides a chance of neutral squads offering to join the hero’s army for Gold instead of fighting them.
+
+Synergy →
+
+Defence
+
+Wizard Contract
+
+Friendly creatures take –10% Magic Damage. This bonus is doubled if the hero knows “Diplomacy.”
+
+← Synergy
+
+Battlecraft
+
+Larger Than Life
+
+Neutral squads view the hero’s army as +25% more powerful than it is, increasing the chance that they will join or flee. This bonus is doubled if the hero knows “Battlecraft.”
+
+Economy
+
+Art of the Deal
+
+Neutral squads take –15% Gold to recruit. This bonus is doubled if the hero knows “Economy.”
+
+Requires Subclass
+
+Warden
+
+Fortune’s Favored
+
+Friendly creatures have their maximum possible Luck and will always land a Lucky Strike when attacking.
+
+Herald
+
+Progenitor
+
++200% creature growth in all your cities.
+
+Knight
+
+Paragon
+
+All allies deal maximum damage and take minimum damage.
+
+Overlord
+
+Balthazar's Bodyguard
+
++100% Attack.
+
+Death Knight
+
+Walking Rot
+
+All enemies always have minimum Morale.
+
+Oathkeeper
+
+Unfeeling
+
+Enemy loses all Focus Charges at the beginning of each battle round.
+
+ [Home]
+
+ [Skills]
+
+Basic Diplomacy
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Basic Diplomacy]
+
+ [
+
+Advanced Diplomacy]
+
+ [
+
+Expert Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/basic_economy.txt ===
+Skill
+
+Basic Economy
+
++500 Gold daily.
+
+Synergy →
+
+Diplomacy
+
+Art of the Deal
+
+Neutral squads take –15% Gold to recruit. This bonus is doubled if the hero knows “Economy.”
+
+Luck
+
+Always Heads
+
+The hero gains +25% Gold and resources from piles on the global map. This bonus is doubled if the hero knows “Economy.”
+
+← Synergy
+
+Logistics
+
+Tax Collector
+
++250 Gold daily. This bonus is doubled if the hero knows “Logistics.”
+
+Insight
+
+Experimenter
+
++5 Alchemical Dust daily. This bonus is doubled if the hero knows “Insight.”
+
+Requires Subclass
+
+Druid
+
+Celestial Envoy
+
+The hero can use all spells.
+
+Enforcer
+
+Broodmother
+
+Doubles the base stats of summoned Fire Larvae.
+
+Cleric
+
+Ascendant
+
+All the hero's spells always cost 0 mana.
+
+Warlock
+
+Great Merchant
+
+Grant +10000 gold daily.
+
+Necromancer
+
+Chronomancer
+
+Necromancy works for all creatures and not just the Undead.
+
+Oathkeeper
+
+Unfeeling
+
+Enemy loses all Focus Charges at the beginning of each battle round.
+
+ [Home]
+
+ [Skills]
+
+Basic Economy
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Basic Economy]
+
+ [
+
+Advanced Economy]
+
+ [
+
+Expert Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/basic_insight.txt ===
+Skill
+
+Basic Insight
+
+The hero gains +20% more XP.
+
+Synergy →
+
+Summon Avatar
+
+Avatar of Celerity
+
+Avatar’s Speed and Initiative increase by 1. This bonus is doubled if the hero knows “Insight.”
+
+Economy
+
+Experimenter
+
++5 Alchemical Dust daily. This bonus is doubled if the hero knows “Insight.”
+
+← Synergy
+
+Leadership
+
+Civic Innovation
+
+The hero gains +100% Law points. This bonus is doubled if the hero knows “Leadership.”
+
+Tactics
+
+Endless Charisma
+
++1 Attack, Defense, Spell Power, and Knowledge. This bonus is doubled if the hero knows “Tactics.”
+
+Requires Subclass
+
+Warden
+
+Wellspring of Vigor
+
+Generates maximum Focus Charges at the beginning of each round.
+
+Enforcer
+
+Soul Eater
+
+Grants a new battle ability. It allows the hero to consume a target corpse, gaining bonus Attack, Defense, and Spell Power until the end of battle.
+
+Cleric
+
+Grand Inquisitor
+
+Enemy hero can only use each spell once per battle.
+
+Warlock
+
+Amelchia's Heir
+
++100% spell power.
+
+Necromancer
+
+Soulweaver
+
+After an enemy stack is killed in battle, a temporary stack of friendly Wights appears in their place.
+
+Riftspeaker
+
+Unstoppable
+
++10 to the hero’s Attack, Defence, Spell Power, and Knowledge.
+
+ [Home]
+
+ [Skills]
+
+Basic Insight
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Basic Insight]
+
+ [
+
+Advanced Insight]
+
+ [
+
+Expert Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/basic_intelligence.txt ===
+Skill
+
+Basic Wisdom
+
+The hero can learn up to tier‑3 spells without knowing the corresponding Magic School skill.
+
+Synergy →
+
+Sorcery
+
+Sticky Magic
+
+Effects applied by the hero last +2 round(s). This bonus is doubled if the hero knows “Wisdom.”
+
+Scouting
+
+Familiar Paths
+
++10 Movement points when the hero starts the day in an area you control. This bonus is doubled if the hero knows “Wisdom.”
+
+← Synergy
+
+Sorcery
+
+Rhythmic Cadence
+
++30% maximum mana. This bonus is doubled if the hero knows “Sorcery.”
+
+Requires Subclass
+
+Warden
+
+Fortune’s Favored
+
+Friendly creatures have their maximum possible Luck and will always land a Lucky Strike when attacking.
+
+Enforcer
+
+Broodmother
+
+Doubles the base stats of summoned Fire Larvae.
+
+Knight
+
+Swashbuckler
+
+Heroic Strike deals +200 damage.
+
+Overlord
+
+Balthazar's Bodyguard
+
++100% Attack.
+
+Death Knight
+
+Walking Rot
+
+All enemies always have minimum Morale.
+
+Oathkeeper
+
+Unfeeling
+
+Enemy loses all Focus Charges at the beginning of each battle round.
+
+ [Home]
+
+ [Skills]
+
+Basic Wisdom
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Basic Wisdom]
+
+ [
+
+Advanced Wisdom]
+
+ [
+
+Expert Wisdom]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/basic_leadership.txt ===
+Skill
+
+Basic Leadership
+
+The hero gains 1 Morale.
+
+Synergy →
+
+Summon Avatar
+
+Avatar of Fury
+
+Avatar’s Attack increases by 25% of the hero’s Spell Power. This bonus is doubled if the hero knows “Leadership.”
+
+Insight
+
+Civic Innovation
+
+The hero gains +100% Law points. This bonus is doubled if the hero knows “Leadership.”
+
+← Synergy
+
+Battlecraft
+
+Resolve
+
+Friendly creatures’ chance to take an additional turn increases by 1% for each point of Morale. This bonus is doubled if the hero knows “Battlecraft.”
+
+Daylight Magic
+
+Where Sun Never Sets
+
+Attack, Defence, and Spell Power increase by 1, and sight radius increases by 3 when in an area you do not control. This bonus is doubled if the hero knows Daylight Magic.
+
+Requires Subclass
+
+Enforcer
+
+Broodmother
+
+Doubles the base stats of summoned Fire Larvae.
+
+Knight
+
+Swashbuckler
+
+Heroic Strike deals +200 damage.
+
+Overlord
+
+Balthazar's Bodyguard
+
++100% Attack.
+
+Oathkeeper
+
+Unbound
+
+Increases the level of all hero's spells to their maximum.
+
+ [Home]
+
+ [Skills]
+
+Basic Leadership
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Basic Leadership]
+
+ [
+
+Advanced Leadership]
+
+ [
+
+Expert Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/basic_logistics.txt ===
+Skill
+
+Basic Logistics
+
++10% Movement points on the global map.
+
+Synergy →
+
+Daylight Magic
+
+Speed of Light
+
++10 Movement points. This bonus is doubled if the hero knows “Logistics.”
+
+Economy
+
+Tax Collector
+
++250 Gold daily. This bonus is doubled if the hero knows “Logistics.”
+
+← Synergy
+
+Scouting
+
+Strong Mounts
+
+Neutral Global Map spells cost –4 mana. This bonus is doubled if the hero knows “Scouting.”
+
+Arcane Magic
+
+Careful Planning
+
+Every day, the hero saves up to 50 unused Movement points for the next day. This bonus is doubled if the hero knows “Arcane Magic.”
+
+Requires Subclass
+
+Druid
+
+Heaven’s Fury
+
+Heroic Strike deals Damage to all enemies in a 1‑hex radius.
+
+Enforcer
+
+Soul Eater
+
+Grants a new battle ability. It allows the hero to consume a target corpse, gaining bonus Attack, Defense, and Spell Power until the end of battle.
+
+Cleric
+
+Ascendant
+
+All the hero's spells always cost 0 mana.
+
+Warlock
+
+Great Merchant
+
+Grant +10000 gold daily.
+
+Necromancer
+
+Soulweaver
+
+After an enemy stack is killed in battle, a temporary stack of friendly Wights appears in their place.
+
+Riftspeaker
+
+Unfathomable
+
+All enemies always deal minimum and take maximum Damage.
+
+ [Home]
+
+ [Skills]
+
+Basic Logistics
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Basic Logistics]
+
+ [
+
+Advanced Logistics]
+
+ [
+
+Expert Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/basic_luck.txt ===
+Skill
+
+Basic Luck
+
+The hero gains 1 Luck.
+
+Synergy →
+
+Scouting
+
+Long‑Sight
+
+Sight radius increases by an additional 1. This bonus is doubled if the hero knows “Luck.”
+
+Offence
+
+Battle March
+
+Friendly creatures generate +1 Focus Point(s) per attack. This bonus is doubled if the hero knows “Luck.”
+
+← Synergy
+
+Primal Magic
+
+Beastly Confidence
+
+Friendly creatures have a 1% higher chance to land a Lucky Strike for each point of Luck. This bonus is doubled if the hero knows “Primal Magic.”
+
+Economy
+
+Always Heads
+
+The hero gains +25% Gold and resources from piles on the global map. This bonus is doubled if the hero knows “Economy.”
+
+Requires Subclass
+
+Warden
+
+Fortune’s Favored
+
+Friendly creatures have their maximum possible Luck and will always land a Lucky Strike when attacking.
+
+Herald
+
+Lord of Chaos
+
+Heroic Strike deals +2 Damage per each hero attribute point.
+
+Knight
+
+Swashbuckler
+
+Heroic Strike deals +200 damage.
+
+Overlord
+
+Silvertongue's Envoy
+
++100% Defence.
+
+Death Knight
+
+Harbinger of Doom
+
+Enemy creatures in battle have the minimum possible Luck and always land an Unlucky Strike when attacking.
+
+Riftspeaker
+
+Unfathomable
+
+All enemies always deal minimum and take maximum Damage.
+
+ [Home]
+
+ [Skills]
+
+Basic Luck
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+Basic Luck]
+
+ [
+
+Advanced Luck]
+
+ [
+
+Expert Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/basic_murmuring.txt ===
+Skill
+
+Basic Murmuring
+
+Generates 1 Focus Charge(s) at the start of every battle.
+
+ [Home]
+
+ [Skills]
+
+Basic Murmuring
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Basic Murmuring]
+
+ [
+
+Advanced Murmuring]
+
+ [
+
+Expert Murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/basic_necromancy.txt ===
+Skill
+
+Basic Necromancy
+
+After winning a battle, transforms 10% of the strongest enemy stack into friendly Undead of the same tier. This requires Necromantic Energy, which stores up to 1000 and refills each week or when the hero has no stack of that tier in their army.
+
+ [Home]
+
+ [Skills]
+
+Basic Necromancy
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Basic Necromancy]
+
+ [
+
+Advanced Necromancy]
+
+ [
+
+Expert Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/basic_nightshade_magic.txt ===
+Skill
+
+Basic Nightshade Magic
+
+The hero can learn tier‑5 Nightshade spells.
+
+Synergy →
+
+Daylight Magic
+
+Scholar Synergy: Arina
+
++6 Spell Power when casting Daylight spells. Gain an additional +3 for each other Magic School skill known.
+
+Arcane Magic
+
+Scholar Synergy: Doreath
+
++6 Spell Power when casting Arcane spells. Gain an additional +3 for each other Magic School skill known.
+
+Primal Magic
+
+Scholar Synergy: Hksmilla
+
++6 Spell Power when casting Primal spells. Gain an additional +3 for each other Magic School skill known.
+
+Offence
+
+Reality Wardens
+
+Friendly creatures deal +50% Damage to summoned enemy creatures. This bonus is doubled if the hero knows “Nightshade Magic.”
+
+← Synergy
+
+Resistance
+
+Chronic Weakness
+
+Enemy creature maximum HP reduces by 1. This effect is doubled if the hero knows “Resistance.”
+
+Requires Subclass
+
+Druid
+
+Heaven’s Fury
+
+Heroic Strike deals Damage to all enemies in a 1‑hex radius.
+
+Enforcer
+
+Broodmother
+
+Doubles the base stats of summoned Fire Larvae.
+
+Knight
+
+Swashbuckler
+
+Heroic Strike deals +200 damage.
+
+Overlord
+
+Balthazar's Bodyguard
+
++100% Attack.
+
+Death Knight
+
+Walking Rot
+
+All enemies always have minimum Morale.
+
+Oathkeeper
+
+Unfeeling
+
+Enemy loses all Focus Charges at the beginning of each battle round.
+
+ [Home]
+
+ [Skills]
+
+Basic Nightshade Magic
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Basic Nightshade Magic]
+
+ [
+
+Advanced Nightshade Magic]
+
+ [
+
+Expert Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/basic_offence.txt ===
+Skill
+
+Basic Offense
+
+Friendly creatures’ basic attacks deal +15% Damage.
+
+Synergy →
+
+Tactics
+
+One for All
+
+Friendly creatures gain +2 Attack for each adjacent enemy. This bonus is doubled if the hero knows “Offense.”
+
+Sorcery
+
+Raw Energy
+
++10% more Magic Damage dealt. This bonus is doubled if the hero knows “Offense.”
+
+← Synergy
+
+Nightshade Magic
+
+Reality Wardens
+
+Friendly creatures deal +50% Damage to summoned enemy creatures. This bonus is doubled if the hero knows “Nightshade Magic.”
+
+Requires Subclass
+
+Warden
+
+Fortune’s Favored
+
+Friendly creatures have their maximum possible Luck and will always land a Lucky Strike when attacking.
+
+Herald
+
+Lord of Chaos
+
+Heroic Strike deals +2 Damage per each hero attribute point.
+
+Knight
+
+Swashbuckler
+
+Heroic Strike deals +200 damage.
+
+Overlord
+
+Balthazar's Bodyguard
+
++100% Attack.
+
+Necromancer
+
+Chronomancer
+
+Necromancy works for all creatures and not just the Undead.
+
+Oathkeeper
+
+Unbound
+
+Increases the level of all hero's spells to their maximum.
+
+ [Home]
+
+ [Skills]
+
+Basic Offense
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Basic Offense]
+
+ [
+
+Advanced Offense]
+
+ [
+
+Expert Offense]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/basic_primal_magic.txt ===
+Skill
+
+Basic Primal Magic
+
+The hero can learn tier‑5 Primal spells.
+
+Synergy →
+
+Daylight Magic
+
+Scholar Synergy: Arina
+
++6 Spell Power when casting Daylight spells. Gain an additional +3 for each other Magic School skill known.
+
+Arcane Magic
+
+Scholar Synergy: Doreath
+
++6 Spell Power when casting Arcane spells. Gain an additional +3 for each other Magic School skill known.
+
+Nightshade Magic
+
+Scholar Synergy: Naira
+
++6 Spell Power when casting Nightshade spells. Gain an additional +3 for each other Magic School skill known.
+
+Luck
+
+Beastly Confidence
+
+Friendly creatures have a 1% higher chance to land a Lucky Strike for each point of Luck. This bonus is doubled if the hero knows “Primal Magic.”
+
+← Synergy
+
+Battle Magic
+
+Chaos Reigns
+
+The hero and friendly creatures deal 50% more Damage with Lucky Strikes. This bonus is doubled if the hero knows “Battle Magic.”
+
+Requires Subclass
+
+Warden
+
+Fortune’s Favored
+
+Friendly creatures have their maximum possible Luck and will always land a Lucky Strike when attacking.
+
+Herald
+
+Lord of Chaos
+
+Heroic Strike deals +2 Damage per each hero attribute point.
+
+Cleric
+
+Ascendant
+
+All the hero's spells always cost 0 mana.
+
+Warlock
+
+Amelchia's Heir
+
++100% spell power.
+
+Death Knight
+
+Harbinger of Doom
+
+Enemy creatures in battle have the minimum possible Luck and always land an Unlucky Strike when attacking.
+
+Riftspeaker
+
+Unstoppable
+
++10 to the hero’s Attack, Defence, Spell Power, and Knowledge.
+
+ [Home]
+
+ [Skills]
+
+Basic Primal Magic
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Basic Primal Magic]
+
+ [
+
+Advanced Primal Magic]
+
+ [
+
+Expert Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/basic_recruitment.txt ===
+Skill
+
+Basic Recruitment
+
++4 to tier‑1 creature growth in all your cities.
+
+Synergy →
+
+Battlecraft
+
+Manacraft
+
+The hero’s maximum mana increases by 2 per their Attack and Defense. This bonus is doubled if the hero knows “Recruitment.”
+
+Defence
+
+Hymn to the Martyrs
+
+Friendly creatures generate +1 Focus Point(s) when they take Damage. This bonus is doubled if the hero knows “Recruitment.”
+
+← Synergy
+
+Tactics
+
+Elite Guards
+
+Tier‑1, tier‑2 and tier‑3 friendly creatures gain 25% of the hero’s Attack and Defense as Attack and Defense. This bonus is doubled if the hero knows “Tactics.”
+
+Diplomacy
+
+Veterans
+
+Tier‑4 creature growth in all your cities increases by 2. This bonus is doubled if the hero knows “Diplomacy.”
+
+ [Home]
+
+ [Skills]
+
+Basic Recruitment
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Basic Recruitment]
+
+ [
+
+Advanced Recruitment]
+
+ [
+
+Expert Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/basic_resistance.txt ===
+Skill
+
+Basic Resistance
+
+Friendly creatures take –15% Magic Damage.
+
+Synergy →
+
+Nightshade Magic
+
+Chronic Weakness
+
+Enemy creature maximum HP reduces by 1. This effect is doubled if the hero knows “Resistance.”
+
+Requires Subclass
+
+Enforcer
+
+Soul Eater
+
+Grants a new battle ability. It allows the hero to consume a target corpse, gaining bonus Attack, Defense, and Spell Power until the end of battle.
+
+Cleric
+
+Ascendant
+
+All the hero's spells always cost 0 mana.
+
+Warlock
+
+Great Merchant
+
+Grant +10000 gold daily.
+
+Death Knight
+
+Walking Rot
+
+All enemies always have minimum Morale.
+
+Oathkeeper
+
+Unfeeling
+
+Enemy loses all Focus Charges at the beginning of each battle round.
+
+ [Home]
+
+ [Skills]
+
+Basic Resistance
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Basic Resistance]
+
+ [
+
+Advanced Resistance]
+
+ [
+
+Expert Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/basic_scouting.txt ===
+Skill
+
+Basic Scouting
+
+The hero gains 1 sight radius.
+
+Synergy →
+
+Logistics
+
+Strong Mounts
+
+Neutral Global Map spells cost –4 mana. This bonus is doubled if the hero knows “Scouting.”
+
+← Synergy
+
+Luck
+
+Long‑Sight
+
+Sight radius increases by an additional 1. This bonus is doubled if the hero knows “Luck.”
+
+Intelligence
+
+Familiar Paths
+
++10 Movement points when the hero starts the day in an area you control. This bonus is doubled if the hero knows “Wisdom.”
+
+Requires Subclass
+
+Warden
+
+Wellspring of Vigor
+
+Generates maximum Focus Charges at the beginning of each round.
+
+Druid
+
+Celestial Envoy
+
+The hero can use all spells.
+
+Herald
+
+Lord of Chaos
+
+Heroic Strike deals +2 Damage per each hero attribute point.
+
+Cleric
+
+Grand Inquisitor
+
+Enemy hero can only use each spell once per battle.
+
+Overlord
+
+Silvertongue's Envoy
+
++100% Defence.
+
+Death Knight
+
+Harbinger of Doom
+
+Enemy creatures in battle have the minimum possible Luck and always land an Unlucky Strike when attacking.
+
+Oathkeeper
+
+Unbound
+
+Increases the level of all hero's spells to their maximum.
+
+ [Home]
+
+ [Skills]
+
+Basic Scouting
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Basic Scouting]
+
+ [
+
+Advanced Scouting]
+
+ [
+
+Expert Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/basic_siegecraft.txt ===
+Skill
+
+Basic Siegecraft
+
+The catapult deals +50 Damage.
+
+ [Home]
+
+ [Skills]
+
+Basic Siegecraft
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Basic Siegecraft]
+
+ [
+
+Advanced Siegecraft]
+
+ [
+
+Expert Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/basic_sorcery.txt ===
+Skill
+
+Basic Sorcery
+
++10% Magic Damage dealt.
+
+Synergy →
+
+Intelligence
+
+Rhythmic Cadence
+
++30% maximum mana. This bonus is doubled if the hero knows “Sorcery.”
+
+← Synergy
+
+Intelligence
+
+Sticky Magic
+
+Effects applied by the hero last +2 round(s). This bonus is doubled if the hero knows “Wisdom.”
+
+Offence
+
+Raw Energy
+
++10% more Magic Damage dealt. This bonus is doubled if the hero knows “Offense.”
+
+Requires Subclass
+
+Druid
+
+Heaven’s Fury
+
+Heroic Strike deals Damage to all enemies in a 1‑hex radius.
+
+Herald
+
+Lord of Chaos
+
+Heroic Strike deals +2 Damage per each hero attribute point.
+
+Cleric
+
+Ascendant
+
+All the hero's spells always cost 0 mana.
+
+Overlord
+
+Silvertongue's Envoy
+
++100% Defence.
+
+Death Knight
+
+Harbinger of Doom
+
+Enemy creatures in battle have the minimum possible Luck and always land an Unlucky Strike when attacking.
+
+Oathkeeper
+
+Unbound
+
+Increases the level of all hero's spells to their maximum.
+
+ [Home]
+
+ [Skills]
+
+Basic Sorcery
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Basic Sorcery]
+
+ [
+
+Advanced Sorcery]
+
+ [
+
+Expert Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/basic_summon_avatar.txt ===
+Skill
+
+Basic Summon Avatar
+
+Grants a new battle spell. It summons an Avatar that scales with the hero’s Spell Power and Knowledge.
+
+Synergy →
+
+Arcane Magic
+
+All Life is Endless
+
++30% healing and revival from friendly creature abilities and hero spells in battle. This bonus is doubled if the hero knows “Summon Avatar.”
+
+← Synergy
+
+Leadership
+
+Avatar of Fury
+
+Avatar’s Attack increases by 25% of the hero’s Spell Power. This bonus is doubled if the hero knows “Leadership.”
+
+Defence
+
+Avatar of Toughness
+
+Avatar’s Defense increases by 25% of the hero’s Knowledge. This bonus is doubled if the hero knows “Defense.”
+
+Insight
+
+Avatar of Celerity
+
+Avatar’s Speed and Initiative increase by 1. This bonus is doubled if the hero knows “Insight.”
+
+Requires Subclass
+
+Druid
+
+Celestial Envoy
+
+The hero can use all spells.
+
+Herald
+
+Progenitor
+
++200% creature growth in all your cities.
+
+Knight
+
+Paragon
+
+All allies deal maximum damage and take minimum damage.
+
+Warlock
+
+Amelchia's Heir
+
++100% spell power.
+
+Necromancer
+
+Soulweaver
+
+After an enemy stack is killed in battle, a temporary stack of friendly Wights appears in their place.
+
+Riftspeaker
+
+Unfathomable
+
+All enemies always deal minimum and take maximum Damage.
+
+ [Home]
+
+ [Skills]
+
+Basic Summon Avatar
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+Basic Summon Avatar]
+
+ [
+
+Advanced Summon Avatar]
+
+ [
+
+Expert Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/basic_summon_swarm.txt ===
+Skill
+
+Basic Summon Swarm
+
+Once per round, lays eggs on the battlefield. At the start of next round, they spawn a stack of Fire Larvae. The stack has 8% of the total HP of all Hive Spawns in its army, and the strength of its abilities scales with the hero’s level.
+
+ [Home]
+
+ [Skills]
+
+Basic Summon Swarm
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Basic Summon Swarm]
+
+ [
+
+Advanced Summon Swarm]
+
+ [
+
+Expert Summon Swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/basic_tactics.txt ===
+Skill
+
+基础战术
+
+在战术阶段，你可以在 3 行范围内部署生物。
+
+Synergy →
+
+Insight
+
+Endless Charisma
+
++1 Attack, Defense, Spell Power, and Knowledge. This bonus is doubled if the hero knows “Tactics.”
+
+← Synergy
+
+Offence
+
+One for All
+
+Friendly creatures gain +2 Attack for each adjacent enemy. This bonus is doubled if the hero knows “Offense.”
+
+Defence
+
+All for One
+
+Friendly creatures gain +2 Defense for each adjacent ally. This bonus is doubled if the hero knows “Defense.”
+
+Requires Subclass
+
+Druid
+
+Heaven’s Fury
+
+Heroic Strike deals Damage to all enemies in a 1‑hex radius.
+
+Herald
+
+Progenitor
+
++200% creature growth in all your cities.
+
+Knight
+
+Paragon
+
+All allies deal maximum damage and take minimum damage.
+
+Warlock
+
+Amelchia's Heir
+
++100% spell power.
+
+Death Knight
+
+Walking Rot
+
+All enemies always have minimum Morale.
+
+Necromancer
+
+Chronomancer
+
+Necromancy works for all creatures and not just the Undead.
+
+Riftspeaker
+
+Unstoppable
+
++10 to the hero’s Attack, Defence, Spell Power, and Knowledge.
+
+ [Home]
+
+ [Skills]
+
+基础战术
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+基础战术]
+
+ [
+
+Advanced Tactics]
+
+ [
+
+Expert Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/basic_thaumaturgy.txt ===
+Skill
+
+Basic Thaumaturgy
+
+The hero can use the Spellbook one more time per battle round, but only to cast a spell of a Magic School that hasn’t been used this round. Spells cost +100% mana for each use after the first.
+
+ [Home]
+
+ [Skills]
+
+Basic Thaumaturgy
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Basic Thaumaturgy]
+
+ [
+
+Advanced Thaumaturgy]
+
+ [
+
+Expert Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/basic_triumvirates_strength.txt ===
+Skill
+
+Basic Triumvirate’s Strength
+
+Once per round, the hero can activate one of the three Stances in battle. The active Stance grants the hero +<current_skill_faction_dungeon> to the Stance’s corresponding attribute.
+
+ [Home]
+
+ [Skills]
+
+Basic Triumvirate’s Strength
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+ [
+
+Basic Triumvirate’s Strength]
+
+ [
+
+Advanced Triumvirate’s Strength]
+
+ [
+
+Expert Triumvirate’s Strength]
+
+=== sources/olden-era.com/text/en/skills/expert_abyssal_communion.txt ===
+Skill
+
+Expert Abyssal Communion
+
+After each battle victory, the hero increases their Communion level by 1 (up to a max. of 6). Each level increases the number of friendly Schism units by 3% until the end of the battle. Each morning, all heroes’ Communion level is halved.
+
+Subskills
+
+Black Ice
+
+Enemy spells cost +1 for each active Communion level.
+
+Abyssopelagial
+
+Each victory in battle increases the Communion level by an additional 1.
+
+Celestial Abyss
+
+Increases the number of friendly Schism units per Communion level by an additional 1%.
+
+ [Home]
+
+ [Skills]
+
+Expert Abyssal Communion
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Basic Abyssal Communion]
+
+ [
+
+Advanced Abyssal Communion]
+
+ [
+
+Expert Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/expert_arcane_magic.txt ===
+Skill
+
+Expert Arcane Magic
+
+The hero can learn tier‑5 Arcane spells, and can learn Arcane spells unlocked in the Observatory, without visiting a Mage Guild. Arcane spells gain +1 level(s).
+
+Subskills
+
+Arcane Teachings
+
++1 level(s) to this hero’s Arcane spells.
+
+Mana Flex
+
+Spells cost –2 mana.
+
+Scholar Synergy: Doreath
+
++6 Spell Power when casting Arcane spells. Gain an additional +3 for each other Magic School skill known.
+
+Synergy →
+
+Daylight Magic
+
+Scholar Synergy: Arina
+
++6 Spell Power when casting Daylight spells. Gain an additional +3 for each other Magic School skill known.
+
+Primal Magic
+
+Scholar Synergy: Hksmilla
+
++6 Spell Power when casting Primal spells. Gain an additional +3 for each other Magic School skill known.
+
+Nightshade Magic
+
+Scholar Synergy: Naira
+
++6 Spell Power when casting Nightshade spells. Gain an additional +3 for each other Magic School skill known.
+
+Logistics
+
+Careful Planning
+
+Every day, the hero saves up to 50 unused Movement points for the next day. This bonus is doubled if the hero knows “Arcane Magic.”
+
+← Synergy
+
+Summon Avatar
+
+All Life is Endless
+
++30% healing and revival from friendly creature abilities and hero spells in battle. This bonus is doubled if the hero knows “Summon Avatar.”
+
+Requires Subclass
+
+Warden
+
+Wellspring of Vigor
+
+Generates maximum Focus Charges at the beginning of each round.
+
+Druid
+
+Celestial Envoy
+
+The hero can use all spells.
+
+Herald
+
+Progenitor
+
++200% creature growth in all your cities.
+
+Cleric
+
+Grand Inquisitor
+
+Enemy hero can only use each spell once per battle.
+
+Warlock
+
+Great Merchant
+
+Grant +10000 gold daily.
+
+Necromancer
+
+Soulweaver
+
+After an enemy stack is killed in battle, a temporary stack of friendly Wights appears in their place.
+
+Riftspeaker
+
+Unfathomable
+
+All enemies always deal minimum and take maximum Damage.
+
+ [Home]
+
+ [Skills]
+
+Expert Arcane Magic
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Basic Arcane Magic]
+
+ [
+
+Advanced Arcane Magic]
+
+ [
+
+Expert Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/expert_ascension.txt ===
+Skill
+
+Expert Righteousness
+
+All who fall in battle do so in the hero’s name! Whenever a friendly creature dies or kills an enemy, the hero’s Attack, Defense, Spell Power and Knowledge increase by 1 for four rounds. This effect is stackable.
+
+Subskills
+
+Guardian
+
+Whenever a friendly creature kills an enemy, it fully restores its HP.
+
+The Chosen One
+
+Grants a new ability. It increases Attack of a friendly creature by 100% of the hero’s Attack and Spell Power, and its Defense by 100% of the hero’s Defense and Knowledge (until the end of the round).
+
+Strong Faith
+
+Whenever Righteousness is triggered, the hero gains +2 to all attributes until the end of the round.
+
+ [Home]
+
+ [Skills]
+
+Expert Righteousness
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Basic Righteousness]
+
+ [
+
+Advanced Righteousness]
+
+ [
+
+Expert Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/expert_battle_magic.txt ===
+Skill
+
+Expert Battle Magic
+
+Friendly creatures’ Attack and Defense increase by 35% of the hero’s Spell Power and Knowledge respectively.
+
+Subskills
+
+Battle Mage’s Authority
+
+Friendly creatures’ Attack increases by 20% of the hero’s Spell Power. This bonus is doubled if the hero knows “Sorcery.”
+
+Mage Protector’s Authority
+
+Friendly creatures’ Defense increases by 20% of the hero’s Knowledge. This bonus is doubled if the hero knows “Resistance.”
+
+Magic Time
+
+The cooldowns of all the hero’s battle spells are reduced by 1 round(s).
+
+Synergy →
+
+Primal Magic
+
+Chaos Reigns
+
+The hero and friendly creatures deal 50% more Damage with Lucky Strikes. This bonus is doubled if the hero knows “Battle Magic.”
+
+Battlecraft
+
+Battle Focus
+
+Generates +1 Focus Charge(s) at the beginning of each round. This bonus is doubled if the hero knows “Battle Magic.”
+
+← Synergy
+
+Sorcery
+
+Battle Mage’s Authority
+
+Friendly creatures’ Attack increases by 20% of their hero’s Spell Power. Doubled if the hero knows Sorcery.
+
+Resistance
+
+Mage Protector’s Authority
+
+Friendly creatures’ Defence increases by 20% of their hero’s Knowledge. Doubled if the hero knows Resistance.
+
+Requires Subclass
+
+Warden
+
+Wellspring of Vigor
+
+Generates maximum Focus Charges at the beginning of each round.
+
+Enforcer
+
+Soul Eater
+
+Grants a new battle ability. It allows the hero to consume a target corpse, gaining bonus Attack, Defense, and Spell Power until the end of battle.
+
+Cleric
+
+Grand Inquisitor
+
+Enemy hero can only use each spell once per battle.
+
+Warlock
+
+Great Merchant
+
+Grant +10000 gold daily.
+
+Necromancer
+
+Chronomancer
+
+Necromancy works for all creatures and not just the Undead.
+
+Riftspeaker
+
+Unstoppable
+
++10 to the hero’s Attack, Defence, Spell Power, and Knowledge.
+
+ [Home]
+
+ [Skills]
+
+Expert Battle Magic
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Basic Battle Magic]
+
+ [
+
+Advanced Battle Magic]
+
+ [
+
+Expert Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/expert_battlecraft.txt ===
+Skill
+
+Expert Battlecraft
+
+When a friendly creature waits on their turn, they gain +40% Attack until the end of the round. When they skip turn, they gain +40% Defense until the end of the round.
+
+Subskills
+
+Battle Focus
+
+Generates +1 Focus Charge(s) at the beginning of each round. This bonus is doubled if the hero knows “Battle Magic.”
+
+Preemptive Strike
+
+Friendly creatures prepare for a preemptive strike when they choose to skip their turn. If they are attacked, their counterattack will land before the enemy’s first blow.
+
+Manacraft
+
+The hero’s maximum mana increases by 2 per their Attack and Defense. This bonus is doubled if the hero knows “Recruitment.”
+
+Synergy →
+
+Leadership
+
+Resolve
+
+Friendly creatures’ chance to take an additional turn increases by 1% for each point of Morale. This bonus is doubled if the hero knows “Battlecraft.”
+
+Diplomacy
+
+Larger Than Life
+
+Neutral squads view the hero’s army as +25% more powerful than it is, increasing the chance that they will join or flee. This bonus is doubled if the hero knows “Battlecraft.”
+
+← Synergy
+
+Battle Magic
+
+Battle Focus
+
+Generates +1 Focus Charge(s) at the beginning of each round. This bonus is doubled if the hero knows “Battle Magic.”
+
+Recruitment
+
+Manacraft
+
+The hero’s maximum mana increases by 2 per their Attack and Defense. This bonus is doubled if the hero knows “Recruitment.”
+
+Requires Subclass
+
+Druid
+
+Heaven’s Fury
+
+Heroic Strike deals Damage to all enemies in a 1‑hex radius.
+
+Enforcer
+
+Broodmother
+
+Doubles the base stats of summoned Fire Larvae.
+
+Knight
+
+Paragon
+
+All allies deal maximum damage and take minimum damage.
+
+Warlock
+
+Amelchia's Heir
+
++100% spell power.
+
+Necromancer
+
+Soulweaver
+
+After an enemy stack is killed in battle, a temporary stack of friendly Wights appears in their place.
+
+Riftspeaker
+
+Unstoppable
+
++10 to the hero’s Attack, Defence, Spell Power, and Knowledge.
+
+ [Home]
+
+ [Skills]
+
+Expert Battlecraft
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+Basic Battlecraft]
+
+ [
+
+Advanced Battlecraft]
+
+ [
+
+Expert Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/expert_combat.txt ===
+Skill
+
+Expert Combat
+
+Heroic Strike deals +20 basic Damage.
+
+Subskills
+
+Swordcraft
+
++2 Attack and Defense.
+
+Battle Thrill
+
+Once per round, after killing an enemy stack with Heroic Strike, the hero can use it one additional time.
+
+Confusing Strike
+
+Heroic Strike reduces the target’s counterattacks by 1.
+
+ [Home]
+
+ [Skills]
+
+Expert Combat
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Basic Combat]
+
+ [
+
+Advanced Combat]
+
+ [
+
+Expert Combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/expert_daylight_magic.txt ===
+Skill
+
+Expert Daylight Magic
+
+The hero can learn tier‑5 Daylight spells, and can learn Daylight spells unlocked in the Observatory, without visiting a Mage Guild. Daylight spells gain +1 level(s).
+
+Subskills
+
+Daylight Teachings
+
++1 level(s) to this hero’s Daylight spells.
+
+Speed of Light
+
++10 Movement points. This bonus is doubled if the hero knows “Logistics.”
+
+Scholar Synergy: Arina
+
++6 Spell Power when casting Daylight spells. Gain an additional +3 for each other Magic School skill known.
+
+Synergy →
+
+Arcane Magic
+
+Scholar Synergy: Doreath
+
++6 Spell Power when casting Arcane spells. Gain an additional +3 for each other Magic School skill known.
+
+Primal Magic
+
+Scholar Synergy: Hksmilla
+
++6 Spell Power when casting Primal spells. Gain an additional +3 for each other Magic School skill known.
+
+Nightshade Magic
+
+Scholar Synergy: Naira
+
++6 Spell Power when casting Nightshade spells. Gain an additional +3 for each other Magic School skill known.
+
+← Synergy
+
+Logistics
+
+Speed of Light
+
++10 Movement points. This bonus is doubled if the hero knows “Logistics.”
+
+Requires Subclass
+
+Enforcer
+
+Soul Eater
+
+Grants a new battle ability. It allows the hero to consume a target corpse, gaining bonus Attack, Defense, and Spell Power until the end of battle.
+
+Knight
+
+Paragon
+
+All allies deal maximum damage and take minimum damage.
+
+Overlord
+
+Silvertongue's Envoy
+
++100% Defence.
+
+Necromancer
+
+Chronomancer
+
+Necromancy works for all creatures and not just the Undead.
+
+Oathkeeper
+
+Unbound
+
+Increases the level of all hero's spells to their maximum.
+
+ [Home]
+
+ [Skills]
+
+Expert Daylight Magic
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Basic Daylight Magic]
+
+ [
+
+Advanced Daylight Magic]
+
+ [
+
+Expert Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/expert_defence.txt ===
+Skill
+
+Expert Defense
+
+Friendly creatures take –25% Damage from basic attacks.
+
+Subskills
+
+Shields and Shells
+
+Enemy creatures deal –1 Damage.
+
+Wizard Contract
+
+Friendly creatures take –10% Magic Damage. This bonus is doubled if the hero knows “Diplomacy.”
+
+Unstoppable Force
+
+–15% Attack to enemy creatures.
+
+Synergy →
+
+Tactics
+
+All for One
+
+Friendly creatures gain +2 Defense for each adjacent ally. This bonus is doubled if the hero knows “Defense.”
+
+Summon Avatar
+
+Avatar of Toughness
+
+Avatar’s Defense increases by 25% of the hero’s Knowledge. This bonus is doubled if the hero knows “Defense.”
+
+← Synergy
+
+Diplomacy
+
+Wizard Contract
+
+Friendly creatures take –10% Magic Damage. This bonus is doubled if the hero knows “Diplomacy.”
+
+Recruitment
+
+Hymn to the Martyrs
+
+Friendly creatures generate +1 Focus Point(s) when they take Damage. This bonus is doubled if the hero knows “Recruitment.”
+
+Requires Subclass
+
+Warden
+
+Wellspring of Vigor
+
+Generates maximum Focus Charges at the beginning of each round.
+
+Druid
+
+Celestial Envoy
+
+The hero can use all spells.
+
+Herald
+
+Progenitor
+
++200% creature growth in all your cities.
+
+Cleric
+
+Grand Inquisitor
+
+Enemy hero can only use each spell once per battle.
+
+Overlord
+
+Silvertongue's Envoy
+
++100% Defence.
+
+Death Knight
+
+Harbinger of Doom
+
+Enemy creatures in battle have the minimum possible Luck and always land an Unlucky Strike when attacking.
+
+Riftspeaker
+
+Unfathomable
+
+All enemies always deal minimum and take maximum Damage.
+
+ [Home]
+
+ [Skills]
+
+Expert Defense
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Basic Defense]
+
+ [
+
+Advanced Defense]
+
+ [
+
+Expert Defense]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/expert_diplomacy.txt ===
+Skill
+
+Expert Diplomacy
+
+Provides a chance of neutral squads offering to join the hero’s army for Gold instead of fighting them. +50% Persuasion Power in Diplomacy.
+
+Subskills
+
+Art of the Deal
+
+Neutral squads take –15% Gold to recruit. This bonus is doubled if the hero knows “Economy.”
+
+Vagrant Army
+
+Friendly creatures with neutral affinity gain an additional +100% of the hero’s Attack and Defense to their Attack and Defense.
+
+Negotiator
+
++20% to the number of units from neutral squads joining the hero’s army.
+
+Synergy →
+
+Defence
+
+Wizard Contract
+
+Friendly creatures take –10% Magic Damage. This bonus is doubled if the hero knows “Diplomacy.”
+
+← Synergy
+
+Battlecraft
+
+Larger Than Life
+
+Neutral squads view the hero’s army as +25% more powerful than it is, increasing the chance that they will join or flee. This bonus is doubled if the hero knows “Battlecraft.”
+
+Economy
+
+Art of the Deal
+
+Neutral squads take –15% Gold to recruit. This bonus is doubled if the hero knows “Economy.”
+
+Requires Subclass
+
+Warden
+
+Fortune’s Favored
+
+Friendly creatures have their maximum possible Luck and will always land a Lucky Strike when attacking.
+
+Herald
+
+Progenitor
+
++200% creature growth in all your cities.
+
+Knight
+
+Paragon
+
+All allies deal maximum damage and take minimum damage.
+
+Overlord
+
+Balthazar's Bodyguard
+
++100% Attack.
+
+Death Knight
+
+Walking Rot
+
+All enemies always have minimum Morale.
+
+Oathkeeper
+
+Unfeeling
+
+Enemy loses all Focus Charges at the beginning of each battle round.
+
+ [Home]
+
+ [Skills]
+
+Expert Diplomacy
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Basic Diplomacy]
+
+ [
+
+Advanced Diplomacy]
+
+ [
+
+Expert Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/expert_economy.txt ===
+Skill
+
+Expert Economy
+
++1000 Gold daily.
+
+Subskills
+
+Experimenter
+
++5 Alchemical Dust daily. This bonus is doubled if the hero knows “Insight.”
+
+Merchant
+
+This hero counts as an additional Marketplace when calculating trading prices.
+
+Antiquarian
+
+This hero sells artifacts for 25% more Gold and buys them for 25% less.
+
+Synergy →
+
+Diplomacy
+
+Art of the Deal
+
+Neutral squads take –15% Gold to recruit. This bonus is doubled if the hero knows “Economy.”
+
+Luck
+
+Always Heads
+
+The hero gains +25% Gold and resources from piles on the global map. This bonus is doubled if the hero knows “Economy.”
+
+← Synergy
+
+Logistics
+
+Tax Collector
+
++250 Gold daily. This bonus is doubled if the hero knows “Logistics.”
+
+Insight
+
+Experimenter
+
++5 Alchemical Dust daily. This bonus is doubled if the hero knows “Insight.”
+
+Requires Subclass
+
+Druid
+
+Celestial Envoy
+
+The hero can use all spells.
+
+Enforcer
+
+Broodmother
+
+Doubles the base stats of summoned Fire Larvae.
+
+Cleric
+
+Ascendant
+
+All the hero's spells always cost 0 mana.
+
+Warlock
+
+Great Merchant
+
+Grant +10000 gold daily.
+
+Necromancer
+
+Chronomancer
+
+Necromancy works for all creatures and not just the Undead.
+
+Oathkeeper
+
+Unfeeling
+
+Enemy loses all Focus Charges at the beginning of each battle round.
+
+ [Home]
+
+ [Skills]
+
+Expert Economy
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Basic Economy]
+
+ [
+
+Advanced Economy]
+
+ [
+
+Expert Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/expert_insight.txt ===
+Skill
+
+Expert Insight
+
+The hero gains +40% more XP.
+
+Subskills
+
+Scholar of Magic
+
+Allows heroes to teach each other spells when they interact on the global map. In the exchange, each hero will learn all the spells of the other that their skills, level, and items permit.
+
+Endless Charisma
+
++1 Attack, Defense, Spell Power, and Knowledge. This bonus is doubled if the hero knows “Tactics.”
+
+Perception
+
+Enables viewing detailed information about the enemy hero during battle.
+
+Synergy →
+
+Summon Avatar
+
+Avatar of Celerity
+
+Avatar’s Speed and Initiative increase by 1. This bonus is doubled if the hero knows “Insight.”
+
+Economy
+
+Experimenter
+
++5 Alchemical Dust daily. This bonus is doubled if the hero knows “Insight.”
+
+← Synergy
+
+Leadership
+
+Civic Innovation
+
+The hero gains +100% Law points. This bonus is doubled if the hero knows “Leadership.”
+
+Tactics
+
+Endless Charisma
+
++1 Attack, Defense, Spell Power, and Knowledge. This bonus is doubled if the hero knows “Tactics.”
+
+Requires Subclass
+
+Warden
+
+Wellspring of Vigor
+
+Generates maximum Focus Charges at the beginning of each round.
+
+Enforcer
+
+Soul Eater
+
+Grants a new battle ability. It allows the hero to consume a target corpse, gaining bonus Attack, Defense, and Spell Power until the end of battle.
+
+Cleric
+
+Grand Inquisitor
+
+Enemy hero can only use each spell once per battle.
+
+Warlock
+
+Amelchia's Heir
+
++100% spell power.
+
+Necromancer
+
+Soulweaver
+
+After an enemy stack is killed in battle, a temporary stack of friendly Wights appears in their place.
+
+Riftspeaker
+
+Unstoppable
+
++10 to the hero’s Attack, Defence, Spell Power, and Knowledge.
+
+ [Home]
+
+ [Skills]
+
+Expert Insight
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Basic Insight]
+
+ [
+
+Advanced Insight]
+
+ [
+
+Expert Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/expert_intelligence.txt ===
+Skill
+
+Expert Wisdom
+
+The hero can learn up to tier‑5 spells without knowing the corresponding Magic School skill.
+
+Subskills
+
+Rhythmic Cadence
+
++30% maximum mana. This bonus is doubled if the hero knows “Sorcery.”
+
+Eagle Eye
+
+At the start of battle, the hero learns all spells the enemy knows that the hero is capable of learning.
+
+Stargazer
+
++250 Astrology Points per day. This bonus is doubled if the hero knows “Scouting.”
+
+Synergy →
+
+Sorcery
+
+Sticky Magic
+
+Effects applied by the hero last +2 round(s). This bonus is doubled if the hero knows “Wisdom.”
+
+Scouting
+
+Familiar Paths
+
++10 Movement points when the hero starts the day in an area you control. This bonus is doubled if the hero knows “Wisdom.”
+
+← Synergy
+
+Sorcery
+
+Rhythmic Cadence
+
++30% maximum mana. This bonus is doubled if the hero knows “Sorcery.”
+
+Requires Subclass
+
+Warden
+
+Fortune’s Favored
+
+Friendly creatures have their maximum possible Luck and will always land a Lucky Strike when attacking.
+
+Enforcer
+
+Broodmother
+
+Doubles the base stats of summoned Fire Larvae.
+
+Knight
+
+Swashbuckler
+
+Heroic Strike deals +200 damage.
+
+Overlord
+
+Balthazar's Bodyguard
+
++100% Attack.
+
+Death Knight
+
+Walking Rot
+
+All enemies always have minimum Morale.
+
+Oathkeeper
+
+Unfeeling
+
+Enemy loses all Focus Charges at the beginning of each battle round.
+
+ [Home]
+
+ [Skills]
+
+Expert Wisdom
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Basic Wisdom]
+
+ [
+
+Advanced Wisdom]
+
+ [
+
+Expert Wisdom]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/expert_leadership.txt ===
+Skill
+
+Expert Leadership
+
+The hero gains 3 Morale.
+
+Subskills
+
+Inspiring Strike
+
+The hero gains a chance to instantly reset the cooldown of Heroic Strike whenever they use it: 5% per point of the hero’s Morale.
+
+March!
+
+Friendly creatures gain 1 Initiative.
+
+Enthusiasm
+
+Whenever a friendly creature gains a turn from positive Morale effect, all friendly creatures’ Morale increases by 1 until the end of the next round.
+
+Synergy →
+
+Summon Avatar
+
+Avatar of Fury
+
+Avatar’s Attack increases by 25% of the hero’s Spell Power. This bonus is doubled if the hero knows “Leadership.”
+
+Insight
+
+Civic Innovation
+
+The hero gains +100% Law points. This bonus is doubled if the hero knows “Leadership.”
+
+← Synergy
+
+Battlecraft
+
+Resolve
+
+Friendly creatures’ chance to take an additional turn increases by 1% for each point of Morale. This bonus is doubled if the hero knows “Battlecraft.”
+
+Daylight Magic
+
+Where Sun Never Sets
+
+Attack, Defence, and Spell Power increase by 1, and sight radius increases by 3 when in an area you do not control. This bonus is doubled if the hero knows Daylight Magic.
+
+Requires Subclass
+
+Enforcer
+
+Broodmother
+
+Doubles the base stats of summoned Fire Larvae.
+
+Knight
+
+Swashbuckler
+
+Heroic Strike deals +200 damage.
+
+Overlord
+
+Balthazar's Bodyguard
+
++100% Attack.
+
+Oathkeeper
+
+Unbound
+
+Increases the level of all hero's spells to their maximum.
+
+ [Home]
+
+ [Skills]
+
+Expert Leadership
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Basic Leadership]
+
+ [
+
+Advanced Leadership]
+
+ [
+
+Expert Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/expert_logistics.txt ===
+Skill
+
+Expert Logistics
+
++20% Movement points on the global map.
+
+Subskills
+
+Secret Passages
+
+Terrain penalties are reduced by 50%.
+
+Back to Town!
+
+Grants a new global map spell. It teleports the hero to the nearest city they control within 16 square(s). All remaining Movement points are lost upon casting.
+
+Battle Logistics
+
+Friendly creatures gain +1 Speed on Native Terrain.
+
+Synergy →
+
+Daylight Magic
+
+Speed of Light
+
++10 Movement points. This bonus is doubled if the hero knows “Logistics.”
+
+Economy
+
+Tax Collector
+
++250 Gold daily. This bonus is doubled if the hero knows “Logistics.”
+
+← Synergy
+
+Scouting
+
+Strong Mounts
+
+Neutral Global Map spells cost –4 mana. This bonus is doubled if the hero knows “Scouting.”
+
+Arcane Magic
+
+Careful Planning
+
+Every day, the hero saves up to 50 unused Movement points for the next day. This bonus is doubled if the hero knows “Arcane Magic.”
+
+Requires Subclass
+
+Druid
+
+Heaven’s Fury
+
+Heroic Strike deals Damage to all enemies in a 1‑hex radius.
+
+Enforcer
+
+Soul Eater
+
+Grants a new battle ability. It allows the hero to consume a target corpse, gaining bonus Attack, Defense, and Spell Power until the end of battle.
+
+Cleric
+
+Ascendant
+
+All the hero's spells always cost 0 mana.
+
+Warlock
+
+Great Merchant
+
+Grant +10000 gold daily.
+
+Necromancer
+
+Soulweaver
+
+After an enemy stack is killed in battle, a temporary stack of friendly Wights appears in their place.
+
+Riftspeaker
+
+Unfathomable
+
+All enemies always deal minimum and take maximum Damage.
+
+ [Home]
+
+ [Skills]
+
+Expert Logistics
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Basic Logistics]
+
+ [
+
+Advanced Logistics]
+
+ [
+
+Expert Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/expert_luck.txt ===
+Skill
+
+Expert Luck
+
+The hero gains 3 Luck.
+
+Subskills
+
+Lucky Hit
+
+When friendly creatures land a Lucky Strike, the enemy does not counterattack.
+
+Lightning Strikes Twice
+
+Spells can also land a Lucky Strike, dealing 200% Damage. The chance increases by 5% for every point of Luck.
+
+Lucky Day
+
+Whenever a friendly creature lands a Lucky Strike, all friendly creatures gain +1 Luck until the end of the next round.
+
+Synergy →
+
+Scouting
+
+Long‑Sight
+
+Sight radius increases by an additional 1. This bonus is doubled if the hero knows “Luck.”
+
+Offence
+
+Battle March
+
+Friendly creatures generate +1 Focus Point(s) per attack. This bonus is doubled if the hero knows “Luck.”
+
+← Synergy
+
+Primal Magic
+
+Beastly Confidence
+
+Friendly creatures have a 1% higher chance to land a Lucky Strike for each point of Luck. This bonus is doubled if the hero knows “Primal Magic.”
+
+Economy
+
+Always Heads
+
+The hero gains +25% Gold and resources from piles on the global map. This bonus is doubled if the hero knows “Economy.”
+
+Requires Subclass
+
+Warden
+
+Fortune’s Favored
+
+Friendly creatures have their maximum possible Luck and will always land a Lucky Strike when attacking.
+
+Herald
+
+Lord of Chaos
+
+Heroic Strike deals +2 Damage per each hero attribute point.
+
+Knight
+
+Swashbuckler
+
+Heroic Strike deals +200 damage.
+
+Overlord
+
+Silvertongue's Envoy
+
++100% Defence.
+
+Death Knight
+
+Harbinger of Doom
+
+Enemy creatures in battle have the minimum possible Luck and always land an Unlucky Strike when attacking.
+
+Riftspeaker
+
+Unfathomable
+
+All enemies always deal minimum and take maximum Damage.
+
+ [Home]
+
+ [Skills]
+
+Expert Luck
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+Basic Luck]
+
+ [
+
+Advanced Luck]
+
+ [
+
+Expert Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/expert_murmuring.txt ===
+Skill
+
+Expert Murmuring
+
+Generates 3 Focus Charge(s) at the start of every battle.
+
+Subskills
+
+Just One More Time
+
+Whenever friendly creatures or the hero spend Focus, the cooldowns of all the hero’s spells are reduced by 1 round(s).
+
+Burst of Energy
+
+Whenever friendly creatures or the hero spend Focus, they gain +5% per hero level to the Damage dealt with Heroic Strike. The bonus lasts until the end of the battle.
+
+Strong Connection
+
+Whenever friendly creatures or the hero spend Focus, the hero gains +1 to all attributes until the end of the battle.
+
+ [Home]
+
+ [Skills]
+
+Expert Murmuring
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Basic Murmuring]
+
+ [
+
+Advanced Murmuring]
+
+ [
+
+Expert Murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/expert_necromancy.txt ===
+Skill
+
+Expert Necromancy
+
+After winning a battle, transforms 20% of the strongest enemy stack into friendly Undead of the same tier. This requires Necromantic Energy, which stores up to 1500 and refills each week or when the hero has no stack of that tier in their army.
+
+Subskills
+
+Soul Reaper
+
+–1 to enemy Morale and Luck.
+
+Eternal Service
+
+Grants a new ability. It restores HP to the target friendly Undead and can revive fallen units.
+
+Fields of the Dead
+
++50% Necromantic Energy gained when the hero has no Undead of the required tier.
+
+ [Home]
+
+ [Skills]
+
+Expert Necromancy
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Basic Necromancy]
+
+ [
+
+Advanced Necromancy]
+
+ [
+
+Expert Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/expert_nightshade_magic.txt ===
+Skill
+
+Expert Nightshade Magic
+
+The hero can learn tier‑5 Nightshade spells, and can learn Nightshade spells unlocked in the Observatory, without visiting a Mage Guild. Nightshade spells gain +1 level(s).
+
+Subskills
+
+Nightshade Teachings
+
++1 level(s) to this hero’s Nightshade spells.
+
+Hour of the Wolf
+
+–10% Attack and Defense to enemy creatures.
+
+Scholar Synergy: Naira
+
++6 Spell Power when casting Nightshade spells. Gain an additional +3 for each other Magic School skill known.
+
+Synergy →
+
+Daylight Magic
+
+Scholar Synergy: Arina
+
++6 Spell Power when casting Daylight spells. Gain an additional +3 for each other Magic School skill known.
+
+Arcane Magic
+
+Scholar Synergy: Doreath
+
++6 Spell Power when casting Arcane spells. Gain an additional +3 for each other Magic School skill known.
+
+Primal Magic
+
+Scholar Synergy: Hksmilla
+
++6 Spell Power when casting Primal spells. Gain an additional +3 for each other Magic School skill known.
+
+Offence
+
+Reality Wardens
+
+Friendly creatures deal +50% Damage to summoned enemy creatures. This bonus is doubled if the hero knows “Nightshade Magic.”
+
+← Synergy
+
+Resistance
+
+Chronic Weakness
+
+Enemy creature maximum HP reduces by 1. This effect is doubled if the hero knows “Resistance.”
+
+Requires Subclass
+
+Druid
+
+Heaven’s Fury
+
+Heroic Strike deals Damage to all enemies in a 1‑hex radius.
+
+Enforcer
+
+Broodmother
+
+Doubles the base stats of summoned Fire Larvae.
+
+Knight
+
+Swashbuckler
+
+Heroic Strike deals +200 damage.
+
+Overlord
+
+Balthazar's Bodyguard
+
++100% Attack.
+
+Death Knight
+
+Walking Rot
+
+All enemies always have minimum Morale.
+
+Oathkeeper
+
+Unfeeling
+
+Enemy loses all Focus Charges at the beginning of each battle round.
+
+ [Home]
+
+ [Skills]
+
+Expert Nightshade Magic
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Basic Nightshade Magic]
+
+ [
+
+Advanced Nightshade Magic]
+
+ [
+
+Expert Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/expert_offence.txt ===
+Skill
+
+Expert Offense
+
+Friendly creatures’ basic attacks deal +25% Damage.
+
+Subskills
+
+Shadow Blades
+
+Friendly creatures deal +1 Damage.
+
+Reality Wardens
+
+Friendly creatures deal +50% Damage to summoned enemy creatures. This bonus is doubled if the hero knows “Nightshade Magic.”
+
+Firmness
+
+–15% Defense to enemy creatures.
+
+Synergy →
+
+Tactics
+
+One for All
+
+Friendly creatures gain +2 Attack for each adjacent enemy. This bonus is doubled if the hero knows “Offense.”
+
+Sorcery
+
+Raw Energy
+
++10% more Magic Damage dealt. This bonus is doubled if the hero knows “Offense.”
+
+← Synergy
+
+Nightshade Magic
+
+Reality Wardens
+
+Friendly creatures deal +50% Damage to summoned enemy creatures. This bonus is doubled if the hero knows “Nightshade Magic.”
+
+Requires Subclass
+
+Warden
+
+Fortune’s Favored
+
+Friendly creatures have their maximum possible Luck and will always land a Lucky Strike when attacking.
+
+Herald
+
+Lord of Chaos
+
+Heroic Strike deals +2 Damage per each hero attribute point.
+
+Knight
+
+Swashbuckler
+
+Heroic Strike deals +200 damage.
+
+Overlord
+
+Balthazar's Bodyguard
+
++100% Attack.
+
+Necromancer
+
+Chronomancer
+
+Necromancy works for all creatures and not just the Undead.
+
+Oathkeeper
+
+Unbound
+
+Increases the level of all hero's spells to their maximum.
+
+ [Home]
+
+ [Skills]
+
+Expert Offense
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Basic Offense]
+
+ [
+
+Advanced Offense]
+
+ [
+
+Expert Offense]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/expert_primal_magic.txt ===
+Skill
+
+Expert Primal Magic
+
+The hero can learn tier‑5 Primal spells, and can learn Primal spells unlocked in the Observatory, without visiting a Mage Guild. Primal spells gain +1 level(s).
+
+Subskills
+
+Primal Teachings
+
++1 level(s) to this hero’s Primal spells.
+
+Chaos Reigns
+
+The hero and friendly creatures deal 50% more Damage with Lucky Strikes. This bonus is doubled if the hero knows “Battle Magic.”
+
+Scholar Synergy: Hksmilla
+
++6 Spell Power when casting Primal spells. Gain an additional +3 for each other Magic School skill known.
+
+Synergy →
+
+Daylight Magic
+
+Scholar Synergy: Arina
+
++6 Spell Power when casting Daylight spells. Gain an additional +3 for each other Magic School skill known.
+
+Arcane Magic
+
+Scholar Synergy: Doreath
+
++6 Spell Power when casting Arcane spells. Gain an additional +3 for each other Magic School skill known.
+
+Nightshade Magic
+
+Scholar Synergy: Naira
+
++6 Spell Power when casting Nightshade spells. Gain an additional +3 for each other Magic School skill known.
+
+Luck
+
+Beastly Confidence
+
+Friendly creatures have a 1% higher chance to land a Lucky Strike for each point of Luck. This bonus is doubled if the hero knows “Primal Magic.”
+
+← Synergy
+
+Battle Magic
+
+Chaos Reigns
+
+The hero and friendly creatures deal 50% more Damage with Lucky Strikes. This bonus is doubled if the hero knows “Battle Magic.”
+
+Requires Subclass
+
+Warden
+
+Fortune’s Favored
+
+Friendly creatures have their maximum possible Luck and will always land a Lucky Strike when attacking.
+
+Herald
+
+Lord of Chaos
+
+Heroic Strike deals +2 Damage per each hero attribute point.
+
+Cleric
+
+Ascendant
+
+All the hero's spells always cost 0 mana.
+
+Warlock
+
+Amelchia's Heir
+
++100% spell power.
+
+Death Knight
+
+Harbinger of Doom
+
+Enemy creatures in battle have the minimum possible Luck and always land an Unlucky Strike when attacking.
+
+Riftspeaker
+
+Unstoppable
+
++10 to the hero’s Attack, Defence, Spell Power, and Knowledge.
+
+ [Home]
+
+ [Skills]
+
+Expert Primal Magic
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Basic Primal Magic]
+
+ [
+
+Advanced Primal Magic]
+
+ [
+
+Expert Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/expert_recruitment.txt ===
+Skill
+
+Expert Recruitment
+
++4 to tier‑1, +3 to tier‑2, and +2 to tier‑3 creature growth in all your cities.
+
+Subskills
+
+Relocation
+
+Grants a new global map spell. It allows interaction with any controlled city, enabling the transfer of creatures to or from that city. Usable once per day.
+
+Strenuous Training
+
+Friendly creatures gain 2 HP.
+
+Mentors
+
+Allows creatures in the hero’s army to be upgraded outside the city, provided the army already contains the upgraded version. Upgrading this way costs more than normal.
+
+Synergy →
+
+Battlecraft
+
+Manacraft
+
+The hero’s maximum mana increases by 2 per their Attack and Defense. This bonus is doubled if the hero knows “Recruitment.”
+
+Defence
+
+Hymn to the Martyrs
+
+Friendly creatures generate +1 Focus Point(s) when they take Damage. This bonus is doubled if the hero knows “Recruitment.”
+
+← Synergy
+
+Tactics
+
+Elite Guards
+
+Tier‑1, tier‑2 and tier‑3 friendly creatures gain 25% of the hero’s Attack and Defense as Attack and Defense. This bonus is doubled if the hero knows “Tactics.”
+
+Diplomacy
+
+Veterans
+
+Tier‑4 creature growth in all your cities increases by 2. This bonus is doubled if the hero knows “Diplomacy.”
+
+ [Home]
+
+ [Skills]
+
+Expert Recruitment
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Basic Recruitment]
+
+ [
+
+Advanced Recruitment]
+
+ [
+
+Expert Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/expert_resistance.txt ===
+Skill
+
+Expert Resistance
+
+Friendly creatures take –35% Magic Damage.
+
+Subskills
+
+Magic Suppression
+
+Grants a new ability. It deals significant Magic Damage to the target summoned creature, scaling with the hero’s level.
+
+Time Shift
+
++1 round(s) to the cooldown of all enemy spells.
+
+Draining
+
+The enemy loses 1 levels on all Magic School spells.
+
+Synergy →
+
+Nightshade Magic
+
+Chronic Weakness
+
+Enemy creature maximum HP reduces by 1. This effect is doubled if the hero knows “Resistance.”
+
+Requires Subclass
+
+Enforcer
+
+Soul Eater
+
+Grants a new battle ability. It allows the hero to consume a target corpse, gaining bonus Attack, Defense, and Spell Power until the end of battle.
+
+Cleric
+
+Ascendant
+
+All the hero's spells always cost 0 mana.
+
+Warlock
+
+Great Merchant
+
+Grant +10000 gold daily.
+
+Death Knight
+
+Walking Rot
+
+All enemies always have minimum Morale.
+
+Oathkeeper
+
+Unfeeling
+
+Enemy loses all Focus Charges at the beginning of each battle round.
+
+ [Home]
+
+ [Skills]
+
+Expert Resistance
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Basic Resistance]
+
+ [
+
+Advanced Resistance]
+
+ [
+
+Expert Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/expert_scouting.txt ===
+Skill
+
+Expert Scouting
+
+The hero gains 3 sight radius.
+
+Subskills
+
+Reconnaissance
+
+Removes the fog of war within [ 150% × hero sight radius ] square(s) of the hero each morning.
+
+Visions
+
+Shows the exact army composition of any enemy within [ 300% × hero sight radius ] square(s) of the hero.
+
+Counterespionage
+
+Enemies can’t see detailed information about your army. When they try, they see random numbers of random creatures of your faction.
+
+Synergy →
+
+Logistics
+
+Strong Mounts
+
+Neutral Global Map spells cost –4 mana. This bonus is doubled if the hero knows “Scouting.”
+
+← Synergy
+
+Luck
+
+Long‑Sight
+
+Sight radius increases by an additional 1. This bonus is doubled if the hero knows “Luck.”
+
+Intelligence
+
+Familiar Paths
+
++10 Movement points when the hero starts the day in an area you control. This bonus is doubled if the hero knows “Wisdom.”
+
+Requires Subclass
+
+Warden
+
+Wellspring of Vigor
+
+Generates maximum Focus Charges at the beginning of each round.
+
+Druid
+
+Celestial Envoy
+
+The hero can use all spells.
+
+Herald
+
+Lord of Chaos
+
+Heroic Strike deals +2 Damage per each hero attribute point.
+
+Cleric
+
+Grand Inquisitor
+
+Enemy hero can only use each spell once per battle.
+
+Overlord
+
+Silvertongue's Envoy
+
++100% Defence.
+
+Death Knight
+
+Harbinger of Doom
+
+Enemy creatures in battle have the minimum possible Luck and always land an Unlucky Strike when attacking.
+
+Oathkeeper
+
+Unbound
+
+Increases the level of all hero's spells to their maximum.
+
+ [Home]
+
+ [Skills]
+
+Expert Scouting
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Basic Scouting]
+
+ [
+
+Advanced Scouting]
+
+ [
+
+Expert Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/expert_siegecraft.txt ===
+Skill
+
+Expert Siegecraft
+
+The catapult deals +150 Damage.
+
+Subskills
+
+Phalanx
+
+While besieging a city, friendly creatures take –50% Damage from the defender’s towers.
+
+Tunnelling
+
+Grants a new siege ability. It teleports a friendly creature to a chosen free hex up to 3 hexes away. Usable once per round.
+
+Sabotage
+
+While the hero is besieging a city, the enemy gate is always open.
+
+ [Home]
+
+ [Skills]
+
+Expert Siegecraft
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Basic Siegecraft]
+
+ [
+
+Advanced Siegecraft]
+
+ [
+
+Expert Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/expert_sorcery.txt ===
+Skill
+
+Expert Sorcery
+
++30% Magic Damage dealt.
+
+Subskills
+
+Piercing Spells
+
+Offensive spells ignore 20% of target’s magic resistance.
+
+High Mage
+
+All the spells belonging to Magic Schools the hero has learned gain 1 level(s).
+
+Sticky Magic
+
+Effects applied by the hero last +2 round(s). This bonus is doubled if the hero knows “Wisdom.”
+
+Synergy →
+
+Intelligence
+
+Rhythmic Cadence
+
++30% maximum mana. This bonus is doubled if the hero knows “Sorcery.”
+
+← Synergy
+
+Intelligence
+
+Sticky Magic
+
+Effects applied by the hero last +2 round(s). This bonus is doubled if the hero knows “Wisdom.”
+
+Offence
+
+Raw Energy
+
++10% more Magic Damage dealt. This bonus is doubled if the hero knows “Offense.”
+
+Requires Subclass
+
+Druid
+
+Heaven’s Fury
+
+Heroic Strike deals Damage to all enemies in a 1‑hex radius.
+
+Herald
+
+Lord of Chaos
+
+Heroic Strike deals +2 Damage per each hero attribute point.
+
+Cleric
+
+Ascendant
+
+All the hero's spells always cost 0 mana.
+
+Overlord
+
+Silvertongue's Envoy
+
++100% Defence.
+
+Death Knight
+
+Harbinger of Doom
+
+Enemy creatures in battle have the minimum possible Luck and always land an Unlucky Strike when attacking.
+
+Oathkeeper
+
+Unbound
+
+Increases the level of all hero's spells to their maximum.
+
+ [Home]
+
+ [Skills]
+
+Expert Sorcery
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Basic Sorcery]
+
+ [
+
+Advanced Sorcery]
+
+ [
+
+Expert Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/expert_summon_avatar.txt ===
+Skill
+
+Expert Summon Avatar
+
+Grants a new battle spell. It summons an Avatar that scales even more strongly with the hero’s Spell Power and Knowledge.
+
+Subskills
+
+Stabilization
+
+Summoned friendly creatures become immune to effects that dispel summoned creatures.
+
+Their Name is Legion
+
+Friendly creatures’ abilities summon +30% creatures.
+
+Fields of Mana
+
+Using spells, the hero can summon creatures onto any free hex.
+
+Synergy →
+
+Arcane Magic
+
+All Life is Endless
+
++30% healing and revival from friendly creature abilities and hero spells in battle. This bonus is doubled if the hero knows “Summon Avatar.”
+
+← Synergy
+
+Leadership
+
+Avatar of Fury
+
+Avatar’s Attack increases by 25% of the hero’s Spell Power. This bonus is doubled if the hero knows “Leadership.”
+
+Defence
+
+Avatar of Toughness
+
+Avatar’s Defense increases by 25% of the hero’s Knowledge. This bonus is doubled if the hero knows “Defense.”
+
+Insight
+
+Avatar of Celerity
+
+Avatar’s Speed and Initiative increase by 1. This bonus is doubled if the hero knows “Insight.”
+
+Requires Subclass
+
+Druid
+
+Celestial Envoy
+
+The hero can use all spells.
+
+Herald
+
+Progenitor
+
++200% creature growth in all your cities.
+
+Knight
+
+Paragon
+
+All allies deal maximum damage and take minimum damage.
+
+Warlock
+
+Amelchia's Heir
+
++100% spell power.
+
+Necromancer
+
+Soulweaver
+
+After an enemy stack is killed in battle, a temporary stack of friendly Wights appears in their place.
+
+Riftspeaker
+
+Unfathomable
+
+All enemies always deal minimum and take maximum Damage.
+
+ [Home]
+
+ [Skills]
+
+Expert Summon Avatar
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+Basic Summon Avatar]
+
+ [
+
+Advanced Summon Avatar]
+
+ [
+
+Expert Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/expert_summon_swarm.txt ===
+Skill
+
+Expert Summon Swarm
+
+Once per round, lays eggs on the battlefield. At the start of next round, they spawn a stack of Fire Larvae. The stack has 16% of the total HP of all Hive Spawns in its army, and the strength of its abilities scales with the hero’s level.
+
+Subskills
+
+Hive Power
+
+The hero gains 1 Luck and Morale.
+
+Hardened Shells
+
+The clutch of eggs can withstand +1 hit(s).
+
+Hive Flame
+
+Summoned Fire Larvae last one round longer
+
+ [Home]
+
+ [Skills]
+
+Expert Summon Swarm
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Basic Summon Swarm]
+
+ [
+
+Advanced Summon Swarm]
+
+ [
+
+Expert Summon Swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/expert_tactics.txt ===
+Skill
+
+Expert Tactics
+
+In the Tactics Phase, creatures can be placed within a 5‑line area. If the enemy also knows “Tactics”, their area of placement reduces by 3 line(s).
+
+Subskills
+
+All for One
+
+Friendly creatures gain +2 Defense for each adjacent ally. This bonus is doubled if the hero knows “Defense.”
+
+Riposte Mastery
+
+Whenever a friendly creature kills an enemy with a counterattack, their counterattacks are refreshed for the round.
+
+Spellcaster Tactics
+
+Whenever friendly creatures or the hero spend Focus, they gain 4 temporary mana.
+
+Synergy →
+
+Insight
+
+Endless Charisma
+
++1 Attack, Defense, Spell Power, and Knowledge. This bonus is doubled if the hero knows “Tactics.”
+
+← Synergy
+
+Offence
+
+One for All
+
+Friendly creatures gain +2 Attack for each adjacent enemy. This bonus is doubled if the hero knows “Offense.”
+
+Defence
+
+All for One
+
+Friendly creatures gain +2 Defense for each adjacent ally. This bonus is doubled if the hero knows “Defense.”
+
+Requires Subclass
+
+Druid
+
+Heaven’s Fury
+
+Heroic Strike deals Damage to all enemies in a 1‑hex radius.
+
+Herald
+
+Progenitor
+
++200% creature growth in all your cities.
+
+Knight
+
+Paragon
+
+All allies deal maximum damage and take minimum damage.
+
+Warlock
+
+Amelchia's Heir
+
++100% spell power.
+
+Death Knight
+
+Walking Rot
+
+All enemies always have minimum Morale.
+
+Necromancer
+
+Chronomancer
+
+Necromancy works for all creatures and not just the Undead.
+
+Riftspeaker
+
+Unstoppable
+
++10 to the hero’s Attack, Defence, Spell Power, and Knowledge.
+
+ [Home]
+
+ [Skills]
+
+Expert Tactics
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+基础战术]
+
+ [
+
+Advanced Tactics]
+
+ [
+
+Expert Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/expert_thaumaturgy.txt ===
+Skill
+
+Expert Thaumaturgy
+
+The hero can use the Spellbook one more time per battle round, but only to cast a spell of a Magic School that hasn’t been used this round. Spells cost +50% mana for each use after the first.
+
+Subskills
+
+Thaumaturge Brilliance
+
++2 Spell Power and Knowledge.
+
+Vast Soul
+
++10% mana restored each morning.
+
+Archmage
+
+All the spells belonging to Magic Schools the hero has learned gain 1 level(s).
+
+ [Home]
+
+ [Skills]
+
+Expert Thaumaturgy
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Basic Thaumaturgy]
+
+ [
+
+Advanced Thaumaturgy]
+
+ [
+
+Expert Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+=== sources/olden-era.com/text/en/skills/expert_triumvirates_strength.txt ===
+Skill
+
+Expert Triumvirate’s Strength
+
+Once per round, the hero can activate one of the three Stances in battle. The active Stance grants the hero +<current_skill_faction_dungeon> to the Stance’s corresponding attribute.
+
+Subskills
+
+Jack of All Trades
+
+When selecting a Stance, the hero’s corresponding attribute increases by 5% until the end of the battle.
+
+Flow
+
+Generates 1 Focus Charge(s) each time the hero selects a Stance.
+
+Opportunists
+
+Friendly creatures gain 1 Initiative.
+
+ [Home]
+
+ [Skills]
+
+Expert Triumvirate’s Strength
+
+ [
+
+Abyssal Communion]
+
+ [
+
+Arcane Magic]
+
+ [
+
+Righteousness]
+
+ [
+
+Battle Magic]
+
+ [
+
+Battlecraft]
+
+ [
+
+combat]
+
+ [
+
+Daylight Magic]
+
+ [
+
+Defence]
+
+ [
+
+Diplomacy]
+
+ [
+
+Economy]
+
+ [
+
+Insight]
+
+ [
+
+Intelligence]
+
+ [
+
+Leadership]
+
+ [
+
+Logistics]
+
+ [
+
+Luck]
+
+ [
+
+murmuring]
+
+ [
+
+Necromancy]
+
+ [
+
+Nightshade Magic]
+
+ [
+
+Offence]
+
+ [
+
+Primal Magic]
+
+ [
+
+Recruitment]
+
+ [
+
+Resistance]
+
+ [
+
+Scouting]
+
+ [
+
+Siegecraft]
+
+ [
+
+Sorcery]
+
+ [
+
+Summon Avatar]
+
+ [
+
+summon_swarm]
+
+ [
+
+Tactics]
+
+ [
+
+Thaumaturgy]
+
+ [
+
+Triumvirate's Strength]
+
+ [
+
+Basic Triumvirate’s Strength]
+
+ [
+
+Advanced Triumvirate’s Strength]
+
+ [
+
+Expert Triumvirate’s Strength]
