@@ -568,7 +568,9 @@ export function AppShell(): JSX.Element {
 
   function handleAddZone(role: DesignZoneRole): void {
     const next = addZone(design, role);
-    commit(next, next.zones.at(-1)?.id ?? selectedZoneId);
+    const existingZoneIds = new Set(design.zones.map((zone) => zone.id));
+    const addedZone = next.zones.find((zone) => !existingZoneIds.has(zone.id));
+    commit(next, addedZone?.id ?? selectedZoneId);
   }
 
   function handleDuplicate(zoneId: string): void {
