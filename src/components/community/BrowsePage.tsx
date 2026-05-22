@@ -93,13 +93,14 @@ export function BrowsePage({
   onPageChange(page: number): void;
 }): JSX.Element {
   const tagFilterSections = useMemo(() => buildCommunityTagFilterSections(maps), [maps]);
+  const tagFilterGroups = useMemo(() => tagFilterSections.flatMap((section) => section.groups), [tagFilterSections]);
   const rangeBounds = useMemo(() => buildRangeBounds(maps), [maps]);
   const selectedTags = useMemo(() => {
     const availableTags = new Map(
-      tagFilterSections.flatMap((section) => section.groups.flatMap((group) => group.tags)).map((tag) => [tag.slug, tag])
+      tagFilterGroups.flatMap((group) => group.tags).map((tag) => [tag.slug, tag])
     );
     return selectedTagSlugs.map((slug) => availableTags.get(slug)).filter((tag): tag is NonNullable<typeof tag> => Boolean(tag));
-  }, [selectedTagSlugs, tagFilterSections]);
+  }, [selectedTagSlugs, tagFilterGroups]);
   const selectedRanges = useMemo(() => rangeBounds
     .map((bounds) => {
       const range = rangeFilters[bounds.key];
@@ -136,7 +137,7 @@ export function BrowsePage({
         <CardHeader>
           <div>
             <CardTitle><Search size={18} />Browse shared maps</CardTitle>
-            <CardDescription>Search by name or author, then narrow results with ranges, factual tags, or descriptive tags.</CardDescription>
+            <CardDescription>Search by name or author, then narrow results with ranges and tags.</CardDescription>
           </div>
         </CardHeader>
         <CardContent className="community-filter-grid">
@@ -231,10 +232,10 @@ export function BrowsePage({
                 );
               })}
             </div>
-            {tagFilterSections.map((section) => (
-              <div key={section.kind} className="community-filter-section">
-                <h3>{section.label}</h3>
-                {section.groups.map((group) => (
+            {tagFilterGroups.length > 0 ? (
+              <div className="community-filter-section">
+                <h3>Tags</h3>
+                {tagFilterGroups.map((group) => (
                   <div key={group.id} className="community-filter-group">
                     <span>{group.label}</span>
                     <div className="community-filter-chip-row">
@@ -255,7 +256,7 @@ export function BrowsePage({
                   </div>
                 ))}
               </div>
-            ))}
+            ) : null}
           </div>
         </CardContent>
       </Card>

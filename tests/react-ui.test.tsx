@@ -1758,10 +1758,12 @@ describe("React UI shell", () => {
     expect(getRangeInputByLabel("Zones minimum")).toBeTruthy();
     expect(getRangeInputByLabel("Paths minimum")).toBeTruthy();
     expect(screen.queryByRole("heading", { name: "Factual ranges" })).toBeNull();
-    expect(screen.getByRole("heading", { name: "Factual tags" })).toBeTruthy();
-    expect(screen.getByRole("heading", { name: "Descriptive tags" })).toBeTruthy();
+    expect(screen.queryByRole("heading", { name: "Factual tags" })).toBeNull();
+    expect(screen.queryByRole("heading", { name: "Descriptive tags" })).toBeNull();
+    expect(screen.getByRole("heading", { name: "Tags" })).toBeTruthy();
     expect(screen.getByText("Audience")).toBeTruthy();
     expect(screen.getByText("Pacing")).toBeTruthy();
+    expect(screen.getByRole("button", { name: "Beginner friendly" })).toBeTruthy();
 
     await user.click(screen.getByRole("button", { name: "Competitive" }));
     fireEvent.input(getRangeInputByLabel("Map width maximum"), { target: { value: "208" } });

@@ -168,6 +168,26 @@ describe("community catalog", () => {
     expect(filtered.map((map) => map.title)).toEqual(["Wide Council"]);
   });
 
+  it("includes the full descriptive tag set in browse filter sections", () => {
+    const duel = createDefaultDesign();
+    duel.templateName = "Temple Ring";
+
+    const catalog = uploadCommunityMap(emptyCatalog(), duel, {
+      title: "Temple Ring",
+      summary: "Fast classic match.",
+      authorName: "Anonymous Cartographer",
+      descriptiveTagSlugs: ["competitive"],
+      visibility: "public"
+    }, "2026-05-17T00:00:00.000Z");
+
+    const descriptiveSection = buildCommunityTagFilterSections(catalog.maps).find((section) => section.kind === "descriptive");
+    const descriptiveSlugs = descriptiveSection?.groups.flatMap((group) => group.tags.map((tag) => tag.slug)) ?? [];
+
+    expect(descriptiveSlugs).toContain("competitive");
+    expect(descriptiveSlugs).toContain("beginner-friendly");
+    expect(descriptiveSlugs).toContain("high-resource");
+  });
+
   it("does not expose seeded demo maps in production", () => {
     vi.stubEnv("PROD", true);
     const storage = new MemoryStorage();

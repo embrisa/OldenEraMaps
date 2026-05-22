@@ -9,6 +9,7 @@ import {
 import {
   createTagFromSlug,
   deriveFactualTags,
+  getAllowedDescriptiveTags,
   sortTags,
   validateDescriptiveTagSelection,
   type CommunityTag,
@@ -295,7 +296,10 @@ const DESCRIPTIVE_FILTER_GROUPS: Array<{ category: CommunityTagCategory; label: 
 export function buildCommunityTagFilterSections(maps: readonly CommunityMapRecord[]): CommunityTagFilterSection[] {
   const allTags = dedupeTags(maps.flatMap((map) => map.tags));
   const factualTags = allTags.filter((tag) => tag.kind === "factual");
-  const descriptiveTags = allTags.filter((tag) => tag.kind === "descriptive");
+  const descriptiveTags = sortTags(dedupeTags([
+    ...getAllowedDescriptiveTags().map((tag) => ({ ...tag })),
+    ...allTags.filter((tag) => tag.kind === "descriptive")
+  ])).filter((tag) => tag.kind === "descriptive");
 
   const factualGroups = FACTUAL_FILTER_GROUPS
     .map((group) => ({
@@ -311,7 +315,7 @@ export function buildCommunityTagFilterSections(maps: readonly CommunityMapRecor
   if (factualGroups.length > 0) {
     sections.push({
       kind: "factual",
-      label: "Factual tags",
+      label: "Tags",
       groups: factualGroups
     });
   }
@@ -336,7 +340,7 @@ export function buildCommunityTagFilterSections(maps: readonly CommunityMapRecor
     }
     sections.push({
       kind: "descriptive",
-      label: "Descriptive tags",
+      label: "Tags",
       groups: descriptiveGroups
     });
   }
