@@ -1872,8 +1872,9 @@ describe("React UI shell", () => {
     await user.click(screen.getAllByRole("button", { name: "Download template" })[0]);
 
     await waitFor(() => {
-      expect(clickedDownloads).toEqual(["temple-border-clash.rmg.json"]);
+      expect(clickedDownloads).toHaveLength(1);
     });
+    expect(clickedDownloads[0]).toBe("Merchant Ring.rmg.json");
     expect(createObjectURL).toHaveBeenCalledTimes(1);
     expect(createObjectURL.mock.calls[0]?.[0]).toBeInstanceOf(Blob);
     expect((createObjectURL.mock.calls[0]?.[0] as Blob).type).toBe("application/json");
@@ -1918,8 +1919,9 @@ describe("React UI shell", () => {
     await user.click(screen.getAllByRole("button", { name: "Download image" })[0]);
 
     await waitFor(() => {
-      expect(clickedDownloads).toEqual(["temple-border-clash.png"]);
+      expect(clickedDownloads).toHaveLength(1);
     });
+    expect(clickedDownloads[0]).toBe("Merchant Ring.png");
     expect(previewCanvases).toContainEqual(COMMUNITY_TEMPLATE_PREVIEW_IMAGE_SIZE);
     expect(createObjectURL).toHaveBeenCalledTimes(1);
     expect(createObjectURL.mock.calls[0]?.[0]).toBeInstanceOf(Blob);

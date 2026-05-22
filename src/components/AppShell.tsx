@@ -145,6 +145,17 @@ function pickerTypesForMimeType(type: string): SaveFilePickerOptions["types"] | 
   return undefined;
 }
 
+function communityDownloadBaseName(map: { title?: string; templateName?: string; slug?: string }): string {
+  const candidate = map.title ?? map.templateName ?? map.slug ?? "";
+  const normalized = candidate
+    .trim()
+    .replace(/[<>:"/\\|?*\x00-\x1f]+/g, " ")
+    .replace(/\s+/g, " ")
+    .replace(/[. ]+$/g, "")
+    .trim();
+  return normalized || "map";
+}
+
 async function writeBlobWithSavePicker(name: string, blob: Blob): Promise<boolean> {
   const showSaveFilePicker = saveFilePicker();
   if (!showSaveFilePicker) return false;
@@ -890,14 +901,18 @@ export function AppShell(): JSX.Element {
     URL.revokeObjectURL(url);
   }
 
-  async function downloadCommunityTemplateFile(map: Pick<MapDetail, "slug" | "templateJson">): Promise<void> {
-    await download(`${map.slug}.rmg.json`, map.templateJson, "application/json");
+  async function downloadCommunityTemplateFile(
+    map: Pick<MapDetail, "slug" | "title" | "templateName" | "templateJson">
+  ): Promise<void> {
+    await download(`${communityDownloadBaseName(map)}.rmg.json`, map.templateJson, "application/json");
   }
 
-  async function downloadCommunityPreviewImage(map: Pick<MapDetail, "slug" | "previewDesignJson">): Promise<void> {
+  async function downloadCommunityPreviewImage(
+    map: Pick<MapDetail, "slug" | "title" | "templateName" | "previewDesignJson">
+  ): Promise<void> {
     try {
       const previewBlob = await renderCommunityMapPreviewImageBlob(map.previewDesignJson);
-      await downloadBlob(`${map.slug}.png`, previewBlob, { preferSavePicker: true });
+      await downloadBlob(`${communityDownloadBaseName(map)}.png`, previewBlob, { preferSavePicker: true });
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : "Failed to create preview image.";
       setCommunityError(message);
