@@ -42,11 +42,15 @@ export function duplicateZone(design: TemplateDesign, zoneId: string): TemplateD
 
 export function transferZoneSettings(design: TemplateDesign, sourceZoneId: string, targetZoneId: string): TemplateDesign {
   if (sourceZoneId === targetZoneId) return design;
+  const existingSource = design.zones.find((zone) => zone.id === sourceZoneId);
+  const existingTarget = design.zones.find((zone) => zone.id === targetZoneId);
+  if (!existingSource || !existingTarget) return design;
+  if (existingSource.role === "Spawn" && existingTarget.role !== "Spawn" && design.zones.filter((zone) => zone.role === "Spawn").length >= MAX_SPAWN_ZONES) return design;
+
   const next = structuredClone(design);
   const source = next.zones.find((zone) => zone.id === sourceZoneId);
   const target = next.zones.find((zone) => zone.id === targetZoneId);
   if (!source || !target) return design;
-  if (source.role === "Spawn" && target.role !== "Spawn" && next.zones.filter((zone) => zone.role === "Spawn").length >= MAX_SPAWN_ZONES) return next;
 
   const { id, name, player, position } = target;
   const transferred = structuredClone(source);

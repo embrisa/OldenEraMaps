@@ -79,6 +79,10 @@ export function DesignBoardCanvas({
       },
       connectZones(fromZoneId, toZoneId, currentDesign) {
         const next = addConnectionBetween(currentDesign, fromZoneId, toZoneId);
+        if (next === currentDesign) {
+          callbacksRef.current.onSelectZone(fromZoneId);
+          return;
+        }
         callbacksRef.current.onConnectZones(next, toZoneId);
       },
       hoverZone(zoneId, point, hintId) {

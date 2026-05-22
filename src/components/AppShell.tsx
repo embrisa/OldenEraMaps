@@ -575,11 +575,15 @@ export function AppShell(): JSX.Element {
 
   function handleDuplicate(zoneId: string): void {
     const next = duplicateZone(design, zoneId);
-    commit(next, next.zones.at(-1)?.id ?? zoneId);
+    const existingZoneIds = new Set(design.zones.map((zone) => zone.id));
+    const duplicatedZone = next.zones.find((zone) => !existingZoneIds.has(zone.id));
+    commit(next, duplicatedZone?.id ?? zoneId);
   }
 
   function handleTransferZoneSettings(sourceZoneId: string, targetZoneId: string): void {
-    commit(transferZoneSettings(design, sourceZoneId, targetZoneId), targetZoneId);
+    const next = transferZoneSettings(design, sourceZoneId, targetZoneId);
+    if (next === design) return;
+    commit(next, targetZoneId);
   }
 
   function handleDelete(zoneId: string): void {

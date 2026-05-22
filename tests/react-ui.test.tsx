@@ -1329,6 +1329,99 @@ describe("React UI shell", () => {
     boardLayout.restore();
   });
 
+  it("keeps the selected zone when a capped duplicate is a no-op", async () => {
+    const user = userEvent.setup();
+    const boardLayout = mockDesignBoardLayout();
+    render(<AppShell />);
+
+    for (let index = 0; index < 6; index++) {
+      await user.click(screen.getAllByRole("button", { name: "Spawn" })[0]);
+    }
+    await user.click(screen.getAllByRole("button", { name: "Neutral" })[0]);
+
+    const board = screen.getByLabelText("Schematic design board");
+    fireEvent.pointerDown(board, {
+      clientX: Math.round(BOARD_TEST_WIDTH * 0.18),
+      clientY: Math.round(BOARD_TEST_HEIGHT * 0.5),
+      pointerId: 1
+    });
+
+    const inspector = screen.getByRole("heading", { name: "Zone Inspector" }).closest("section");
+    expect(within(inspector as HTMLElement).getByDisplayValue("Spawn-1")).toBeTruthy();
+
+    await user.click(within(inspector as HTMLElement).getByRole("button", { name: "Duplicate" }));
+
+    expect(within(inspector as HTMLElement).getByDisplayValue("Spawn-1")).toBeTruthy();
+    expect(within(inspector as HTMLElement).queryByDisplayValue("Neutral-4")).toBeNull();
+
+    boardLayout.restore();
+  });
+
+  it("keeps the selected zone when a capped transfer is a no-op", async () => {
+    const user = userEvent.setup();
+    const boardLayout = mockDesignBoardLayout();
+    render(<AppShell />);
+
+    for (let index = 0; index < 6; index++) {
+      await user.click(screen.getAllByRole("button", { name: "Spawn" })[0]);
+    }
+
+    const board = screen.getByLabelText("Schematic design board");
+    fireEvent.pointerDown(board, {
+      clientX: Math.round(BOARD_TEST_WIDTH * 0.18),
+      clientY: Math.round(BOARD_TEST_HEIGHT * 0.5),
+      pointerId: 1
+    });
+
+    const inspector = screen.getByRole("heading", { name: "Zone Inspector" }).closest("section");
+    expect(getInputForLabel(inspector as HTMLElement, "Name").value).toBe("Spawn-1");
+
+    const transferTarget = within(inspector as HTMLElement).getByLabelText("Transfer settings target") as HTMLSelectElement;
+    const neutralTarget = Array.from(transferTarget.options).find((option) => option.text === "Neutral-3");
+    expect(neutralTarget).toBeTruthy();
+    await user.selectOptions(transferTarget, (neutralTarget as HTMLOptionElement).value);
+    await user.click(within(inspector as HTMLElement).getByRole("button", { name: "Transfer Settings" }));
+
+    expect(getInputForLabel(inspector as HTMLElement, "Name").value).toBe("Spawn-1");
+    expect(getSelectForLabel(inspector as HTMLElement, "Role").value).toBe("Spawn");
+
+    boardLayout.restore();
+  });
+
+  it("keeps the source zone selected when a duplicate board connection is a no-op", async () => {
+    const user = userEvent.setup();
+    const boardLayout = mockDesignBoardLayout();
+    render(<AppShell />);
+
+    const board = screen.getByLabelText("Schematic design board");
+    const boardState = buildBoardRenderState(buildPreviewDesign(createDefaultDesign()), BOARD_TEST_WIDTH, BOARD_TEST_HEIGHT);
+    const handle = boardState.zoneLayoutsById.get("zone-1")?.handle;
+    const targetZone = boardState.zoneLayoutsById.get("zone-3")?.box;
+    expect(handle).toBeTruthy();
+    expect(targetZone).toBeTruthy();
+
+    await user.click(screen.getByRole("button", { name: "Road Mode" }));
+    fireEvent.pointerDown(board, { clientX: Math.round((handle as NonNullable<typeof handle>).x), clientY: Math.round((handle as NonNullable<typeof handle>).y), pointerId: 1 });
+    fireEvent.pointerMove(board, {
+      clientX: Math.round((targetZone as NonNullable<typeof targetZone>).centerX),
+      clientY: Math.round((targetZone as NonNullable<typeof targetZone>).centerY),
+      pointerId: 1
+    });
+    fireEvent.pointerUp(board, {
+      clientX: Math.round((targetZone as NonNullable<typeof targetZone>).centerX),
+      clientY: Math.round((targetZone as NonNullable<typeof targetZone>).centerY),
+      pointerId: 1
+    });
+
+    const inspector = screen.getByRole("heading", { name: "Zone Inspector" }).closest("section");
+    expect(getInputForLabel(inspector as HTMLElement, "Name").value).toBe("Spawn-1");
+
+    await user.click(screen.getByRole("button", { name: "Connections" }));
+    expect(screen.getAllByDisplayValue("Path-1-3")).toHaveLength(1);
+
+    boardLayout.restore();
+  });
+
   it("selects a zone instead of an overlapping connection line", () => {
     const boardLayout = mockDesignBoardLayout();
     render(<AppShell />);
