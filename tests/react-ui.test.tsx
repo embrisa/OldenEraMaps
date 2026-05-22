@@ -449,14 +449,26 @@ describe("React UI shell", () => {
 
     const referenceRegion = await screen.findByRole("region", { name: "RMG JSON reference guide page" });
     expect(within(referenceRegion).getByText("RMG JSON Reference Guide")).toBeTruthy();
-    expect(within(referenceRegion).getByText(/Builder To Export/i)).toBeTruthy();
+    expect(within(referenceRegion).getAllByText(/Builder to Export/i).length).toBeGreaterThan(0);
     expect(within(referenceRegion).getByText("Plain English Map Terms")).toBeTruthy();
     expect(within(referenceRegion).getByText(/one area of the map, like a player start/i)).toBeTruthy();
-    expect(within(referenceRegion).getByText("Field Directory")).toBeTruthy();
+    expect(within(referenceRegion).getAllByText("Field Directory").length).toBeGreaterThan(0);
+    expect(within(referenceRegion).getByRole("link", { name: "Official Patterns" }).getAttribute("href")).toBe("#official-patterns");
     expect(within(referenceRegion).getByText("zone content values")).toBeTruthy();
     expect(within(referenceRegion).getAllByText("mainObjects").length).toBeGreaterThan(0);
     expect(within(referenceRegion).getAllByText("contentCountLimits").length).toBeGreaterThan(0);
     expect(within(referenceRegion).getByText("What Actually Changes The Match?")).toBeTruthy();
+    expect(within(referenceRegion).getByText("Official Template Patterns")).toBeTruthy();
+    expect(within(referenceRegion).getByText("Blitz-style pressure")).toBeTruthy();
+    expect(within(referenceRegion).getByText("Jebus Cross-style contest center")).toBeTruthy();
+    expect(within(referenceRegion).getByText("connectionsPlacement")).toBeTruthy();
+
+    await user.type(within(referenceRegion).getByRole("textbox", { name: "Search reference fields" }), "cityHold");
+    expect(within(referenceRegion).getByText("cityHold / cityHoldDays")).toBeTruthy();
+    expect(within(referenceRegion).getAllByText("holdCityWinCon").length).toBeGreaterThan(0);
+    expect(within(referenceRegion).queryByText("connectionsPlacement")).toBeNull();
+
+    await user.clear(within(referenceRegion).getByRole("textbox", { name: "Search reference fields" }));
     expect(window.location.pathname).toBe("/reference");
 
     await user.click(screen.getByRole("link", { name: "RMG Template Builder" }));
