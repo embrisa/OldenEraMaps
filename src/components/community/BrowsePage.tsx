@@ -134,7 +134,7 @@ export function BrowsePage({
         <CardHeader>
           <div>
             <CardTitle><Search size={18} />Browse shared maps</CardTitle>
-            <CardDescription>Search by name or author, then narrow results with factual and descriptive tag filters.</CardDescription>
+            <CardDescription>Search by name or author, then narrow results with ranges, factual tags, or descriptive tags.</CardDescription>
           </div>
         </CardHeader>
         <CardContent className="community-filter-grid">
@@ -187,8 +187,7 @@ export function BrowsePage({
                 </div>
               </div>
             ) : null}
-            <div className="community-filter-section community-filter-section--ranges">
-              <h3>Factual ranges</h3>
+            <div className="community-filter-section community-filter-section--ranges" aria-label="Factual ranges">
               {rangeBounds.map((bounds) => {
                 const range = rangeFilters[bounds.key] ?? {};
                 const minValue = clampRangeValue(range.min ?? bounds.min, bounds.min, bounds.max);

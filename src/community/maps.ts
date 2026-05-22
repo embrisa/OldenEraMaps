@@ -311,7 +311,7 @@ export function buildCommunityTagFilterSections(maps: readonly CommunityMapRecor
   if (factualGroups.length > 0) {
     sections.push({
       kind: "factual",
-      label: "Factual filters",
+      label: "Factual tags",
       groups: factualGroups
     });
   }
@@ -336,7 +336,7 @@ export function buildCommunityTagFilterSections(maps: readonly CommunityMapRecor
     }
     sections.push({
       kind: "descriptive",
-      label: "Descriptive filters",
+      label: "Descriptive tags",
       groups: descriptiveGroups
     });
   }

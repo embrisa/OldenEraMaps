@@ -1757,6 +1757,9 @@ describe("React UI shell", () => {
     expect(getRangeInputByLabel("Map height minimum")).toBeTruthy();
     expect(getRangeInputByLabel("Zones minimum")).toBeTruthy();
     expect(getRangeInputByLabel("Paths minimum")).toBeTruthy();
+    expect(screen.queryByRole("heading", { name: "Factual ranges" })).toBeNull();
+    expect(screen.getByRole("heading", { name: "Factual tags" })).toBeTruthy();
+    expect(screen.getByRole("heading", { name: "Descriptive tags" })).toBeTruthy();
     expect(screen.getByText("Audience")).toBeTruthy();
     expect(screen.getByText("Pacing")).toBeTruthy();
 
