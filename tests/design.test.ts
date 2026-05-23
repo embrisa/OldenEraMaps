@@ -107,7 +107,7 @@ describe("manual template design", () => {
     expect(template.description).toBe("Tournament-focused template description.");
     expect(template.gameRules?.heroHireBan).toBe(true);
     expect(template.gameRules?.encounterHoles).toBe(true);
-    expect(template.gameRules?.bonuses?.[0]?.parameters).toEqual(["movementBonus", "7"]);
+    expect(Array.isArray(template.gameRules?.bonuses) ? template.gameRules.bonuses[0]?.parameters : undefined).toEqual(["movementBonus", "7"]);
     expect(template.gameRules?.factionLawsExpModifier).toBe(1.25);
     expect(template.gameRules?.astrologyExpModifier).toBe(0.75);
     expect(template.gameRules?.winConditions?.lostStartCity).toBe(true);
@@ -824,13 +824,13 @@ describe("manual template design", () => {
     design.gameEndConditions.cityHold = true;
 
     for (let i = 0; i < 29; i++) design = addZone(design, "Neutral");
-    design.zones.push(createZone("zone-33", "Neutral-33", "Neutral"));
+    for (let i = 33; i <= 49; i++) design.zones.push(createZone(`zone-${i}`, `Neutral-${i}`, "Neutral"));
 
     const errors = validateDesign(design).errors.join("\n");
     expect(errors).toContain("Zone names must be unique");
     expect(errors).toContain("references a missing zone");
     expect(errors).toContain("Direct and portal connections must connect every zone");
-    expect(errors).toContain("Templates support at most 32 zones");
+    expect(errors).toContain("Templates support at most 48 zones");
     expect(errors).toContain("City Hold requires exactly one hold-city zone");
   });
 
@@ -1355,5 +1355,53 @@ describe("manual template design", () => {
 
     expect(imported.gameEndConditions.victoryCondition).toBe("win_condition_5");
     expect(imported.gameEndConditions.cityHold).toBe(true);
+  });
+
+  it("does not treat spawn-prefixed support zones as player starts unless they contain a spawn object", () => {
+    const imported = templateToDesign(parseRmgTemplate(`{
+      "name": "Spawn Prefix Support Zones",
+      "sizeX": 144,
+      "sizeZ": 144,
+      "variants": [{
+        "zones": [
+          { "name": "Spawn-A", "mainObjects": [{ "type": "Spawn", "spawn": "Player1" }] },
+          { "name": "Spawn-B", "mainObjects": [{ "type": "Spawn", "spawn": "Player2" }] },
+          { "name": "Spawn-B-Side-1", "mainObjects": [{ "type": "City" }] }
+        ],
+        "connections": [
+          { "name": "Path-A-Side", "from": "Spawn-A", "to": "Spawn-B-Side-1" },
+          { "name": "Path-Side-B", "from": "Spawn-B-Side-1", "to": "Spawn-B" }
+        ]
+      }]
+    }`));
+
+    expect(imported.playerCount).toBe(2);
+    expect(imported.zones.find((zone) => zone.name === "Spawn-B-Side-1")?.role).toBe("Neutral");
+    expect(validateDesign(imported).errors).toEqual([]);
+  });
+
+  it("accepts official-template import shapes outside the manual generator presets", () => {
+    const imported = templateToDesign(parseRmgTemplate(`{
+      "name": "Official Shape Import",
+      "sizeX": 80,
+      "sizeZ": 80,
+      "gameRules": {
+        "bonuses": { "sid": "add_bonus_hero_item", "parameters": ["swamp_boots_artifact"] },
+        "winConditions": { "cityHold": true, "cityHoldDays": 7 }
+      },
+      "variants": [{
+        "zones": [
+          { "name": "Spawn-A", "mainObjects": [{ "type": "Spawn", "spawn": "Player1" }] },
+          { "name": "Spawn-B", "mainObjects": [{ "type": "Spawn", "spawn": "Player2" }] },
+          { "name": "Island" }
+        ],
+        "connections": [
+          { "name": "Path-A-B", "from": "Spawn-A", "to": "Spawn-B" }
+        ]
+      }]
+    }`));
+
+    expect(imported.gameEndConditions.cityHold).toBe(false);
+    expect(validateDesign(imported).errors).toEqual([]);
   });
 });

@@ -87,7 +87,7 @@ import { RmgJsonReferencePage } from "@/components/reference/RmgJsonReferencePag
 import { SignInDialog } from "@/components/community/SignInDialog";
 import { UploadMapDialog } from "@/components/community/UploadMapDialog";
 import { TemplateSettingsPanel } from "@/components/builder/TemplateSettingsPanel";
-import { ValidationOutputPanel } from "@/components/builder/ValidationOutputPanel";
+import { BuilderValidationMessages, ValidationOutputPanel } from "@/components/builder/ValidationOutputPanel";
 import { ZoneInspector, type ZoneInspectorTab } from "@/components/builder/ZoneInspector";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -1197,6 +1197,7 @@ export function AppShell(): JSX.Element {
                     </TabsTrigger>
                   </TabsList>
                 </div>
+                <BuilderValidationMessages validation={validation} />
                 <TabsContent value="layout" forceMount style={builderWorkspaceTab === "layout" ? undefined : { display: "none" }}>
                   <Card className="design-board-shell">
                     <CardHeader className="design-board-shell__header">

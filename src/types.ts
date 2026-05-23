@@ -186,7 +186,7 @@ export interface GameRules {
   tournamentRules?: boolean;
   factionLawsExpModifier?: number;
   astrologyExpModifier?: number;
-  bonuses?: Bonus[];
+  bonuses?: Bonus[] | Bonus;
   winConditions?: WinConditions;
 
   // Older examples sometimes place selected win-condition fields directly on gameRules.

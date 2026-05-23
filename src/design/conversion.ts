@@ -406,7 +406,8 @@ export function templateToDesign(template: RmgTemplate): TemplateDesign {
   const usedSpawnPlayers = new Set<number>();
   const gameRules = template.gameRules;
   const winConditions = gameRules?.winConditions;
-  const importedCityHold = (winConditions?.cityHold ?? gameRules?.cityHold ?? false) || template.displayWinCondition === "win_condition_5";
+  const hasHoldCityObject = zones.some((zone) => zone.mainObjects?.some((object) => object.holdCityWinCon === true));
+  const importedCityHold = template.displayWinCondition === "win_condition_5" || hasHoldCityObject;
   const designZones = zones.map((zone, index) => {
     const role = inferDesignZoneRole(zone);
     const quality: NeutralZoneQuality = zone.layout === sideLayoutName ? "Low" : zone.layout === treasureLayoutName ? "Medium" : "High";
@@ -484,7 +485,7 @@ export function templateToDesign(template: RmgTemplate): TemplateDesign {
       lostStartCity: winConditions?.lostStartCity ?? gameRules?.lostStartCity ?? defaults.gameEndConditions.lostStartCity,
       lostStartCityDay: winConditions?.lostStartCityDay ?? defaults.gameEndConditions.lostStartCityDay,
       lostStartHero: winConditions?.lostStartHero ?? gameRules?.lostStartHero ?? defaults.gameEndConditions.lostStartHero,
-      cityHold: importedCityHold || (winConditions?.cityHold ?? gameRules?.cityHold ?? defaults.gameEndConditions.cityHold),
+      cityHold: importedCityHold,
       cityHoldDays: winConditions?.cityHoldDays ?? gameRules?.cityHoldDays ?? defaults.gameEndConditions.cityHoldDays
     },
     gladiatorArenaRules: {
@@ -843,7 +844,7 @@ function isDesign(value: unknown): value is TemplateDesign {
 
 function inferDesignZoneRole(zone: Zone): DesignZoneRole {
   if (zone.name === "Hub" || zone.name.startsWith("Hub")) return "Hub";
-  if (zone.name.startsWith("Spawn-") || zone.mainObjects?.some((object) => object.type === "Spawn")) return "Spawn";
+  if (zone.mainObjects?.some((object) => object.type === "Spawn")) return "Spawn";
   return "Neutral";
 }
 
@@ -900,8 +901,9 @@ function modifierToPercent(modifier: number | undefined, fallback: number): numb
   return Math.round(modifier * 100);
 }
 
-function inferMovementBonus(bonuses: Bonus[] | undefined, fallback: number): number {
-  const value = bonuses?.find((bonus) => bonus.parameters?.[0] === "movementBonus")?.parameters?.[1];
+function inferMovementBonus(bonuses: Bonus[] | Bonus | undefined, fallback: number): number {
+  const bonusList = Array.isArray(bonuses) ? bonuses : bonuses ? [bonuses] : [];
+  const value = bonusList.find((bonus) => bonus.parameters?.[0] === "movementBonus")?.parameters?.[1];
   if (value === undefined) return fallback;
   const parsed = Number(value);
   return Number.isFinite(parsed) ? Math.trunc(parsed) : fallback;

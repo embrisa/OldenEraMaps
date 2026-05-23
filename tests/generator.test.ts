@@ -313,7 +313,7 @@ describe("generateTemplate", () => {
 
     expect(template.gameRules?.heroHireBan).toBe(true);
     expect(template.gameRules?.encounterHoles).toBe(true);
-    expect(template.gameRules?.bonuses?.[0]?.parameters).toEqual(["movementBonus", "7"]);
+    expect(Array.isArray(template.gameRules?.bonuses) ? template.gameRules.bonuses[0]?.parameters : undefined).toEqual(["movementBonus", "7"]);
   });
 
   it("emits single-hero preset rules and identity copy", () => {

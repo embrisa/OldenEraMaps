@@ -1651,6 +1651,10 @@ button {
   gap: 6px;
 }
 
+.builder-validation-summary {
+  margin: 0 0 10px;
+}
+
 .alert {
   border: 1px solid rgba(147, 161, 175, 0.22);
   border-radius: 6px;

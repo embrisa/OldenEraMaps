@@ -441,6 +441,23 @@ describe("React UI shell", () => {
     expect(tabPanelDisplay(screen.getByLabelText("RMG JSON editor"))).not.toBe("none");
   });
 
+  it("keeps builder validation errors visible on the design board tab", async () => {
+    const user = userEvent.setup();
+    render(<AppShell />);
+
+    const workspaceTabs = screen.getByRole("tablist", { name: "Builder workspace view" });
+    expect(within(workspaceTabs).getByRole("tab", { name: "Design Board" }).getAttribute("data-state")).toBe("active");
+    expect(tabPanelDisplay(screen.getByLabelText("RMG JSON editor"))).toBe("none");
+
+    await user.clear(screen.getByDisplayValue("Custom Template"));
+
+    const validationAlert = screen.getByText("Template name is required.");
+    const validationSummary = document.querySelector(".builder-validation-summary");
+    expect(validationAlert.closest(".oe-tab-panel")).toBeNull();
+    expect(validationSummary).toBeTruthy();
+    expect((validationSummary as HTMLElement).contains(validationAlert)).toBe(true);
+  });
+
   it("navigates to the in-app RMG JSON reference page from the header menu and footer", async () => {
     const user = userEvent.setup();
     render(<AppShell />);

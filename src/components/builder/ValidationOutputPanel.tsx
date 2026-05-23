@@ -5,6 +5,20 @@ import { RmgJsonEditor } from "@/components/builder/RmgJsonEditor";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert } from "@/components/builder/formHelpers";
 
+export function BuilderValidationMessages({ validation }: { validation: ValidationResult }): JSX.Element | null {
+  if (validation.errors.length === 0 && validation.warnings.length === 0) return null;
+
+  return (
+    <div className="builder-validation-summary messages" aria-label="Builder validation">
+      {validation.errors.map((message) => <Alert key={message} tone="danger">{message}</Alert>)}
+      {validation.warnings.map((message) => <Alert key={message} tone="warning">{message}</Alert>)}
+      {validation.errors.length > 0 ? (
+        <Alert tone="warning">Fix builder errors to push a fresh JSON snapshot. The editor is showing the last valid builder JSON.</Alert>
+      ) : null}
+    </div>
+  );
+}
+
 export function ValidationOutputPanel({
   validation,
   jsonValue,
@@ -29,11 +43,6 @@ export function ValidationOutputPanel({
       </CardHeader>
       <CardContent className="output-grid">
         <div className="messages">
-          {validation.errors.map((message) => <Alert key={message} tone="danger">{message}</Alert>)}
-          {validation.warnings.map((message) => <Alert key={message} tone="warning">{message}</Alert>)}
-          {validation.errors.length > 0 ? (
-            <Alert tone="warning">Fix builder errors to push a fresh JSON snapshot. The editor is showing the last valid builder JSON.</Alert>
-          ) : null}
           {jsonDirty ? <Alert tone="warning">JSON edits will auto-apply as soon as they parse and validate.</Alert> : null}
           {jsonParseError ? <Alert tone="danger">{jsonParseError}</Alert> : null}
           {jsonApplyError ? <Alert tone="danger">{jsonApplyError}</Alert> : null}

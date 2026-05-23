@@ -18,7 +18,7 @@ export function validateDesign(design: TemplateDesign): ValidationResult {
   if (!Number.isInteger(design.playerCount) || design.playerCount < 2 || design.playerCount > 8) errors.push("Player count must be an integer from 2 to 8.");
   if (spawnCount < 2 || spawnCount > 8) errors.push("Designs need 2 to 8 player start zones.");
   if (expectedPlayers >= 2 && expectedPlayers <= 8 && spawnCount !== expectedPlayers) errors.push(`Player count is ${expectedPlayers}, so the design must have exactly ${expectedPlayers} spawn zones.`);
-  if (design.zones.length > 32) errors.push("Templates support at most 32 zones.");
+  if (design.zones.length > 48) errors.push("Templates support at most 48 zones.");
   if (new Set(names).size !== names.length) errors.push("Zone names must be unique.");
   if (new Set(connectionNames).size !== connectionNames.length) errors.push("Connection names must be unique.");
   if (names.length !== design.zones.length) errors.push("Every zone needs a name.");
@@ -103,7 +103,7 @@ export function validateDesign(design: TemplateDesign): ValidationResult {
   } else if (!isGraphConnected(design)) {
     errors.push("Direct and portal connections must connect every zone.");
   }
-  if (design.mapWidth < 96 || design.mapHeight < 96) errors.push("Map dimensions must be at least 96x96.");
+  if (design.mapWidth < 80 || design.mapHeight < 80) errors.push("Map dimensions must be at least 80x80.");
   if (design.mapWidth > 240 || design.mapHeight > 240) warnings.push("Official examples top out at 240x240. Larger or rectangular maps are experimental.");
 
   return { errors, warnings };
@@ -165,15 +165,27 @@ function isTournamentDesign(design: TemplateDesign): boolean {
 
 function connectionComponents(design: TemplateDesign, connectionTypes: Array<TemplateDesign["connections"][number]["type"]>): string[][] {
   if (design.zones.length === 0) return [];
-  const graph = new Map(design.zones.map((zone) => [zone.id, [] as string[]]));
   const includedTypes = new Set(connectionTypes);
-  for (const connection of design.connections.filter((candidate) => includedTypes.has(candidate.type))) {
+  const zoneIds = new Set(design.zones.map((zone) => zone.id));
+  const includedConnections = design.connections.filter((candidate) =>
+    includedTypes.has(candidate.type) && zoneIds.has(candidate.from) && zoneIds.has(candidate.to)
+  );
+  const connectedZoneIds = new Set<string>();
+  for (const connection of includedConnections) {
+    connectedZoneIds.add(connection.from);
+    connectedZoneIds.add(connection.to);
+  }
+  if (connectedZoneIds.size === 0) {
+    return design.zones.length > 1 ? design.zones.map((zone) => [zone.id]) : [design.zones.map((zone) => zone.id)];
+  }
+  const graph = new Map(design.zones.filter((zone) => connectedZoneIds.has(zone.id)).map((zone) => [zone.id, [] as string[]]));
+  for (const connection of includedConnections) {
     graph.get(connection.from)?.push(connection.to);
     graph.get(connection.to)?.push(connection.from);
   }
   const visited = new Set<string>();
   const components: string[][] = [];
-  for (const zone of design.zones) {
+  for (const zone of design.zones.filter((candidate) => connectedZoneIds.has(candidate.id))) {
     if (visited.has(zone.id)) continue;
     const component: string[] = [];
     const queue = [zone.id];
