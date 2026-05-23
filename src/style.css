@@ -3063,6 +3063,120 @@ button {
   padding: 12px;
 }
 
+.installation-main code {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.installation-hero .reference-section__heading p code {
+  color: #f0dfab;
+  font-size: 0.86em;
+}
+
+.installation-step-strip,
+.installation-card-grid,
+.installation-command-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.installation-step-strip {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.installation-step-strip div,
+.installation-store-card {
+  border: 1px solid rgba(39, 53, 68, 0.75);
+  border-radius: 8px;
+  background: rgba(9, 13, 18, 0.42);
+}
+
+.installation-step-strip div {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+  padding: 12px;
+}
+
+.installation-step-strip strong {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid rgba(214, 180, 94, 0.35);
+  border-radius: 50%;
+  background: rgba(214, 180, 94, 0.1);
+  color: #f0dfab;
+}
+
+.installation-step-strip span {
+  color: #d5dee8;
+  line-height: 1.5;
+}
+
+.installation-card-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.installation-store-card {
+  display: grid;
+  gap: 8px;
+  color: #d5dee8;
+  padding: 13px;
+  text-decoration: none;
+}
+
+.installation-store-card strong {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  color: #f0dfab;
+}
+
+.installation-store-card span {
+  line-height: 1.55;
+}
+
+.installation-store-card:hover,
+.installation-store-card:focus-visible {
+  border-color: rgba(214, 180, 94, 0.52);
+  background: rgba(214, 180, 94, 0.1);
+  outline: none;
+}
+
+.install-path-list {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.install-path-list li {
+  border: 1px solid rgba(58, 76, 95, 0.82);
+  border-radius: 8px;
+  background: rgba(7, 11, 16, 0.72);
+  padding: 10px 12px;
+}
+
+.install-path-list code {
+  color: #dfe9f4;
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.installation-command-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.reference-callout span {
+  line-height: 1.55;
+}
+
 @media (max-width: 1120px) {
   .reference-layout {
     grid-template-columns: minmax(0, 1fr);
@@ -3081,6 +3195,9 @@ button {
   .reference-section__heading--with-control,
   .reference-flow,
   .reference-grid,
+  .installation-card-grid,
+  .installation-command-grid,
+  .installation-step-strip,
   .reference-pattern-grid,
   .reference-schema-grid,
   .reference-schema-grid--quick {

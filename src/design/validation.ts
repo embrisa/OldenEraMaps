@@ -98,7 +98,11 @@ export function validateDesign(design: TemplateDesign): ValidationResult {
     if (zone.castleCount < 1) errors.push(`${zone.name} must contain at least one castle to be marked as a natural expansion.`);
     if (adjacentSpawnNames(design, zone).length !== 1) errors.push(`${zone.name} natural expansion must connect to exactly one spawn zone.`);
   }
-  if (!isGraphConnected(design)) errors.push("Direct and portal connections must connect every zone.");
+  if (isTournamentDesign(design)) {
+    if (!hasValidTournamentLaneGraph(design)) errors.push("Tournament direct and portal connections must keep every zone attached to a player lane.");
+  } else if (!isGraphConnected(design)) {
+    errors.push("Direct and portal connections must connect every zone.");
+  }
   if (design.mapWidth < 96 || design.mapHeight < 96) errors.push("Map dimensions must be at least 96x96.");
   if (design.mapWidth > 240 || design.mapHeight > 240) warnings.push("Official examples top out at 240x240. Larger or rectangular maps are experimental.");
 
@@ -147,23 +151,44 @@ function isAmbientPickupDistribution(value: unknown): value is AmbientPickupDist
 }
 
 function isGraphConnected(design: TemplateDesign): boolean {
-  if (design.zones.length === 0) return false;
+  return directPortalComponents(design).length === 1;
+}
+
+function hasValidTournamentLaneGraph(design: TemplateDesign): boolean {
+  const spawnIds = new Set(design.zones.filter((zone) => zone.role === "Spawn").map((zone) => zone.id));
+  return directPortalComponents(design).every((component) => component.some((zoneId) => spawnIds.has(zoneId)));
+}
+
+function isTournamentDesign(design: TemplateDesign): boolean {
+  return design.tournamentRules.enabled || design.gameEndConditions.victoryCondition === "win_condition_6" || design.gameMode === "Tournament";
+}
+
+function directPortalComponents(design: TemplateDesign): string[][] {
+  if (design.zones.length === 0) return [];
   const graph = new Map(design.zones.map((zone) => [zone.id, [] as string[]]));
   for (const connection of design.connections.filter((candidate) => candidate.type === "Direct" || candidate.type === "Portal")) {
     graph.get(connection.from)?.push(connection.to);
     graph.get(connection.to)?.push(connection.from);
   }
-  const visited = new Set<string>([design.zones[0].id]);
-  const queue = [design.zones[0].id];
-  while (queue.length > 0) {
-    const current = queue.shift()!;
-    for (const next of graph.get(current) ?? []) {
-      if (visited.has(next)) continue;
-      visited.add(next);
-      queue.push(next);
+  const visited = new Set<string>();
+  const components: string[][] = [];
+  for (const zone of design.zones) {
+    if (visited.has(zone.id)) continue;
+    const component: string[] = [];
+    const queue = [zone.id];
+    visited.add(zone.id);
+    while (queue.length > 0) {
+      const current = queue.shift()!;
+      component.push(current);
+      for (const next of graph.get(current) ?? []) {
+        if (visited.has(next)) continue;
+        visited.add(next);
+        queue.push(next);
+      }
     }
+    components.push(component);
   }
-  return visited.size === design.zones.length;
+  return components;
 }
 
 function adjacentSpawnNames(design: TemplateDesign, zone: DesignZone): string[] {

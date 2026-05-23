@@ -825,6 +825,43 @@ describe("manual template design", () => {
     expect(errors).toContain("City Hold requires exactly one hold-city zone");
   });
 
+  it("allows tournament designs with separate player lanes", () => {
+    const design = createDefaultDesign();
+    design.gameMode = "Tournament";
+    design.gameEndConditions.victoryCondition = "win_condition_6";
+    design.tournamentRules.enabled = true;
+    design.zones = [
+      createZone("spawn-1", "Spawn-1", "Spawn", { player: 1 }),
+      createZone("neutral-1-a", "Neutral-1A", "Neutral"),
+      createZone("neutral-1-b", "Neutral-1B", "Neutral"),
+      createZone("spawn-2", "Spawn-2", "Spawn", { player: 2 }),
+      createZone("neutral-2-a", "Neutral-2A", "Neutral"),
+      createZone("neutral-2-b", "Neutral-2B", "Neutral")
+    ];
+    design.connections = [
+      { id: "conn-1-a", name: "Path-1-A", from: "spawn-1", to: "neutral-1-a", type: "Direct", guardStrength: 12000, road: true },
+      { id: "conn-1-b", name: "Path-1-B", from: "neutral-1-a", to: "neutral-1-b", type: "Direct", guardStrength: 18000, road: true },
+      { id: "conn-2-a", name: "Path-2-A", from: "spawn-2", to: "neutral-2-a", type: "Direct", guardStrength: 12000, road: true },
+      { id: "conn-2-b", name: "Path-2-B", from: "neutral-2-a", to: "neutral-2-b", type: "Direct", guardStrength: 18000, road: true }
+    ];
+
+    expect(validateDesign(design).errors).not.toContain("Direct and portal connections must connect every zone.");
+    expect(validateDesign(design).errors).not.toContain("Tournament direct and portal connections must keep every zone attached to a player lane.");
+  });
+
+  it("rejects tournament designs with orphaned neutral lanes", () => {
+    const design = createDefaultDesign();
+    design.tournamentRules.enabled = true;
+    design.zones = [
+      createZone("spawn-1", "Spawn-1", "Spawn", { player: 1 }),
+      createZone("spawn-2", "Spawn-2", "Spawn", { player: 2 }),
+      createZone("neutral-1", "Neutral-1", "Neutral")
+    ];
+    design.connections = [];
+
+    expect(validateDesign(design).errors).toContain("Tournament direct and portal connections must keep every zone attached to a player lane.");
+  });
+
   it("validates spawn player numbers as unique integers from one to eight", () => {
     const duplicate = createDefaultDesign();
     duplicate.zones[2].player = 1;

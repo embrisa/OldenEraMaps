@@ -319,6 +319,7 @@ describe("React UI shell", () => {
     expect(screen.getByRole("link", { name: "RMG Template Builder" })).toBeTruthy();
     expect(screen.getByRole("link", { name: "Browse Community Maps" })).toBeTruthy();
     expect(screen.getByRole("link", { name: "RMG JSON Reference Guide" })).toBeTruthy();
+    expect(screen.getByRole("link", { name: "Installation Guide" })).toBeTruthy();
     expect(screen.getByText(/Heroes of Might and Magic: Olden Era map templates/i)).toBeTruthy();
     expect(screen.getByRole("button", { name: /Export/i })).toBeTruthy();
     const boardShell = document.querySelector(".design-board-shell");
@@ -477,6 +478,33 @@ describe("React UI shell", () => {
     await user.click(screen.getByRole("link", { name: "RMG JSON Reference Guide" }));
     expect(await screen.findByRole("region", { name: "RMG JSON reference guide page" })).toBeTruthy();
     expect(window.location.pathname).toBe("/reference");
+  });
+
+  it("navigates to the installation guide and shows OS and launcher paths", async () => {
+    const user = userEvent.setup();
+    render(<AppShell />);
+
+    await openHeaderMenu(user);
+    await user.click(screen.getByRole("button", { name: "Install" }));
+
+    const installRegion = await screen.findByRole("region", { name: "Olden Era installation guide page" });
+    expect(within(installRegion).getByRole("heading", { name: "Installation Guide" })).toBeTruthy();
+    expect(within(installRegion).getByText("Where to Buy and Install")).toBeTruthy();
+    expect(within(installRegion).getAllByRole("link").some((link) => link.getAttribute("href")?.includes("store.steampowered.com"))).toBe(true);
+    expect(within(installRegion).getByRole("link", { name: /Ubisoft Store/i }).getAttribute("href")).toContain("store.ubisoft.com");
+    expect(within(installRegion).getByText(/Windows: Steam and Ubisoft Connect/i)).toBeTruthy();
+    expect(within(installRegion).getByText(/Linux: Steam with Proton/i)).toBeTruthy();
+    expect(within(installRegion).getByRole("heading", { name: "Steam Deck" })).toBeTruthy();
+    expect(within(installRegion).getByRole("heading", { name: "macOS" })).toBeTruthy();
+    expect(within(installRegion).getAllByText(/HeroesOldenEra_Data\/StreamingAssets\/map_templates/i).length).toBeGreaterThan(0);
+    expect(window.location.pathname).toBe("/install");
+
+    await user.click(screen.getByRole("link", { name: "RMG Template Builder" }));
+    expect(window.location.pathname).toBe("/");
+
+    await user.click(screen.getByRole("link", { name: "Installation Guide" }));
+    expect(await screen.findByRole("region", { name: "Olden Era installation guide page" })).toBeTruthy();
+    expect(window.location.pathname).toBe("/install");
   });
 
   it("can deselect a newly added zone by clicking empty board space", async () => {

@@ -1,4 +1,4 @@
-import { BookOpenText, Compass, Download, FileJson, FolderOpen, Link2, ListChecks, Menu, PackageCheck, Plus, RotateCcw, Save, Share2, Sparkles, X } from "lucide-react";
+import { BookOpenText, Compass, Download, FileJson, FolderOpen, HardDriveDownload, Link2, ListChecks, Menu, PackageCheck, Plus, RotateCcw, Save, Share2, Sparkles, X } from "lucide-react";
 import { useCallback, useEffect, useMemo, useReducer, useRef, useState, type JSX } from "react";
 import { applyBalancedRandomBoardLayout } from "@/balancedRandomMap";
 import {
@@ -82,6 +82,7 @@ import { DeleteAccountDialog } from "@/components/community/DeleteAccountDialog"
 import { EditAuthorNameDialog } from "@/components/community/EditAuthorNameDialog";
 import { MapDetailDialog } from "@/components/community/MapDetailDialog";
 import { MyMapsPage, type MyMapsStatus } from "@/components/community/MyMapsPage";
+import { InstallationGuidePage } from "@/components/install/InstallationGuidePage";
 import { RmgJsonReferencePage } from "@/components/reference/RmgJsonReferencePage";
 import { SignInDialog } from "@/components/community/SignInDialog";
 import { UploadMapDialog } from "@/components/community/UploadMapDialog";
@@ -95,7 +96,7 @@ import { serializeRmgTemplate, type GeneratorSettings, type Point } from "@/type
 
 const AUTOSAVE_KEY = "olden-era-template-generator.autosave";
 const POST_SIGN_IN_UPLOAD_KEY = "olden-era-template-generator.post-sign-in-upload";
-type AppPage = "builder" | "browse" | "reference" | "my-maps";
+type AppPage = "builder" | "browse" | "reference" | "install" | "my-maps";
 type BuilderWorkspaceTab = "layout" | "json";
 
 interface AutosaveRecovery {
@@ -188,6 +189,14 @@ function pageSeoMetadata(page: AppPage): SeoMetadata {
     return {
       title: "RMG JSON Reference | Olden Era Maps",
       description: "Reference fields and terminology for Heroes of Might and Magic: Olden Era .rmg.json map templates.",
+      ogType: "article"
+    };
+  }
+
+  if (page === "install") {
+    return {
+      title: "Installation Guide | Olden Era Maps",
+      description: "Install Heroes of Might and Magic: Olden Era map templates on Windows, Steam, Ubisoft Connect, Linux, Steam Deck, and macOS compatibility setups.",
       ogType: "article"
     };
   }
@@ -671,9 +680,11 @@ export function AppShell(): JSX.Element {
       ? "/browse"
       : nextPage === "reference"
         ? "/reference"
-        : nextPage === "my-maps"
-          ? "/my-maps"
-          : "/";
+        : nextPage === "install"
+          ? "/install"
+          : nextPage === "my-maps"
+            ? "/my-maps"
+            : "/";
     if (window.location.pathname !== nextPath) {
       window.history.pushState({}, "", nextPath);
     }
@@ -1094,6 +1105,7 @@ export function AppShell(): JSX.Element {
               <Button variant={page === "builder" ? "gold" : "ghost"} onClick={() => navigate("builder")}><FileJson size={16} />Builder</Button>
               <Button variant={page === "browse" ? "primary" : "ghost"} onClick={() => navigate("browse")}><Compass size={16} />Browse</Button>
               <Button variant={page === "reference" ? "blue" : "ghost"} onClick={() => navigate("reference")}><BookOpenText size={16} />Reference</Button>
+              <Button variant={page === "install" ? "green" : "ghost"} onClick={() => navigate("install")}><HardDriveDownload size={16} />Install</Button>
               <AccountMenu
                 status={authState.status}
                 profile={authState.profile}
@@ -1293,6 +1305,8 @@ export function AppShell(): JSX.Element {
           }}
           onPageChange={setBrowsePage}
         />
+      ) : page === "install" ? (
+        <InstallationGuidePage />
       ) : page === "my-maps" ? (
         authState.status === "signed-in" ? (
           <MyMapsPage
@@ -1343,6 +1357,7 @@ export function AppShell(): JSX.Element {
           <a href="/" onClick={(event) => { event.preventDefault(); navigate("builder"); }}>RMG Template Builder</a>
           <a href="/browse" onClick={(event) => { event.preventDefault(); navigate("browse"); }}>Browse Community Maps</a>
           <a href="/reference" onClick={(event) => { event.preventDefault(); navigate("reference"); }}>RMG JSON Reference Guide</a>
+          <a href="/install" onClick={(event) => { event.preventDefault(); navigate("install"); }}>Installation Guide</a>
           <a href="https://github.com/embrisa/OldenEraMaps" rel="noreferrer">GitHub Project</a>
         </nav>
         <p className="site-footer__meta">
@@ -1566,6 +1581,7 @@ function summarizeBrowseResult(result: BrowseResult): CommunityCatalogStats {
 function readPageFromLocation(): AppPage {
   if (window.location.pathname === "/browse") return "browse";
   if (window.location.pathname === "/reference") return "reference";
+  if (window.location.pathname === "/install") return "install";
   if (window.location.pathname === "/my-maps") return "my-maps";
   return "builder";
 }
