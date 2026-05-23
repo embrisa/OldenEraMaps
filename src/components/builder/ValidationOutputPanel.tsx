@@ -21,6 +21,7 @@ export function BuilderValidationMessages({ validation }: { validation: Validati
 
 export function ValidationOutputPanel({
   validation,
+  showBuilderValidationMessages = true,
   jsonValue,
   jsonDirty,
   jsonParseError,
@@ -29,6 +30,7 @@ export function ValidationOutputPanel({
   onJsonChange
 }: {
   validation: ValidationResult;
+  showBuilderValidationMessages?: boolean;
   jsonValue: string;
   jsonDirty: boolean;
   jsonParseError?: string;
@@ -43,6 +45,7 @@ export function ValidationOutputPanel({
       </CardHeader>
       <CardContent className="output-grid">
         <div className="messages">
+          {showBuilderValidationMessages ? <BuilderValidationMessages validation={validation} /> : null}
           {jsonDirty ? <Alert tone="warning">JSON edits will auto-apply as soon as they parse and validate.</Alert> : null}
           {jsonParseError ? <Alert tone="danger">{jsonParseError}</Alert> : null}
           {jsonApplyError ? <Alert tone="danger">{jsonApplyError}</Alert> : null}

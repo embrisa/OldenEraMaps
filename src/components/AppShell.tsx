@@ -1212,8 +1212,8 @@ export function AppShell(): JSX.Element {
                     </TabsTrigger>
                   </TabsList>
                 </div>
-                <BuilderValidationMessages validation={validation} />
                 <TabsContent value="layout" forceMount style={builderWorkspaceTab === "layout" ? undefined : { display: "none" }}>
+                  <BuilderValidationMessages validation={validation} />
                   <Card className="design-board-shell">
                     <CardHeader className="design-board-shell__header">
                       <CardTitle><Sparkles size={17} />Template Layout</CardTitle>
@@ -1268,6 +1268,7 @@ export function AppShell(): JSX.Element {
                 <TabsContent value="json" forceMount style={builderWorkspaceTab === "json" ? undefined : { display: "none" }}>
                   <ValidationOutputPanel
                     validation={validation}
+                    showBuilderValidationMessages={builderWorkspaceTab === "json"}
                     jsonValue={jsonDraft}
                     jsonDirty={jsonDirty}
                     jsonParseError={jsonParseError}

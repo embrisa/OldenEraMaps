@@ -468,8 +468,10 @@ describe("React UI shell", () => {
     await user.clear(screen.getByDisplayValue("Custom Template"));
 
     const validationAlert = screen.getByText("Template name is required.");
-    const validationSummary = document.querySelector(".builder-validation-summary");
-    expect(validationAlert.closest(".oe-tab-panel")).toBeNull();
+    const validationSummary = validationAlert.closest(".builder-validation-summary");
+    const layoutPanel = validationAlert.closest(".oe-tab-panel");
+    expect(layoutPanel).toBeTruthy();
+    expect(layoutPanel?.getAttribute("data-state")).toBe("active");
     expect(validationSummary).toBeTruthy();
     expect((validationSummary as HTMLElement).contains(validationAlert)).toBe(true);
   });
