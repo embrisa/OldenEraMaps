@@ -87,11 +87,12 @@ import { RmgJsonReferencePage } from "@/components/reference/RmgJsonReferencePag
 import { SignInDialog } from "@/components/community/SignInDialog";
 import { UploadMapDialog } from "@/components/community/UploadMapDialog";
 import { TemplateSettingsPanel } from "@/components/builder/TemplateSettingsPanel";
+import { Alert } from "@/components/builder/formHelpers";
 import { BuilderValidationMessages, ValidationOutputPanel } from "@/components/builder/ValidationOutputPanel";
 import { ZoneInspector, type ZoneInspectorTab } from "@/components/builder/ZoneInspector";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger, TooltipProvider } from "@/components/ui/radix";
+import { Dialog, DialogContent, DialogDescription, DialogTitle, Tabs, TabsContent, TabsList, TabsTrigger, TooltipProvider } from "@/components/ui/radix";
 import { serializeRmgTemplate, type GeneratorSettings, type Point } from "@/types";
 
 const AUTOSAVE_KEY = "olden-era-template-generator.autosave";
@@ -317,6 +318,7 @@ export function AppShell(): JSX.Element {
   const [editAuthorNameError, setEditAuthorNameError] = useState<string>();
   const [detailOpen, setDetailOpen] = useState(false);
   const [detailMap, setDetailMap] = useState<MapDetail | null>(null);
+  const [exportWarningOpen, setExportWarningOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const topbarMenuRef = useRef<HTMLDivElement>(null);
 
@@ -344,6 +346,7 @@ export function AppShell(): JSX.Element {
   }, [design, validation.errors.length]);
   const jsonDirty = jsonDraft !== jsonSnapshot;
   const fileName = `${dirty || jsonDirty ? "* " : ""}${design.templateName || "Custom Template"}.oetd.json`;
+  const exportFileName = `${design.templateName.trim() || "Custom Template"}.rmg.json`;
   const localCommunityStats = useMemo(() => summarizeCommunityCatalog(communityCatalog), [communityCatalog]);
   const communityStats = useMemo(() => {
     if (page !== "browse" || !browseResult) return localCommunityStats;
@@ -1031,6 +1034,23 @@ export function AppShell(): JSX.Element {
     await downloadBlob(name, new Blob([content], { type }), options);
   }
 
+  function handleExportClick(): void {
+    if (validation.errors.length === 0) {
+      if (exportJson === "") return;
+      void download(exportFileName, exportJson, "application/json", { preferSavePicker: true });
+      return;
+    }
+
+    if (forceExportJson === "") return;
+    setExportWarningOpen(true);
+  }
+
+  async function handleForceExportClick(): Promise<void> {
+    if (forceExportJson === "") return;
+    setExportWarningOpen(false);
+    await download(exportFileName, forceExportJson, "application/json", { preferSavePicker: true });
+  }
+
   async function downloadBlob(name: string, blob: Blob, options?: DownloadOptions): Promise<void> {
     if (options?.preferSavePicker && await writeBlobWithSavePicker(name, blob)) {
       return;
@@ -1092,14 +1112,9 @@ export function AppShell(): JSX.Element {
             <Button size="sm" onClick={() => fileInputRef.current?.click()}><FolderOpen size={14} />Open</Button>
             <Button size="sm" onClick={() => void download(`${design.templateName}.oetd.json`, serializeDesignFile(design), "application/json", { preferSavePicker: true })}><Save size={14} />Save</Button>
             <Button size="sm" variant="blue" onClick={handleShareMapClick} disabled={validation.errors.length > 0}><Share2 size={14} />Share</Button>
-            <Button size="sm" variant="primary" onClick={() => void download(`${design.templateName}.rmg.json`, exportJson, "application/json", { preferSavePicker: true })} disabled={validation.errors.length > 0}>
+            <Button size="sm" variant="primary" onClick={handleExportClick} disabled={validation.errors.length === 0 ? exportJson === "" : forceExportJson === ""}>
               <Download size={14} />Export
             </Button>
-            {validation.errors.length > 0 ? (
-              <Button size="sm" variant="danger" onClick={() => void download(`${design.templateName}.rmg.json`, forceExportJson, "application/json", { preferSavePicker: true })} disabled={forceExportJson === ""}>
-                <HardDriveDownload size={14} />Force Export
-              </Button>
-            ) : null}
           </div>
         ) : null}
         <div className="topbar-menu" ref={topbarMenuRef}>
@@ -1423,6 +1438,27 @@ export function AppShell(): JSX.Element {
         onOpenChange={setBalancedRandomOpen}
         onGenerate={handleGenerateBalancedRandomMap}
       />
+      <Dialog open={exportWarningOpen} onOpenChange={setExportWarningOpen}>
+        <DialogContent className="auth-dialog">
+          <div className="dialog-heading">
+            <div>
+              <DialogTitle>Export with validation errors?</DialogTitle>
+              <DialogDescription>
+                This file can be exported, but these issues may prevent it from working in game.
+              </DialogDescription>
+            </div>
+          </div>
+          <div className="messages">
+            {validation.errors.map((message) => <Alert key={message} tone="danger">{message}</Alert>)}
+          </div>
+          <div className="dialog-actions">
+            <Button onClick={() => setExportWarningOpen(false)}>Cancel</Button>
+            <Button variant="danger" onClick={() => void handleForceExportClick()} disabled={forceExportJson === ""}>
+              <HardDriveDownload size={14} />Force Export
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
       <UploadMapDialog
         open={uploadOpen}
         onOpenChange={setUploadOpen}

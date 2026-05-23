@@ -265,6 +265,22 @@ describe("React UI shell", () => {
     return input as HTMLInputElement;
   }
 
+  function mockAnchorDownload() {
+    const createObjectUrl = vi.spyOn(URL, "createObjectURL").mockReturnValue("blob:test-export");
+    const revokeObjectUrl = vi.spyOn(URL, "revokeObjectURL").mockImplementation(() => {});
+    const originalCreateElement = document.createElement.bind(document);
+    const anchor = originalCreateElement("a");
+    const anchorClick = vi.spyOn(anchor, "click").mockImplementation(() => {});
+    const createElement = vi.spyOn(document, "createElement").mockImplementation(((tagName: string, options?: ElementCreationOptions) => {
+      if (tagName === "a") {
+        return anchor;
+      }
+      return originalCreateElement(tagName, options);
+    }) as typeof document.createElement);
+
+    return { anchor, anchorClick, createElement, createObjectUrl, revokeObjectUrl };
+  }
+
   async function openHeaderMenu(user: ReturnType<typeof userEvent.setup>): Promise<void> {
     await user.click(screen.getByRole("button", { name: "Open header menu" }));
   }
@@ -513,6 +529,10 @@ describe("React UI shell", () => {
     expect(within(installRegion).getByText(/Linux: Steam with Proton/i)).toBeTruthy();
     expect(within(installRegion).getByRole("heading", { name: "Steam Deck" })).toBeTruthy();
     expect(within(installRegion).getByRole("heading", { name: "macOS" })).toBeTruthy();
+    expect(within(installRegion).getAllByText(/CrossOver Games/i).length).toBeGreaterThan(0);
+    expect(within(installRegion).getByText(/Library\/Application Support\/CrossOver\/Bottles\/Steam/i)).toBeTruthy();
+    expect(within(installRegion).getByRole("heading", { name: "Map Preview Images" })).toBeTruthy();
+    expect(within(installRegion).getByText("My Template.png")).toBeTruthy();
     expect(within(installRegion).getAllByText(/HeroesOldenEra_Data\/StreamingAssets\/map_templates/i).length).toBeGreaterThan(0);
     expect(window.location.pathname).toBe("/install");
 
@@ -935,6 +955,57 @@ describe("React UI shell", () => {
 
     expect(anchor.download).toBe("Custom Template.oetd.json");
     expect(anchor.href).toBe("blob:test-fallback");
+  });
+
+  it("exports a valid builder template directly", async () => {
+    const user = userEvent.setup();
+    const { anchor, anchorClick, createObjectUrl } = mockAnchorDownload();
+
+    render(<AppShell />);
+
+    await user.click(screen.getByRole("button", { name: "Export" }));
+
+    await waitFor(() => {
+      expect(anchorClick).toHaveBeenCalledTimes(1);
+      expect(createObjectUrl).toHaveBeenCalledTimes(1);
+    });
+    expect(anchor.download).toBe("Custom Template.rmg.json");
+    expect(screen.queryByRole("dialog")).toBeNull();
+  });
+
+  it("opens a validation warning dialog before force-exporting an invalid template", async () => {
+    const user = userEvent.setup();
+    const { anchor, anchorClick, createObjectUrl } = mockAnchorDownload();
+
+    render(<AppShell />);
+
+    fireEvent.change(getInputForLabel(document.body, "Template Name"), { target: { value: "" } });
+
+    expect(await screen.findByText("Template name is required.")).toBeTruthy();
+    expect(screen.queryByRole("button", { name: "Force Export" })).toBeNull();
+
+    await user.click(screen.getByRole("button", { name: "Export" }));
+
+    const dialog = await screen.findByRole("dialog");
+    expect(within(dialog).getByRole("heading", { name: "Export with validation errors?" })).toBeTruthy();
+    expect(within(dialog).getByText("Template name is required.")).toBeTruthy();
+    expect(anchorClick).not.toHaveBeenCalled();
+    expect(createObjectUrl).not.toHaveBeenCalled();
+
+    await user.click(within(dialog).getByRole("button", { name: "Cancel" }));
+    await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
+    expect(anchorClick).not.toHaveBeenCalled();
+
+    await user.click(screen.getByRole("button", { name: "Export" }));
+    const reopenedDialog = await screen.findByRole("dialog");
+    await user.click(within(reopenedDialog).getByRole("button", { name: "Force Export" }));
+
+    await waitFor(() => {
+      expect(anchorClick).toHaveBeenCalledTimes(1);
+      expect(createObjectUrl).toHaveBeenCalledTimes(1);
+    });
+    expect(anchor.download).toBe("Custom Template.rmg.json");
+    expect(screen.queryByRole("dialog")).toBeNull();
   });
 
   it("opens the connections dialog and keeps validation visible", async () => {

@@ -1,4 +1,4 @@
-import { BookOpenText, Compass, Download, ExternalLink, FileJson, Gamepad2, HardDrive, Monitor, PackageCheck, ShieldAlert } from "lucide-react";
+import { BookOpenText, Compass, Download, ExternalLink, FileJson, Gamepad2, HardDrive, Images, Monitor, PackageCheck, ShieldAlert } from "lucide-react";
 import type { JSX } from "react";
 
 const guideSections = [
@@ -8,6 +8,7 @@ const guideSections = [
   ["linux", "Linux"],
   ["steam-deck", "Steam Deck"],
   ["macos", "macOS"],
+  ["preview-images", "Preview Images"],
   ["verify", "Verify"]
 ] as const;
 
@@ -34,6 +35,10 @@ const linuxLocations = [
   "~/.local/share/Steam/steamapps/common/Heroes of Might and Magic Olden Era/HeroesOldenEra_Data/StreamingAssets/map_templates",
   "~/.steam/steam/steamapps/common/Heroes of Might and Magic Olden Era/HeroesOldenEra_Data/StreamingAssets/map_templates",
   "~/.var/app/com.valvesoftware.Steam/.local/share/Steam/steamapps/common/Heroes of Might and Magic Olden Era/HeroesOldenEra_Data/StreamingAssets/map_templates"
+] as const;
+
+const macosLocations = [
+  "~/Library/Application Support/CrossOver/Bottles/Steam/drive_c/Program Files (x86)/Steam/steamapps/common/Heroes of Might and Magic Olden Era/HeroesOldenEra_Data/StreamingAssets/map_templates"
 ] as const;
 
 function PathList({ paths }: { paths: readonly string[] }): JSX.Element {
@@ -70,7 +75,7 @@ export function InstallationGuidePage(): JSX.Element {
           <div className="installation-step-strip" aria-label="Installation steps">
             <div><strong>1</strong><span>Buy and install the game from an official store.</span></div>
             <div><strong>2</strong><span>Open the install location from Steam or Ubisoft Connect.</span></div>
-            <div><strong>3</strong><span>Copy exported templates into the map template folder.</span></div>
+            <div><strong>3</strong><span>Copy exported templates and matching preview images into the map template folder.</span></div>
             <div><strong>4</strong><span>Restart the game and select the template in Random Map setup.</span></div>
           </div>
         </section>
@@ -98,8 +103,8 @@ export function InstallationGuidePage(): JSX.Element {
             <strong>Current platform stance</strong>
             <span>
               The official listed requirement is Windows 10 64-bit or newer. Linux and Steam Deck players should treat the
-              Steam version as a Proton compatibility setup. macOS does not have a native release listed, so use a Windows
-              install or a compatibility layer only if you are comfortable troubleshooting it.
+              Steam version as a Proton compatibility setup. macOS does not have a native release listed, but players have
+              reported good results with the Steam version through CrossOver Games.
             </span>
           </div>
         </section>
@@ -185,18 +190,46 @@ export function InstallationGuidePage(): JSX.Element {
             <div>
               <h2>macOS</h2>
               <p>
-                Olden Era does not list a native macOS version. The reliable path is to manage templates on a Windows or
-                Linux/Steam Deck install. Intel Mac users may use Boot Camp Windows. Apple Silicon users can try a Windows
-                compatibility layer, but folder locations and game support depend on that tool.
+                Olden Era does not list a native macOS version, but Mac players can run the Windows Steam version through
+                CrossOver Games. Install Steam inside the CrossOver bottle, install Olden Era there, then copy templates into
+                the game folder inside that bottle&apos;s virtual Windows drive.
               </p>
             </div>
           </div>
+          <PathList paths={macosLocations} />
           <div className="reference-callout">
-            <strong>Practical recommendation</strong>
+            <strong>CrossOver Games notes</strong>
             <span>
-              Export <code>.rmg.json</code> from this site on macOS, then copy the file to a supported Olden Era install.
-              Avoid editing files inside a compatibility wrapper unless you know where that wrapper stores its virtual
-              Windows drive.
+              If your bottle is named something other than <code>Steam</code>, replace that folder name in the path above.
+              You can also use CrossOver&apos;s bottle tools to open the C: drive, then browse to
+              <code> Program Files (x86)/Steam/steamapps/common</code>.
+            </span>
+          </div>
+        </section>
+
+        <section id="preview-images" className="reference-section">
+          <div className="reference-section__heading">
+            <span className="reference-section__icon"><Images size={20} /></span>
+            <div>
+              <h2>Map Preview Images</h2>
+              <p>
+                Olden Era stores template preview images in the same <code>map_templates</code> folder as the template JSON.
+                To install a preview, copy the downloaded <code>.png</code> next to the matching <code>.rmg.json</code> file and
+                keep both files named with the same template title.
+              </p>
+            </div>
+          </div>
+          <ul className="reference-explainer-list">
+            <li><strong>Template file:</strong> <code>My Template.rmg.json</code></li>
+            <li><strong>Preview image:</strong> <code>My Template.png</code></li>
+            <li><strong>Install folder:</strong> <code>HeroesOldenEra_Data/StreamingAssets/map_templates</code></li>
+            <li><strong>After copying:</strong> restart the game so the template list reloads the image.</li>
+          </ul>
+          <div className="reference-callout">
+            <strong>Community map downloads</strong>
+            <span>
+              When downloading from Browse, use the template download for the <code>.rmg.json</code> and the image download for
+              the matching <code>.png</code>. Put both files directly in <code>map_templates</code>, not in a subfolder.
             </span>
           </div>
         </section>
