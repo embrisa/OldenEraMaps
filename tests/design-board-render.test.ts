@@ -31,7 +31,7 @@ function createStubContext(): { ctx: CanvasRenderingContext2D; calls: DrawCall[]
 }
 
 describe("design board renderer", () => {
-  it("lifts selected zones with a shadow without replacing their danger border color", () => {
+  it("surrounds selected zones with a centered shadow without replacing their danger border color", () => {
     const design = createDefaultDesign();
     const dangerousZone = design.zones.find((zone) => zone.role === "Neutral");
     expect(dangerousZone).toBeTruthy();
@@ -56,11 +56,21 @@ describe("design board renderer", () => {
     const fillStyles = calls
       .filter((call) => call.method === "set:fillStyle")
       .map((call) => call.args[0]);
+    const shadowOffsetYs = calls
+      .filter((call) => call.method === "set:shadowOffsetY")
+      .map((call) => call.args[0]);
+    const shadowArc = calls.find((call) =>
+      call.method === "arc"
+      && call.args[0] === state.zoneLayoutsById.get(dangerousZone!.id)?.box.centerX
+      && call.args[2] === (state.zoneLayoutsById.get(dangerousZone!.id)?.badgeSize ?? 0) / 2 + 13
+    );
 
     expect(strokeStyles).toContain("#ff8877");
     expect(strokeStyles).not.toContain("rgba(255, 244, 198, 0.56)");
     expect(strokeStyles).not.toContain("#d8ba64");
     expect(shadowColors).toContain("rgba(0, 0, 0, 0.34)");
+    expect(shadowOffsetYs).toContain(0);
+    expect(shadowArc?.args[1]).toBe(state.zoneLayoutsById.get(dangerousZone!.id)?.box.centerY);
     expect(fillStyles).toContain("rgba(0, 0, 0, 0.2)");
   });
 

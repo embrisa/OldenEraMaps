@@ -239,11 +239,11 @@ function drawZone(
   if (options.selected) {
     ctx.save();
     ctx.beginPath();
-    ctx.arc(box.centerX, box.centerY + 10, badgeRadius + 9, 0, Math.PI * 2);
+    ctx.arc(box.centerX, box.centerY, badgeRadius + 9, 0, Math.PI * 2);
     ctx.shadowColor = "rgba(0, 0, 0, 0.34)";
     ctx.shadowBlur = 40;
     ctx.shadowOffsetX = 0;
-    ctx.shadowOffsetY = 9;
+    ctx.shadowOffsetY = 0;
     ctx.fillStyle = "rgba(0, 0, 0, 0.2)";
     ctx.fill();
     ctx.restore();
