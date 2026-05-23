@@ -32,6 +32,7 @@ import {
   signInWithProvider,
   signOut,
   syncCurrentUserProfile,
+  updateCurrentUserDisplayName,
   type CommunityAuthProvider
 } from "@/community/auth";
 import {
@@ -78,6 +79,7 @@ import { MandatoryContentDialog } from "@/components/builder/MandatoryContentDia
 import { AccountMenu } from "@/components/community/AccountMenu";
 import { BrowsePage, type BrowseStatus } from "@/components/community/BrowsePage";
 import { DeleteAccountDialog } from "@/components/community/DeleteAccountDialog";
+import { EditAuthorNameDialog } from "@/components/community/EditAuthorNameDialog";
 import { MapDetailDialog } from "@/components/community/MapDetailDialog";
 import { MyMapsPage, type MyMapsStatus } from "@/components/community/MyMapsPage";
 import { RmgJsonReferencePage } from "@/components/reference/RmgJsonReferencePage";
@@ -301,6 +303,9 @@ export function AppShell(): JSX.Element {
   const [deleteAccountOpen, setDeleteAccountOpen] = useState(false);
   const [deleteAccountSubmitting, setDeleteAccountSubmitting] = useState(false);
   const [deleteAccountError, setDeleteAccountError] = useState<string>();
+  const [editAuthorNameOpen, setEditAuthorNameOpen] = useState(false);
+  const [editAuthorNameSubmitting, setEditAuthorNameSubmitting] = useState(false);
+  const [editAuthorNameError, setEditAuthorNameError] = useState<string>();
   const [detailOpen, setDetailOpen] = useState(false);
   const [detailMap, setDetailMap] = useState<MapDetail | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -364,7 +369,13 @@ export function AppShell(): JSX.Element {
       .then((session) => {
         if (!active) return;
         dispatchAuth({ type: "session", session });
-        if (session) void syncCurrentUserProfile(session).catch((error: unknown) => dispatchAuth({ type: "error", error: authErrorMessage(error) }));
+        if (session) {
+          void syncCurrentUserProfile(session)
+            .then((profile) => {
+              if (active && profile) dispatchAuth({ type: "profile", profile });
+            })
+            .catch((error: unknown) => dispatchAuth({ type: "error", error: authErrorMessage(error) }));
+        }
       })
       .catch((error: unknown) => {
         if (active) dispatchAuth({ type: "error", error: authErrorMessage(error) });
@@ -372,7 +383,13 @@ export function AppShell(): JSX.Element {
 
     const unsubscribe = onAuthStateChange((_event, session) => {
       dispatchAuth({ type: "session", session });
-      if (session) void syncCurrentUserProfile(session).catch((error: unknown) => dispatchAuth({ type: "error", error: authErrorMessage(error) }));
+      if (session) {
+        void syncCurrentUserProfile(session)
+          .then((profile) => {
+            if (profile) dispatchAuth({ type: "profile", profile });
+          })
+          .catch((error: unknown) => dispatchAuth({ type: "error", error: authErrorMessage(error) }));
+      }
     });
 
     return () => {
@@ -841,6 +858,25 @@ export function AppShell(): JSX.Element {
     void signOut().catch((error: unknown) => dispatchAuth({ type: "error", error: authErrorMessage(error) }));
   }
 
+  function handleEditAuthorName(displayName: string): void {
+    if (!authState.profile) return;
+    setEditAuthorNameSubmitting(true);
+    setEditAuthorNameError(undefined);
+    void updateCurrentUserDisplayName(authState.profile, displayName)
+      .then((profile) => {
+        dispatchAuth({ type: "profile", profile });
+        setCommunityNotice("Author name updated.");
+        setEditAuthorNameOpen(false);
+        if (page === "browse") void loadBrowseMaps();
+        if (page === "my-maps") void loadMyMaps();
+        if (detailMap?.ownerId && detailMap.ownerId === profile.userId) {
+          void getMap(detailMap.id).then((updated) => setDetailMap(updated)).catch(() => {});
+        }
+      })
+      .catch((error: unknown) => setEditAuthorNameError(authErrorMessage(error)))
+      .finally(() => setEditAuthorNameSubmitting(false));
+  }
+
   function handleOpenMyMaps(): void {
     navigate("my-maps");
   }
@@ -1064,6 +1100,10 @@ export function AppShell(): JSX.Element {
                 onSignIn={() => requestSignIn()}
                 onSignOut={handleSignOut}
                 onMyMaps={handleOpenMyMaps}
+                onEditProfile={() => {
+                  setEditAuthorNameError(undefined);
+                  setEditAuthorNameOpen(true);
+                }}
                 onDeleteAccount={handleDeleteAccount}
               />
               {page === "builder" ? (
@@ -1381,6 +1421,14 @@ export function AppShell(): JSX.Element {
         submitting={deleteAccountSubmitting}
         error={deleteAccountError}
         onConfirm={confirmDeleteAccount}
+      />
+      <EditAuthorNameDialog
+        open={editAuthorNameOpen}
+        onOpenChange={setEditAuthorNameOpen}
+        currentName={authState.profile?.displayName ?? "Anonymous Cartographer"}
+        submitting={editAuthorNameSubmitting}
+        error={editAuthorNameError}
+        onSubmit={handleEditAuthorName}
       />
       <MapDetailDialog
         map={detailMap}

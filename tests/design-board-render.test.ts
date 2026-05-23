@@ -165,6 +165,9 @@ describe("design board renderer", () => {
     const keepFills = calls
       .filter((call) => call.method === "set:fillStyle")
       .map((call) => call.args[0]);
+    const strokeStyles = calls
+      .filter((call) => call.method === "set:strokeStyle")
+      .map((call) => call.args[0]);
 
     expect(drawnTexts).toContain("S1");
     expect(drawnTexts).not.toContain("Spawn-1");
@@ -177,6 +180,9 @@ describe("design board renderer", () => {
     expect(drawnTexts).not.toContain("🚫");
     expect(drawnTexts).not.toContain("⛔");
     expect(keepFills).toContain("#f3d778");
+    expect(strokeStyles).toContain("#8fdb85");
+    expect(strokeStyles).toContain("#ff8877");
+    expect(strokeStyles).not.toContain("rgba(150, 174, 199, 0.46)");
   });
 
   it("shrinks dense layouts on small community preview canvases", () => {

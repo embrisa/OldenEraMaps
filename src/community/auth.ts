@@ -23,6 +23,7 @@ export interface CommunityAuthState {
 export type CommunityAuthAction =
   | { type: "loading" }
   | { type: "session"; session: Session | null }
+  | { type: "profile"; profile: CommunityAuthProfile }
   | { type: "error"; error: string }
   | { type: "clear-error" };
 
@@ -37,6 +38,10 @@ export function communityAuthReducer(state: CommunityAuthState, action: Communit
       profile: action.session ? profileFromUser(action.session.user) : null,
       error: null
     };
+  }
+  if (action.type === "profile") {
+    if (!state.session || state.session.user.id !== action.profile.userId) return state;
+    return { ...state, status: "signed-in", profile: action.profile, error: null };
   }
   if (action.type === "error") {
     return { ...state, status: state.session ? "signed-in" : "signed-out", error: action.error };
@@ -102,9 +107,9 @@ export async function deleteCurrentAccount(client: SupabaseClient<Database> | nu
   await client.auth.signOut().catch(() => {});
 }
 
-export async function syncCurrentUserProfile(session: Session, client: SupabaseClient<Database> | null = supabase): Promise<void> {
-  if (!client) return;
+export async function syncCurrentUserProfile(session: Session, client: SupabaseClient<Database> | null = supabase): Promise<CommunityAuthProfile> {
   const profile = profileFromUser(session.user);
+  if (!client) return profile;
   const { error } = await client
     .from("profiles")
     .upsert([{
@@ -113,6 +118,25 @@ export async function syncCurrentUserProfile(session: Session, client: SupabaseC
       avatar_url: null
     }], { ignoreDuplicates: true, onConflict: "id" });
   if (error) throw error;
+
+  return loadProfileFromDatabase(profile, client);
+}
+
+export async function updateCurrentUserDisplayName(
+  profile: CommunityAuthProfile,
+  displayName: string,
+  client: SupabaseClient<Database> | null = supabase
+): Promise<CommunityAuthProfile> {
+  const normalizedDisplayName = displayName.trim() || "Anonymous Cartographer";
+  if (!client) return { ...profile, displayName: normalizedDisplayName };
+
+  const { error } = await client
+    .from("profiles")
+    .update({ display_name: normalizedDisplayName, avatar_url: null })
+    .eq("id", profile.userId);
+  if (error) throw error;
+
+  return { ...profile, displayName: normalizedDisplayName, avatarUrl: null };
 }
 
 export function profileFromUser(user: User): CommunityAuthProfile {
@@ -133,6 +157,21 @@ export function profileFromUser(user: User): CommunityAuthProfile {
 function readMetadataString(metadata: User["user_metadata"], key: string): string | null {
   const value = metadata[key];
   return typeof value === "string" && value.trim().length > 0 ? value.trim() : null;
+}
+
+async function loadProfileFromDatabase(profile: CommunityAuthProfile, client: SupabaseClient<Database>): Promise<CommunityAuthProfile> {
+  const { data, error } = await client
+    .from("profiles")
+    .select("display_name, avatar_url")
+    .eq("id", profile.userId)
+    .maybeSingle();
+  if (error) throw error;
+
+  return {
+    ...profile,
+    displayName: data?.display_name?.trim() || profile.displayName,
+    avatarUrl: data?.avatar_url?.trim() || null
+  };
 }
 
 async function readFunctionError(error: unknown, fallback: string): Promise<{ message: string; code: string; details: string[] }> {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { createZone } from "../src/design";
+import { createDefaultDesign, createZone } from "../src/design";
 import { zoneHoverSections } from "../src/components/zoneHoverContent";
 import { zoneBoardMarkers, zoneHints, zoneHintStyle } from "../src/zoneHints";
 
@@ -105,6 +105,14 @@ describe("zone hints", () => {
     });
 
     expect(zoneHintStyle(zone).border).toBe("#8dbde8");
+  });
+
+  it("treats generated low-danger spawn zones as light guard zones", () => {
+    const spawn = createDefaultDesign().zones.find((zone) => zone.role === "Spawn");
+    expect(spawn).toBeTruthy();
+
+    expect(zoneHints(spawn!).find((hint) => hint.id === "guards")?.label).toBe("Light guards");
+    expect(zoneHintStyle(spawn!).border).toBe("#8fdb85");
   });
 
   it("spreads common generated guard profiles across green, orange, and red", () => {

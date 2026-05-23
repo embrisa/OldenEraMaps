@@ -164,6 +164,7 @@ function guardHint(zone: DesignZone): ZoneHint {
   const roundedPressure = Math.round(pressure);
   if (roundedPressure >= 185) return { id: "guards", icon: "⚔", label: "Brutal guards", detail: `Very high guard pressure (${roundedPressure} index).`, tone: "danger" };
   if (roundedPressure >= 145) return { id: "guards", icon: "⚔", label: "Tough guards", detail: `Above-average guard pressure (${roundedPressure} index).`, tone: "warning" };
+  if (zone.role === "Spawn" && zone.quality === "Low" && roundedPressure <= 135) return { id: "guards", icon: "⚔", label: "Light guards", detail: `Low guard pressure (${roundedPressure} index).`, tone: "success" };
   if (roundedPressure <= 110) return { id: "guards", icon: "⚔", label: "Light guards", detail: `Low guard pressure (${roundedPressure} index).`, tone: "success" };
   return { id: "guards", icon: "⚔", label: "Normal guards", detail: `Typical guard pressure (${roundedPressure} index).`, tone: "info" };
 }

@@ -232,7 +232,7 @@ function drawZone(
   },
 ): void {
   const { box, color, badgeSize, zone } = layout;
-  const hintStyle = options.presentation === "community" ? communityZoneStyle : zoneHintStyle(toDesignZoneLike(zone));
+  const hintStyle = zoneHintStyle(toDesignZoneLike(zone));
   const badgeRadius = badgeSize / 2 + 4;
 
   ctx.save();
@@ -287,11 +287,6 @@ function drawZone(
   drawZoneCenterDetails(ctx, zone, box.centerX, box.centerY);
   ctx.restore();
 }
-
-const communityZoneStyle = {
-  border: "rgba(150, 174, 199, 0.46)",
-  glow: "rgba(118, 146, 176, 0.18)",
-};
 
 function drawCommunityZoneDetails(
   ctx: CanvasRenderingContext2D,
