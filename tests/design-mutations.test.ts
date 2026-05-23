@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
+import { boardSlots, pointBoardSlotIndex } from "../src/boardSlots";
 import { createDefaultDesign } from "../src/design/model";
-import { addConnectionBetween, addZone, duplicateZone, setDesignPlayerCount } from "../src/design/mutations";
+import { addConnectionBetween, addZone, duplicateZone, moveZone, setDesignPlayerCount } from "../src/design/mutations";
 import { validateDesign } from "../src/design/validation";
 
 describe("design mutations", () => {
@@ -42,5 +43,28 @@ describe("design mutations", () => {
     expect(duplicateCapped.zones).toHaveLength(32);
     expect(validateDesign(addCapped).errors).not.toContain("Templates support at most 32 zones.");
     expect(validateDesign(duplicateCapped).errors).not.toContain("Templates support at most 32 zones.");
+  });
+
+  it("keeps board slot assignments unique when dragging a zone in a stale overlapping layout", () => {
+    let design = addZone(createDefaultDesign(), "Neutral");
+    design = structuredClone(design);
+
+    const zoneOne = design.zones.find((zone) => zone.id === "zone-1");
+    const zoneTwo = design.zones.find((zone) => zone.id === "zone-2");
+    const movedZone = design.zones.find((zone) => zone.id === "zone-3");
+    if (!zoneOne || !zoneTwo || !movedZone) throw new Error("expected initial zones");
+
+    zoneTwo.position = zoneOne.position;
+
+    const occupied = new Set(design.zones.map((zone) => pointBoardSlotIndex(zone.position)));
+    occupied.delete(pointBoardSlotIndex(movedZone.position));
+    const targetSlot = boardSlots().find((slot) => !occupied.has(slot.index));
+    if (!targetSlot) throw new Error("expected free board slot");
+
+    const next = moveZone(design, movedZone.id, targetSlot.position);
+    const slotIndexes = next.zones.map((zone) => pointBoardSlotIndex(zone.position));
+
+    expect(next.zones.find((zone) => zone.id === movedZone.id)?.position).toEqual(targetSlot.position);
+    expect(new Set(slotIndexes).size).toBe(slotIndexes.length);
   });
 });

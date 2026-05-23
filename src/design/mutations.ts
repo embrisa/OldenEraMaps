@@ -1,4 +1,4 @@
-import { findOpenBoardSlotPosition } from "../boardSlots.ts";
+import { findOpenBoardSlotPosition, normalizeBoardZonePositions } from "../boardSlots.ts";
 import { clamp } from "../math.ts";
 import { zoneSuffixes } from "../generator/math.ts";
 import type { Point } from "../types.ts";
@@ -57,6 +57,26 @@ export function transferZoneSettings(design: TemplateDesign, sourceZoneId: strin
   Object.assign(target, transferred, { id, name, position });
   target.player = target.role === "Spawn" ? player ?? nextAvailableSpawnPlayer(next) ?? source.player : undefined;
   next.playerCount = clamp(next.zones.filter((zone) => zone.role === "Spawn").length, 2, 8);
+  return next;
+}
+
+export function moveZone(design: TemplateDesign, zoneId: string, position: Point): TemplateDesign {
+  const source = design.zones.find((zone) => zone.id === zoneId);
+  if (!source) return design;
+
+  const next = structuredClone(design);
+  const reorderedZones = next.zones.map((zone) => zone.id === zoneId ? { ...zone, position } : zone);
+  const normalizedById = new Map(
+    normalizeBoardZonePositions([
+      reorderedZones.find((zone) => zone.id === zoneId)!,
+      ...reorderedZones.filter((zone) => zone.id !== zoneId),
+    ]).map((zone) => [zone.id, zone.position])
+  );
+
+  next.zones = next.zones.map((zone) => {
+    const normalizedPosition = normalizedById.get(zone.id);
+    return normalizedPosition ? { ...zone, position: normalizedPosition } : zone;
+  });
   return next;
 }
 

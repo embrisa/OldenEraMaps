@@ -11,6 +11,7 @@ import {
   duplicateZone,
   getDesignMandatoryContentGroups,
   MAX_SPAWN_ZONES,
+  moveZone,
   parseDesignOrTemplateFile,
   parseDesignOrTemplateFileResult,
   serializeDesignFile,
@@ -632,10 +633,8 @@ export function AppShell(): JSX.Element {
   }
 
   function handleMoveZone(zoneId: string, position: Point): void {
-    const next = structuredClone(design);
-    const zone = next.zones.find((candidate) => candidate.id === zoneId);
-    if (!zone) return;
-    zone.position = position;
+    const next = moveZone(design, zoneId, position);
+    if (next === design) return;
     commit(next, zoneId);
   }
 
