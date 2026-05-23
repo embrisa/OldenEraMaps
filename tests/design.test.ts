@@ -71,6 +71,15 @@ describe("manual template design", () => {
     expect(serialized).not.toContain("generatorPosition");
   });
 
+  it("can compile with validation skipped for forced export", () => {
+    const design = createDefaultDesign();
+    design.connections = [];
+
+    expect(validateDesign(design).errors).toContain("Direct and portal connections must connect every zone.");
+    expect(() => designToTemplate(design)).toThrow("Direct and portal connections must connect every zone.");
+    expect(designToTemplate(design, { skipValidation: true }).variants?.[0].connections).toEqual([]);
+  });
+
   it("round-trips exposed advanced global rule controls through rmg json", () => {
     const design = createDefaultDesign();
     design.gameMode = "Tournament";

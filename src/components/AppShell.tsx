@@ -334,6 +334,14 @@ export function AppShell(): JSX.Element {
       return error instanceof Error ? error.message : "";
     }
   }, [design, validation.errors.length]);
+  const forceExportJson = useMemo(() => {
+    if (validation.errors.length === 0) return "";
+    try {
+      return serializeTemplate(designToTemplate(design, { skipValidation: true }));
+    } catch {
+      return "";
+    }
+  }, [design, validation.errors.length]);
   const jsonDirty = jsonDraft !== jsonSnapshot;
   const fileName = `${dirty || jsonDirty ? "* " : ""}${design.templateName || "Custom Template"}.oetd.json`;
   const localCommunityStats = useMemo(() => summarizeCommunityCatalog(communityCatalog), [communityCatalog]);
@@ -1087,6 +1095,11 @@ export function AppShell(): JSX.Element {
             <Button size="sm" variant="primary" onClick={() => void download(`${design.templateName}.rmg.json`, exportJson, "application/json", { preferSavePicker: true })} disabled={validation.errors.length > 0}>
               <Download size={14} />Export
             </Button>
+            {validation.errors.length > 0 ? (
+              <Button size="sm" variant="danger" onClick={() => void download(`${design.templateName}.rmg.json`, forceExportJson, "application/json", { preferSavePicker: true })} disabled={forceExportJson === ""}>
+                <HardDriveDownload size={14} />Force Export
+              </Button>
+            ) : null}
           </div>
         ) : null}
         <div className="topbar-menu" ref={topbarMenuRef}>

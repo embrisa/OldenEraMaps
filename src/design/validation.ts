@@ -61,7 +61,7 @@ export function validateDesign(design: TemplateDesign): ValidationResult {
     if (limit.playerMin !== undefined && !isFiniteNumber(limit.playerMin)) errors.push(`${limit.name || "<unnamed>"} player minimum must be numeric.`);
     if (limit.playerMax !== undefined && !isFiniteNumber(limit.playerMax)) errors.push(`${limit.name || "<unnamed>"} player maximum must be numeric.`);
     for (const sidLimit of limit.limits ?? []) {
-      if (!sidLimit.sid?.trim()) errors.push(`${limit.name || "<unnamed>"} has a content SID limit without a SID.`);
+      if (!sidLimit.sid?.trim() && !hasContentLimitTarget(sidLimit)) errors.push(`${limit.name || "<unnamed>"} has a content SID limit without a SID.`);
       if (sidLimit.variant !== undefined && !isFiniteNumber(sidLimit.variant)) errors.push(`${limit.name || "<unnamed>"} has a non-numeric SID variant.`);
       if (sidLimit.maxCount !== undefined && !isFiniteNumber(sidLimit.maxCount)) errors.push(`${limit.name || "<unnamed>"} has a non-numeric max count.`);
     }
@@ -151,22 +151,23 @@ function isAmbientPickupDistribution(value: unknown): value is AmbientPickupDist
 }
 
 function isGraphConnected(design: TemplateDesign): boolean {
-  return directPortalComponents(design).length === 1;
+  return connectionComponents(design, ["Direct", "Portal", "Proximity"]).length === 1;
 }
 
 function hasValidTournamentLaneGraph(design: TemplateDesign): boolean {
   const spawnIds = new Set(design.zones.filter((zone) => zone.role === "Spawn").map((zone) => zone.id));
-  return directPortalComponents(design).every((component) => component.some((zoneId) => spawnIds.has(zoneId)));
+  return connectionComponents(design, ["Direct", "Portal"]).every((component) => component.some((zoneId) => spawnIds.has(zoneId)));
 }
 
 function isTournamentDesign(design: TemplateDesign): boolean {
   return design.tournamentRules.enabled || design.gameEndConditions.victoryCondition === "win_condition_6" || design.gameMode === "Tournament";
 }
 
-function directPortalComponents(design: TemplateDesign): string[][] {
+function connectionComponents(design: TemplateDesign, connectionTypes: Array<TemplateDesign["connections"][number]["type"]>): string[][] {
   if (design.zones.length === 0) return [];
   const graph = new Map(design.zones.map((zone) => [zone.id, [] as string[]]));
-  for (const connection of design.connections.filter((candidate) => candidate.type === "Direct" || candidate.type === "Portal")) {
+  const includedTypes = new Set(connectionTypes);
+  for (const connection of design.connections.filter((candidate) => includedTypes.has(candidate.type))) {
     graph.get(connection.from)?.push(connection.to);
     graph.get(connection.to)?.push(connection.from);
   }
@@ -189,6 +190,11 @@ function directPortalComponents(design: TemplateDesign): string[][] {
     components.push(component);
   }
   return components;
+}
+
+function hasContentLimitTarget(limit: { includeLists?: unknown; content?: unknown }): boolean {
+  return (Array.isArray(limit.includeLists) && limit.includeLists.length > 0)
+    || (Array.isArray(limit.content) && limit.content.length > 0);
 }
 
 function adjacentSpawnNames(design: TemplateDesign, zone: DesignZone): string[] {

@@ -48,9 +48,15 @@ export type ApplyRmgJsonResult =
   | { ok: true; design: TemplateDesign }
   | { ok: false; parseError?: string; validation?: ValidationResult };
 
-export function designToTemplate(design: TemplateDesign): RmgTemplate {
-  const validation = validateDesign(design);
-  if (validation.errors.length > 0) throw new Error(validation.errors.join("\n"));
+export interface DesignToTemplateOptions {
+  skipValidation?: boolean;
+}
+
+export function designToTemplate(design: TemplateDesign, options: DesignToTemplateOptions = {}): RmgTemplate {
+  if (!options.skipValidation) {
+    const validation = validateDesign(design);
+    if (validation.errors.length > 0) throw new Error(validation.errors.join("\n"));
+  }
 
   const totalZones = design.zones.length;
   const defaultTuning: GenerationTuning = {
@@ -446,7 +452,7 @@ export function templateToDesign(template: RmgTemplate): TemplateDesign {
         && (object.faction.args?.some((arg) => arg.startsWith("Spawn-")) ?? false)
       ) ?? false),
       neutralCastlesAsRuins: zone.mainObjects?.some((object) => object.type === "Ruins") ?? false,
-      naturalExpansion: role === "Neutral" && zone.mainObjects?.some((object) => object.type === "City" && object.faction?.type === "Match" && object.faction.args?.some((arg) => arg.startsWith("Spawn-"))) === true,
+      naturalExpansion: false,
       position: zone.generatorPosition ?? ringPosition(index, Math.max(1, zones.length))
     });
   });
