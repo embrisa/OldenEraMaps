@@ -319,10 +319,11 @@ export class DesignBoard {
 
   private hitTest(point: Point): BoardRenderZoneLayout | undefined {
     return this.reversedZoneLayouts.find((layout) => {
-      const dx = point.x - layout.box.centerX;
-      const dy = point.y - layout.box.centerY;
-      const radius = Math.min(layout.box.width, layout.box.height) / 2 + 4;
-      return dx * dx + dy * dy <= radius * radius;
+      const halfWidth = layout.box.width / 2 + 4;
+      const halfHeight = layout.box.height / 2 + 4;
+      const dx = (point.x - layout.box.centerX) / halfWidth;
+      const dy = (point.y - layout.box.centerY) / halfHeight;
+      return dx * dx + dy * dy <= 1;
     });
   }
 

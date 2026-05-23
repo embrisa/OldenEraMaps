@@ -1427,6 +1427,41 @@ describe("React UI shell", () => {
     boardLayout.restore();
   });
 
+  it("connects roads when dropped on the visible edge of a hub zone", async () => {
+    const user = userEvent.setup();
+    const boardLayout = mockDesignBoardLayout();
+    render(<AppShell />);
+
+    await user.click(screen.getAllByRole("button", { name: "Hub" })[0]);
+
+    const board = screen.getByLabelText("Schematic design board");
+    const boardState = buildBoardRenderState(buildPreviewDesign(addZone(createDefaultDesign(), "Hub")), BOARD_TEST_WIDTH, BOARD_TEST_HEIGHT);
+    const handle = boardState.zoneLayoutsById.get("zone-1")?.handle;
+    const hubLayout = boardState.zoneLayouts.find((layout) => layout.zone.role === "Hub");
+    expect(handle).toBeTruthy();
+    expect(hubLayout).toBeTruthy();
+
+    const target = {
+      clientX: Math.round((hubLayout as NonNullable<typeof hubLayout>).box.left + 2),
+      clientY: Math.round((hubLayout as NonNullable<typeof hubLayout>).box.centerY),
+      pointerId: 1
+    };
+
+    await user.click(screen.getByRole("button", { name: "Road Mode" }));
+    fireEvent.pointerDown(board, {
+      clientX: Math.round((handle as NonNullable<typeof handle>).x),
+      clientY: Math.round((handle as NonNullable<typeof handle>).y),
+      pointerId: 1
+    });
+    fireEvent.pointerMove(board, target);
+    fireEvent.pointerUp(board, target);
+
+    await user.click(screen.getByRole("button", { name: "Connections" }));
+    expect(screen.getByDisplayValue("Path-Spawn-1-Hub")).toBeTruthy();
+
+    boardLayout.restore();
+  });
+
   it("keeps the selected zone when a capped zone add is a no-op after road edits", async () => {
     const user = userEvent.setup();
     const boardLayout = mockDesignBoardLayout();
