@@ -1,4 +1,4 @@
-import { ArrowRightLeft, Copy, Palette, Shield, Trash2 } from "lucide-react";
+import { ArrowRightLeft, Copy, Layers, Palette, Shield, Trash2 } from "lucide-react";
 import { useEffect, useMemo, useState, type JSX } from "react";
 import { terrainOptions } from "@/settings";
 import { syncZoneProfile, type DesignZone, type DesignZoneRole } from "@/design";
@@ -61,6 +61,7 @@ export function ZoneInspector({
   const [transferDialogOpen, setTransferDialogOpen] = useState(false);
   const [terrainDialogOpen, setTerrainDialogOpen] = useState(false);
   const [guardsRulesDialogOpen, setGuardsRulesDialogOpen] = useState(false);
+  const [contentDialogOpen, setContentDialogOpen] = useState(false);
 
   useEffect(() => {
     if (transferTargetOptions.some((candidate) => candidate.id === transferTargetId)) return;
@@ -108,6 +109,9 @@ export function ZoneInspector({
           </Button>
           <Button type="button" size="sm" variant="default" onClick={() => setGuardsRulesDialogOpen(true)}>
             <Shield size={14} />Guards &amp; Rules
+          </Button>
+          <Button type="button" size="sm" variant="gold" onClick={() => setContentDialogOpen(true)}>
+            <Layers size={14} />Content
           </Button>
         </div>
         <Tabs value={tab} onValueChange={(value) => onTabChange(value as ZoneInspectorTab)}>
@@ -411,6 +415,53 @@ export function ZoneInspector({
             >
               <ArrowRightLeft size={14} />Transfer Settings
             </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+      {/* Content dialog */}
+      <Dialog open={contentDialogOpen} onOpenChange={setContentDialogOpen}>
+        <DialogContent className="zone-content-dialog">
+          <div className="dialog-heading">
+            <div>
+              <DialogTitle>Content</DialogTitle>
+              <DialogDescription>Content pools, density, and value settings for {zone.name}.</DialogDescription>
+            </div>
+          </div>
+          <div className="dialog-section">
+            <h3 className="dialog-section__heading">Density &amp; Value</h3>
+            <NumberGrid zone={zone} fields={[
+              ["resourceDensityPercent", "Resources %", 20, 400],
+              ["structureDensityPercent", "Structures %", 20, 200],
+              ["guardedContentValue", "Guarded Content Value", 0, 2000000],
+              ["guardedContentValuePerArea", "Guarded Value / Area", 0, 20000],
+              ["unguardedContentValue", "Unguarded Content Value", 0, 2000000],
+              ["unguardedContentValuePerArea", "Unguarded Value / Area", 0, 20000],
+              ["resourcesValue", "Resources Value", 0, 2000000],
+              ["resourcesValuePerArea", "Resources Value / Area", 0, 20000]
+            ]} onUpdate={onUpdate} />
+          </div>
+          <div className="dialog-section">
+            <h3 className="dialog-section__heading">Content Pools</h3>
+            <ContentPoolField label="Guarded Content Pool" configKey="zone.guardedContentPool" values={zone.guardedContentPool} onChange={(values) => onUpdate((draft) => { draft.guardedContentPool = values; })} />
+            <ContentPoolField label="Unguarded Content Pool" configKey="zone.unguardedContentPool" values={zone.unguardedContentPool} onChange={(values) => onUpdate((draft) => { draft.unguardedContentPool = values; })} />
+            <ContentPoolField label="Resources Content Pool" configKey="zone.resourcesContentPool" values={zone.resourcesContentPool} onChange={(values) => onUpdate((draft) => { draft.resourcesContentPool = values; })} />
+          </div>
+          <div className="dialog-section">
+            <h3 className="dialog-section__heading">References</h3>
+            <SidListField
+              label="Mandatory Content"
+              configKey="zone.mandatoryContent"
+              values={zone.mandatoryContent}
+              options={contentReferenceOptions(mandatoryContentNames, zone.mandatoryContent, "mandatory_content_")}
+              onChange={(values) => onUpdate((draft) => { draft.mandatoryContent = values; })}
+            />
+            <SidListField
+              label="Content Count Limits"
+              configKey="zone.contentCountLimits"
+              values={zone.contentCountLimits}
+              options={contentReferenceOptions(contentCountLimitNames, zone.contentCountLimits, "content_limits_")}
+              onChange={(values) => onUpdate((draft) => { draft.contentCountLimits = values; })}
+            />
           </div>
         </DialogContent>
       </Dialog>

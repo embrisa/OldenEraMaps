@@ -55,6 +55,14 @@ export function TemplateSettingsPanel({
           </ConfigField>
         </section>
         <section className="template-settings-card__section template-settings-card__section--map" aria-label="Map setup">
+          <ConfigField configKey="global.gameMode" label="Game Mode">
+            <NativeSelect value={design.gameMode} onChange={(event) => onGlobal("gameMode", event.currentTarget.value)}>
+              {gameModeOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+            </NativeSelect>
+          </ConfigField>
+          <Button type="button" size="sm" variant="blue" onClick={() => setRulesDialogOpen(true)}>
+            <Settings2 size={14} />Rules &amp; Victory
+          </Button>
           <ConfigField configKey="global.playerCount" label="Players">
             <SteppedValueSlider min={2} max={8} value={design.playerCount} onChange={(event) => onPlayerCount(Number(event.currentTarget.value))} />
           </ConfigField>
@@ -64,18 +72,10 @@ export function TemplateSettingsPanel({
           <ConfigField configKey="global.mapHeight" label="Height">
             <SteppedValueSlider min={96} max={512} step={16} value={design.mapHeight} onChange={(event) => onMapDimension("mapHeight", Number(event.currentTarget.value))} />
           </ConfigField>
-          <ConfigField configKey="global.gameMode" label="Game Mode">
-            <NativeSelect value={design.gameMode} onChange={(event) => onGlobal("gameMode", event.currentTarget.value)}>
-              {gameModeOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
-            </NativeSelect>
-          </ConfigField>
           <div className="template-settings-card__map-actions">
             <div className="checks">
               <CheckField checked={design.lockMapDimensions} onCheckedChange={onLockMapDimensions}>Lock width and height together</CheckField>
             </div>
-            <Button type="button" size="sm" variant="blue" onClick={() => setRulesDialogOpen(true)}>
-              <Settings2 size={14} />Rules &amp; Victory
-            </Button>
           </div>
         </section>
       </CardContent>

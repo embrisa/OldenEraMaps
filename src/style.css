@@ -1902,6 +1902,11 @@ button {
   width: min(640px, calc(100vw - 28px));
 }
 
+.zone-content-dialog {
+  width: min(900px, calc(100vw - 28px));
+  max-height: min(820px, calc(100vh - 28px));
+}
+
 .zone-inspector-actions {
   display: flex;
   flex-wrap: wrap;
