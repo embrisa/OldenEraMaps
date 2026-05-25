@@ -2,6 +2,7 @@
 
 import { cleanup, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { useState, type JSX } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 const authMocks = vi.hoisted(() => ({
@@ -92,7 +93,7 @@ import { buildBoardRenderState } from "../src/components/designBoardRender";
 import { hoverCardPosition } from "../src/components/ZoneHoverCard";
 import { zoneHoverSections } from "../src/components/zoneHoverContent";
 import { Button } from "../src/components/ui/button";
-import { NativeSelect } from "../src/components/ui/form-controls";
+import { NativeSelect, SteppedValueSlider } from "../src/components/ui/form-controls";
 import {
   SCHEMATIC_BOARD_BACKGROUND_HEIGHT,
   SCHEMATIC_BOARD_BACKGROUND_WIDTH,
@@ -324,6 +325,61 @@ describe("React UI shell", () => {
     expect(shell?.querySelector("select")).toBeTruthy();
     expect(shell?.querySelector(".oe-select__icon")).toBeTruthy();
     expect((shell as HTMLElement).children.length).toBe(2);
+  });
+
+  it("lets typed slider values exceed the visual slider max", async () => {
+    function ControlledSlider(): JSX.Element {
+      const [value, setValue] = useState(14);
+      return (
+        <SteppedValueSlider
+          aria-label="City Hold Days"
+          min={1}
+          max={30}
+          value={value}
+          onChange={(event) => setValue(Number(event.currentTarget.value))}
+        />
+      );
+    }
+
+    const user = userEvent.setup();
+    render(<ControlledSlider />);
+
+    const numberInput = screen.getByRole("spinbutton", { name: "City Hold Days" }) as HTMLInputElement;
+    const rangeInput = screen.getByRole("slider", { name: "City Hold Days" }) as HTMLInputElement;
+    expect(numberInput.getAttribute("max")).toBeNull();
+
+    await user.clear(numberInput);
+    await user.type(numberInput, "100");
+    fireEvent.blur(numberInput);
+
+    expect(numberInput.value).toBe("100");
+    expect(rangeInput.value).toBe("30");
+  });
+
+  it("keeps typed slider values from going below the configured minimum", async () => {
+    function ControlledSlider(): JSX.Element {
+      const [value, setValue] = useState(14);
+      return (
+        <SteppedValueSlider
+          aria-label="City Hold Days"
+          min={1}
+          max={30}
+          value={value}
+          onChange={(event) => setValue(Number(event.currentTarget.value))}
+        />
+      );
+    }
+
+    const user = userEvent.setup();
+    render(<ControlledSlider />);
+
+    const numberInput = screen.getByRole("spinbutton", { name: "City Hold Days" }) as HTMLInputElement;
+
+    await user.clear(numberInput);
+    await user.type(numberInput, "-5");
+    fireEvent.blur(numberInput);
+
+    expect(numberInput.value).toBe("1");
   });
 
   it("renders the dense builder workflow and can add a neutral zone", async () => {

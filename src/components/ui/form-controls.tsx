@@ -107,7 +107,11 @@ function formatSliderValue(value: NumericAttribute, precision = 0): string {
   return parsed.toFixed(precision).replace(/(?:\.0+|(?:(\.\d*?)0+))$/, "$1");
 }
 
-function clampAndSnapValue(rawValue: number, min: number | undefined, max: number | undefined, step: number | undefined): number {
+function clampDraftValue(rawValue: number, min: number | undefined): number {
+  return min === undefined ? rawValue : Math.max(rawValue, min);
+}
+
+function clampRangeValue(rawValue: number, min: number | undefined, max: number | undefined): number {
   let nextValue = rawValue;
 
   if (min !== undefined) {
@@ -116,20 +120,6 @@ function clampAndSnapValue(rawValue: number, min: number | undefined, max: numbe
 
   if (max !== undefined) {
     nextValue = Math.min(nextValue, max);
-  }
-
-  if (step !== undefined && step > 0) {
-    const base = min ?? 0;
-    const steps = Math.round((nextValue - base) / step);
-    nextValue = base + (steps * step);
-
-    if (min !== undefined) {
-      nextValue = Math.max(nextValue, min);
-    }
-
-    if (max !== undefined) {
-      nextValue = Math.min(nextValue, max);
-    }
   }
 
   return nextValue;
@@ -165,7 +155,7 @@ export function SteppedValueSlider({
       return;
     }
 
-    const normalized = clampAndSnapValue(parsed, minValue, maxValue, stepValue);
+    const normalized = clampDraftValue(parsed, minValue);
     const nextValue = formatSliderValue(normalized, precision);
     setDraftValue(nextValue);
 
@@ -173,7 +163,16 @@ export function SteppedValueSlider({
       currentTarget: { value: nextValue },
       target: { value: nextValue }
     } as React.ChangeEvent<HTMLInputElement>);
-  }, [draftValue, formattedValue, maxValue, minValue, onChange, precision, stepValue]);
+  }, [draftValue, formattedValue, minValue, onChange, precision]);
+
+  const rangeValue = React.useMemo(() => {
+    const numericValue = parseNumericAttribute(value);
+    if (numericValue === undefined) {
+      return value;
+    }
+
+    return clampRangeValue(numericValue, minValue, maxValue);
+  }, [maxValue, minValue, value]);
 
   const sliderFill = React.useMemo(() => {
     const numericValue = parseNumericAttribute(value) ?? minValue ?? 0;
@@ -200,14 +199,13 @@ export function SteppedValueSlider({
           step={step}
           style={{ "--oe-slider-fill": `${Math.min(Math.max(sliderFill, 0), 100)}%` } as React.CSSProperties}
           type="range"
-          value={value}
+          value={rangeValue}
         />
         <Input
           aria-label={props["aria-label"]}
           aria-labelledby={props["aria-labelledby"]}
           className="oe-slider__value"
           disabled={disabled}
-          max={max}
           min={min}
           onBlur={(event) => {
             commitDraftValue();
