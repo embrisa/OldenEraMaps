@@ -36,6 +36,7 @@ export function MyMapsPage({
 }): JSX.Element {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editTitle, setEditTitle] = useState("");
+  const [editAuthorName, setEditAuthorName] = useState("");
   const [editDescription, setEditDescription] = useState("");
   const [editVisibility, setEditVisibility] = useState<ManagedMapVisibility>("public");
 
@@ -46,6 +47,7 @@ export function MyMapsPage({
   function startEditing(map: ManagedMapCard): void {
     setEditingId(map.id);
     setEditTitle(map.title);
+    setEditAuthorName(map.authorName);
     setEditDescription(map.summary);
     setEditVisibility(map.visibility);
   }
@@ -53,6 +55,7 @@ export function MyMapsPage({
   function saveEditing(map: ManagedMapCard): void {
     onUpdateListing(map.id, {
       title: editTitle.trim() || map.title,
+      authorName: editAuthorName.trim(),
       description: editDescription.trim(),
       visibility: editVisibility
     });
@@ -127,6 +130,10 @@ export function MyMapsPage({
                       <div className="config-field">
                         <label className="oe-field__label" htmlFor={`my-map-title-${map.id}`}>Title</label>
                         <Input id={`my-map-title-${map.id}`} value={editTitle} onChange={(event) => setEditTitle(event.currentTarget.value)} />
+                      </div>
+                      <div className="config-field">
+                        <label className="oe-field__label" htmlFor={`my-map-author-${map.id}`}>Author</label>
+                        <Input id={`my-map-author-${map.id}`} value={editAuthorName} onChange={(event) => setEditAuthorName(event.currentTarget.value)} />
                       </div>
                       <div className="config-field">
                         <label className="oe-field__label" htmlFor={`my-map-description-${map.id}`}>Template Description</label>

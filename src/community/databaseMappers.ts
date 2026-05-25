@@ -35,7 +35,7 @@ export function mapDatabaseRecordToCommunityMapRecord(row: CommunityMapDatabaseR
     slug: row.slug,
     title: row.title,
     summary: templateDescription ?? row.description,
-    authorName: row.profiles?.display_name?.trim() || "Anonymous Cartographer",
+    authorName: row.author_name?.trim() || row.profiles?.display_name?.trim() || "Anonymous Cartographer",
     tags: extractTags(row),
     visibility: row.visibility === "private" ? "unlisted" : row.visibility,
     mapWidth: row.map_width,

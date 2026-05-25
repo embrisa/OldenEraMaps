@@ -39,6 +39,7 @@ export async function uploadCommunityMapToServer(
 
   const request: UploadMapRequest = {
     title: draft.title,
+    authorName: draft.authorName,
     description: typeof template.description === "string" ? template.description : draft.summary,
     visibility: draft.visibility,
     descriptiveTagSlugs: draft.descriptiveTagSlugs,

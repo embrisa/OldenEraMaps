@@ -2625,6 +2625,32 @@ describe("React UI shell", () => {
     });
   });
 
+  it("can edit the author name on an owned listing", async () => {
+    const user = userEvent.setup();
+    authMocks.session = createAuthSession();
+    communityApiMocks.myMaps = [
+      createManagedMap({ id: "author-map", title: "Author Road", authorName: "Old Author", visibility: "public", status: "published" })
+    ];
+    render(<AppShell />);
+
+    await openHeaderMenu(user);
+    await user.click(screen.getByRole("button", { name: "My maps" }));
+    expect(await screen.findByRole("heading", { name: "Author Road" })).toBeTruthy();
+
+    await user.click(screen.getByRole("button", { name: "Edit listing" }));
+    const authorInput = screen.getByLabelText("Author");
+    await user.clear(authorInput);
+    await user.type(authorInput, "New Author");
+    await user.click(screen.getByRole("button", { name: "Save changes" }));
+
+    await waitFor(() => {
+      expect(communityApiMocks.updatePatches).toContainEqual({
+        mapId: "author-map",
+        patch: expect.objectContaining({ authorName: "New Author" })
+      });
+    });
+  });
+
   it("can delete an owned listing after confirmation", async () => {
     const user = userEvent.setup();
     const confirm = vi.spyOn(window, "confirm").mockReturnValue(true);

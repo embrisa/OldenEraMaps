@@ -12,6 +12,7 @@ function createMapRow(overrides: Record<string, unknown> = {}) {
     owner_id: "user-1",
     slug: "hidden-private-map",
     title: "Hidden Private Map",
+    author_name: "Owner",
     description: "Owned map.",
     visibility: "private",
     status: "hidden",
@@ -157,6 +158,23 @@ describe("signed-in map management API", () => {
       design_json: expect.any(Object),
       template_json: expect.objectContaining({ description: "Updated description." })
     }));
+  });
+
+  it("updates a listing-specific author name", async () => {
+    const updateBuilder = {
+      update: vi.fn(() => updateBuilder),
+      eq: vi.fn(async () => ({ error: null }))
+    };
+    const client = {
+      from: vi.fn(() => updateBuilder)
+    };
+
+    await updateMapListing("map-1", { authorName: "  New   Author  " }, client as never);
+
+    expect(updateBuilder.update).toHaveBeenCalledWith(expect.objectContaining({
+      author_name: "New Author"
+    }));
+    expect(updateBuilder.eq).toHaveBeenCalledWith("id", "map-1");
   });
 
   it("rejects stringified design_json during description sync", async () => {

@@ -41,6 +41,7 @@ export type Database = {
           owner_id: string;
           slug: string;
           title: string;
+          author_name: string | null;
           description: string;
           visibility: "public" | "unlisted" | "private";
           status: "draft" | "published" | "hidden" | "rejected";
@@ -78,6 +79,7 @@ export type Database = {
           owner_id: string;
           slug: string;
           title: string;
+          author_name?: string | null;
           description: string;
           visibility: "public" | "unlisted" | "private";
           status: "draft" | "published" | "hidden" | "rejected";
@@ -115,6 +117,7 @@ export type Database = {
           owner_id?: string;
           slug?: string;
           title?: string;
+          author_name?: string | null;
           description?: string;
           visibility?: "public" | "unlisted" | "private";
           status?: "draft" | "published" | "hidden" | "rejected";

@@ -22,6 +22,7 @@ describe("community upload API preview payloads", () => {
     const result = await uploadCommunityMapToServer(design, uploadDraft(), client);
 
     expect(functionBody.description).toBe("Shared upload description.");
+    expect(functionBody.authorName).toBe("Test Author");
     expect(functionBody.previewRendererVersion).toBe(PREVIEW_RENDERER_VERSION);
     expect(functionBody.previewDesignJson).toEqual(buildPreviewDesign(design));
     expect(JSON.parse(result.map.previewDesignJson)).toEqual(buildPreviewDesign(design));
@@ -89,6 +90,7 @@ function mapRecord(body: Record<string, unknown>): CommunityMapDatabaseRecord {
     owner_id: "user-1",
     slug: "shared-map",
     title: "Shared Map",
+    author_name: body.authorName as string,
     description: body.description as string,
     visibility: "public",
     status: "published",

@@ -38,6 +38,7 @@ export function MapDetailDialog({
 }): JSX.Element {
   const [editing, setEditing] = useState(false);
   const [editTitle, setEditTitle] = useState("");
+  const [editAuthorName, setEditAuthorName] = useState("");
   const [editDescription, setEditDescription] = useState("");
   const [editVisibility, setEditVisibility] = useState<"public" | "unlisted">("public");
 
@@ -45,6 +46,7 @@ export function MapDetailDialog({
     if (!open || !map) return;
     setEditing(false);
     setEditTitle(map.title);
+    setEditAuthorName(map.authorName);
     setEditDescription(map.summary);
     setEditVisibility(map.visibility);
   }, [open, map]);
@@ -67,6 +69,7 @@ export function MapDetailDialog({
     if (!map || !onUpdateListing) return;
     onUpdateListing(map.id, {
       title: editTitle.trim() || map.title,
+      authorName: editAuthorName.trim(),
       description: editDescription.trim(),
       visibility: editVisibility
     });
@@ -103,6 +106,10 @@ export function MapDetailDialog({
               <div className="config-field">
                 <label className="oe-field__label" htmlFor="detail-edit-title">Title</label>
                 <Input id="detail-edit-title" value={editTitle} onChange={(e) => setEditTitle(e.currentTarget.value)} />
+              </div>
+              <div className="config-field">
+                <label className="oe-field__label" htmlFor="detail-edit-author">Author</label>
+                <Input id="detail-edit-author" value={editAuthorName} onChange={(e) => setEditAuthorName(e.currentTarget.value)} />
               </div>
               <div className="config-field">
                 <label className="oe-field__label" htmlFor="detail-edit-description">Template Description</label>

@@ -13,6 +13,7 @@ import {
 import { requireStoredPreviewDesignJson } from "./previewPayload.ts";
 import { requireOptionalReleaseTemplateDescription, requireReleaseTemplateJson, serializeReleaseJsonField, serializeReleaseTemplateJson } from "./releaseRowJson.ts";
 import { createTagFromSlug, formatWinConditionLabel, sortTags, type CommunityTag } from "./tags";
+import { validateAuthorDisplayName } from "./textValidation";
 import { isSupabaseConfigured, supabase } from "./supabaseClient";
 
 // ---------------------------------------------------------------------------
@@ -82,6 +83,7 @@ export interface MapDetail extends BrowseMapCard {
 
 export interface MapListingPatch {
   title?: string;
+  authorName?: string;
   description?: string;
   visibility?: "public" | "unlisted" | "private";
   descriptiveTagSlugs?: string[];
@@ -135,6 +137,7 @@ export async function listMyMaps(
       owner_id,
       slug,
       title,
+      author_name,
       description,
       visibility,
       status,
@@ -180,6 +183,7 @@ async function listMapsFromSupabase(
       owner_id,
       slug,
       title,
+      author_name,
       description,
       visibility,
       map_width,
@@ -303,6 +307,7 @@ async function getOwnedMapFromSupabase(
       owner_id,
       slug,
       title,
+      author_name,
       description,
       visibility,
       status,
@@ -400,6 +405,11 @@ export async function updateMapListing(
 
   const update: Record<string, unknown> = {};
   if (patch.title !== undefined) update.title = patch.title;
+  if (patch.authorName !== undefined) {
+    const validation = validateAuthorDisplayName(patch.authorName);
+    if (!validation.ok) throw new Error(validation.errors[0]);
+    update.author_name = validation.value || "Anonymous Cartographer";
+  }
   if (patch.visibility !== undefined) update.visibility = patch.visibility;
   if (patch.status !== undefined) update.status = patch.status;
 

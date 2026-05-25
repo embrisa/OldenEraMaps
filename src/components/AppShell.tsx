@@ -965,6 +965,7 @@ export function AppShell(): JSX.Element {
       .then(() => {
         patchMyMap(mapId, {
           ...(patch.title !== undefined ? { title: patch.title } : {}),
+          ...(patch.authorName !== undefined ? { authorName: patch.authorName.trim() || "Anonymous Cartographer" } : {}),
           ...(patch.description !== undefined ? { summary: patch.description } : {}),
           ...(patch.visibility !== undefined ? { visibility: patch.visibility } : {}),
           ...(patch.status !== undefined ? { status: patch.status } : {})

@@ -13,7 +13,9 @@ import {
   type CommunityTopologyHint
 } from "./tags.ts";
 import {
+  normalizeAuthorDisplayName,
   normalizeMapDescription,
+  validateAuthorDisplayName,
   validateMapDescription,
   validateMapTitle
 } from "./textValidation.ts";
@@ -24,6 +26,7 @@ export const COMMUNITY_UPLOAD_MAX_JSON_DEPTH = 80;
 
 export interface UploadMapRequest {
   title: string;
+  authorName?: string;
   description: string;
   visibility: "public" | "unlisted" | "private";
   descriptiveTagSlugs: string[];
@@ -35,6 +38,7 @@ export interface UploadMapRequest {
 
 export interface PreparedCommunityUploadCore {
   title: string;
+  authorName: string;
   description: string;
   visibility: UploadMapRequest["visibility"];
   slug: string;
@@ -85,6 +89,11 @@ export async function prepareCommunityUploadCore(request: UploadMapRequest): Pro
     throw new UploadValidationError(descriptionValidation.errors[0]!, "invalid_description", descriptionValidation.errors);
   }
   const title = titleValidation.value || "Untitled Map";
+  const authorValidation = validateAuthorDisplayName(request.authorName ?? "");
+  if (!authorValidation.ok) {
+    throw new UploadValidationError(authorValidation.errors[0]!, "invalid_author_name", authorValidation.errors);
+  }
+  const authorName = normalizeAuthorDisplayName(authorValidation.value) || "Anonymous Cartographer";
   const description = descriptionValidation.value;
   const visibility = request.visibility;
   if (!["public", "unlisted", "private"].includes(visibility)) {
@@ -125,6 +134,7 @@ export async function prepareCommunityUploadCore(request: UploadMapRequest): Pro
 
   return {
     title,
+    authorName,
     description,
     visibility,
     slug: slugify(title),

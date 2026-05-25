@@ -97,6 +97,8 @@ npm test
 npm run build
 ```
 
+When completed changes include Supabase schema or Edge Function updates, deploy those Supabase changes before the final handoff whenever credentials and project access are available. If deployment cannot be completed, state exactly which Supabase deployment command failed and why.
+
 When changing behavior, always add or update focused Vitest tests around the generator/model/workflow behavior rather than relying only on manual UI checks.
 
 For Supabase schema work on local macOS development with Colima, start Colima first and run Supabase without the logging/vector containers:

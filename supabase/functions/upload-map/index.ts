@@ -62,6 +62,7 @@ Deno.serve(async (request) => {
         owner_id: authData.user.id,
         slug: `${prepared.slug}-${crypto.randomUUID().slice(0, 8)}`,
         title: prepared.title,
+        author_name: prepared.authorName,
         description: prepared.description,
         visibility: prepared.visibility,
         status: "published",
