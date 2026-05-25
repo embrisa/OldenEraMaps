@@ -2287,7 +2287,7 @@ describe("React UI shell", () => {
 
     const uploadDialog = await screen.findByRole("dialog");
     expect(within(uploadDialog).getByRole("heading", { name: "Share map template" })).toBeTruthy();
-    expect(within(uploadDialog).getByDisplayValue("OAuth Cartographer")).toBeTruthy();
+    expect(within(uploadDialog).getByDisplayValue("Anonymous Cartographer")).toBeTruthy();
   });
 
   it("keeps signed-out users from rating shared maps", async () => {

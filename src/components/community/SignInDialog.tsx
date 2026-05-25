@@ -44,8 +44,8 @@ export function SignInDialog({
           <p>
             Sign-in is required to upload and manage your map templates.
             We don't store any passwords or credentials — authentication is handled
-            entirely by your chosen provider. We only save a minimal profile
-            (display name) to show alongside your published maps.
+            entirely by your chosen provider. We request the smallest provider
+            scope available and save only a local display name for published maps.
           </p>
         </div>
         {error ? <div className="alert alert--danger">{error}</div> : null}

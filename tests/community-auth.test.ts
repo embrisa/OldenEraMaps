@@ -3,12 +3,13 @@ import {
   communityAuthReducer,
   initialCommunityAuthState,
   profileFromUser,
+  signInWithProvider,
   syncCurrentUserProfile,
   updateCurrentUserDisplayName
 } from "../src/community/auth";
 
 describe("community auth", () => {
-  it("derives display profile metadata from OAuth user records", () => {
+  it("does not copy OAuth metadata into the local community profile", () => {
     const profile = profileFromUser({
       id: "user-1",
       email: "cartographer@example.test",
@@ -20,9 +21,8 @@ describe("community auth", () => {
 
     expect(profile).toEqual({
       userId: "user-1",
-      displayName: "Template Maker",
-      avatarUrl: "https://example.test/avatar.png",
-      email: "cartographer@example.test"
+      displayName: "Anonymous Cartographer",
+      avatarUrl: null
     });
   });
 
@@ -33,8 +33,35 @@ describe("community auth", () => {
       user_metadata: {}
     } as never);
 
-    expect(profile.displayName).toBe("Cartographer");
-    expect(profile.email).toBe("cartographer@example.test");
+    expect(profile.displayName).toBe("Anonymous Cartographer");
+    expect(profile.avatarUrl).toBeNull();
+  });
+
+  it("requests minimal OAuth scopes for configured providers", async () => {
+    const signInWithOAuth = vi.fn(() => ({ error: null }));
+    const client = { auth: { signInWithOAuth } };
+    vi.stubGlobal("window", { location: { origin: "https://maps.example.test" } });
+
+    try {
+      await signInWithProvider("google", client as never);
+      await signInWithProvider("github", client as never);
+      await signInWithProvider("discord", client as never);
+    } finally {
+      vi.unstubAllGlobals();
+    }
+
+    expect(signInWithOAuth).toHaveBeenNthCalledWith(1, {
+      provider: "google",
+      options: { redirectTo: "https://maps.example.test", scopes: "openid" }
+    });
+    expect(signInWithOAuth).toHaveBeenNthCalledWith(2, {
+      provider: "github",
+      options: { redirectTo: "https://maps.example.test", queryParams: { scopes: "" } }
+    });
+    expect(signInWithOAuth).toHaveBeenNthCalledWith(3, {
+      provider: "discord",
+      options: { redirectTo: "https://maps.example.test", scopes: "identify" }
+    });
   });
 
   it("reduces session changes into signed-in and signed-out state", () => {
@@ -52,7 +79,7 @@ describe("community auth", () => {
     });
 
     expect(signedIn.status).toBe("signed-in");
-    expect(signedIn.profile?.displayName).toBe("Map Maker");
+    expect(signedIn.profile?.displayName).toBe("Anonymous Cartographer");
 
     const signedOut = communityAuthReducer(signedIn, { type: "session", session: null });
 
@@ -77,8 +104,7 @@ describe("community auth", () => {
       profile: {
         userId: "user-1",
         displayName: "Map Handle",
-        avatarUrl: null,
-        email: "maker@example.test"
+        avatarUrl: null
       }
     });
 
@@ -104,7 +130,7 @@ describe("community auth", () => {
     expect(profile.displayName).toBe("Saved Handle");
     expect(upsert).toHaveBeenCalledWith([{
       id: "user-1",
-      display_name: "OAuth Name",
+      display_name: "Anonymous Cartographer",
       avatar_url: null
     }], { ignoreDuplicates: true, onConflict: "id" });
     expect(eq).toHaveBeenCalledWith("id", "user-1");
@@ -117,8 +143,7 @@ describe("community auth", () => {
     const profile = await updateCurrentUserDisplayName({
       userId: "user-1",
       displayName: "Old Name",
-      avatarUrl: "https://example.test/avatar.png",
-      email: "maker@example.test"
+      avatarUrl: "https://example.test/avatar.png"
     }, "", { from } as never);
 
     expect(profile.displayName).toBe("Anonymous Cartographer");

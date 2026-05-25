@@ -10,8 +10,13 @@ export interface CommunityAuthProfile {
   userId: string;
   displayName: string;
   avatarUrl: string | null;
-  email: string | null;
 }
+
+type MinimalOAuthOptions = {
+  redirectTo: string;
+  scopes?: string;
+  queryParams?: Record<string, string>;
+};
 
 export interface CommunityAuthState {
   status: "loading" | "signed-out" | "signed-in";
@@ -78,11 +83,15 @@ export async function signInWithProvider(provider: CommunityAuthProvider, client
   const authClient = requireSupabaseClient(client);
   const { error } = await authClient.auth.signInWithOAuth({
     provider: provider as Provider,
-    options: {
-      redirectTo: window.location.origin
-    }
+    options: minimalOAuthOptions(provider, window.location.origin)
   });
   if (error) throw error;
+}
+
+function minimalOAuthOptions(provider: CommunityAuthProvider, redirectTo: string): MinimalOAuthOptions {
+  if (provider === "google") return { redirectTo, scopes: "openid" };
+  if (provider === "discord") return { redirectTo, scopes: "identify" };
+  return { redirectTo, queryParams: { scopes: "" } };
 }
 
 export async function signOut(client: SupabaseClient<Database> | null = supabase): Promise<void> {
@@ -140,23 +149,11 @@ export async function updateCurrentUserDisplayName(
 }
 
 export function profileFromUser(user: User): CommunityAuthProfile {
-  const metadata = user.user_metadata;
-  const displayName = readMetadataString(metadata, "full_name")
-    ?? readMetadataString(metadata, "name")
-    ?? readMetadataString(metadata, "user_name")
-    ?? "Cartographer";
-
   return {
     userId: user.id,
-    displayName,
-    avatarUrl: readMetadataString(metadata, "avatar_url") ?? readMetadataString(metadata, "picture"),
-    email: user.email ?? null
+    displayName: "Anonymous Cartographer",
+    avatarUrl: null
   };
-}
-
-function readMetadataString(metadata: User["user_metadata"], key: string): string | null {
-  const value = metadata[key];
-  return typeof value === "string" && value.trim().length > 0 ? value.trim() : null;
 }
 
 async function loadProfileFromDatabase(profile: CommunityAuthProfile, client: SupabaseClient<Database>): Promise<CommunityAuthProfile> {
