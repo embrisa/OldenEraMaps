@@ -5,9 +5,17 @@ import { gameModeOptions, terrainOptions, victoryOptions } from "@/settings";
 import type { TemplateDesign } from "@/design";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input, NativeSelect, SteppedValueSlider, Textarea } from "@/components/ui/form-controls";
+import { HelpIcon, Input, NativeSelect, SteppedValueSlider, Textarea } from "@/components/ui/form-controls";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/radix";
 import { CheckField, ConfigField } from "@/components/builder/formHelpers";
+
+const mapSizePresets = [
+  { value: 120, label: "Small" },
+  { value: 160, label: "Standard" },
+  { value: 240, label: "Large" }
+] as const;
+
+const templateTypeLabels = ["Duel", "Ring", "City Hold"] as const;
 
 export function TemplateSettingsPanel({
   design,
@@ -31,10 +39,15 @@ export function TemplateSettingsPanel({
   const showCityHoldDays = design.gameEndConditions.cityHold || design.gameEndConditions.victoryCondition === "win_condition_5";
   const showGladiatorRules = design.gameEndConditions.victoryCondition === "win_condition_4" || design.gladiatorArenaRules.enabled;
   const showTournamentRules = design.gameEndConditions.victoryCondition === "win_condition_6" || design.tournamentRules.enabled;
+  const activeTemplateType = design.gameEndConditions.victoryCondition === "win_condition_5" || design.gameEndConditions.cityHold
+    ? "City Hold"
+    : design.playerCount <= 2
+      ? "Duel"
+      : "Ring";
 
   return (
     <Card className="template-settings-card">
-      <CardHeader>
+      <CardHeader className="template-settings-card__header">
         <div>
           <CardTitle><FileJson size={17} />Template Settings</CardTitle>
           <CardDescription>Core output settings for the generated .rmg.json file.</CardDescription>
@@ -46,35 +59,126 @@ export function TemplateSettingsPanel({
         </div>
       </CardHeader>
       <CardContent className="compact-form template-settings-card__content">
-        <section className="template-settings-card__section template-settings-card__section--identity" aria-label="Template identity">
-          <ConfigField configKey="global.templateName" label="Template Name">
-            <Input value={design.templateName} onChange={(event) => onGlobal("templateName", event.currentTarget.value)} />
-          </ConfigField>
-          <ConfigField configKey="global.templateDescription" label="Template Description">
-            <Textarea rows={2} value={design.templateDescription} onChange={(event) => onGlobal("templateDescription", event.currentTarget.value)} />
-          </ConfigField>
+        <section className="template-settings-card__panel" aria-label="Template identity">
+          <div className="template-settings-card__identity-grid">
+            <div className="template-settings-card__field-shell template-settings-card__field-shell--stacked">
+              <ConfigField configKey="global.templateName" label="Template Name" className="template-settings-card__field">
+                <Input value={design.templateName} onChange={(event) => onGlobal("templateName", event.currentTarget.value)} />
+              </ConfigField>
+              <div className="template-settings-card__field template-settings-card__template-type" aria-hidden="true">
+                <span className="oe-field__label">
+                  Template Type
+                  <HelpIcon tooltip="Visual template classifier" detail="This mirrors the current setup so the header feels closer to the in-game style, without introducing a separate exported field." />
+                </span>
+                <div className="template-settings-card__chip-row">
+                  {templateTypeLabels.map((label) => (
+                    <span
+                      key={label}
+                      className={`template-settings-card__chip${label === activeTemplateType ? " template-settings-card__chip--active" : ""}`}
+                    >
+                      {label}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div className="template-settings-card__field-shell">
+              <ConfigField configKey="global.templateDescription" label="Template Description" className="template-settings-card__field">
+                <Textarea rows={4} value={design.templateDescription} onChange={(event) => onGlobal("templateDescription", event.currentTarget.value)} />
+              </ConfigField>
+            </div>
+          </div>
         </section>
-        <section className="template-settings-card__section template-settings-card__section--map" aria-label="Map setup">
-          <ConfigField configKey="global.gameMode" label="Game Mode">
-            <NativeSelect value={design.gameMode} onChange={(event) => onGlobal("gameMode", event.currentTarget.value)}>
-              {gameModeOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
-            </NativeSelect>
-          </ConfigField>
-          <Button type="button" size="sm" variant="blue" onClick={() => setRulesDialogOpen(true)}>
-            <Settings2 size={14} />Rules &amp; Victory
-          </Button>
-          <ConfigField configKey="global.playerCount" label="Players">
-            <SteppedValueSlider min={2} max={8} value={design.playerCount} onChange={(event) => onPlayerCount(Number(event.currentTarget.value))} />
-          </ConfigField>
-          <ConfigField configKey="global.mapWidth" label="Width">
-            <SteppedValueSlider min={96} max={512} step={16} value={design.mapWidth} onChange={(event) => onMapDimension("mapWidth", Number(event.currentTarget.value))} />
-          </ConfigField>
-          <ConfigField configKey="global.mapHeight" label="Height">
-            <SteppedValueSlider min={96} max={512} step={16} value={design.mapHeight} onChange={(event) => onMapDimension("mapHeight", Number(event.currentTarget.value))} />
-          </ConfigField>
-          <div className="template-settings-card__map-actions">
-            <div className="checks">
-              <CheckField checked={design.lockMapDimensions} onCheckedChange={onLockMapDimensions}>Lock width and height together</CheckField>
+        <section className="template-settings-card__panel" aria-label="Game setup">
+          <PanelHeading
+            title="Game Setup"
+            help="Core match flow"
+            detail="Pick the top-level game mode, open advanced rules, and tune the player count from one place."
+          />
+          <div className="template-settings-card__setup-grid">
+            <div className="template-settings-card__field-shell template-settings-card__field-shell--stacked">
+              <ConfigField configKey="global.gameMode" label="Game Mode" className="template-settings-card__field template-settings-card__field--mode">
+                <NativeSelect value={design.gameMode} onChange={(event) => onGlobal("gameMode", event.currentTarget.value)}>
+                  {gameModeOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+                </NativeSelect>
+              </ConfigField>
+              <div className="template-settings-card__quick-row" role="group" aria-label="Game mode quick options">
+                {gameModeOptions.map((option) => (
+                  <Button
+                    key={option.value}
+                    type="button"
+                    size="sm"
+                    variant="ghost"
+                    className="template-settings-card__quick-button"
+                    aria-pressed={design.gameMode === option.value}
+                    onClick={() => onGlobal("gameMode", option.value)}
+                  >
+                    {option.label}
+                  </Button>
+                ))}
+              </div>
+            </div>
+            <Button type="button" variant="blue" className="template-settings-card__rules-button" onClick={() => setRulesDialogOpen(true)}>
+              <Settings2 size={16} />Rules &amp; Victory
+            </Button>
+            <div className="template-settings-card__field-shell">
+              <ConfigField configKey="global.playerCount" label="Players" className="template-settings-card__field template-settings-card__field--player">
+                <SteppedValueSlider min={2} max={8} value={design.playerCount} onChange={(event) => onPlayerCount(Number(event.currentTarget.value))} />
+              </ConfigField>
+            </div>
+          </div>
+        </section>
+        <section className="template-settings-card__panel" aria-label="Map size">
+          <PanelHeading
+            title="Map Size"
+            help="Template dimensions"
+            detail="Width and height are written straight into the exported template. Use presets for common competitive sizes or fine-tune with the sliders."
+          />
+          <div className="template-settings-card__map-grid">
+            <div className="template-settings-card__field-shell template-settings-card__field-shell--stacked template-settings-card__dimension">
+              <ConfigField configKey="global.mapWidth" label="Width" className="template-settings-card__field template-settings-card__field--dimension">
+                <SteppedValueSlider min={96} max={512} step={16} value={design.mapWidth} onChange={(event) => onMapDimension("mapWidth", Number(event.currentTarget.value))} />
+              </ConfigField>
+              <div className="template-settings-card__quick-row" role="group" aria-label="Width quick sizes">
+                {mapSizePresets.map((preset) => (
+                  <Button
+                    key={`width-${preset.value}`}
+                    type="button"
+                    size="sm"
+                    variant="ghost"
+                    className="template-settings-card__quick-button"
+                    aria-pressed={design.mapWidth === preset.value}
+                    onClick={() => onMapDimension("mapWidth", preset.value)}
+                  >
+                    {preset.label}
+                  </Button>
+                ))}
+              </div>
+            </div>
+            <div className="template-settings-card__map-actions">
+              <div className="checks">
+                <CheckField checked={design.lockMapDimensions} onCheckedChange={onLockMapDimensions}>Lock width and height together</CheckField>
+              </div>
+            </div>
+            <div className="template-settings-card__field-shell template-settings-card__field-shell--stacked template-settings-card__dimension">
+              <ConfigField configKey="global.mapHeight" label="Height" className="template-settings-card__field template-settings-card__field--dimension">
+                <SteppedValueSlider min={96} max={512} step={16} value={design.mapHeight} onChange={(event) => onMapDimension("mapHeight", Number(event.currentTarget.value))} />
+              </ConfigField>
+              <div className="template-settings-card__quick-row" role="group" aria-label="Height quick sizes">
+                {mapSizePresets.map((preset) => (
+                  <Button
+                    key={`height-${preset.value}`}
+                    type="button"
+                    size="sm"
+                    variant="ghost"
+                    className="template-settings-card__quick-button"
+                    aria-pressed={design.mapHeight === preset.value}
+                    onClick={() => onMapDimension("mapHeight", preset.value)}
+                  >
+                    {preset.label}
+                  </Button>
+                ))}
+              </div>
             </div>
           </div>
         </section>
@@ -185,5 +289,16 @@ export function TemplateSettingsPanel({
         </DialogContent>
       </Dialog>
     </Card>
+  );
+}
+
+function PanelHeading({ title, help, detail }: { title: string; help: string; detail: string }): JSX.Element {
+  return (
+    <div className="template-settings-card__panel-heading">
+      <h3>
+        {title}
+        <HelpIcon tooltip={help} detail={detail} />
+      </h3>
+    </div>
   );
 }

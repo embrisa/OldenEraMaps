@@ -1512,6 +1512,24 @@ describe("React UI shell", () => {
     expect(getInputForLabel(document.body, "Height").value).toBe("160");
   });
 
+  it("supports the template settings quick-action buttons for game mode and map size presets", async () => {
+    const user = userEvent.setup();
+    render(<AppShell />);
+
+    const settingsCard = screen.getByDisplayValue("Custom Template").closest(".template-settings-card");
+    expect(settingsCard).toBeTruthy();
+
+    const gameModeActions = within(settingsCard as HTMLElement).getByRole("group", { name: "Game mode quick options" });
+    await user.click(within(gameModeActions).getByRole("button", { name: "Tournament" }));
+    expect(getSelectForLabel(settingsCard as HTMLElement, "Game Mode").value).toBe("Tournament");
+
+    const widthPresets = within(settingsCard as HTMLElement).getByRole("group", { name: "Width quick sizes" });
+    await user.click(within(widthPresets).getByRole("button", { name: "Large" }));
+
+    expect(getSliderValueInputForLabel(settingsCard as HTMLElement, "Width").value).toBe("240");
+    expect(getSliderValueInputForLabel(settingsCard as HTMLElement, "Height").value).toBe("240");
+  });
+
   it("shows edit and delete actions when clicking a board connection", async () => {
     const user = userEvent.setup();
     const boardLayout = mockDesignBoardLayout();
