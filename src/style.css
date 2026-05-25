@@ -525,6 +525,8 @@ button {
 }
 
 .template-settings-card .oe-value-slider {
+  --oe-slider-value-min: 3.1rem;
+  --oe-slider-value-width: 4rem;
   gap: 0;
 }
 
@@ -534,10 +536,6 @@ button {
 
 .template-settings-card .oe-value-slider__main {
   gap: 7px;
-}
-
-.template-settings-card .oe-slider__value {
-  min-width: 3.1rem;
 }
 
 .template-settings-card__dimension-lock {
@@ -660,7 +658,7 @@ button {
 
 .oe-value-slider__main {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr) minmax(var(--oe-slider-value-min, 3.75rem), var(--oe-slider-value-width, 4.75rem));
   gap: 10px;
   align-items: center;
 }
@@ -721,7 +719,8 @@ button {
 }
 
 .oe-slider__value {
-  min-width: 3.75rem;
+  width: 100%;
+  min-width: 0;
   padding: 0 8px;
   border: 1px solid var(--border);
   border-radius: 6px;
@@ -1467,8 +1466,12 @@ button {
 }
 
 .inspector-card .oe-slider__value {
-  min-width: 3.35rem;
   line-height: 30px;
+}
+
+.inspector-card .oe-value-slider {
+  --oe-slider-value-min: 3.35rem;
+  --oe-slider-value-width: 4.25rem;
 }
 
 .inspector-card .oe-slider__bounds {
