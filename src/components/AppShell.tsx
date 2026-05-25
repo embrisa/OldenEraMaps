@@ -105,6 +105,13 @@ interface AutosaveRecovery {
   design: TemplateDesign;
 }
 
+interface DesignHistoryEntry {
+  design: TemplateDesign;
+  selectedZoneId: string;
+  selectedConnectionId: string;
+  dirty: boolean;
+}
+
 interface SaveFilePickerHandle {
   createWritable(): Promise<SaveFilePickerWritable>;
 }
@@ -320,8 +327,10 @@ export function AppShell(): JSX.Element {
   const [detailOpen, setDetailOpen] = useState(false);
   const [detailMap, setDetailMap] = useState<MapDetail | null>(null);
   const [exportWarningOpen, setExportWarningOpen] = useState(false);
+  const [historyRevision, setHistoryRevision] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const topbarMenuRef = useRef<HTMLDivElement>(null);
+  const designHistoryRef = useRef<DesignHistoryEntry[]>([]);
 
   const selectedZone = design.zones.find((zone) => zone.id === selectedZoneId);
   const zoneLimitReached = design.zones.length >= zoneSuffixes.length;
@@ -354,6 +363,7 @@ export function AppShell(): JSX.Element {
     return summarizeBrowseResult(browseResult);
   }, [browseResult, localCommunityStats, page]);
   const browseMaps = useMemo(() => visibleCommunityMaps(communityCatalog), [communityCatalog]);
+  const canUndoDesignChange = historyRevision > 0;
 
   useEffect(() => {
     if (!dirty) return;
@@ -446,6 +456,18 @@ export function AppShell(): JSX.Element {
     syncSeoMetadata(page);
   }, [page]);
 
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent): void {
+      if (!isUndoShortcut(event) || isEditableShortcutTarget(event.target)) return;
+      if (!designHistoryRef.current.length) return;
+      event.preventDefault();
+      undoDesignChange();
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
   const loadBrowseMaps = useCallback(async (currentPage = browsePage) => {
     setBrowseStatus("loading");
     setBrowseError(undefined);
@@ -507,6 +529,12 @@ export function AppShell(): JSX.Element {
       return false;
     }
 
+    pushDesignHistory({
+      design,
+      selectedZoneId,
+      selectedConnectionId,
+      dirty
+    });
     const resolvedZoneId = resolveSelectedZoneId(design, next, nextSelectedZoneId);
     setDesign(next);
     setSelectedZoneId(resolvedZoneId);
@@ -515,6 +543,30 @@ export function AppShell(): JSX.Element {
     clearJsonMessages();
     syncJsonSnapshot(next);
     return true;
+  }
+
+  function pushDesignHistory(entry: DesignHistoryEntry): void {
+    designHistoryRef.current = [...designHistoryRef.current.slice(-49), structuredClone(entry)];
+    setHistoryRevision(designHistoryRef.current.length);
+  }
+
+  function resetDesignHistory(): void {
+    designHistoryRef.current = [];
+    setHistoryRevision(0);
+  }
+
+  function undoDesignChange(): void {
+    const previous = designHistoryRef.current.at(-1);
+    if (!previous) return;
+
+    designHistoryRef.current = designHistoryRef.current.slice(0, -1);
+    setDesign(previous.design);
+    setSelectedZoneId(previous.selectedZoneId);
+    setSelectedConnectionId(previous.selectedConnectionId);
+    setDirty(previous.dirty);
+    clearJsonMessages();
+    syncJsonSnapshot(previous.design);
+    setHistoryRevision(designHistoryRef.current.length);
   }
 
   function handleNew(): void {
@@ -526,6 +578,7 @@ export function AppShell(): JSX.Element {
     setDirty(false);
     clearJsonMessages();
     syncJsonSnapshot(next);
+    resetDesignHistory();
   }
 
   function handleRecover(): void {
@@ -537,6 +590,7 @@ export function AppShell(): JSX.Element {
     setDirty(true);
     clearJsonMessages();
     syncJsonSnapshot(autosaveRecovery.design);
+    resetDesignHistory();
     setAutosaveRecovery(null);
   }
 
@@ -1217,6 +1271,16 @@ export function AppShell(): JSX.Element {
                     <CardHeader className="design-board-shell__header">
                       <CardTitle><Sparkles size={17} />Template Layout</CardTitle>
                       <div className="board-widget-actions" aria-label="Design board actions">
+                        <Button
+                          size="icon"
+                          variant="blue"
+                          disabled={!canUndoDesignChange}
+                          aria-label="Undo last design change"
+                          title="Undo last design change (Ctrl+Z)"
+                          onClick={undoDesignChange}
+                        >
+                          <RotateCcw size={16} />
+                        </Button>
                         <Button variant="blue" disabled={zoneLimitReached} title={zoneLimitMessage} onClick={() => handleAddZone("Spawn")}><Plus size={16} />Spawn</Button>
                         <Button variant="gold" disabled={zoneLimitReached} title={zoneLimitMessage} onClick={() => handleAddZone("Neutral")}><Plus size={16} />Neutral</Button>
                         <Button variant="green" disabled={zoneLimitReached} title={zoneLimitMessage} onClick={() => handleAddZone("Hub")}><Plus size={16} />Hub</Button>
@@ -1634,6 +1698,16 @@ function readPageFromLocation(): AppPage {
   if (window.location.pathname === "/install") return "install";
   if (window.location.pathname === "/my-maps") return "my-maps";
   return "builder";
+}
+
+function isUndoShortcut(event: KeyboardEvent): boolean {
+  return event.key.toLowerCase() === "z" && (event.ctrlKey || event.metaKey) && !event.shiftKey && !event.altKey;
+}
+
+function isEditableShortcutTarget(target: EventTarget | null): boolean {
+  if (!(target instanceof HTMLElement)) return false;
+  if (target.isContentEditable) return true;
+  return target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement || target instanceof HTMLSelectElement;
 }
 
 function writePostSignInUpload(): void {

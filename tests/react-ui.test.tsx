@@ -591,6 +591,47 @@ describe("React UI shell", () => {
     boardLayout.restore();
   });
 
+  it("undoes the last board change from the board action button", async () => {
+    const user = userEvent.setup();
+    const boardLayout = mockDesignBoardLayout();
+
+    render(<AppShell />);
+
+    const undo = screen.getByRole("button", { name: "Undo last design change" });
+    expect(undo.hasAttribute("disabled")).toBe(true);
+
+    await user.click(screen.getAllByRole("button", { name: "Neutral" })[0]);
+    expect(screen.getByText("Neutral-4")).toBeTruthy();
+    expect(undo.hasAttribute("disabled")).toBe(false);
+
+    await user.click(undo);
+
+    expect(screen.queryByText("Neutral-4")).toBeNull();
+    expect(undo.hasAttribute("disabled")).toBe(true);
+
+    boardLayout.restore();
+  });
+
+  it("undoes design changes with Ctrl+Z without intercepting text field undo", async () => {
+    const user = userEvent.setup();
+    const boardLayout = mockDesignBoardLayout();
+
+    render(<AppShell />);
+
+    await user.click(screen.getAllByRole("button", { name: "Neutral" })[0]);
+    expect(screen.getByText("Neutral-4")).toBeTruthy();
+
+    const templateName = screen.getByDisplayValue("Custom Template");
+    await user.click(templateName);
+    await user.keyboard("{Control>}z{/Control}");
+    expect(screen.getByText("Neutral-4")).toBeTruthy();
+
+    fireEvent.keyDown(window, { key: "z", ctrlKey: true });
+    expect(screen.queryByText("Neutral-4")).toBeNull();
+
+    boardLayout.restore();
+  });
+
   it("clears connection selection when adding a zone from a non-zone selection", async () => {
     const user = userEvent.setup();
     const boardLayout = mockDesignBoardLayout();
@@ -1645,11 +1686,15 @@ describe("React UI shell", () => {
     const inspector = screen.getByRole("heading", { name: "Zone Inspector" }).closest("section");
     expect(getInputForLabel(inspector as HTMLElement, "Name").value).toBe("Spawn-1");
 
-    const transferTarget = within(inspector as HTMLElement).getByLabelText("Transfer settings target") as HTMLSelectElement;
+    await user.click(within(inspector as HTMLElement).getByRole("button", { name: "Transfer Settings" }));
+
+    const dialog = screen.getByRole("dialog");
+    expect(within(dialog).getByRole("heading", { name: "Transfer Settings" })).toBeTruthy();
+    const transferTarget = within(dialog).getByLabelText("Transfer settings target") as HTMLSelectElement;
     const neutralTarget = Array.from(transferTarget.options).find((option) => option.text === "Neutral-3");
     expect(neutralTarget).toBeTruthy();
     await user.selectOptions(transferTarget, (neutralTarget as HTMLOptionElement).value);
-    await user.click(within(inspector as HTMLElement).getByRole("button", { name: "Transfer Settings" }));
+    await user.click(within(dialog).getByRole("button", { name: "Transfer Settings" }));
 
     expect(getInputForLabel(inspector as HTMLElement, "Name").value).toBe("Spawn-1");
     expect(getSelectForLabel(inspector as HTMLElement, "Role").value).toBe("Spawn");
@@ -1869,6 +1914,9 @@ describe("React UI shell", () => {
     render(<AppShell />);
 
     await user.click(screen.getByRole("button", { name: "Transfer Settings" }));
+    const dialog = screen.getByRole("dialog");
+    expect(within(dialog).getByRole("heading", { name: "Transfer Settings" })).toBeTruthy();
+    await user.click(within(dialog).getByRole("button", { name: "Transfer Settings" }));
 
     expect(screen.getByDisplayValue("Neutral-3")).toBeTruthy();
     expect(getSelectForLabel(document.body, "Role").value).toBe("Spawn");

@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input, NativeSelect, SteppedValueSlider, Textarea } from "@/components/ui/form-controls";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/radix";
+import { Dialog, DialogContent, DialogDescription, DialogTitle, Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/radix";
 import { BiomeField } from "@/components/builder/BiomeField";
 import { ContentPoolField, SidListField } from "@/components/builder/ContentPoolField";
 import { MainObjectsEditor } from "@/components/builder/MainObjectsEditor";
@@ -61,6 +61,7 @@ export function ZoneInspector({
     [zone?.id, zones]
   );
   const [transferTargetId, setTransferTargetId] = useState("");
+  const [transferDialogOpen, setTransferDialogOpen] = useState(false);
 
   useEffect(() => {
     if (transferTargetOptions.some((candidate) => candidate.id === transferTargetId)) return;
@@ -99,22 +100,7 @@ export function ZoneInspector({
         {duplicateDisabledReason ? <div className="builder-inline-notice">{duplicateDisabledReason}</div> : null}
         {transferTargetOptions.length > 0 ? (
           <div className="zone-transfer">
-            <NativeSelect
-              aria-label="Transfer settings target"
-              value={transferTargetId}
-              onChange={(event) => setTransferTargetId(event.currentTarget.value)}
-            >
-              {transferTargetOptions.map((candidate) => (
-                <option key={candidate.id} value={candidate.id}>{candidate.name}</option>
-              ))}
-            </NativeSelect>
-            <Button
-              type="button"
-              size="sm"
-              variant="default"
-              disabled={!transferTargetId}
-              onClick={() => onTransferSettings(zone.id, transferTargetId)}
-            >
+            <Button type="button" size="sm" variant="default" onClick={() => setTransferDialogOpen(true)}>
               <ArrowRightLeft size={14} />Transfer Settings
             </Button>
           </div>
@@ -360,6 +346,40 @@ export function ZoneInspector({
           </TabsContent>
         </Tabs>
       </CardContent>
+      <Dialog open={transferDialogOpen} onOpenChange={setTransferDialogOpen}>
+        <DialogContent className="transfer-settings-dialog">
+          <div className="dialog-heading">
+            <div>
+              <DialogTitle>Transfer Settings</DialogTitle>
+              <DialogDescription>Choose a zone to receive this zone's configuration.</DialogDescription>
+            </div>
+          </div>
+          <ConfigField configKey="zone.transferTarget" label="Target Zone">
+            <NativeSelect
+              aria-label="Transfer settings target"
+              value={transferTargetId}
+              onChange={(event) => setTransferTargetId(event.currentTarget.value)}
+            >
+              {transferTargetOptions.map((candidate) => (
+                <option key={candidate.id} value={candidate.id}>{candidate.name}</option>
+              ))}
+            </NativeSelect>
+          </ConfigField>
+          <div className="dialog-actions">
+            <Button type="button" variant="ghost" onClick={() => setTransferDialogOpen(false)}>Cancel</Button>
+            <Button
+              type="button"
+              disabled={!transferTargetId}
+              onClick={() => {
+                onTransferSettings(zone.id, transferTargetId);
+                setTransferDialogOpen(false);
+              }}
+            >
+              <ArrowRightLeft size={14} />Transfer Settings
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </Card>
   );
 }
