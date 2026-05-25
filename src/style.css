@@ -473,9 +473,7 @@ button {
   gap: 10px;
 }
 
-.template-settings-card__section + .template-settings-card__section,
-.template-settings-card__section + .raw-details,
-.template-settings-card .raw-details + .raw-details {
+.template-settings-card__section + .template-settings-card__section {
   padding-top: 10px;
   border-top: 1px solid rgba(39, 53, 68, 0.62);
 }
@@ -487,18 +485,6 @@ button {
 .template-settings-card__section--map {
   grid-template-columns: repeat(4, minmax(132px, 1fr));
   align-items: end;
-}
-
-.template-settings-card__section--match {
-  grid-template-columns: repeat(4, minmax(132px, 1fr));
-  align-items: end;
-}
-
-.template-settings-card__victory-group {
-  display: grid;
-  gap: 10px;
-  align-self: end;
-  min-width: 0;
 }
 
 .template-settings-card .form-grid {
@@ -545,10 +531,6 @@ button {
 .template-settings-card__dimension-lock .checkline {
   min-height: 34px;
   width: 100%;
-}
-
-.template-settings-card .compact-form > .raw-details {
-  grid-column: auto;
 }
 
 .template-settings-card__rule-checks {
@@ -1421,11 +1403,8 @@ button {
   gap: 6px;
 }
 
-.zone-transfer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 6px;
-  margin-bottom: 10px;
+.zone-inspector-actions + .oe-tabs {
+  margin-top: 2px;
 }
 
 .transfer-settings-dialog {
@@ -1899,6 +1878,42 @@ button {
   display: flex;
   justify-content: flex-end;
   gap: 8px;
+}
+
+.dialog-section {
+  margin-bottom: 16px;
+}
+
+.dialog-section__heading {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 0 0 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+
+.rules-victory-dialog {
+  width: min(720px, calc(100vw - 28px));
+}
+
+.zone-detail-dialog {
+  width: min(640px, calc(100vw - 28px));
+}
+
+.zone-inspector-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.template-settings-card__rules-trigger {
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 2px;
 }
 
 .auth-dialog {

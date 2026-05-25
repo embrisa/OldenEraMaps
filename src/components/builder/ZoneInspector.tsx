@@ -1,4 +1,4 @@
-import { ArrowRightLeft, Copy, Trash2 } from "lucide-react";
+import { ArrowRightLeft, Copy, Palette, Shield, Trash2 } from "lucide-react";
 import { useEffect, useMemo, useState, type JSX } from "react";
 import { terrainOptions } from "@/settings";
 import { syncZoneProfile, type DesignZone, type DesignZoneRole } from "@/design";
@@ -17,14 +17,11 @@ import {
   parseNumberList
 } from "@/components/builder/formHelpers";
 
-export type ZoneInspectorTab = "general" | "terrain" | "content" | "guards" | "rules";
+export type ZoneInspectorTab = "general" | "content";
 
 const zoneInspectorTabs: Array<{ value: ZoneInspectorTab; label: string; tone: string }> = [
   { value: "general", label: "General", tone: "blue" },
-  { value: "terrain", label: "Terrain", tone: "green" },
-  { value: "content", label: "Content", tone: "gold" },
-  { value: "guards", label: "Guards", tone: "red" },
-  { value: "rules", label: "Rules", tone: "blue" }
+  { value: "content", label: "Content", tone: "gold" }
 ];
 
 export function ZoneInspector({
@@ -62,6 +59,8 @@ export function ZoneInspector({
   );
   const [transferTargetId, setTransferTargetId] = useState("");
   const [transferDialogOpen, setTransferDialogOpen] = useState(false);
+  const [terrainDialogOpen, setTerrainDialogOpen] = useState(false);
+  const [guardsRulesDialogOpen, setGuardsRulesDialogOpen] = useState(false);
 
   useEffect(() => {
     if (transferTargetOptions.some((candidate) => candidate.id === transferTargetId)) return;
@@ -98,13 +97,19 @@ export function ZoneInspector({
           </div>
         </div>
         {duplicateDisabledReason ? <div className="builder-inline-notice">{duplicateDisabledReason}</div> : null}
-        {transferTargetOptions.length > 0 ? (
-          <div className="zone-transfer">
+        <div className="zone-inspector-actions">
+          {transferTargetOptions.length > 0 ? (
             <Button type="button" size="sm" variant="default" onClick={() => setTransferDialogOpen(true)}>
-              <ArrowRightLeft size={14} />Transfer Settings
+              <ArrowRightLeft size={14} />Transfer
             </Button>
-          </div>
-        ) : null}
+          ) : null}
+          <Button type="button" size="sm" variant="green" onClick={() => setTerrainDialogOpen(true)}>
+            <Palette size={14} />Terrain &amp; Biomes
+          </Button>
+          <Button type="button" size="sm" variant="default" onClick={() => setGuardsRulesDialogOpen(true)}>
+            <Shield size={14} />Guards &amp; Rules
+          </Button>
+        </div>
         <Tabs value={tab} onValueChange={(value) => onTabChange(value as ZoneInspectorTab)}>
           <TabsList>
             {zoneInspectorTabs.map((item) => (
@@ -210,7 +215,48 @@ export function ZoneInspector({
             </div>
             <MainObjectsEditor zone={zone} onUpdate={onUpdate} />
           </TabsContent>
-          <TabsContent value="terrain">
+          <TabsContent value="content">
+            <NumberGrid zone={zone} fields={[
+              ["resourceDensityPercent", "Resources %", 20, 400],
+              ["structureDensityPercent", "Structures %", 20, 200],
+              ["guardedContentValue", "Guarded Content Value", 0, 2000000],
+              ["guardedContentValuePerArea", "Guarded Value / Area", 0, 20000],
+              ["unguardedContentValue", "Unguarded Content Value", 0, 2000000],
+              ["unguardedContentValuePerArea", "Unguarded Value / Area", 0, 20000],
+              ["resourcesValue", "Resources Value", 0, 2000000],
+              ["resourcesValuePerArea", "Resources Value / Area", 0, 20000]
+            ]} onUpdate={onUpdate} />
+            <ContentPoolField label="Guarded Content Pool" configKey="zone.guardedContentPool" values={zone.guardedContentPool} onChange={(values) => onUpdate((draft) => { draft.guardedContentPool = values; })} />
+            <ContentPoolField label="Unguarded Content Pool" configKey="zone.unguardedContentPool" values={zone.unguardedContentPool} onChange={(values) => onUpdate((draft) => { draft.unguardedContentPool = values; })} />
+            <ContentPoolField label="Resources Content Pool" configKey="zone.resourcesContentPool" values={zone.resourcesContentPool} onChange={(values) => onUpdate((draft) => { draft.resourcesContentPool = values; })} />
+            <SidListField
+              label="Mandatory Content"
+              configKey="zone.mandatoryContent"
+              values={zone.mandatoryContent}
+              options={contentReferenceOptions(mandatoryContentNames, zone.mandatoryContent, "mandatory_content_")}
+              onChange={(values) => onUpdate((draft) => { draft.mandatoryContent = values; })}
+            />
+            <SidListField
+              label="Content Count Limits"
+              configKey="zone.contentCountLimits"
+              values={zone.contentCountLimits}
+              options={contentReferenceOptions(contentCountLimitNames, zone.contentCountLimits, "content_limits_")}
+              onChange={(values) => onUpdate((draft) => { draft.contentCountLimits = values; })}
+            />
+          </TabsContent>
+        </Tabs>
+      </CardContent>
+      {/* Terrain & Biomes dialog */}
+      <Dialog open={terrainDialogOpen} onOpenChange={setTerrainDialogOpen}>
+        <DialogContent className="zone-detail-dialog">
+          <div className="dialog-heading">
+            <div>
+              <DialogTitle>Terrain &amp; Biomes</DialogTitle>
+              <DialogDescription>Terrain theme, layout, and biome overrides for {zone.name}.</DialogDescription>
+            </div>
+          </div>
+          <div className="dialog-section">
+            <h3 className="dialog-section__heading">Terrain &amp; Layout</h3>
             <div className="form-grid form-grid--two">
               <ConfigField configKey="zone.terrainTheme" label="Terrain">
                 <NativeSelect value={zone.terrainTheme} onChange={(event) => {
@@ -246,40 +292,26 @@ export function ZoneInspector({
                 }} />
               </ConfigField>
             </div>
+          </div>
+          <div className="dialog-section">
+            <h3 className="dialog-section__heading">Biome Overrides</h3>
             <BiomeField label="Zone Biome" value={zone.zoneBiome} onChange={(value) => onUpdate((draft) => { draft.zoneBiome = value; })} />
             <BiomeField label="Content Biome" value={zone.contentBiome} onChange={(value) => onUpdate((draft) => { draft.contentBiome = value; })} />
             <BiomeField label="Meta Objects Biome" value={zone.metaObjectsBiome} onChange={(value) => onUpdate((draft) => { draft.metaObjectsBiome = value; })} />
-          </TabsContent>
-          <TabsContent value="content">
-            <NumberGrid zone={zone} fields={[
-              ["resourceDensityPercent", "Resources %", 20, 400],
-              ["structureDensityPercent", "Structures %", 20, 200],
-              ["guardedContentValue", "Guarded Content Value", 0, 2000000],
-              ["guardedContentValuePerArea", "Guarded Value / Area", 0, 20000],
-              ["unguardedContentValue", "Unguarded Content Value", 0, 2000000],
-              ["unguardedContentValuePerArea", "Unguarded Value / Area", 0, 20000],
-              ["resourcesValue", "Resources Value", 0, 2000000],
-              ["resourcesValuePerArea", "Resources Value / Area", 0, 20000]
-            ]} onUpdate={onUpdate} />
-            <ContentPoolField label="Guarded Content Pool" configKey="zone.guardedContentPool" values={zone.guardedContentPool} onChange={(values) => onUpdate((draft) => { draft.guardedContentPool = values; })} />
-            <ContentPoolField label="Unguarded Content Pool" configKey="zone.unguardedContentPool" values={zone.unguardedContentPool} onChange={(values) => onUpdate((draft) => { draft.unguardedContentPool = values; })} />
-            <ContentPoolField label="Resources Content Pool" configKey="zone.resourcesContentPool" values={zone.resourcesContentPool} onChange={(values) => onUpdate((draft) => { draft.resourcesContentPool = values; })} />
-            <SidListField
-              label="Mandatory Content"
-              configKey="zone.mandatoryContent"
-              values={zone.mandatoryContent}
-              options={contentReferenceOptions(mandatoryContentNames, zone.mandatoryContent, "mandatory_content_")}
-              onChange={(values) => onUpdate((draft) => { draft.mandatoryContent = values; })}
-            />
-            <SidListField
-              label="Content Count Limits"
-              configKey="zone.contentCountLimits"
-              values={zone.contentCountLimits}
-              options={contentReferenceOptions(contentCountLimitNames, zone.contentCountLimits, "content_limits_")}
-              onChange={(values) => onUpdate((draft) => { draft.contentCountLimits = values; })}
-            />
-          </TabsContent>
-          <TabsContent value="guards">
+          </div>
+        </DialogContent>
+      </Dialog>
+      {/* Guards & Rules dialog */}
+      <Dialog open={guardsRulesDialogOpen} onOpenChange={setGuardsRulesDialogOpen}>
+        <DialogContent className="zone-detail-dialog">
+          <div className="dialog-heading">
+            <div>
+              <DialogTitle>Guards &amp; Rules</DialogTitle>
+              <DialogDescription>Guard strength, reactions, and zone-level rules for {zone.name}.</DialogDescription>
+            </div>
+          </div>
+          <div className="dialog-section">
+            <h3 className="dialog-section__heading">Guard Settings</h3>
             <NumberGrid zone={zone} fields={[
               ["neutralStackStrengthPercent", "Guard Strength %", 25, 300],
               ["guardRandomizationPercent", "Guard Random %", 0, 50],
@@ -294,8 +326,9 @@ export function ZoneInspector({
                 onUpdate((draft) => { draft.guardReactionDistribution = value; });
               }} />
             </ConfigField>
-          </TabsContent>
-          <TabsContent value="rules">
+          </div>
+          <div className="dialog-section">
+            <h3 className="dialog-section__heading">Zone Rules</h3>
             <div className="checks checks--vertical">
               <ConfigField configKey="zone.encounterHolesSettings" label="Encounter Holes">
                 <CheckField checked={zone.encounterHolesSettings != null} onCheckedChange={(checked) => onUpdate((draft) => {
@@ -343,9 +376,10 @@ export function ZoneInspector({
                 }} />
               </ConfigField>
             </div>
-          </TabsContent>
-        </Tabs>
-      </CardContent>
+          </div>
+        </DialogContent>
+      </Dialog>
+      {/* Transfer Settings dialog */}
       <Dialog open={transferDialogOpen} onOpenChange={setTransferDialogOpen}>
         <DialogContent className="transfer-settings-dialog">
           <div className="dialog-heading">

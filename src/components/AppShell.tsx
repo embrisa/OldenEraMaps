@@ -1490,6 +1490,7 @@ export function AppShell(): JSX.Element {
         onOpenChange={setExpertTemplateSettingsOpen}
         design={design}
         onUpdate={updateDesign}
+        onGlobal={handleGlobal}
       />
       <MandatoryContentDialog
         open={mandatoryContentOpen}

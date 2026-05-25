@@ -430,7 +430,6 @@ describe("React UI shell", () => {
 
     expect(screen.getAllByText("4").length).toBeGreaterThan(0);
     expect(screen.getByText("Neutral-4")).toBeTruthy();
-    expect(screen.getByRole("tab", { name: "Rules" })).toBeTruthy();
     expect(screen.getByRole("checkbox", { name: "Generate roads in this zone" })).toBeTruthy();
   });
 
@@ -1742,7 +1741,7 @@ describe("React UI shell", () => {
     const inspector = screen.getByRole("heading", { name: "Zone Inspector" }).closest("section");
     expect(getInputForLabel(inspector as HTMLElement, "Name").value).toBe("Spawn-1");
 
-    await user.click(within(inspector as HTMLElement).getByRole("button", { name: "Transfer Settings" }));
+    await user.click(within(inspector as HTMLElement).getByRole("button", { name: /Transfer/ }));
 
     const dialog = screen.getByRole("dialog");
     expect(within(dialog).getByRole("heading", { name: "Transfer Settings" })).toBeTruthy();
@@ -1922,8 +1921,9 @@ describe("React UI shell", () => {
     const user = userEvent.setup();
     render(<AppShell />);
 
-    await user.click(screen.getByRole("tab", { name: "Terrain" }));
-    const zoneBiome = screen.getByLabelText("Zone Biome") as HTMLTextAreaElement;
+    await user.click(screen.getByRole("button", { name: /Terrain & Biomes/ }));
+    const dialog = screen.getByRole("dialog");
+    const zoneBiome = within(dialog).getByLabelText("Zone Biome") as HTMLTextAreaElement;
 
     await user.clear(zoneBiome);
     await user.paste("{");
@@ -1938,25 +1938,35 @@ describe("React UI shell", () => {
     const settingsCard = screen.getByDisplayValue("Custom Template").closest(".template-settings-card");
     expect(settingsCard).toBeTruthy();
 
-    await chooseSelectOption(user, "Victory", "City Hold");
-    expect(screen.getByText("City Hold requires exactly one hold-city zone.")).toBeTruthy();
-    expect(within(settingsCard as HTMLElement).getByText("City Hold Days")).toBeTruthy();
-    expect(getSliderValueInputForLabel(settingsCard as HTMLElement, "City Hold Days").value).toBe("6");
+    await user.click(within(settingsCard as HTMLElement).getByRole("button", { name: /Rules & Victory/ }));
+    const dialog = screen.getByRole("dialog");
 
-    await chooseSelectOption(user, "Victory", "Classic");
+    await chooseSelectOptionInContainer(user, dialog, "Victory", "City Hold");
+    expect(screen.getByText("City Hold requires exactly one hold-city zone.")).toBeTruthy();
+    expect(within(dialog).getByText("City Hold Days")).toBeTruthy();
+    expect(getSliderValueInputForLabel(dialog, "City Hold Days").value).toBe("6");
+
+    await chooseSelectOptionInContainer(user, dialog, "Victory", "Classic");
     expect(screen.queryByText("City Hold requires exactly one hold-city zone.")).toBeNull();
-    expect(screen.queryByText("City Hold Days")).toBeNull();
+    expect(within(dialog).queryByText("City Hold Days")).toBeNull();
   });
 
   it("shows Gladiator Arena in the victory selector and keeps the inspector visible after zone actions", async () => {
     const user = userEvent.setup();
     render(<AppShell />);
 
-    const victoryField = screen.getByText("Victory").closest(".config-field");
+    const settingsCard = screen.getByDisplayValue("Custom Template").closest(".template-settings-card");
+    await user.click(within(settingsCard as HTMLElement).getByRole("button", { name: /Rules & Victory/ }));
+    const dialog = screen.getByRole("dialog");
+
+    const victoryField = within(dialog).getByText("Victory").closest(".config-field");
     const victorySelect = victoryField?.querySelector<HTMLSelectElement>("select");
     expect(victorySelect).toBeTruthy();
     expect(Array.from((victorySelect as HTMLSelectElement).options).some((option) => option.text === "Gladiator Arena")).toBe(true);
     expect(Array.from((victorySelect as HTMLSelectElement).options).some((option) => option.text === "Find artifact")).toBe(false);
+
+    // Close dialog to access inspector actions
+    await user.click(within(dialog).getByRole("button", { name: "Close" }));
 
     await user.click(screen.getByRole("button", { name: "Duplicate" }));
     await user.click(screen.getByRole("button", { name: "Delete" }));
@@ -1969,7 +1979,7 @@ describe("React UI shell", () => {
     const user = userEvent.setup();
     render(<AppShell />);
 
-    await user.click(screen.getByRole("button", { name: "Transfer Settings" }));
+    await user.click(screen.getByRole("button", { name: /Transfer/ }));
     const dialog = screen.getByRole("dialog");
     expect(within(dialog).getByRole("heading", { name: "Transfer Settings" })).toBeTruthy();
     await user.click(within(dialog).getByRole("button", { name: "Transfer Settings" }));
@@ -1987,57 +1997,60 @@ describe("React UI shell", () => {
 
     await chooseSelectOptionInContainer(user, settingsCard as HTMLElement, "Game Mode", "Tournament");
 
-    const factionLaws = getSliderValueInputForLabel(settingsCard as HTMLElement, "Faction Laws XP %");
+    // Open Rules & Victory dialog
+    await user.click(within(settingsCard as HTMLElement).getByRole("button", { name: /Rules & Victory/ }));
+    const dialog = screen.getByRole("dialog");
+
+    const factionLaws = getSliderValueInputForLabel(dialog, "Faction Laws XP %");
     fireEvent.input(factionLaws, { target: { value: "125" } });
     fireEvent.blur(factionLaws);
 
-    const astrology = getSliderValueInputForLabel(settingsCard as HTMLElement, "Astrology XP %");
+    const astrology = getSliderValueInputForLabel(dialog, "Astrology XP %");
     fireEvent.input(astrology, { target: { value: "75" } });
     fireEvent.blur(astrology);
 
-    await user.click(screen.getByText("Advanced Rules"));
-    await user.click(screen.getByRole("checkbox", { name: "Ban hiring extra heroes" }));
-    await user.click(screen.getByRole("checkbox", { name: "Enable encounter holes" }));
+    await user.click(within(dialog).getByRole("checkbox", { name: "Ban hiring extra heroes" }));
+    await user.click(within(dialog).getByRole("checkbox", { name: "Enable encounter holes" }));
 
-    const movementBonus = getSliderValueInputForLabel(settingsCard as HTMLElement, "Movement Bonus");
+    const movementBonus = getSliderValueInputForLabel(dialog, "Movement Bonus");
     fireEvent.input(movementBonus, { target: { value: "7" } });
     fireEvent.blur(movementBonus);
 
-    await user.click(screen.getByRole("checkbox", { name: "Lose when starting city is lost" }));
-    expect(screen.getByText("Lost Start City Day")).toBeTruthy();
+    await user.click(within(dialog).getByRole("checkbox", { name: "Lose when starting city is lost" }));
+    expect(within(dialog).getByText("Lost Start City Day")).toBeTruthy();
 
-    const lostStartCityDay = getSliderValueInputForLabel(settingsCard as HTMLElement, "Lost Start City Day");
+    const lostStartCityDay = getSliderValueInputForLabel(dialog, "Lost Start City Day");
     fireEvent.input(lostStartCityDay, { target: { value: "9" } });
     fireEvent.blur(lostStartCityDay);
 
-    await chooseSelectOption(user, "Victory", "Gladiator Arena");
-    expect(screen.getByText("Gladiator Start Delay")).toBeTruthy();
+    await chooseSelectOptionInContainer(user, dialog, "Victory", "Gladiator Arena");
+    expect(within(dialog).getByText("Gladiator Start Delay")).toBeTruthy();
 
-    await user.click(screen.getByRole("checkbox", { name: "Enable Gladiator rules" }));
+    await user.click(within(dialog).getByRole("checkbox", { name: "Enable Gladiator rules" }));
 
-    const gladiatorDelay = getSliderValueInputForLabel(settingsCard as HTMLElement, "Gladiator Start Delay");
+    const gladiatorDelay = getSliderValueInputForLabel(dialog, "Gladiator Start Delay");
     fireEvent.input(gladiatorDelay, { target: { value: "21" } });
     fireEvent.blur(gladiatorDelay);
 
-    const gladiatorCountDay = getSliderValueInputForLabel(settingsCard as HTMLElement, "Gladiator Count Day");
+    const gladiatorCountDay = getSliderValueInputForLabel(dialog, "Gladiator Count Day");
     fireEvent.input(gladiatorCountDay, { target: { value: "4" } });
     fireEvent.blur(gladiatorCountDay);
 
-    await chooseSelectOption(user, "Victory", "Tournament");
-    expect(screen.getByText("First Tournament Day")).toBeTruthy();
-    expect(screen.getByText("Gladiator Start Delay")).toBeTruthy();
+    await chooseSelectOptionInContainer(user, dialog, "Victory", "Tournament");
+    expect(within(dialog).getByText("First Tournament Day")).toBeTruthy();
+    expect(within(dialog).getByText("Gladiator Start Delay")).toBeTruthy();
 
-    await user.click(screen.getByRole("checkbox", { name: "Save tournament army" }));
+    await user.click(within(dialog).getByRole("checkbox", { name: "Save tournament army" }));
 
-    const firstTournamentDay = getSliderValueInputForLabel(settingsCard as HTMLElement, "First Tournament Day");
+    const firstTournamentDay = getSliderValueInputForLabel(dialog, "First Tournament Day");
     fireEvent.input(firstTournamentDay, { target: { value: "18" } });
     fireEvent.blur(firstTournamentDay);
 
-    const tournamentInterval = getSliderValueInputForLabel(settingsCard as HTMLElement, "Tournament Interval");
+    const tournamentInterval = getSliderValueInputForLabel(dialog, "Tournament Interval");
     fireEvent.input(tournamentInterval, { target: { value: "5" } });
     fireEvent.blur(tournamentInterval);
 
-    const pointsToWin = getSliderValueInputForLabel(settingsCard as HTMLElement, "Points To Win");
+    const pointsToWin = getSliderValueInputForLabel(dialog, "Points To Win");
     fireEvent.input(pointsToWin, { target: { value: "3" } });
     fireEvent.blur(pointsToWin);
 
@@ -2064,16 +2077,14 @@ describe("React UI shell", () => {
     const user = userEvent.setup();
     render(<AppShell />);
 
-    const settingsCard = screen.getByDisplayValue("Custom Template").closest(".template-settings-card");
-    expect(settingsCard).toBeTruthy();
+    await user.click(screen.getByRole("button", { name: "Expert Settings" }));
+    const dialog = screen.getByRole("dialog");
 
-    await user.click(screen.getByText("Advanced Map Geometry"));
-
-    const waterWidth = getSliderValueInputForLabel(settingsCard as HTMLElement, "Water Width");
+    const waterWidth = getSliderValueInputForLabel(dialog, "Water Width");
     fireEvent.input(waterWidth, { target: { value: "4" } });
     fireEvent.blur(waterWidth);
 
-    const randomAngleAmplitude = getSliderValueInputForLabel(settingsCard as HTMLElement, "Random Angle Amplitude");
+    const randomAngleAmplitude = getSliderValueInputForLabel(dialog, "Random Angle Amplitude");
     fireEvent.input(randomAngleAmplitude, { target: { value: "120" } });
     fireEvent.blur(randomAngleAmplitude);
 
@@ -2088,22 +2099,21 @@ describe("React UI shell", () => {
     const user = userEvent.setup();
     render(<AppShell />);
 
-    await user.click(screen.getByRole("tab", { name: "Rules" }));
-    const inspector = screen.getByRole("heading", { name: "Zone Inspector" }).closest("section");
-    expect(inspector).toBeTruthy();
+    await user.click(screen.getByRole("button", { name: /Guards & Rules/ }));
+    const dialog = screen.getByRole("dialog");
 
-    await user.click(within(inspector as HTMLElement).getByRole("checkbox", { name: "Configure encounter holes for this zone" }));
-    const affectedEncounters = getSliderValueInputForLabel(inspector as HTMLElement, "Affected Encounters");
+    await user.click(within(dialog).getByRole("checkbox", { name: "Configure encounter holes for this zone" }));
+    const affectedEncounters = getSliderValueInputForLabel(dialog, "Affected Encounters");
     fireEvent.input(affectedEncounters, { target: { value: "7" } });
     fireEvent.blur(affectedEncounters);
 
-    const twoHoleEncounters = getSliderValueInputForLabel(inspector as HTMLElement, "Two-Hole Encounters");
+    const twoHoleEncounters = getSliderValueInputForLabel(dialog, "Two-Hole Encounters");
     fireEvent.input(twoHoleEncounters, { target: { value: "3" } });
     fireEvent.blur(twoHoleEncounters);
 
-    await user.click(within(inspector as HTMLElement).getByRole("checkbox", { name: "Enable weekly random hire unit increment" }));
-    await user.click(within(inspector as HTMLElement).getByRole("checkbox", { name: "Set initial random hire unit increment" }));
-    const initialIncrement = getSliderValueInputForLabel(inspector as HTMLElement, "Initial Unit Increment");
+    await user.click(within(dialog).getByRole("checkbox", { name: "Enable weekly random hire unit increment" }));
+    await user.click(within(dialog).getByRole("checkbox", { name: "Set initial random hire unit increment" }));
+    const initialIncrement = getSliderValueInputForLabel(dialog, "Initial Unit Increment");
     fireEvent.input(initialIncrement, { target: { value: "4" } });
     fireEvent.blur(initialIncrement);
 
@@ -2139,10 +2149,11 @@ describe("React UI shell", () => {
 
     fireEvent.change(editor, { target: { value: JSON.stringify(parsed, null, 2) } });
 
-    await user.click(screen.getByRole("tab", { name: "Terrain" }));
+    await user.click(screen.getByRole("button", { name: /Terrain & Biomes/ }));
 
     await waitFor(() => {
-      const field = screen.getByText("Layout").closest(".config-field");
+      const dialog = screen.getByRole("dialog");
+      const field = within(dialog).getByText("Layout").closest(".config-field");
       const select = field?.querySelector("select") as HTMLSelectElement;
       expect(select.value).toBe("custom_layout_alpha");
       expect(Array.from(select.options).map((option) => option.value)).toContain("custom_layout_alpha");
@@ -2178,15 +2189,16 @@ describe("React UI shell", () => {
     const user = userEvent.setup();
     render(<AppShell />);
 
-    await user.click(screen.getByRole("tab", { name: "Terrain" }));
-    const inspector = screen.getByRole("heading", { name: "Zone Inspector" }).closest("section");
-    expect(inspector).toBeTruthy();
+    await user.click(screen.getByRole("button", { name: /Terrain & Biomes/ }));
+    const dialog = screen.getByRole("dialog");
 
-    await user.click(within(inspector as HTMLElement).getByRole("button", { name: "Snow" }));
+    await user.click(within(dialog).getByRole("button", { name: "Snow" }));
 
-    const terrain = (inspector as HTMLElement).querySelector('[data-state="active"][role="tabpanel"] select');
+    const terrain = dialog.querySelector("select");
     expect(terrain).toBeTruthy();
     expect((terrain as HTMLSelectElement).value).toBe("Snow");
+
+    await user.click(within(dialog).getByRole("button", { name: "Close" }));
     expect(screen.getByRole("heading", { name: "Zone Inspector" })).toBeTruthy();
   });
 
@@ -2332,7 +2344,11 @@ describe("React UI shell", () => {
     const user = userEvent.setup();
     render(<AppShell />);
 
-    await chooseSelectOption(user, "Victory", "City Hold");
+    const settingsCard = screen.getByDisplayValue("Custom Template").closest(".template-settings-card");
+    await user.click(within(settingsCard as HTMLElement).getByRole("button", { name: /Rules & Victory/ }));
+    const dialog = screen.getByRole("dialog");
+    await chooseSelectOptionInContainer(user, dialog, "Victory", "City Hold");
+    await user.click(within(dialog).getByRole("button", { name: "Close" }));
 
     expect(screen.getByText("City Hold requires exactly one hold-city zone.")).toBeTruthy();
     expect((screen.getByRole("button", { name: "Share" }) as HTMLButtonElement).disabled).toBe(true);
