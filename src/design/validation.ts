@@ -1,6 +1,7 @@
 import { createDefaultSettings, validateSettings } from "../settings.ts";
 import type { AmbientPickupDistribution, GuardedEncounterResourceFractions, ValidationResult } from "../types.ts";
 import { type DesignBorder, type DesignOrientation, type DesignZone, type TemplateDesign, isFiniteNumber, isNoiseEntry } from "./model.ts";
+import { nearestSpawnNames } from "./zoneOwnership.ts";
 
 export function validateDesign(design: TemplateDesign): ValidationResult {
   const errors: string[] = [];
@@ -96,7 +97,7 @@ export function validateDesign(design: TemplateDesign): ValidationResult {
   for (const zone of design.zones.filter((candidate) => candidate.naturalExpansion)) {
     if (zone.role !== "Neutral") errors.push(`${zone.name} must be a neutral zone to be marked as a natural expansion.`);
     if (zone.castleCount < 1) errors.push(`${zone.name} must contain at least one castle to be marked as a natural expansion.`);
-    if (adjacentSpawnNames(design, zone).length !== 1) errors.push(`${zone.name} natural expansion must connect to exactly one spawn zone.`);
+    if (nearestSpawnNames(design, zone).length !== 1) errors.push(`${zone.name} natural expansion must connect to exactly one spawn zone.`);
   }
   if (isTournamentDesign(design)) {
     if (!hasValidTournamentLaneGraph(design)) errors.push("Tournament direct and portal connections must keep every zone attached to a player lane.");
@@ -207,19 +208,6 @@ function connectionComponents(design: TemplateDesign, connectionTypes: Array<Tem
 function hasContentLimitTarget(limit: { includeLists?: unknown; content?: unknown }): boolean {
   return (Array.isArray(limit.includeLists) && limit.includeLists.length > 0)
     || (Array.isArray(limit.content) && limit.content.length > 0);
-}
-
-function adjacentSpawnNames(design: TemplateDesign, zone: DesignZone): string[] {
-  const zonesById = new Map(design.zones.map((candidate) => [candidate.id, candidate]));
-  const adjacent = new Set<string>();
-  for (const connection of design.connections) {
-    if (connection.type !== "Direct" && connection.type !== "Portal") continue;
-    const otherId = connection.from === zone.id ? connection.to : connection.to === zone.id ? connection.from : undefined;
-    if (!otherId) continue;
-    const otherZone = zonesById.get(otherId);
-    if (otherZone?.role === "Spawn") adjacent.add(otherZone.name);
-  }
-  return [...adjacent];
 }
 
 export function designValidationAsSettingsValidation(design: TemplateDesign): ValidationResult {

@@ -2150,6 +2150,21 @@ describe("React UI shell", () => {
     });
   });
 
+  it("renders zone inspector detail dialogs with scrollable content regions", async () => {
+    const user = userEvent.setup();
+    render(<AppShell />);
+
+    for (const dialogButtonName of [/Terrain & Biomes/, /Guards & Rules/, "Content"]) {
+      await user.click(screen.getByRole("button", { name: dialogButtonName }));
+      const dialog = screen.getByRole("dialog");
+
+      expect(dialog.querySelector(".zone-inspector-dialog__scroll")).toBeTruthy();
+
+      await user.click(within(dialog).getByRole("button", { name: "Close" }));
+      await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
+    }
+  });
+
   it("shows imported custom layout profiles in the zone terrain selector", async () => {
     const user = userEvent.setup();
     render(<AppShell />);

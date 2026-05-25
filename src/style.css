@@ -2163,12 +2163,33 @@ button {
 }
 
 .zone-detail-dialog {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
   width: min(640px, calc(100vw - 28px));
+  overflow: hidden;
 }
 
 .zone-content-dialog {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
   width: min(900px, calc(100vw - 28px));
   max-height: min(820px, calc(100vh - 28px));
+  overflow: hidden;
+}
+
+.studio-shell--builder .oe-dialog.zone-detail-dialog {
+  width: min(640px, calc(100vw - 28px));
+}
+
+.studio-shell--builder .oe-dialog.zone-content-dialog {
+  width: min(900px, calc(100vw - 28px));
+  max-height: min(820px, calc(100vh - 28px));
+}
+
+.zone-inspector-dialog__scroll {
+  min-height: 0;
+  height: min(680px, calc(100vh - 126px));
+  padding-right: 8px;
 }
 
 .zone-inspector-actions {

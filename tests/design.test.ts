@@ -809,6 +809,30 @@ describe("manual template design", () => {
     expect(natural?.mainObjects?.[1].faction).toEqual({ type: "Match", args: ["0"] });
   });
 
+  it("matches neutral castle factions to the unique nearest spawn in a private lane", () => {
+    let design = createDefaultDesign();
+    design = addZone(design, "Neutral");
+    design = addZone(design, "Neutral");
+    design = addZone(design, "Neutral");
+    const [spawn1, laneA, spawn2, laneB, laneC, laneD] = design.zones;
+    laneB.matchAdjacentNeutralCastleFactions = true;
+    laneB.naturalExpansion = true;
+    laneB.castleCount = 1;
+    design.connections = [
+      { id: "conn-1", name: "Lane-1-A", from: spawn1.id, to: laneA.id, type: "Direct", guardStrength: 8000, road: true },
+      { id: "conn-2", name: "Lane-A-B", from: laneA.id, to: laneB.id, type: "Direct", guardStrength: 12000, road: true },
+      { id: "conn-3", name: "Lane-B-C", from: laneB.id, to: laneC.id, type: "Direct", guardStrength: 16000, road: true },
+      { id: "conn-4", name: "Lane-C-D", from: laneC.id, to: laneD.id, type: "Direct", guardStrength: 20000, road: true },
+      { id: "conn-5", name: "Lane-D-2", from: laneD.id, to: spawn2.id, type: "Direct", guardStrength: 24000, road: true }
+    ];
+
+    expect(validateDesign(design).errors).toEqual([]);
+    const template = designToTemplate(design);
+    const matched = template.variants?.[0].zones?.find((zone) => zone.name === laneB.name);
+
+    expect(matched?.mainObjects?.[0].faction).toEqual({ type: "Match", args: ["0", "Spawn-1"] });
+  });
+
   it("requires manual natural expansion zones to have one adjacent spawn", () => {
     const design = createDefaultDesign();
     design.zones[1].naturalExpansion = true;

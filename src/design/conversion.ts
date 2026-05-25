@@ -27,6 +27,7 @@ import {
   type TemplateDesign
 } from "./model.ts";
 import { validateDesign } from "./validation.ts";
+import { uniqueNearestSpawnName } from "./zoneOwnership.ts";
 
 export type ReleaseImportStrategy = "design_file" | "rmg_template";
 export type ReleaseImportFailureCategory =
@@ -199,13 +200,12 @@ export function designToTemplate(design: TemplateDesign, options: DesignToTempla
   for (const zone of zones) {
     const designZone = design.zones.find((candidate) => candidate.name === zone.name);
     if (designZone?.role !== "Neutral") continue;
-    const adjacentSpawns = adjacentSpawnNames(design, designZone);
-    const spawnZoneName = adjacentSpawns.length === 1 ? adjacentSpawns[0] : undefined;
-    if (designZone.matchAdjacentNeutralCastleFactions && spawnZoneName) {
-      matchZoneCityFactions(zone, spawnZoneName);
+    const laneSpawnZoneName = uniqueNearestSpawnName(design, designZone);
+    if (designZone.matchAdjacentNeutralCastleFactions && laneSpawnZoneName) {
+      matchZoneCityFactions(zone, laneSpawnZoneName);
     }
-    if (designZone.naturalExpansion && spawnZoneName) {
-      matchZoneCityFactions(zone, spawnZoneName);
+    if (designZone.naturalExpansion && laneSpawnZoneName) {
+      matchZoneCityFactions(zone, laneSpawnZoneName);
     }
     if (designZone.neutralCastlesAsRuins) {
       applyNeutralCastleRuinsToZone(zone);
@@ -762,19 +762,6 @@ function cloneCustomMainObjectsForDesignZone(zone: DesignZone): MainObject[] {
     if (mainObject.type === "Spawn") mainObject.spawn = `Player${zone.player}`;
   }
   return mainObjects;
-}
-
-function adjacentSpawnNames(design: TemplateDesign, zone: DesignZone): string[] {
-  const zonesById = new Map(design.zones.map((candidate) => [candidate.id, candidate]));
-  const adjacent = new Set<string>();
-  for (const connection of design.connections) {
-    if (connection.type !== "Direct" && connection.type !== "Portal") continue;
-    const otherId = connection.from === zone.id ? connection.to : connection.to === zone.id ? connection.from : undefined;
-    if (!otherId) continue;
-    const otherZone = zonesById.get(otherId);
-    if (otherZone?.role === "Spawn") adjacent.add(otherZone.name);
-  }
-  return [...adjacent];
 }
 
 function pushUniqueName(existing: string[], base: string): string {
