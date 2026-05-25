@@ -1,4 +1,4 @@
-import { LogIn } from "lucide-react";
+import { LogIn, ShieldCheck } from "lucide-react";
 import type { JSX } from "react";
 import { OAUTH_PROVIDERS, type CommunityAuthProvider } from "@/community/auth";
 import { Button } from "@/components/ui/button";
@@ -38,6 +38,15 @@ export function SignInDialog({
               <LogIn size={15} />Continue with {PROVIDER_LABELS[provider]}
             </Button>
           ))}
+        </div>
+        <div className="auth-privacy-note">
+          <ShieldCheck size={15} />
+          <p>
+            Sign-in is required to upload and manage your map templates.
+            We don't store any passwords or credentials — authentication is handled
+            entirely by your chosen provider. We only save a minimal profile
+            (display name) to show alongside your published maps.
+          </p>
         </div>
         {error ? <div className="alert alert--danger">{error}</div> : null}
       </DialogContent>

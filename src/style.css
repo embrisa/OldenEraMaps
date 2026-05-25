@@ -1925,6 +1925,27 @@ button {
   gap: 8px;
 }
 
+.auth-privacy-note {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  padding: 10px 12px;
+  border-radius: 6px;
+  background: var(--color-surface-raised, hsl(0 0% 100% / 0.04));
+  color: var(--color-text-muted, hsl(0 0% 100% / 0.55));
+  font-size: 0.8rem;
+  line-height: 1.45;
+}
+
+.auth-privacy-note svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.auth-privacy-note p {
+  margin: 0;
+}
+
 .account-menu {
   display: grid;
   gap: 10px;
