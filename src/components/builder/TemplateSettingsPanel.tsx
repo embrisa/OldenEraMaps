@@ -69,10 +69,10 @@ export function TemplateSettingsPanel({
               {gameModeOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
             </NativeSelect>
           </ConfigField>
-          <div className="checks checks--vertical template-settings-card__dimension-lock">
-            <CheckField checked={design.lockMapDimensions} onCheckedChange={onLockMapDimensions}>Lock width and height together</CheckField>
-          </div>
-          <div className="template-settings-card__rules-trigger">
+          <div className="template-settings-card__map-actions">
+            <div className="checks">
+              <CheckField checked={design.lockMapDimensions} onCheckedChange={onLockMapDimensions}>Lock width and height together</CheckField>
+            </div>
             <Button type="button" size="sm" variant="blue" onClick={() => setRulesDialogOpen(true)}>
               <Settings2 size={14} />Rules &amp; Victory
             </Button>

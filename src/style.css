@@ -500,9 +500,9 @@ button {
   align-items: end;
 }
 
-.template-settings-card .oe-input,
-.template-settings-card .oe-select,
-.template-settings-card .oe-select-shell {
+.template-settings-card__section--map .oe-input,
+.template-settings-card__section--map .oe-select,
+.template-settings-card__section--map .oe-select-shell {
   max-width: 220px;
 }
 
@@ -524,13 +524,12 @@ button {
   gap: 7px;
 }
 
-.template-settings-card__dimension-lock {
-  align-self: end;
-}
-
-.template-settings-card__dimension-lock .checkline {
-  min-height: 34px;
-  width: 100%;
+.template-settings-card__map-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
 }
 
 .template-settings-card__rule-checks {
@@ -1910,11 +1909,7 @@ button {
   margin-bottom: 10px;
 }
 
-.template-settings-card__rules-trigger {
-  display: flex;
-  align-items: flex-end;
-  padding-bottom: 2px;
-}
+
 
 .auth-dialog {
   width: min(420px, calc(100vw - 28px));
