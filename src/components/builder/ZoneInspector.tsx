@@ -17,10 +17,10 @@ import {
   parseNumberList
 } from "@/components/builder/formHelpers";
 
-export type ZoneInspectorTab = "basics" | "terrain" | "content" | "guards" | "rules";
+export type ZoneInspectorTab = "general" | "terrain" | "content" | "guards" | "rules";
 
 const zoneInspectorTabs: Array<{ value: ZoneInspectorTab; label: string; tone: string }> = [
-  { value: "basics", label: "Basics", tone: "blue" },
+  { value: "general", label: "General", tone: "blue" },
   { value: "terrain", label: "Terrain", tone: "green" },
   { value: "content", label: "Content", tone: "gold" },
   { value: "guards", label: "Guards", tone: "red" },
@@ -127,14 +127,14 @@ export function ZoneInspector({
               </TabsTrigger>
             ))}
           </TabsList>
-          <TabsContent value="basics">
-            <ConfigField configKey="zone.name" label="Name">
-              <Input value={zone.name} onChange={(event) => {
-                const value = event.currentTarget.value;
-                onUpdate((draft) => { draft.name = value; });
-              }} />
-            </ConfigField>
-            <div className="form-grid form-grid--two">
+          <TabsContent value="general">
+            <div className="zone-general-grid">
+              <ConfigField configKey="zone.name" label="Name" className="zone-general-grid__wide">
+                <Input value={zone.name} onChange={(event) => {
+                  const value = event.currentTarget.value;
+                  onUpdate((draft) => { draft.name = value; });
+                }} />
+              </ConfigField>
               <ConfigField configKey="zone.role" label="Role">
                 <NativeSelect value={zone.role} onChange={(event) => {
                   const value = event.currentTarget.value as DesignZoneRole;
@@ -152,13 +152,6 @@ export function ZoneInspector({
                   {["Spawn", "Neutral", "Hub"].map((value) => <option key={value} value={value}>{value}</option>)}
                 </NativeSelect>
               </ConfigField>
-              <ConfigField configKey="zone.player" label="Player">
-                <SteppedValueSlider min={1} max={8} disabled={zone.role !== "Spawn"} value={zone.player ?? 1} onChange={(event) => {
-                  onUpdate((draft) => { draft.player = Number(event.currentTarget.value); });
-                }} />
-              </ConfigField>
-            </div>
-            <div className="form-grid form-grid--two">
               <ConfigField configKey="zone.quality" label="Quality">
                 <NativeSelect value={zone.quality} onChange={(event) => {
                   const value = event.currentTarget.value as DesignZone["quality"];
@@ -167,13 +160,55 @@ export function ZoneInspector({
                   {["Low", "Medium", "High"].map((value) => <option key={value} value={value}>{value}</option>)}
                 </NativeSelect>
               </ConfigField>
+              <ConfigField configKey="zone.guardMultiplier" label="Guard Strength" className="zone-general-grid__wide">
+                <SteppedValueSlider min={0.5} max={2.5} step={0.05} value={zone.guardMultiplier} onChange={(event) => {
+                  onUpdate((draft) => { draft.guardMultiplier = Number(event.currentTarget.value); });
+                }} />
+              </ConfigField>
+              <ConfigField configKey="zone.resourcesValue" label="Resources" className="zone-general-grid__wide">
+                <SteppedValueSlider min={0} max={120000} step={2500} value={zone.resourcesValue} onChange={(event) => {
+                  const value = Number(event.currentTarget.value);
+                  onUpdate((draft) => { setZoneResourceBudget(draft, value); });
+                }} />
+              </ConfigField>
+              <ConfigField configKey="zone.player" label="Player">
+                <SteppedValueSlider min={1} max={8} disabled={zone.role !== "Spawn"} value={zone.player ?? 1} onChange={(event) => {
+                  onUpdate((draft) => { draft.player = Number(event.currentTarget.value); });
+                }} />
+              </ConfigField>
               <ConfigField configKey="zone.castleCount" label="Castles">
                 <SteppedValueSlider min={0} max={8} value={zone.castleCount} onChange={(event) => {
                   onUpdate((draft) => { draft.castleCount = Number(event.currentTarget.value); });
                 }} />
               </ConfigField>
+              <ConfigField configKey="zone.size" label="Size">
+                <SteppedValueSlider min={0.25} max={3} step={0.05} value={zone.size} onChange={(event) => {
+                  onUpdate((draft) => { draft.size = Number(event.currentTarget.value); });
+                }} />
+              </ConfigField>
+              <ConfigField configKey="zone.terrainTheme" label="Terrain">
+                <NativeSelect value={zone.terrainTheme} onChange={(event) => {
+                  const value = event.currentTarget.value as DesignZone["terrainTheme"];
+                  onUpdate((draft) => {
+                    draft.terrainTheme = value;
+                    draft.zoneBiome = undefined;
+                    draft.contentBiome = undefined;
+                    draft.metaObjectsBiome = undefined;
+                  });
+                }}>
+                  {terrainOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+                </NativeSelect>
+              </ConfigField>
+              <ConfigField configKey="zone.layout" label="Layout" className="zone-general-grid__wide">
+                <NativeSelect value={zone.layout} onChange={(event) => {
+                  const value = event.currentTarget.value;
+                  onUpdate((draft) => { draft.layout = value; });
+                }}>
+                  {layoutOptionsForZone(layoutProfileNames, zone.layout).map((option) => <option key={option} value={option}>{option}</option>)}
+                </NativeSelect>
+              </ConfigField>
             </div>
-            <div className="checks checks--vertical">
+            <div className="checks checks--vertical zone-inspector-checks">
               <CheckField checked={zone.roads} onCheckedChange={(checked) => onUpdate((draft) => { draft.roads = checked; })}>Generate roads in this zone</CheckField>
               <CheckField checked={zone.footholds} onCheckedChange={(checked) => onUpdate((draft) => { draft.footholds = checked; })}>Include remote foothold content</CheckField>
               <CheckField checked={zone.holdCity} onCheckedChange={(checked) => onUpdate((draft) => { draft.holdCity = checked; })}>Mark as City Hold target</CheckField>
@@ -353,6 +388,11 @@ function NumberGrid({ zone, fields, onUpdate }: { zone: DesignZone; fields: Arra
       ))}
     </div>
   );
+}
+
+function setZoneResourceBudget(zone: DesignZone, resourcesValue: number): void {
+  zone.resourcesValue = resourcesValue;
+  zone.resourcesValuePerArea = resourcesValue > 0 ? Math.round(resourcesValue / 125) : 0;
 }
 
 function RoleBadge({ role }: { role: DesignZoneRole }): JSX.Element {

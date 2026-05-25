@@ -1402,8 +1402,8 @@ button {
 
 .selected-title {
   display: grid;
-  gap: 10px;
-  margin-bottom: 12px;
+  gap: 8px;
+  margin-bottom: 10px;
   margin-top: 2px;
 }
 
@@ -1419,14 +1419,79 @@ button {
 
 .selected-title__actions {
   display: flex;
-  gap: 8px;
+  gap: 6px;
 }
 
 .zone-transfer {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.inspector-card .oe-card__header {
+  padding: 10px 12px;
+}
+
+.inspector-card .oe-card__content {
+  padding: 10px;
+}
+
+.inspector-card .oe-tabs {
+  margin-bottom: 8px;
+}
+
+.inspector-card .oe-tab-panel {
   gap: 8px;
-  margin-bottom: 12px;
+}
+
+.inspector-card .config-field {
+  gap: 4px;
+}
+
+.inspector-card .oe-field {
+  gap: 4px;
+}
+
+.inspector-card .oe-input,
+.inspector-card .oe-select {
+  height: 32px;
+}
+
+.inspector-card .oe-slider {
+  height: 30px;
+}
+
+.inspector-card .oe-slider__value {
+  min-width: 3.35rem;
+  line-height: 30px;
+}
+
+.inspector-card .oe-slider__bounds {
+  display: none;
+}
+
+.zone-general-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.zone-general-grid__wide {
+  grid-column: 1 / -1;
+}
+
+.zone-general-grid .config-suggestions {
+  display: none;
+}
+
+.zone-inspector-checks {
+  gap: 6px;
+}
+
+.zone-inspector-checks .checkline {
+  min-height: 31px;
+  padding-block: 6px;
 }
 
 .oe-tabs {

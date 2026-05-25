@@ -54,6 +54,7 @@ export class DesignBoard {
   private connectionLayouts: BoardRenderConnectionLayout[] = [];
   private zoneLayoutsById = new Map<string, BoardRenderZoneLayout>();
   private dragPreviewPosition: Point | null = null;
+  private activePointerId: number | null = null;
   private renderFrame = 0;
 
   constructor(private canvas: HTMLCanvasElement, private callbacks: BoardCallbacks) {
@@ -63,9 +64,10 @@ export class DesignBoard {
     this.listen("pointerdown", (event) => this.pointerDown(event));
     this.listen("pointermove", (event) => this.pointerMove(event));
     this.listen("pointerup", (event) => this.pointerUp(event));
+    this.listen("pointercancel", (event) => this.pointerCancel(event));
+    this.listen("lostpointercapture", (event) => this.pointerCancel(event));
     this.listen("pointerleave", () => {
       this.setHoveredZone("", null);
-      this.cancelDrag();
     });
     this.resize();
   }
@@ -125,6 +127,7 @@ export class DesignBoard {
       this.setHoveredZone("", null);
       this.callbacks.selectConnection("", null);
       this.connectionDrag = { fromZoneId: handle.zone.id, pointer: point, dropZoneId: "" };
+      this.activePointerId = event.pointerId;
       this.canvas.setPointerCapture(event.pointerId);
       this.callbacks.selectZone(handle.zone.id);
       this.requestRender();
@@ -151,11 +154,13 @@ export class DesignBoard {
     this.setHoveredZone("", null);
     this.callbacks.selectConnection("", null);
     this.draggingZoneId = hit.zone.id;
+    this.activePointerId = event.pointerId;
     this.canvas.setPointerCapture(event.pointerId);
     this.callbacks.selectZone(hit.zone.id);
   }
 
   private pointerMove(event: PointerEvent): void {
+    if (this.activePointerId !== null && event.pointerId !== this.activePointerId) return;
     const point = this.eventPoint(event);
     if (this.connectionDrag) {
       this.setHoveredZone("", null);
@@ -183,11 +188,13 @@ export class DesignBoard {
   }
 
   private pointerUp(event: PointerEvent): void {
+    if (this.activePointerId !== null && event.pointerId !== this.activePointerId) return;
     if (this.connectionDrag) {
       const point = this.eventPoint(event);
       const dropZone = this.hitTest(point);
       const fromZoneId = this.connectionDrag.fromZoneId;
       this.connectionDrag = null;
+      this.releaseActivePointer(event.pointerId);
       if (dropZone && dropZone.zone.id !== fromZoneId) this.callbacks.connectZones(fromZoneId, dropZone.zone.id, this.design);
       else this.requestRender();
       return;
@@ -198,19 +205,34 @@ export class DesignBoard {
       const position = this.dragPreviewPosition;
       this.draggingZoneId = "";
       this.dragPreviewPosition = null;
+      this.releaseActivePointer(event.pointerId);
       this.callbacks.moveZone(zoneId, position);
       return;
     }
     this.draggingZoneId = "";
     this.dragPreviewPosition = null;
+    this.releaseActivePointer(event.pointerId);
+  }
+
+  private pointerCancel(event: PointerEvent): void {
+    if (this.activePointerId !== null && event.pointerId !== this.activePointerId) return;
+    this.cancelDrag();
   }
 
   private cancelDrag(): void {
+    const pointerId = this.activePointerId;
     this.draggingZoneId = "";
     this.dragPreviewPosition = null;
     this.connectionDrag = null;
+    this.releaseActivePointer(pointerId);
     this.rebuildZoneLayouts();
     this.requestRender();
+  }
+
+  private releaseActivePointer(pointerId: number | null): void {
+    this.activePointerId = null;
+    if (pointerId === null || !this.canvas.hasPointerCapture(pointerId)) return;
+    this.canvas.releasePointerCapture(pointerId);
   }
 
   private setHoveredZone(zoneId: string, point: Point | null, hintId?: string): void {

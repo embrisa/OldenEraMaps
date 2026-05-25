@@ -270,7 +270,7 @@ export function AppShell(): JSX.Element {
   const [design, setDesign] = useState(() => createInitialDesign());
   const [selectedZoneId, setSelectedZoneId] = useState(() => design.zones[0]?.id ?? "");
   const [selectedConnectionId, setSelectedConnectionId] = useState("");
-  const [inspectorTab, setInspectorTab] = useState<ZoneInspectorTab>("basics");
+  const [inspectorTab, setInspectorTab] = useState<ZoneInspectorTab>("general");
   const [builderWorkspaceTab, setBuilderWorkspaceTab] = useState<BuilderWorkspaceTab>("layout");
   const [connectionsOpen, setConnectionsOpen] = useState(false);
   const [roadMode, setRoadMode] = useState(false);

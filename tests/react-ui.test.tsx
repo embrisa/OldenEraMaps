@@ -795,6 +795,43 @@ describe("React UI shell", () => {
     boardLayout.restore();
   });
 
+  it("continues a zone drag after the pointer leaves the board", async () => {
+    const boardLayout = mockDesignBoardLayout();
+
+    render(<AppShell />);
+
+    const board = screen.getByLabelText("Schematic design board");
+    const startPoint = {
+      clientX: Math.round(BOARD_TEST_WIDTH * 0.5),
+      clientY: Math.round(BOARD_TEST_HEIGHT * 0.5),
+      pointerId: 1
+    };
+    const targetPoint = {
+      clientX: Math.round(BOARD_TEST_WIDTH * 0.74),
+      clientY: Math.round(BOARD_TEST_HEIGHT * 0.67),
+      pointerId: 1
+    };
+
+    fireEvent.pointerDown(board, startPoint);
+    fireEvent.pointerMove(board, targetPoint);
+    fireEvent.pointerLeave(board, { pointerId: 1 });
+    fireEvent.pointerUp(board, targetPoint);
+
+    await waitFor(() => {
+      const saved = window.localStorage.getItem("olden-era-template-generator.autosave");
+      expect(saved).toBeTruthy();
+      const design = parseDesignOrTemplateFile(saved ?? "");
+      expect(design.zones.find((zone) => zone.name === "Neutral-3")?.position).toEqual(
+        snapPointToBoardSlot({
+          x: targetPoint.clientX / BOARD_TEST_WIDTH,
+          y: targetPoint.clientY / BOARD_TEST_HEIGHT,
+        })
+      );
+    });
+
+    boardLayout.restore();
+  });
+
   it("formats all zone hover sections from the current zone configuration", () => {
     const zone = createDefaultDesign().zones[0];
     zone.guardedContentPool = ["classic_template_pool_random_t2_item", "classic_template_pool_random_t2_pandora"];
@@ -1288,6 +1325,8 @@ describe("React UI shell", () => {
     expect((screen.getByLabelText("RMG JSON editor") as HTMLTextAreaElement).value).toContain('"spawn": "Player3"');
 
     const inspector = screen.getByRole("heading", { name: "Zone Inspector" }).closest("section");
+    expect(within(inspector as HTMLElement).getByRole("tab", { name: "General" })).toBeTruthy();
+
     const castles = getInputForLabel(inspector as HTMLElement, "Castles");
     expect(castles.type).toBe("range");
     fireEvent.input(castles, { target: { value: "3" } });
@@ -1299,6 +1338,23 @@ describe("React UI shell", () => {
     fireEvent.blur(castlesValue);
     expect(castles.value).toBe("4");
     expect(within(inspector as HTMLElement).getByText(/4 cities/)).toBeTruthy();
+
+    const guardStrength = getInputForLabel(inspector as HTMLElement, "Guard Strength");
+    expect(guardStrength.type).toBe("range");
+    fireEvent.input(guardStrength, { target: { value: "1.75" } });
+    expect(guardStrength.value).toBe("1.75");
+
+    const resources = getInputForLabel(inspector as HTMLElement, "Resources");
+    expect(resources.type).toBe("range");
+    fireEvent.input(resources, { target: { value: "60000" } });
+    expect(resources.value).toBe("60000");
+
+    await waitFor(() => {
+      const json = (screen.getByLabelText("RMG JSON editor") as HTMLTextAreaElement).value;
+      expect(json).toContain('"guardMultiplier": 1.75');
+      expect(json).toContain('"resourcesValue": 60000');
+      expect(json).toContain('"resourcesValuePerArea": 480');
+    });
   });
 
   it("assigns a player and updates player count when changing a neutral zone into a spawn", async () => {
@@ -1418,7 +1474,40 @@ describe("React UI shell", () => {
     expect(activeRoadModeButton.getAttribute("aria-pressed")).toBe("true");
 
     fireEvent.pointerDown(board, { clientX: Math.round((handle as NonNullable<typeof handle>).x), clientY: Math.round((handle as NonNullable<typeof handle>).y), pointerId: 2 });
+    fireEvent.pointerMove(board, { ...target, pointerId: 2 });
+    fireEvent.pointerUp(board, { ...target, pointerId: 2 });
+
+    await user.click(screen.getByRole("button", { name: "Connections" }));
+    expect(screen.getByDisplayValue("Path-Spawn-1-Spawn-2")).toBeTruthy();
+
+    boardLayout.restore();
+  });
+
+  it("continues a road drag after the pointer leaves the board", async () => {
+    const user = userEvent.setup();
+    const boardLayout = mockDesignBoardLayout();
+    render(<AppShell />);
+
+    const board = screen.getByLabelText("Schematic design board");
+    const boardState = buildBoardRenderState(buildPreviewDesign(createDefaultDesign()), BOARD_TEST_WIDTH, BOARD_TEST_HEIGHT);
+    const handle = boardState.zoneLayoutsById.get("zone-1")?.handle;
+    const targetZone = boardState.zoneLayoutsById.get("zone-2")?.box;
+    expect(handle).toBeTruthy();
+    expect(targetZone).toBeTruthy();
+    const target = {
+      clientX: Math.round((targetZone as NonNullable<typeof targetZone>).centerX),
+      clientY: Math.round((targetZone as NonNullable<typeof targetZone>).centerY),
+      pointerId: 1
+    };
+
+    await user.click(screen.getByRole("button", { name: "Road Mode" }));
+    fireEvent.pointerDown(board, {
+      clientX: Math.round((handle as NonNullable<typeof handle>).x),
+      clientY: Math.round((handle as NonNullable<typeof handle>).y),
+      pointerId: 1
+    });
     fireEvent.pointerMove(board, target);
+    fireEvent.pointerLeave(board, { pointerId: 1 });
     fireEvent.pointerUp(board, target);
 
     await user.click(screen.getByRole("button", { name: "Connections" }));
