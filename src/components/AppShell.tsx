@@ -1,4 +1,4 @@
-import { BookOpenText, Compass, Download, FileJson, FolderOpen, HardDriveDownload, Link2, ListChecks, Menu, PackageCheck, Plus, RotateCcw, Save, Share2, Sparkles, X } from "lucide-react";
+import { BookOpenText, Bug, Compass, Download, FileJson, FolderOpen, HardDriveDownload, Link2, ListChecks, Menu, PackageCheck, Plus, RotateCcw, Save, Share2, Sparkles, X } from "lucide-react";
 import { useCallback, useEffect, useMemo, useReducer, useRef, useState, type JSX } from "react";
 import { applyBalancedRandomBoardLayout } from "@/balancedRandomMap";
 import {
@@ -98,6 +98,7 @@ import { serializeRmgTemplate, type GeneratorSettings, type Point } from "@/type
 
 const AUTOSAVE_KEY = "olden-era-template-generator.autosave";
 const POST_SIGN_IN_UPLOAD_KEY = "olden-era-template-generator.post-sign-in-upload";
+const GITHUB_ISSUES_URL = "https://github.com/embrisa/OldenEraMaps/issues";
 type AppPage = "builder" | "browse" | "reference" | "install" | "my-maps";
 type BuilderWorkspaceTab = "layout" | "json";
 
@@ -1187,6 +1188,9 @@ export function AppShell(): JSX.Element {
               <Button variant={page === "browse" ? "primary" : "ghost"} onClick={() => navigate("browse")}><Compass size={16} />Browse</Button>
               <Button variant={page === "reference" ? "blue" : "ghost"} onClick={() => navigate("reference")}><BookOpenText size={16} />Reference</Button>
               <Button variant={page === "install" ? "green" : "ghost"} onClick={() => navigate("install")}><HardDriveDownload size={16} />Install</Button>
+              <a className="oe-button oe-button--ghost" href={GITHUB_ISSUES_URL} target="_blank" rel="noreferrer">
+                <Bug size={16} />Report bug or suggestion
+              </a>
               <AccountMenu
                 status={authState.status}
                 profile={authState.profile}

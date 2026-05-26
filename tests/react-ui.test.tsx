@@ -570,6 +570,18 @@ describe("React UI shell", () => {
     expect(window.location.pathname).toBe("/reference");
   });
 
+  it("links to GitHub issues from the header menu", async () => {
+    const user = userEvent.setup();
+    render(<AppShell />);
+
+    await openHeaderMenu(user);
+
+    const issuesLink = screen.getByRole("link", { name: "Report bug or suggestion" });
+    expect(issuesLink.getAttribute("href")).toBe("https://github.com/embrisa/OldenEraMaps/issues");
+    expect(issuesLink.getAttribute("target")).toBe("_blank");
+    expect(issuesLink.getAttribute("rel")).toBe("noreferrer");
+  });
+
   it("navigates to the installation guide and shows OS and launcher paths", async () => {
     const user = userEvent.setup();
     render(<AppShell />);
