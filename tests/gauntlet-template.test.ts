@@ -41,6 +41,9 @@ describe("4-player gauntlet city hold template", () => {
       expect(spawn?.mainObjects?.[0]).toMatchObject({ type: "Spawn", spawn: `Player${player}` });
       expect(spawn?.mandatoryContent).toEqual([`mandatory_content_p${player}_s1`]);
       expect([spawn?.size, n2?.size, n3?.size, n4?.size, n5?.size]).toEqual([0.55, 0.72, 0.86, 1, 1.25]);
+      expect([spawn?.resourcesValue, n2?.resourcesValue, n3?.resourcesValue, n4?.resourcesValue, n5?.resourcesValue]).toEqual([9000, 14000, 22000, 34000, 52000]);
+      expect([spawn?.resourcesValuePerArea, n2?.resourcesValuePerArea, n3?.resourcesValuePerArea, n4?.resourcesValuePerArea, n5?.resourcesValuePerArea]).toEqual([120, 130, 180, 260, 360]);
+      expect([spawn?.unguardedContentValue, n2?.unguardedContentValue, n3?.unguardedContentValue, n4?.unguardedContentValue, n5?.unguardedContentValue]).toEqual([8000, 12000, 16000, 22000, 28000]);
 
       expect(n3?.mainObjects?.[0]).toMatchObject({
         type: "City",

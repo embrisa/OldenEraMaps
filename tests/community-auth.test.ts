@@ -137,8 +137,12 @@ describe("community auth", () => {
   });
 
   it("updates the current profile display name and allows anonymous fallback", async () => {
-    const update = vi.fn(() => ({ eq: vi.fn(() => ({ error: null })) }));
-    const from = vi.fn(() => ({ update }));
+    const profileEq = vi.fn(() => ({ error: null }));
+    const profileUpdate = vi.fn(() => ({ eq: profileEq }));
+    const from = vi.fn((table: string) => {
+      expect(table).toBe("profiles");
+      return { update: profileUpdate };
+    });
 
     const profile = await updateCurrentUserDisplayName({
       userId: "user-1",
@@ -148,6 +152,57 @@ describe("community auth", () => {
 
     expect(profile.displayName).toBe("Anonymous Cartographer");
     expect(profile.avatarUrl).toBeNull();
-    expect(update).toHaveBeenCalledWith({ display_name: "Anonymous Cartographer", avatar_url: null });
+    expect(profileUpdate).toHaveBeenCalledWith({ display_name: "Anonymous Cartographer", avatar_url: null });
+    expect(from).toHaveBeenCalledTimes(1);
+  });
+
+  it("propagates a non-anonymous profile name to anonymous map listing author names", async () => {
+    const profileEq = vi.fn(() => ({ error: null }));
+    const profileUpdate = vi.fn(() => ({ eq: profileEq }));
+
+    const mapsAnonymousEqAuthor = vi.fn(() => ({ error: null }));
+    const mapsAnonymousEqOwner = vi.fn(() => ({ eq: mapsAnonymousEqAuthor }));
+    const mapsAnonymousUpdate = vi.fn(() => ({ eq: mapsAnonymousEqOwner }));
+
+    const mapsNullIsAuthor = vi.fn(() => ({ error: null }));
+    const mapsNullEqOwner = vi.fn(() => ({ is: mapsNullIsAuthor }));
+    const mapsNullUpdate = vi.fn(() => ({ eq: mapsNullEqOwner }));
+
+    const mapsBlankEqAuthor = vi.fn(() => ({ error: null }));
+    const mapsBlankEqOwner = vi.fn(() => ({ eq: mapsBlankEqAuthor }));
+    const mapsBlankUpdate = vi.fn(() => ({ eq: mapsBlankEqOwner }));
+
+    const from = vi.fn((table: string) => {
+      if (table === "profiles") return { update: profileUpdate };
+      if (table === "maps" && from.mock.calls.filter(([name]) => name === "maps").length === 1) {
+        return { update: mapsAnonymousUpdate };
+      }
+      if (table === "maps" && from.mock.calls.filter(([name]) => name === "maps").length === 2) {
+        return { update: mapsNullUpdate };
+      }
+      if (table === "maps") return { update: mapsBlankUpdate };
+      throw new Error(`Unexpected table: ${table}`);
+    });
+
+    const profile = await updateCurrentUserDisplayName({
+      userId: "user-1",
+      displayName: "Old Name",
+      avatarUrl: null
+    }, "  New Display Name  ", { from } as never);
+
+    expect(profile.displayName).toBe("New Display Name");
+    expect(profileUpdate).toHaveBeenCalledWith({ display_name: "New Display Name", avatar_url: null });
+
+    const expectedMapPatch = { author_name: "New Display Name" };
+    expect(mapsAnonymousUpdate).toHaveBeenCalledWith(expectedMapPatch);
+    expect(mapsNullUpdate).toHaveBeenCalledWith(expectedMapPatch);
+    expect(mapsBlankUpdate).toHaveBeenCalledWith(expectedMapPatch);
+
+    expect(mapsAnonymousEqOwner).toHaveBeenCalledWith("owner_id", "user-1");
+    expect(mapsAnonymousEqAuthor).toHaveBeenCalledWith("author_name", "Anonymous Cartographer");
+    expect(mapsNullEqOwner).toHaveBeenCalledWith("owner_id", "user-1");
+    expect(mapsNullIsAuthor).toHaveBeenCalledWith("author_name", null);
+    expect(mapsBlankEqOwner).toHaveBeenCalledWith("owner_id", "user-1");
+    expect(mapsBlankEqAuthor).toHaveBeenCalledWith("author_name", "");
   });
 });

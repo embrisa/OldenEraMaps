@@ -145,6 +145,10 @@ export async function updateCurrentUserDisplayName(
     .eq("id", profile.userId);
   if (error) throw error;
 
+  if (normalizedDisplayName !== "Anonymous Cartographer") {
+    await propagateDisplayNameToAnonymousMapAuthors(profile.userId, normalizedDisplayName, client);
+  }
+
   return { ...profile, displayName: normalizedDisplayName, avatarUrl: null };
 }
 
@@ -154,6 +158,35 @@ export function profileFromUser(user: User): CommunityAuthProfile {
     displayName: "Anonymous Cartographer",
     avatarUrl: null
   };
+}
+
+async function propagateDisplayNameToAnonymousMapAuthors(
+  userId: string,
+  displayName: string,
+  client: SupabaseClient<Database>
+): Promise<void> {
+  const patch = { author_name: displayName };
+
+  const { error: anonymousError } = await client
+    .from("maps")
+    .update(patch)
+    .eq("owner_id", userId)
+    .eq("author_name", "Anonymous Cartographer");
+  if (anonymousError) throw anonymousError;
+
+  const { error: nullError } = await client
+    .from("maps")
+    .update(patch)
+    .eq("owner_id", userId)
+    .is("author_name", null);
+  if (nullError) throw nullError;
+
+  const { error: blankError } = await client
+    .from("maps")
+    .update(patch)
+    .eq("owner_id", userId)
+    .eq("author_name", "");
+  if (blankError) throw blankError;
 }
 
 async function loadProfileFromDatabase(profile: CommunityAuthProfile, client: SupabaseClient<Database>): Promise<CommunityAuthProfile> {

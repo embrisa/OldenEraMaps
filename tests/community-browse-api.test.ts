@@ -235,6 +235,70 @@ describe("browse owner controls visibility", () => {
   });
 });
 
+describe("browse author names", () => {
+  it("prefers listing author_name over profile display_name", () => {
+    const card = browseRowToCard({
+      id: "test-map-1",
+      slug: "test-map",
+      title: "Test Map",
+      description: "A test map for units.",
+      visibility: "public",
+      status: "published",
+      map_width: 160,
+      map_height: 160,
+      player_count: 2,
+      zone_count: 5,
+      connection_count: 4,
+      win_condition: "win_condition_1",
+      template_name: "Test Template",
+      template_json: { name: "Test Template" },
+      preview_design_json: { version: PREVIEW_RENDERER_VERSION, zones: [], connections: [], mapWidth: 160, mapHeight: 160, templateName: "Test Template" },
+      preview_renderer_version: PREVIEW_RENDERER_VERSION,
+      download_count: 10,
+      rating_count: 2,
+      rating_average: 4.5,
+      created_at: "2026-05-17T00:00:00.000Z",
+      updated_at: "2026-05-17T00:00:00.000Z",
+      author_name: "Listing Author",
+      profiles: { display_name: "Profile Author" },
+      map_tags: []
+    });
+
+    expect(card.authorName).toBe("Listing Author");
+  });
+
+  it("falls back to profile display_name when listing author_name is missing", () => {
+    const card = browseRowToCard({
+      id: "test-map-1",
+      slug: "test-map",
+      title: "Test Map",
+      description: "A test map for units.",
+      visibility: "public",
+      status: "published",
+      map_width: 160,
+      map_height: 160,
+      player_count: 2,
+      zone_count: 5,
+      connection_count: 4,
+      win_condition: "win_condition_1",
+      template_name: "Test Template",
+      template_json: { name: "Test Template" },
+      preview_design_json: { version: PREVIEW_RENDERER_VERSION, zones: [], connections: [], mapWidth: 160, mapHeight: 160, templateName: "Test Template" },
+      preview_renderer_version: PREVIEW_RENDERER_VERSION,
+      download_count: 10,
+      rating_count: 2,
+      rating_average: 4.5,
+      created_at: "2026-05-17T00:00:00.000Z",
+      updated_at: "2026-05-17T00:00:00.000Z",
+      author_name: null,
+      profiles: { display_name: "Profile Author" },
+      map_tags: []
+    });
+
+    expect(card.authorName).toBe("Profile Author");
+  });
+});
+
 describe("browse card preview payloads", () => {
   it("stores preview design json for canvas rendering", () => {
     const card = createMockCard({
