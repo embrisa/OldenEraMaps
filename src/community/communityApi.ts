@@ -13,7 +13,7 @@ import {
 import { requireStoredPreviewDesignJson } from "./previewPayload.ts";
 import { requireOptionalReleaseTemplateDescription, requireReleaseTemplateJson, serializeReleaseJsonField, serializeReleaseTemplateJson } from "./releaseRowJson.ts";
 import { createTagFromSlug, formatWinConditionLabel, sortTags, type CommunityTag } from "./tags";
-import { validateAuthorDisplayName } from "./textValidation";
+import { validateAuthorDisplayName, validateMapDescription, validateMapTitle } from "./textValidation";
 import { isSupabaseConfigured, supabase } from "./supabaseClient";
 
 // ---------------------------------------------------------------------------
@@ -211,6 +211,7 @@ async function listMapsFromSupabase(
   }
 
   query = applySupabaseRangeFilters(query, filters.rangeFilters);
+  query = applySupabaseTagFilters(query, filters.selectedTagSlugs);
 
   const sort = filters.sort ?? "newest";
   if (sort === "top-rated") {
@@ -235,7 +236,7 @@ async function listMapsFromSupabase(
 
   const total = count ?? cards.length;
   return {
-    maps: filterByTags(cards, filters.selectedTagSlugs ?? []),
+    maps: cards,
     total,
     page,
     pageSize,
@@ -404,7 +405,11 @@ export async function updateMapListing(
   if (!client || !isSupabaseConfigured) return;
 
   const update: Record<string, unknown> = {};
-  if (patch.title !== undefined) update.title = patch.title;
+  if (patch.title !== undefined) {
+    const validation = validateMapTitle(patch.title);
+    if (!validation.ok) throw new Error(validation.errors[0]);
+    update.title = validation.value || "Untitled Map";
+  }
   if (patch.authorName !== undefined) {
     const validation = validateAuthorDisplayName(patch.authorName);
     if (!validation.ok) throw new Error(validation.errors[0]);
@@ -414,6 +419,9 @@ export async function updateMapListing(
   if (patch.status !== undefined) update.status = patch.status;
 
   if (patch.description !== undefined) {
+    const validation = validateMapDescription(patch.description);
+    if (!validation.ok) throw new Error(validation.errors[0]);
+
     const { data: existing, error: existingError } = await client
       .from("maps")
       .select("design_json")
@@ -421,9 +429,9 @@ export async function updateMapListing(
       .single<{ design_json: unknown }>();
     if (existingError) throw existingError;
 
-    update.description = patch.description;
+    update.description = validation.value;
 
-    const synced = syncStoredTemplateDescription(existing?.design_json, patch.description);
+    const synced = syncStoredTemplateDescription(existing?.design_json, validation.value);
     update.template_json = synced.templateJson;
     update.design_json = synced.designJson;
   }
@@ -709,15 +717,6 @@ function extractRowTags(row: BrowseListRow): CommunityTag[] {
     }));
 }
 
-function filterByTags(cards: BrowseMapCard[], slugs: string[]): BrowseMapCard[] {
-  const selected = new Set(slugs.filter(Boolean));
-  if (selected.size === 0) return cards;
-  return cards.filter((card) => {
-    const mapSlugs = new Set(card.tags.map((tag) => tag.slug));
-    return [...selected].every((slug) => mapSlugs.has(slug));
-  });
-}
-
 function applySupabaseRangeFilters<T extends {
   gte(column: string, value: number): T;
   lte(column: string, value: number): T;
@@ -738,6 +737,16 @@ function applySupabaseRange<T extends {
   let next = query;
   if (typeof range?.min === "number" && Number.isFinite(range.min)) next = next.gte(column, range.min);
   if (typeof range?.max === "number" && Number.isFinite(range.max)) next = next.lte(column, range.max);
+  return next;
+}
+
+function applySupabaseTagFilters<T extends {
+  contains(column: string, value: unknown): T;
+}>(query: T, selectedTagSlugs: string[] | undefined): T {
+  let next = query;
+  for (const slug of [...new Set((selectedTagSlugs ?? []).filter(Boolean))]) {
+    next = next.contains("tags", [{ slug }]);
+  }
   return next;
 }
 

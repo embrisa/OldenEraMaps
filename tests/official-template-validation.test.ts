@@ -11,6 +11,8 @@ const detectedCrossOverTemplateDir = join(
 );
 
 const officialTemplateDir = process.env.OLDEN_ERA_RMG_TEMPLATE_DIR || detectedCrossOverTemplateDir;
+const knownDisconnectedOfficialTemplates = new Set(["Spider.rmg.json"]);
+const disconnectedGraphError = "Direct and portal connections must connect every zone.";
 
 describe.skipIf(!existsSync(officialTemplateDir))("official Olden Era template validation", () => {
   const templatePaths = readdirSync(officialTemplateDir)
@@ -22,8 +24,15 @@ describe.skipIf(!existsSync(officialTemplateDir))("official Olden Era template v
     const templateJson = readFileSync(templatePath, "utf8");
     const design = templateToDesign(parseRmgTemplate(templateJson));
     const validation = validateDesign(design);
+    const fileName = basename(templatePath);
 
-    expect(validation.errors, basename(templatePath)).toEqual([]);
-    expect(() => designToTemplate(design), basename(templatePath)).not.toThrow();
+    if (knownDisconnectedOfficialTemplates.has(fileName)) {
+      expect(validation.errors, fileName).toEqual([disconnectedGraphError]);
+      expect(() => designToTemplate(design, { skipValidation: true }), fileName).not.toThrow();
+      return;
+    }
+
+    expect(validation.errors, fileName).toEqual([]);
+    expect(() => designToTemplate(design), fileName).not.toThrow();
   });
 });

@@ -171,22 +171,14 @@ function connectionComponents(design: TemplateDesign, connectionTypes: Array<Tem
   const includedConnections = design.connections.filter((candidate) =>
     includedTypes.has(candidate.type) && zoneIds.has(candidate.from) && zoneIds.has(candidate.to)
   );
-  const connectedZoneIds = new Set<string>();
-  for (const connection of includedConnections) {
-    connectedZoneIds.add(connection.from);
-    connectedZoneIds.add(connection.to);
-  }
-  if (connectedZoneIds.size === 0) {
-    return design.zones.length > 1 ? design.zones.map((zone) => [zone.id]) : [design.zones.map((zone) => zone.id)];
-  }
-  const graph = new Map(design.zones.filter((zone) => connectedZoneIds.has(zone.id)).map((zone) => [zone.id, [] as string[]]));
+  const graph = new Map(design.zones.map((zone) => [zone.id, [] as string[]]));
   for (const connection of includedConnections) {
     graph.get(connection.from)?.push(connection.to);
     graph.get(connection.to)?.push(connection.from);
   }
   const visited = new Set<string>();
   const components: string[][] = [];
-  for (const zone of design.zones.filter((candidate) => connectedZoneIds.has(candidate.id))) {
+  for (const zone of design.zones) {
     if (visited.has(zone.id)) continue;
     const component: string[] = [];
     const queue = [zone.id];

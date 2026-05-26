@@ -135,6 +135,43 @@ describe("browse API filters", () => {
     expect(calls).toContainEqual(["lte", "connection_count", 20]);
   });
 
+  it("applies selected tag filters before Supabase pagination", async () => {
+    const calls: Array<[string, string, unknown?]> = [];
+    const query = {
+      select: vi.fn(() => query),
+      eq: vi.fn((column: string, value: unknown) => {
+        calls.push(["eq", column, value]);
+        return query;
+      }),
+      contains: vi.fn((column: string, value: unknown) => {
+        calls.push(["contains", column, value]);
+        return query;
+      }),
+      order: vi.fn(() => query),
+      range: vi.fn((from: number, to: number) => {
+        calls.push(["range", `${from}`, to]);
+        return query;
+      }),
+      then: (resolve: (value: { data: unknown[]; error: null; count: number }) => void) => Promise.resolve(resolve({ data: [], error: null, count: 7 }))
+    };
+    const client = {
+      rpc: vi.fn(() => query)
+    };
+
+    const result = await listMaps({
+      selectedTagSlugs: ["players:2", "competitive", "competitive"],
+      page: 2,
+      pageSize: 3
+    }, client as never);
+
+    expect(calls).toContainEqual(["contains", "tags", [{ slug: "players:2" }]]);
+    expect(calls).toContainEqual(["contains", "tags", [{ slug: "competitive" }]]);
+    expect(calls.filter((call) => call[0] === "contains")).toHaveLength(2);
+    expect(calls.findIndex((call) => call[0] === "contains")).toBeLessThan(calls.findIndex((call) => call[0] === "range"));
+    expect(result.total).toBe(7);
+    expect(result.pageCount).toBe(3);
+  });
+
   it("loads public browse rows through the narrow public RPC without template or design JSON", async () => {
     let selectedColumns = "";
     const query = {

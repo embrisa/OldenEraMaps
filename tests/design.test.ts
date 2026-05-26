@@ -858,6 +858,13 @@ describe("manual template design", () => {
     expect(errors).toContain("City Hold requires exactly one hold-city zone");
   });
 
+  it("rejects designs with isolated zones even when other zones are connected", () => {
+    const design = createDefaultDesign();
+    design.zones.push(createZone("zone-4", "Neutral-4", "Neutral"));
+
+    expect(validateDesign(design).errors).toContain("Direct and portal connections must connect every zone.");
+  });
+
   it("allows tournament designs with separate player lanes", () => {
     const design = createDefaultDesign();
     design.gameMode = "Tournament";
@@ -1404,7 +1411,7 @@ describe("manual template design", () => {
     expect(validateDesign(imported).errors).toEqual([]);
   });
 
-  it("accepts official-template import shapes outside the manual generator presets", () => {
+  it("imports official-template shapes outside the manual generator presets while reporting disconnected zones", () => {
     const imported = templateToDesign(parseRmgTemplate(`{
       "name": "Official Shape Import",
       "sizeX": 80,
@@ -1426,6 +1433,6 @@ describe("manual template design", () => {
     }`));
 
     expect(imported.gameEndConditions.cityHold).toBe(false);
-    expect(validateDesign(imported).errors).toEqual([]);
+    expect(validateDesign(imported).errors).toContain("Direct and portal connections must connect every zone.");
   });
 });

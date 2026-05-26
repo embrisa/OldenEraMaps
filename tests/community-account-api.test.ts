@@ -160,6 +160,34 @@ describe("signed-in map management API", () => {
     }));
   });
 
+  it("normalizes listing titles before update", async () => {
+    const updateBuilder = {
+      update: vi.fn(() => updateBuilder),
+      eq: vi.fn(async () => ({ error: null }))
+    };
+    const client = {
+      from: vi.fn(() => updateBuilder)
+    };
+
+    await updateMapListing("map-1", { title: "  New   Listing   Title  " }, client as never);
+
+    expect(updateBuilder.update).toHaveBeenCalledWith(expect.objectContaining({
+      title: "New Listing Title"
+    }));
+  });
+
+  it("rejects invalid listing titles and descriptions before update", async () => {
+    const client = {
+      from: vi.fn()
+    };
+
+    await expect(updateMapListing("map-1", { title: "Bad <b>Title</b>" }, client as never))
+      .rejects.toThrow("Title cannot contain HTML tags.");
+    await expect(updateMapListing("map-1", { description: "Read https://example.com" }, client as never))
+      .rejects.toThrow("Description cannot contain links or URLs.");
+    expect(client.from).not.toHaveBeenCalled();
+  });
+
   it("updates a listing-specific author name", async () => {
     const updateBuilder = {
       update: vi.fn(() => updateBuilder),
