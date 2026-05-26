@@ -44,7 +44,7 @@ Deno.serve(async (request) => {
   const serviceClient = createClient(supabaseUrl, serviceRoleKey);
   const { data: map, error: mapError } = await serviceClient
     .from("maps")
-    .select("id, owner_id, preview_image_path, preview_thumbnail_path")
+    .select("id, owner_id")
     .eq("id", body.mapId)
     .maybeSingle();
 
@@ -55,11 +55,6 @@ Deno.serve(async (request) => {
   if (!map) return jsonResponse(request, { error: "Map not found.", code: "not_found" }, 404);
   if (map.owner_id !== authData.user.id) {
     return jsonResponse(request, { error: "You can only delete your own map listings.", code: "forbidden" }, 403);
-  }
-
-  const previewPaths = [map.preview_image_path, map.preview_thumbnail_path].filter((path): path is string => Boolean(path));
-  if (previewPaths.length > 0) {
-    await serviceClient.storage.from("map-previews").remove([...new Set(previewPaths)]);
   }
 
   const { error: deleteError } = await serviceClient

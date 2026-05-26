@@ -1,5 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { CommunityMapRecord } from "./maps";
+import { resolvePublicAuthorName } from "./authorNames";
 import { requireStoredPreviewDesignJson } from "./previewPayload.ts";
 import { extractReleaseTemplateDescription, requireReleaseTemplateJson, serializeReleaseJsonField, serializeReleaseTemplateJson } from "./releaseRowJson.ts";
 import { createTagFromSlug, sortTags, type CommunityTag } from "./tags";
@@ -35,7 +36,7 @@ export function mapDatabaseRecordToCommunityMapRecord(row: CommunityMapDatabaseR
     slug: row.slug,
     title: row.title,
     summary: templateDescription ?? row.description,
-    authorName: row.author_name?.trim() || row.profiles?.display_name?.trim() || "Anonymous Cartographer",
+    authorName: resolvePublicAuthorName(row.author_name, row.profiles?.display_name),
     tags: extractTags(row),
     visibility: row.visibility === "private" ? "unlisted" : row.visibility,
     mapWidth: row.map_width,

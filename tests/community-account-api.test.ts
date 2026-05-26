@@ -27,8 +27,6 @@ function createMapRow(overrides: Record<string, unknown> = {}) {
     design_json: JSON.parse(serializeDesignFile(design)),
     preview_design_json: buildPreviewDesign(design),
     preview_renderer_version: PREVIEW_RENDERER_VERSION,
-    preview_image_url: null,
-    preview_thumbnail_url: null,
     download_count: 0,
     rating_count: 0,
     rating_average: 0,
@@ -97,9 +95,7 @@ describe("signed-in map management API", () => {
       eq: vi.fn(() => selectBuilder),
       maybeSingle: vi.fn(async () => ({
         data: {
-          id: "map-123",
-          preview_image_path: "user-1/map-123/full.png",
-          preview_thumbnail_path: "user-1/map-123/thumb.png"
+          id: "map-123"
         },
         error: null
       }))
@@ -108,25 +104,17 @@ describe("signed-in map management API", () => {
       delete: vi.fn(() => deleteBuilder),
       eq: vi.fn(async () => ({ error: null }))
     };
-    const remove = vi.fn(async () => ({ data: [], error: null }));
     const client = {
       functions: { invoke },
       from: vi.fn((table: string) => {
         expect(table).toBe("maps");
         return client.from.mock.calls.length === 1 ? selectBuilder : deleteBuilder;
-      }),
-      storage: {
-        from: vi.fn((bucket: string) => {
-          expect(bucket).toBe("map-previews");
-          return { remove };
-        })
-      }
+      })
     };
 
     await deleteMapListing("map-123", client as never);
 
     expect(invoke).toHaveBeenCalledWith("delete-map", { body: { mapId: "map-123" } });
-    expect(remove).toHaveBeenCalledWith(["user-1/map-123/full.png", "user-1/map-123/thumb.png"]);
     expect(deleteBuilder.delete).toHaveBeenCalled();
     expect(deleteBuilder.eq).toHaveBeenCalledWith("id", "map-123");
   });

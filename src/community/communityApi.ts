@@ -12,6 +12,7 @@ import {
 } from "./maps";
 import { requireStoredPreviewDesignJson } from "./previewPayload.ts";
 import { requireOptionalReleaseTemplateDescription, requireReleaseTemplateJson, serializeReleaseJsonField, serializeReleaseTemplateJson } from "./releaseRowJson.ts";
+import { resolvePublicAuthorName } from "./authorNames";
 import { createTagFromSlug, formatWinConditionLabel, sortTags, type CommunityTag } from "./tags";
 import { validateAuthorDisplayName, validateMapDescription, validateMapTitle } from "./textValidation";
 import { isSupabaseConfigured, supabase } from "./supabaseClient";
@@ -479,17 +480,12 @@ async function deleteMapListingDirect(
 ): Promise<void> {
   const { data: map, error: lookupError } = await client
     .from("maps")
-    .select("id, preview_image_path, preview_thumbnail_path")
+    .select("id")
     .eq("id", mapId)
-    .maybeSingle<Pick<Database["public"]["Tables"]["maps"]["Row"], "id" | "preview_image_path" | "preview_thumbnail_path">>();
+    .maybeSingle<Pick<Database["public"]["Tables"]["maps"]["Row"], "id">>();
 
   if (lookupError) throw lookupError;
   if (!map) throw new Error("Map not found.");
-
-  const previewPaths = [map.preview_image_path, map.preview_thumbnail_path].filter((path): path is string => Boolean(path));
-  if (previewPaths.length > 0) {
-    await client.storage.from("map-previews").remove([...new Set(previewPaths)]);
-  }
 
   const { error: deleteError } = await client
     .from("maps")
@@ -666,7 +662,7 @@ export function browseRowToCard(row: BrowseListRow): BrowseMapCard {
     slug: row.slug,
     title: row.title,
     summary: templateDescription ?? row.description,
-    authorName: row.author_name?.trim() || row.profiles?.display_name?.trim() || "Anonymous Cartographer",
+    authorName: resolvePublicAuthorName(row.author_name, row.profiles?.display_name),
     tags: extractRowTags(row),
     visibility: row.visibility === "private" ? "unlisted" : row.visibility,
     mapWidth: row.map_width,
