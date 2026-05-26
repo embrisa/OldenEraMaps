@@ -1666,10 +1666,6 @@ button {
   gap: 6px;
 }
 
-.zone-inspector-actions + .oe-tabs {
-  margin-top: 2px;
-}
-
 .transfer-settings-dialog {
   width: min(420px, calc(100vw - 28px));
 }
@@ -1680,14 +1676,6 @@ button {
 
 .inspector-card .oe-card__content {
   padding: 10px;
-}
-
-.inspector-card .oe-tabs {
-  margin-bottom: 8px;
-}
-
-.inspector-card .oe-tab-panel {
-  gap: 8px;
 }
 
 .inspector-card .config-field {

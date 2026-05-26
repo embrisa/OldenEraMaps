@@ -90,7 +90,7 @@ import { UploadMapDialog } from "@/components/community/UploadMapDialog";
 import { TemplateSettingsPanel } from "@/components/builder/TemplateSettingsPanel";
 import { Alert } from "@/components/builder/formHelpers";
 import { BuilderValidationMessages, ValidationOutputPanel } from "@/components/builder/ValidationOutputPanel";
-import { ZoneInspector, type ZoneInspectorTab } from "@/components/builder/ZoneInspector";
+import { ZoneInspector } from "@/components/builder/ZoneInspector";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogTitle, Tabs, TabsContent, TabsList, TabsTrigger, TooltipProvider } from "@/components/ui/radix";
@@ -277,7 +277,6 @@ export function AppShell(): JSX.Element {
   const [design, setDesign] = useState(() => createInitialDesign());
   const [selectedZoneId, setSelectedZoneId] = useState(() => design.zones[0]?.id ?? "");
   const [selectedConnectionId, setSelectedConnectionId] = useState("");
-  const [inspectorTab, setInspectorTab] = useState<ZoneInspectorTab>("general");
   const [builderWorkspaceTab, setBuilderWorkspaceTab] = useState<BuilderWorkspaceTab>("layout");
   const [connectionsOpen, setConnectionsOpen] = useState(false);
   const [roadMode, setRoadMode] = useState(false);
@@ -1346,8 +1345,6 @@ export function AppShell(): JSX.Element {
             <aside className="studio-side">
               <ZoneInspector
                 zone={selectedZone}
-                tab={inspectorTab}
-                onTabChange={setInspectorTab}
                 onDuplicate={handleDuplicate}
                 duplicateDisabled={zoneLimitReached}
                 duplicateDisabledReason={zoneLimitMessage}

@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input, NativeSelect, SteppedValueSlider, Textarea } from "@/components/ui/form-controls";
-import { Dialog, DialogContent, DialogDescription, DialogTitle, ScrollArea, Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/radix";
+import { Dialog, DialogContent, DialogDescription, DialogTitle, ScrollArea } from "@/components/ui/radix";
 import { BiomeField } from "@/components/builder/BiomeField";
 import { ContentPoolField, SidListField } from "@/components/builder/ContentPoolField";
 import { MainObjectsEditor } from "@/components/builder/MainObjectsEditor";
@@ -17,17 +17,8 @@ import {
   parseNumberList
 } from "@/components/builder/formHelpers";
 
-export type ZoneInspectorTab = "general" | "content";
-
-const zoneInspectorTabs: Array<{ value: ZoneInspectorTab; label: string; tone: string }> = [
-  { value: "general", label: "General", tone: "blue" },
-  { value: "content", label: "Content", tone: "gold" }
-];
-
 export function ZoneInspector({
   zone,
-  tab,
-  onTabChange,
   onDuplicate,
   duplicateDisabled = false,
   duplicateDisabledReason,
@@ -40,8 +31,6 @@ export function ZoneInspector({
   onUpdate
 }: {
   zone: DesignZone | undefined;
-  tab: ZoneInspectorTab;
-  onTabChange(tab: ZoneInspectorTab): void;
   onDuplicate(zoneId: string): void;
   duplicateDisabled?: boolean;
   duplicateDisabledReason?: string;
@@ -114,141 +103,101 @@ export function ZoneInspector({
             <Layers size={14} />Content
           </Button>
         </div>
-        <Tabs value={tab} onValueChange={(value) => onTabChange(value as ZoneInspectorTab)}>
-          <TabsList>
-            {zoneInspectorTabs.map((item) => (
-              <TabsTrigger key={item.value} value={item.value} className={`oe-tab--${item.tone}`}>
-                {item.label}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-          <TabsContent value="general">
-            <div className="zone-general-grid">
-              <ConfigField configKey="zone.name" label="Name" className="zone-general-grid__wide">
-                <Input value={zone.name} onChange={(event) => {
-                  const value = event.currentTarget.value;
-                  onUpdate((draft) => { draft.name = value; });
-                }} />
-              </ConfigField>
-              <ConfigField configKey="zone.role" label="Role">
-                <NativeSelect value={zone.role} onChange={(event) => {
-                  const value = event.currentTarget.value as DesignZoneRole;
-                  onUpdate((draft) => {
-                    draft.role = value;
-                    draft.quality = draft.role === "Hub" ? "High" : draft.role === "Neutral" ? "Medium" : "Low";
-                    if (draft.role !== "Spawn") draft.player = undefined;
-                    if (draft.role !== "Neutral") draft.matchAdjacentNeutralCastleFactions = false;
-                    if (draft.role !== "Neutral") draft.neutralCastlesAsRuins = false;
-                    if (draft.role !== "Neutral") draft.naturalExpansion = false;
-                    if (draft.role === "Hub") draft.name = draft.name.startsWith("Hub") ? draft.name : "Hub";
-                    syncZoneProfile(draft);
-                  });
-                }}>
-                  {["Spawn", "Neutral", "Hub"].map((value) => <option key={value} value={value}>{value}</option>)}
-                </NativeSelect>
-              </ConfigField>
-              <ConfigField configKey="zone.quality" label="Quality">
-                <NativeSelect value={zone.quality} onChange={(event) => {
-                  const value = event.currentTarget.value as DesignZone["quality"];
-                  onUpdate((draft) => { draft.quality = value; syncZoneProfile(draft); });
-                }}>
-                  {["Low", "Medium", "High"].map((value) => <option key={value} value={value}>{value}</option>)}
-                </NativeSelect>
-              </ConfigField>
-              <ConfigField configKey="zone.guardMultiplier" label="Guard Strength" className="zone-general-grid__wide">
-                <SteppedValueSlider min={0.5} max={2.5} step={0.05} value={zone.guardMultiplier} onChange={(event) => {
-                  onUpdate((draft) => { draft.guardMultiplier = Number(event.currentTarget.value); });
-                }} />
-              </ConfigField>
-              <ConfigField configKey="zone.resourcesValue" label="Resources" className="zone-general-grid__wide">
-                <SteppedValueSlider min={0} max={120000} step={2500} value={zone.resourcesValue} onChange={(event) => {
-                  const value = Number(event.currentTarget.value);
-                  onUpdate((draft) => { setZoneResourceBudget(draft, value); });
-                }} />
-              </ConfigField>
-              <ConfigField configKey="zone.player" label="Player">
-                <SteppedValueSlider min={1} max={8} disabled={zone.role !== "Spawn"} value={zone.player ?? 1} onChange={(event) => {
-                  onUpdate((draft) => { draft.player = Number(event.currentTarget.value); });
-                }} />
-              </ConfigField>
-              <ConfigField configKey="zone.castleCount" label="Castles">
-                <SteppedValueSlider min={0} max={8} value={zone.castleCount} onChange={(event) => {
-                  onUpdate((draft) => { draft.castleCount = Number(event.currentTarget.value); });
-                }} />
-              </ConfigField>
-              <ConfigField configKey="zone.size" label="Size">
-                <SteppedValueSlider min={0.25} max={3} step={0.05} value={zone.size} onChange={(event) => {
-                  onUpdate((draft) => { draft.size = Number(event.currentTarget.value); });
-                }} />
-              </ConfigField>
-              <ConfigField configKey="zone.terrainTheme" label="Terrain">
-                <NativeSelect value={zone.terrainTheme} onChange={(event) => {
-                  const value = event.currentTarget.value as DesignZone["terrainTheme"];
-                  onUpdate((draft) => {
-                    draft.terrainTheme = value;
-                    draft.zoneBiome = undefined;
-                    draft.contentBiome = undefined;
-                    draft.metaObjectsBiome = undefined;
-                  });
-                }}>
-                  {terrainOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
-                </NativeSelect>
-              </ConfigField>
-              <ConfigField configKey="zone.layout" label="Layout" className="zone-general-grid__wide">
-                <NativeSelect value={zone.layout} onChange={(event) => {
-                  const value = event.currentTarget.value;
-                  onUpdate((draft) => { draft.layout = value; });
-                }}>
-                  {layoutOptionsForZone(layoutProfileNames, zone.layout).map((option) => <option key={option} value={option}>{option}</option>)}
-                </NativeSelect>
-              </ConfigField>
-            </div>
-            <div className="checks checks--vertical zone-inspector-checks">
-              <CheckField checked={zone.roads} onCheckedChange={(checked) => onUpdate((draft) => { draft.roads = checked; })}>Generate roads in this zone</CheckField>
-              <CheckField checked={zone.footholds} onCheckedChange={(checked) => onUpdate((draft) => { draft.footholds = checked; })}>Include remote foothold content</CheckField>
-              <CheckField checked={zone.holdCity} onCheckedChange={(checked) => onUpdate((draft) => { draft.holdCity = checked; })}>Mark as City Hold target</CheckField>
-              {zone.role === "Neutral" ? (
-                <CheckField checked={zone.naturalExpansion} onCheckedChange={(checked) => onUpdate((draft) => { draft.naturalExpansion = checked; })}>Mark as natural expansion</CheckField>
-              ) : null}
-              {zone.role === "Neutral" ? (
-                <CheckField checked={zone.matchAdjacentNeutralCastleFactions} onCheckedChange={(checked) => onUpdate((draft) => { draft.matchAdjacentNeutralCastleFactions = checked; })}>Match adjacent neutral castles</CheckField>
-              ) : null}
-              {zone.role === "Neutral" ? (
-                <CheckField checked={zone.neutralCastlesAsRuins} onCheckedChange={(checked) => onUpdate((draft) => { draft.neutralCastlesAsRuins = checked; })}>Make this zone's castles ruins</CheckField>
-              ) : null}
-            </div>
-            <MainObjectsEditor zone={zone} onUpdate={onUpdate} />
-          </TabsContent>
-          <TabsContent value="content">
-            <NumberGrid zone={zone} fields={[
-              ["resourceDensityPercent", "Resources %", 20, 400],
-              ["structureDensityPercent", "Structures %", 20, 200],
-              ["guardedContentValue", "Guarded Content Value", 0, 2000000],
-              ["guardedContentValuePerArea", "Guarded Value / Area", 0, 20000],
-              ["unguardedContentValue", "Unguarded Content Value", 0, 2000000],
-              ["unguardedContentValuePerArea", "Unguarded Value / Area", 0, 20000],
-              ["resourcesValue", "Resources Value", 0, 2000000],
-              ["resourcesValuePerArea", "Resources Value / Area", 0, 20000]
-            ]} onUpdate={onUpdate} />
-            <ContentPoolField label="Guarded Content Pool" configKey="zone.guardedContentPool" values={zone.guardedContentPool} onChange={(values) => onUpdate((draft) => { draft.guardedContentPool = values; })} />
-            <ContentPoolField label="Unguarded Content Pool" configKey="zone.unguardedContentPool" values={zone.unguardedContentPool} onChange={(values) => onUpdate((draft) => { draft.unguardedContentPool = values; })} />
-            <ContentPoolField label="Resources Content Pool" configKey="zone.resourcesContentPool" values={zone.resourcesContentPool} onChange={(values) => onUpdate((draft) => { draft.resourcesContentPool = values; })} />
-            <SidListField
-              label="Mandatory Content"
-              configKey="zone.mandatoryContent"
-              values={zone.mandatoryContent}
-              options={contentReferenceOptions(mandatoryContentNames, zone.mandatoryContent, "mandatory_content_")}
-              onChange={(values) => onUpdate((draft) => { draft.mandatoryContent = values; })}
-            />
-            <SidListField
-              label="Content Count Limits"
-              configKey="zone.contentCountLimits"
-              values={zone.contentCountLimits}
-              options={contentReferenceOptions(contentCountLimitNames, zone.contentCountLimits, "content_limits_")}
-              onChange={(values) => onUpdate((draft) => { draft.contentCountLimits = values; })}
-            />
-          </TabsContent>
-        </Tabs>
+        <div className="zone-general-grid">
+          <ConfigField configKey="zone.name" label="Name" className="zone-general-grid__wide">
+            <Input value={zone.name} onChange={(event) => {
+              const value = event.currentTarget.value;
+              onUpdate((draft) => { draft.name = value; });
+            }} />
+          </ConfigField>
+          <ConfigField configKey="zone.role" label="Role">
+            <NativeSelect value={zone.role} onChange={(event) => {
+              const value = event.currentTarget.value as DesignZoneRole;
+              onUpdate((draft) => {
+                draft.role = value;
+                draft.quality = draft.role === "Hub" ? "High" : draft.role === "Neutral" ? "Medium" : "Low";
+                if (draft.role !== "Spawn") draft.player = undefined;
+                if (draft.role !== "Neutral") draft.matchAdjacentNeutralCastleFactions = false;
+                if (draft.role !== "Neutral") draft.neutralCastlesAsRuins = false;
+                if (draft.role !== "Neutral") draft.naturalExpansion = false;
+                if (draft.role === "Hub") draft.name = draft.name.startsWith("Hub") ? draft.name : "Hub";
+                syncZoneProfile(draft);
+              });
+            }}>
+              {["Spawn", "Neutral", "Hub"].map((value) => <option key={value} value={value}>{value}</option>)}
+            </NativeSelect>
+          </ConfigField>
+          <ConfigField configKey="zone.quality" label="Quality">
+            <NativeSelect value={zone.quality} onChange={(event) => {
+              const value = event.currentTarget.value as DesignZone["quality"];
+              onUpdate((draft) => { draft.quality = value; syncZoneProfile(draft); });
+            }}>
+              {["Low", "Medium", "High"].map((value) => <option key={value} value={value}>{value}</option>)}
+            </NativeSelect>
+          </ConfigField>
+          <ConfigField configKey="zone.guardMultiplier" label="Guard Strength" className="zone-general-grid__wide">
+            <SteppedValueSlider min={0.5} max={2.5} step={0.05} value={zone.guardMultiplier} onChange={(event) => {
+              onUpdate((draft) => { draft.guardMultiplier = Number(event.currentTarget.value); });
+            }} />
+          </ConfigField>
+          <ConfigField configKey="zone.resourcesValue" label="Resources" className="zone-general-grid__wide">
+            <SteppedValueSlider min={0} max={120000} step={2500} value={zone.resourcesValue} onChange={(event) => {
+              const value = Number(event.currentTarget.value);
+              onUpdate((draft) => { setZoneResourceBudget(draft, value); });
+            }} />
+          </ConfigField>
+          <ConfigField configKey="zone.player" label="Player">
+            <SteppedValueSlider min={1} max={8} disabled={zone.role !== "Spawn"} value={zone.player ?? 1} onChange={(event) => {
+              onUpdate((draft) => { draft.player = Number(event.currentTarget.value); });
+            }} />
+          </ConfigField>
+          <ConfigField configKey="zone.castleCount" label="Castles">
+            <SteppedValueSlider min={0} max={8} value={zone.castleCount} onChange={(event) => {
+              onUpdate((draft) => { draft.castleCount = Number(event.currentTarget.value); });
+            }} />
+          </ConfigField>
+          <ConfigField configKey="zone.size" label="Size">
+            <SteppedValueSlider min={0.25} max={3} step={0.05} value={zone.size} onChange={(event) => {
+              onUpdate((draft) => { draft.size = Number(event.currentTarget.value); });
+            }} />
+          </ConfigField>
+          <ConfigField configKey="zone.terrainTheme" label="Terrain">
+            <NativeSelect value={zone.terrainTheme} onChange={(event) => {
+              const value = event.currentTarget.value as DesignZone["terrainTheme"];
+              onUpdate((draft) => {
+                draft.terrainTheme = value;
+                draft.zoneBiome = undefined;
+                draft.contentBiome = undefined;
+                draft.metaObjectsBiome = undefined;
+              });
+            }}>
+              {terrainOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+            </NativeSelect>
+          </ConfigField>
+          <ConfigField configKey="zone.layout" label="Layout" className="zone-general-grid__wide">
+            <NativeSelect value={zone.layout} onChange={(event) => {
+              const value = event.currentTarget.value;
+              onUpdate((draft) => { draft.layout = value; });
+            }}>
+              {layoutOptionsForZone(layoutProfileNames, zone.layout).map((option) => <option key={option} value={option}>{option}</option>)}
+            </NativeSelect>
+          </ConfigField>
+        </div>
+        <div className="checks checks--vertical zone-inspector-checks">
+          <CheckField checked={zone.roads} onCheckedChange={(checked) => onUpdate((draft) => { draft.roads = checked; })}>Generate roads in this zone</CheckField>
+          <CheckField checked={zone.footholds} onCheckedChange={(checked) => onUpdate((draft) => { draft.footholds = checked; })}>Include remote foothold content</CheckField>
+          <CheckField checked={zone.holdCity} onCheckedChange={(checked) => onUpdate((draft) => { draft.holdCity = checked; })}>Mark as City Hold target</CheckField>
+          {zone.role === "Neutral" ? (
+            <CheckField checked={zone.naturalExpansion} onCheckedChange={(checked) => onUpdate((draft) => { draft.naturalExpansion = checked; })}>Mark as natural expansion</CheckField>
+          ) : null}
+          {zone.role === "Neutral" ? (
+            <CheckField checked={zone.matchAdjacentNeutralCastleFactions} onCheckedChange={(checked) => onUpdate((draft) => { draft.matchAdjacentNeutralCastleFactions = checked; })}>Match adjacent neutral castles</CheckField>
+          ) : null}
+          {zone.role === "Neutral" ? (
+            <CheckField checked={zone.neutralCastlesAsRuins} onCheckedChange={(checked) => onUpdate((draft) => { draft.neutralCastlesAsRuins = checked; })}>Make this zone's castles ruins</CheckField>
+          ) : null}
+        </div>
+        <MainObjectsEditor zone={zone} onUpdate={onUpdate} />
       </CardContent>
       {/* Terrain & Biomes dialog */}
       <Dialog open={terrainDialogOpen} onOpenChange={setTerrainDialogOpen}>

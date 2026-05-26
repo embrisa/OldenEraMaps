@@ -1421,7 +1421,8 @@ describe("React UI shell", () => {
     expect((screen.getByLabelText("RMG JSON editor") as HTMLTextAreaElement).value).toContain('"spawn": "Player3"');
 
     const inspector = screen.getByRole("heading", { name: "Zone Inspector" }).closest("section");
-    expect(within(inspector as HTMLElement).getByRole("tab", { name: "General" })).toBeTruthy();
+    expect(getInputForLabel(inspector as HTMLElement, "Castles")).toBeTruthy();
+    expect(getInputForLabel(inspector as HTMLElement, "Guard Strength")).toBeTruthy();
 
     const castles = getInputForLabel(inspector as HTMLElement, "Castles");
     expect(castles.type).toBe("range");
