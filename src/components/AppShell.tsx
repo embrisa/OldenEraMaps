@@ -1188,8 +1188,19 @@ export function AppShell(): JSX.Element {
               <Button variant={page === "browse" ? "primary" : "ghost"} onClick={() => navigate("browse")}><Compass size={16} />Browse</Button>
               <Button variant={page === "reference" ? "blue" : "ghost"} onClick={() => navigate("reference")}><BookOpenText size={16} />Reference</Button>
               <Button variant={page === "install" ? "green" : "ghost"} onClick={() => navigate("install")}><HardDriveDownload size={16} />Install</Button>
-              <a className="oe-button oe-button--ghost" href={GITHUB_ISSUES_URL} target="_blank" rel="noreferrer">
-                <Bug size={16} />Report bug or suggestion
+              <a
+                className="oe-button oe-button--ghost report-bug-button"
+                href={GITHUB_ISSUES_URL}
+                target="_blank"
+                rel="noreferrer"
+                onClick={(event) => {
+                  event.preventDefault();
+                  window.open(GITHUB_ISSUES_URL, "_blank", "noopener,noreferrer");
+                  setTopbarMenuOpen(false);
+                }}
+              >
+                <Bug size={16} className="bug-icon" />
+                <span className="button-text">Report bug or suggestion</span>
               </a>
               <AccountMenu
                 status={authState.status}

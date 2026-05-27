@@ -859,12 +859,6 @@ button {
   background: var(--panel-3);
 }
 
-.oe-textarea.code,
-.json-output {
-  font-family: "SFMono-Regular", Consolas, monospace;
-  font-size: 0.76rem;
-}
-
 .oe-input:focus,
 .oe-select:focus,
 .oe-textarea:focus {
@@ -3678,4 +3672,21 @@ button {
   padding: 32px 16px;
   text-align: center;
   color: var(--muted);
+}
+
+.report-bug-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.report-bug-button .bug-icon {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.report-bug-button .button-text {
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 1;
 }

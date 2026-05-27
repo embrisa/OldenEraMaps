@@ -572,6 +572,7 @@ describe("React UI shell", () => {
 
   it("links to GitHub issues from the header menu", async () => {
     const user = userEvent.setup();
+    const open = vi.spyOn(window, "open").mockImplementation(() => null);
     render(<AppShell />);
 
     await openHeaderMenu(user);
@@ -580,6 +581,11 @@ describe("React UI shell", () => {
     expect(issuesLink.getAttribute("href")).toBe("https://github.com/embrisa/OldenEraMaps/issues");
     expect(issuesLink.getAttribute("target")).toBe("_blank");
     expect(issuesLink.getAttribute("rel")).toBe("noreferrer");
+
+    await user.click(issuesLink);
+
+    expect(open).toHaveBeenCalledWith("https://github.com/embrisa/OldenEraMaps/issues", "_blank", "noopener,noreferrer");
+    expect(screen.queryByRole("link", { name: "Report bug or suggestion" })).toBeNull();
   });
 
   it("navigates to the installation guide and shows OS and launcher paths", async () => {
