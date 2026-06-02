@@ -1,13 +1,15 @@
-import { FileJson, Settings2 } from "lucide-react";
-import { useState } from "react";
+import { Ban, FileJson, Settings2 } from "lucide-react";
+import { useMemo, useState } from "react";
 import type { JSX } from "react";
 import { gameModeOptions, terrainOptions, victoryOptions } from "@/settings";
 import type { TemplateDesign } from "@/design";
+import { SPELL_BAN_CATALOG } from "@/spellCatalog";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { HelpIcon, Input, NativeSelect, SteppedValueSlider, Textarea } from "@/components/ui/form-controls";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/radix";
 import { CheckField, ConfigField } from "@/components/builder/formHelpers";
+import { SpellBanDialog } from "@/components/builder/SpellBanDialog";
 
 export function TemplateSettingsPanel({
   design,
@@ -27,10 +29,24 @@ export function TemplateSettingsPanel({
   onGameEnd(key: keyof TemplateDesign["gameEndConditions"], value: boolean | number | string): void;
 }): JSX.Element {
   const [rulesDialogOpen, setRulesDialogOpen] = useState(false);
+  const [spellBanDialogOpen, setSpellBanDialogOpen] = useState(false);
   const showLostStartCityDay = design.gameEndConditions.lostStartCity || design.gameEndConditions.victoryCondition === "win_condition_3";
   const showCityHoldDays = design.gameEndConditions.cityHold || design.gameEndConditions.victoryCondition === "win_condition_5";
   const showGladiatorRules = design.gameEndConditions.victoryCondition === "win_condition_4" || design.gladiatorArenaRules.enabled;
   const showTournamentRules = design.gameEndConditions.victoryCondition === "win_condition_6" || design.tournamentRules.enabled;
+  const bannedSpellIds = design.globalBans.magics ?? [];
+  const bannedSpellPreview = useMemo(() => {
+    const catalogById = new Map(SPELL_BAN_CATALOG.map((spell) => [spell.id, spell]));
+    return bannedSpellIds.map((id) => catalogById.get(id)).filter(Boolean).slice(0, 5);
+  }, [bannedSpellIds]);
+
+  function updateBannedSpellIds(magics: string[]): void {
+    const nextGlobalBans = { ...design.globalBans };
+    if (magics.length > 0) nextGlobalBans.magics = magics;
+    else delete nextGlobalBans.magics;
+    onGlobal("globalBans", nextGlobalBans);
+  }
+
   return (
     <Card className="template-settings-card">
       <CardHeader className="template-settings-card__header">
@@ -176,6 +192,19 @@ export function TemplateSettingsPanel({
                 <SteppedValueSlider min={-100} max={100} step={1} value={design.movementBonus} onChange={(event) => onGlobal("movementBonus", Number(event.currentTarget.value))} />
               </ConfigField>
             </div>
+            <div className="form-grid form-grid--two">
+              <ConfigField configKey="template.globalBans.magics" label="Banned Spells">
+                <div className="spell-ban-summary">
+                  <Button type="button" variant="blue" onClick={() => setSpellBanDialogOpen(true)}>
+                    <Ban size={15} />Ban Spells
+                  </Button>
+                  <div className="spell-ban-summary__preview" aria-label="Banned spell preview">
+                    {bannedSpellPreview.map((spell) => spell ? <img key={spell.id} src={spell.image} alt={spell.title} /> : null)}
+                    <span>{bannedSpellIds.length === 0 ? "None" : `${bannedSpellIds.length} banned`}</span>
+                  </div>
+                </div>
+              </ConfigField>
+            </div>
           </div>
           {showGladiatorRules ? (
             <div className="dialog-section">
@@ -215,6 +244,12 @@ export function TemplateSettingsPanel({
           ) : null}
         </DialogContent>
       </Dialog>
+      <SpellBanDialog
+        open={spellBanDialogOpen}
+        onOpenChange={setSpellBanDialogOpen}
+        bannedSpellIds={bannedSpellIds}
+        onChange={updateBannedSpellIds}
+      />
     </Card>
   );
 }

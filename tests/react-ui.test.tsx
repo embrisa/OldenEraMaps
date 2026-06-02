@@ -94,6 +94,7 @@ import { hoverCardPosition } from "../src/components/ZoneHoverCard";
 import { zoneHoverSections } from "../src/components/zoneHoverContent";
 import { Button } from "../src/components/ui/button";
 import { NativeSelect, SteppedValueSlider } from "../src/components/ui/form-controls";
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "../src/components/ui/radix";
 import {
   SCHEMATIC_BOARD_BACKGROUND_HEIGHT,
   SCHEMATIC_BOARD_BACKGROUND_WIDTH,
@@ -290,6 +291,28 @@ describe("React UI shell", () => {
     render(<Button variant="primary">Export</Button>);
 
     expect(screen.getByRole("button", { name: "Export" }).className).toContain("oe-button--primary");
+  });
+
+  it("renders shared dialog content with a standard scrollable body", () => {
+    render(
+      <Dialog open>
+        <DialogContent>
+          <div className="dialog-heading">
+            <div>
+              <DialogTitle>Scrollable dialog</DialogTitle>
+              <DialogDescription>Shared dialog body smoke test.</DialogDescription>
+            </div>
+          </div>
+          <div>Dialog body content</div>
+        </DialogContent>
+      </Dialog>
+    );
+
+    const dialog = screen.getByRole("dialog");
+    const body = dialog.querySelector(".oe-dialog__body");
+    expect(body).toBeTruthy();
+    expect(body?.textContent).toContain("Dialog body content");
+    expect(dialog.querySelector(".oe-dialog__close")).toBeTruthy();
   });
 
   it("keeps page scrolling available when a select dropdown opens", async () => {
@@ -987,7 +1010,6 @@ describe("React UI shell", () => {
 
   it("keeps the current dirty design when New is canceled", async () => {
     const user = userEvent.setup();
-    const confirm = vi.spyOn(window, "confirm").mockReturnValue(false);
     render(<AppShell />);
 
     await user.click(screen.getAllByRole("button", { name: "Neutral" })[0]);
@@ -996,7 +1018,9 @@ describe("React UI shell", () => {
     await openHeaderMenu(user);
     await user.click(screen.getByRole("button", { name: "New" }));
 
-    expect(confirm).toHaveBeenCalledWith("Discard unsaved changes?");
+    const dialog = screen.getByRole("dialog");
+    expect(within(dialog).getByRole("heading", { name: "Discard unsaved changes?" })).toBeTruthy();
+    await user.click(within(dialog).getByRole("button", { name: "Cancel" }));
     expect(screen.getByText("Neutral-4")).toBeTruthy();
     expect(screen.getAllByText("4").length).toBeGreaterThan(0);
   });
@@ -1351,6 +1375,30 @@ describe("React UI shell", () => {
     expect(within(connectionRow).getByRole("checkbox", { name: "Guards can escape" }).getAttribute("aria-checked")).toBe("true");
     await waitFor(() => {
       expect((screen.getByLabelText("RMG JSON editor") as HTMLTextAreaElement).value).toContain('"guardEscape": true');
+    });
+  });
+
+  it("adds a reverse portal from the connections dialog", async () => {
+    const user = userEvent.setup();
+    render(<AppShell />);
+
+    await user.click(screen.getByRole("button", { name: "Connections" }));
+
+    const connectionRow = screen.getByDisplayValue("Path-1-3").closest(".connection-row") as HTMLElement;
+    const typeField = within(connectionRow).getByText("Type").closest(".config-field");
+    const typeSelect = typeField?.querySelector("select") as HTMLSelectElement;
+    await user.selectOptions(typeSelect, "Portal");
+
+    await user.click(within(connectionRow).getByRole("button", { name: "Add Reverse Portal" }));
+
+    await waitFor(() => {
+      const json = (screen.getByLabelText("RMG JSON editor") as HTMLTextAreaElement).value;
+      const template = JSON.parse(json) as { variants?: Array<{ connections?: Array<Record<string, unknown>> }> };
+      const connections = template.variants?.[0]?.connections ?? [];
+      expect(connections).toEqual(expect.arrayContaining([
+        expect.objectContaining({ name: "Path-1-3", from: "Spawn-1", to: "Neutral-3", connectionType: "Portal" }),
+        expect.objectContaining({ name: "Portal-Neutral-3-Spawn-1", from: "Neutral-3", to: "Spawn-1", connectionType: "Portal" })
+      ]));
     });
   });
 
@@ -2115,6 +2163,32 @@ describe("React UI shell", () => {
     });
   });
 
+  it("writes spell picker selections into globalBans.magics", async () => {
+    const user = userEvent.setup();
+    render(<AppShell />);
+
+    const settingsCard = screen.getByDisplayValue("Custom Template").closest(".template-settings-card");
+    expect(settingsCard).toBeTruthy();
+
+    await user.click(within(settingsCard as HTMLElement).getByRole("button", { name: /Rules & Victory/ }));
+    const dialog = screen.getByRole("dialog");
+    await user.click(within(dialog).getByRole("button", { name: "Ban Spells" }));
+
+    const spellDialog = screen.getByRole("dialog", { name: "Ban Spells" });
+    expect(within(spellDialog).getByAltText("Town Portal icon")).toBeTruthy();
+
+    await user.click(within(spellDialog).getByRole("button", { name: "Ban Town Portal" }));
+    await user.click(within(spellDialog).getByRole("button", { name: "Ban Dimension Door" }));
+
+    await waitFor(() => {
+      const json = (screen.getByLabelText("RMG JSON editor") as HTMLTextAreaElement).value;
+      expect(json).toContain('"globalBans": {');
+      expect(json).toContain('"magics": [');
+      expect(json).toContain('"neutral_magic_town_portal"');
+      expect(json).toContain('"neutral_magic_dimension_door"');
+    });
+  }, 10000);
+
   it("edits advanced map geometry controls and pushes them into exported json", async () => {
     const user = userEvent.setup();
     render(<AppShell />);
@@ -2672,7 +2746,6 @@ describe("React UI shell", () => {
 
   it("can delete an owned listing after confirmation", async () => {
     const user = userEvent.setup();
-    const confirm = vi.spyOn(window, "confirm").mockReturnValue(true);
     authMocks.session = createAuthSession();
     communityApiMocks.myMaps = [
       createManagedMap({ id: "delete-map", title: "Private Vault", visibility: "private", status: "published" })
@@ -2685,7 +2758,10 @@ describe("React UI shell", () => {
 
     await user.click(screen.getByRole("button", { name: "Delete Private Vault" }));
 
-    expect(confirm).toHaveBeenCalledWith('Permanently delete "Private Vault"? This cannot be undone.');
+    const dialog = screen.getByRole("dialog");
+    expect(within(dialog).getByRole("heading", { name: "Delete map listing?" })).toBeTruthy();
+    expect(within(dialog).getByText('Permanently delete "Private Vault"? This cannot be undone.')).toBeTruthy();
+    await user.click(within(dialog).getByRole("button", { name: "Delete listing" }));
     await waitFor(() => {
       expect(communityApiMocks.deletedMapIds).toEqual(["delete-map"]);
     });

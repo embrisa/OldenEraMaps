@@ -719,19 +719,21 @@ export const configHelp: Record<string, ConfigHelp> = {
     ]
   },
   "connection.from": {
-    tooltip: "The first zone this connection links.",
+    tooltip: "The source zone for this connection.",
+    detail: "For direct paths this is just one endpoint. For portal links, travel is from this zone to the To zone.",
     suggestions: []
   },
   "connection.to": {
-    tooltip: "The second zone this connection links.",
+    tooltip: "The destination zone for this connection.",
+    detail: "For portal links, add a second reverse portal if heroes should be able to travel back.",
     suggestions: []
   },
   "connection.type": {
     tooltip: "How the two zones are linked — physical path, teleporter, or spatial adjacency.",
-    detail: "\"Direct\" = walkable path between zones. \"Portal\" = teleporter link (no terrain path). \"Proximity\" = zones are adjacent but no explicit path or validation.",
+    detail: "\"Direct\" = walkable path between zones. \"Portal\" = one-way teleporter from From to To. Use two opposite portal connections for return travel. \"Proximity\" = zones are adjacent but no explicit path or validation.",
     suggestions: [
       { label: "Direct", value: "Direct", description: "Physical path between zones — validated for walkability" },
-      { label: "Portal", value: "Portal", description: "Teleporter link between zones — validated but no terrain path" },
+      { label: "Portal", value: "Portal", description: "One-way teleporter link from From to To — validated but no terrain path" },
       { label: "Proximity", value: "Proximity", description: "Zones are spatially adjacent — no path or validation" }
     ]
   },
@@ -789,5 +791,9 @@ export const configHelp: Record<string, ConfigHelp> = {
     tooltip: "Raw JSON placement rules for the portal entrance in the destination zone.",
     detail: "This first iteration accepts a JSON array of placement-rule objects. Invalid JSON stays local in the textarea and will not overwrite the design.",
     suggestions: [blankSuggestion]
+  },
+  "template.globalBans.magics": {
+    tooltip: "Spell IDs to ban from the generated match.",
+    detail: "Writes top-level globalBans.magics. Use the spell picker for wiki-backed spell art or add custom IDs when needed."
   }
 };

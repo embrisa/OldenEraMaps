@@ -2042,6 +2042,8 @@ button {
   z-index: 51;
   top: 50%;
   left: 50%;
+  display: flex;
+  flex-direction: column;
   width: min(980px, calc(100vw - 28px));
   max-height: min(760px, calc(100vh - 28px));
   transform: translate(-50%, -50%);
@@ -2049,7 +2051,18 @@ button {
   border-radius: 8px;
   background: var(--panel);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+}
+
+.oe-dialog__body {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 0;
+  max-height: inherit;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   padding: 14px;
+  scrollbar-gutter: stable;
 }
 
 .studio-shell--builder .oe-dialog {
@@ -2142,6 +2155,188 @@ button {
 
 .rules-victory-dialog {
   width: min(720px, calc(100vw - 28px));
+}
+
+.spell-ban-dialog {
+  width: min(980px, calc(100vw - 28px));
+  max-height: min(820px, calc(100vh - 28px));
+}
+
+.spell-ban-dialog__count {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid rgba(214, 180, 94, 0.3);
+  border-radius: 999px;
+  background: rgba(214, 180, 94, 0.1);
+  color: #efdba5;
+  padding: 6px 10px;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.spell-ban-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.spell-ban-summary__preview {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  gap: 6px;
+  border: 1px solid rgba(147, 161, 175, 0.18);
+  border-radius: 8px;
+  background: rgba(7, 11, 16, 0.28);
+  color: var(--muted);
+  padding: 5px 8px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.spell-ban-summary__preview img {
+  width: 24px;
+  height: 24px;
+  border-radius: 5px;
+  object-fit: cover;
+}
+
+.spell-ban-toolbar,
+.spell-ban-custom {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.spell-ban-search {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgba(147, 161, 175, 0.22);
+  border-radius: 8px;
+  background: rgba(7, 11, 16, 0.32);
+  color: var(--muted);
+  padding: 0 10px;
+}
+
+.spell-ban-search .oe-input {
+  border: 0;
+  background: transparent;
+  padding-inline: 0;
+}
+
+.spell-ban-selected {
+  display: flex;
+  flex-wrap: wrap;
+  min-height: 36px;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid rgba(147, 161, 175, 0.16);
+  border-radius: 8px;
+  background: rgba(7, 11, 16, 0.2);
+  color: var(--muted);
+  padding: 8px;
+  margin-bottom: 10px;
+  font-size: 0.78rem;
+}
+
+.spell-ban-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid rgba(214, 180, 94, 0.3);
+  border-radius: 999px;
+  background: rgba(214, 180, 94, 0.1);
+  color: #efdba5;
+  padding: 4px 8px 4px 4px;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.spell-ban-chip img {
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  object-fit: cover;
+}
+
+.spell-ban-chip--custom {
+  padding-left: 9px;
+  border-color: rgba(147, 161, 175, 0.28);
+  color: #cbd6e1;
+}
+
+.spell-ban-scroll {
+  height: min(520px, calc(100vh - 320px));
+}
+
+.spell-ban-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 8px;
+  padding-right: 8px;
+}
+
+.spell-ban-card {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 66px;
+  border: 1px solid rgba(39, 53, 68, 0.9);
+  border-radius: 8px;
+  background: rgba(7, 11, 16, 0.36);
+  color: var(--text);
+  padding: 8px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.spell-ban-card:hover {
+  border-color: rgba(214, 180, 94, 0.44);
+  background: rgba(214, 180, 94, 0.08);
+}
+
+.spell-ban-card[data-selected="true"] {
+  border-color: rgba(189, 107, 97, 0.78);
+  background: rgba(74, 36, 35, 0.42);
+  box-shadow: inset 0 0 0 1px rgba(235, 171, 163, 0.18);
+}
+
+.spell-ban-card img {
+  width: 48px;
+  height: 48px;
+  border-radius: 7px;
+  object-fit: cover;
+}
+
+.spell-ban-card__body {
+  display: grid;
+  min-width: 0;
+  gap: 3px;
+}
+
+.spell-ban-card__body strong,
+.spell-ban-card__body code {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.spell-ban-card__body strong {
+  font-size: 0.84rem;
+}
+
+.spell-ban-card__body code {
+  color: #9fb3c7;
+  font-size: 0.68rem;
 }
 
 .zone-detail-dialog {
@@ -3106,12 +3301,6 @@ button {
 .oe-dialog.community-detail-dialog {
   width: min(970px, calc(100vw - 28px));
   max-height: min(860px, calc(100vh - 28px));
-}
-
-.community-detail-dialog {
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  scrollbar-gutter: stable;
 }
 
 .community-detail-body {

@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useReducer, useRef, useState, type JSX
 import { applyBalancedRandomBoardLayout } from "@/balancedRandomMap";
 import {
   addConnection,
+  addConnectionFromDraft,
   addZone,
   applyRmgJsonToDesign,
   createDefaultDesign,
@@ -91,7 +92,7 @@ import { TemplateSettingsPanel } from "@/components/builder/TemplateSettingsPane
 import { Alert } from "@/components/builder/formHelpers";
 import { BuilderValidationMessages, ValidationOutputPanel } from "@/components/builder/ValidationOutputPanel";
 import { ZoneInspector } from "@/components/builder/ZoneInspector";
-import { Button } from "@/components/ui/button";
+import { Button, type ButtonProps } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogTitle, Tabs, TabsContent, TabsList, TabsTrigger, TooltipProvider } from "@/components/ui/radix";
 import { serializeRmgTemplate, type GeneratorSettings, type Point } from "@/types";
@@ -111,6 +112,14 @@ interface DesignHistoryEntry {
   selectedZoneId: string;
   selectedConnectionId: string;
   dirty: boolean;
+}
+
+interface PendingConfirmation {
+  title: string;
+  message: string;
+  confirmLabel: string;
+  confirmVariant?: ButtonProps["variant"];
+  onConfirm(): void;
 }
 
 interface SaveFilePickerHandle {
@@ -327,6 +336,7 @@ export function AppShell(): JSX.Element {
   const [detailOpen, setDetailOpen] = useState(false);
   const [detailMap, setDetailMap] = useState<MapDetail | null>(null);
   const [exportWarningOpen, setExportWarningOpen] = useState(false);
+  const [pendingConfirmation, setPendingConfirmation] = useState<PendingConfirmation | null>(null);
   const [historyRevision, setHistoryRevision] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const topbarMenuRef = useRef<HTMLDivElement>(null);
@@ -525,7 +535,16 @@ export function AppShell(): JSX.Element {
       markDirty?: boolean;
     } = {}
   ): boolean {
-    if (!options.allowDirtyJsonOverwrite && jsonDirty && !window.confirm("Discard unsynced JSON edits?")) {
+    if (!options.allowDirtyJsonOverwrite && jsonDirty) {
+      requestConfirmation({
+        title: "Discard unsynced JSON edits?",
+        message: "The JSON editor has changes that have not been applied to the builder yet. Continue and discard those JSON edits?",
+        confirmLabel: "Discard JSON edits",
+        confirmVariant: "danger",
+        onConfirm: () => {
+          commit(next, nextSelectedZoneId, { ...options, allowDirtyJsonOverwrite: true });
+        }
+      });
       return false;
     }
 
@@ -543,6 +562,25 @@ export function AppShell(): JSX.Element {
     clearJsonMessages();
     syncJsonSnapshot(next);
     return true;
+  }
+
+  function requestConfirmation(confirmation: PendingConfirmation): void {
+    setPendingConfirmation(confirmation);
+  }
+
+  function runAfterDiscardingUnsavedChanges(action: () => void): void {
+    if (!dirty && !jsonDirty) {
+      action();
+      return;
+    }
+
+    requestConfirmation({
+      title: "Discard unsaved changes?",
+      message: "The current builder design has unsaved changes. Continue and discard those changes?",
+      confirmLabel: "Discard changes",
+      confirmVariant: "danger",
+      onConfirm: action
+    });
   }
 
   function pushDesignHistory(entry: DesignHistoryEntry): void {
@@ -570,28 +608,30 @@ export function AppShell(): JSX.Element {
   }
 
   function handleNew(): void {
-    if ((dirty || jsonDirty) && !window.confirm("Discard unsaved changes?")) return;
-    const next = createInitialDesign();
-    setDesign(next);
-    setSelectedZoneId(next.zones[0]?.id ?? "");
-    setSelectedConnectionId("");
-    setDirty(false);
-    clearJsonMessages();
-    syncJsonSnapshot(next);
-    resetDesignHistory();
+    runAfterDiscardingUnsavedChanges(() => {
+      const next = createInitialDesign();
+      setDesign(next);
+      setSelectedZoneId(next.zones[0]?.id ?? "");
+      setSelectedConnectionId("");
+      setDirty(false);
+      clearJsonMessages();
+      syncJsonSnapshot(next);
+      resetDesignHistory();
+    });
   }
 
   function handleRecover(): void {
     if (!autosaveRecovery) return;
-    if ((dirty || jsonDirty) && !window.confirm("Discard unsaved changes?")) return;
-    setDesign(autosaveRecovery.design);
-    setSelectedZoneId(autosaveRecovery.design.zones[0]?.id ?? "");
-    setSelectedConnectionId("");
-    setDirty(true);
-    clearJsonMessages();
-    syncJsonSnapshot(autosaveRecovery.design);
-    resetDesignHistory();
-    setAutosaveRecovery(null);
+    runAfterDiscardingUnsavedChanges(() => {
+      setDesign(autosaveRecovery.design);
+      setSelectedZoneId(autosaveRecovery.design.zones[0]?.id ?? "");
+      setSelectedConnectionId("");
+      setDirty(true);
+      clearJsonMessages();
+      syncJsonSnapshot(autosaveRecovery.design);
+      resetDesignHistory();
+      setAutosaveRecovery(null);
+    });
   }
 
   function handleDismissRecovery(): void {
@@ -656,6 +696,29 @@ export function AppShell(): JSX.Element {
     commit(next);
   }
 
+  function handleAddReversePortal(connectionId: string): void {
+    const connection = design.connections.find((candidate) => candidate.id === connectionId);
+    const fromZone = design.zones.find((zone) => zone.id === connection?.from);
+    const toZone = design.zones.find((zone) => zone.id === connection?.to);
+    if (!connection || !fromZone || !toZone) return;
+    commit(addConnectionFromDraft(design, {
+      name: `Portal-${toZone.name}-${fromZone.name}`,
+      from: connection.to,
+      to: connection.from,
+      type: "Portal",
+      guardStrength: connection.guardStrength,
+      road: connection.road,
+      guardRandomization: connection.guardRandomization,
+      guardWeeklyIncrement: connection.guardWeeklyIncrement,
+      guardEscape: connection.guardEscape,
+      simTurnSquad: connection.simTurnSquad,
+      guardZone: connection.guardZone,
+      guardMatchGroup: connection.guardMatchGroup,
+      portalPlacementRulesFrom: connection.portalPlacementRulesTo ? structuredClone(connection.portalPlacementRulesTo) : undefined,
+      portalPlacementRulesTo: connection.portalPlacementRulesFrom ? structuredClone(connection.portalPlacementRulesFrom) : undefined
+    }));
+  }
+
   function updateDesign(mutator: (design: TemplateDesign) => void): void {
     const next = structuredClone(design);
     mutator(next);
@@ -718,25 +781,34 @@ export function AppShell(): JSX.Element {
 
   function handleImportFile(file: File | undefined): void {
     if (!file) return;
-    if ((dirty || jsonDirty) && !window.confirm("Discard unsaved changes?")) return;
-    void file.text().then((text) => {
-      const result = parseDesignOrTemplateFileResult(text);
-      if (!result.ok) {
-        setCommunityError(result.errorMessage);
-        return;
-      }
-      const next = result.design;
-      setCommunityError(undefined);
-      commit(next, next.zones[0]?.id ?? "", { allowDirtyJsonOverwrite: true });
-    }).catch((error: unknown) => {
-      setCommunityError(error instanceof Error ? error.message : "Failed to read import file.");
+    runAfterDiscardingUnsavedChanges(() => {
+      void file.text().then((text) => {
+        const result = parseDesignOrTemplateFileResult(text);
+        if (!result.ok) {
+          setCommunityError(result.errorMessage);
+          return;
+        }
+        const next = result.design;
+        setCommunityError(undefined);
+        commit(next, next.zones[0]?.id ?? "", { allowDirtyJsonOverwrite: true });
+      }).catch((error: unknown) => {
+        setCommunityError(error instanceof Error ? error.message : "Failed to read import file.");
+      });
     });
   }
 
   function handleGenerateBalancedRandomMap(settings: GeneratorSettings): boolean {
-    if ((dirty || jsonDirty) && !window.confirm("Discard unsaved changes?")) return false;
-    const next = applyBalancedRandomBoardLayout(templateToDesign(generateTemplate(settings)));
-    return commit(next, next.zones[0]?.id ?? "", { allowDirtyJsonOverwrite: true, markDirty: true });
+    const generate = (): boolean => {
+      const next = applyBalancedRandomBoardLayout(templateToDesign(generateTemplate(settings)));
+      return commit(next, next.zones[0]?.id ?? "", { allowDirtyJsonOverwrite: true, markDirty: true });
+    };
+
+    if (!dirty && !jsonDirty) return generate();
+
+    runAfterDiscardingUnsavedChanges(() => {
+      if (generate()) setBalancedRandomOpen(false);
+    });
+    return false;
   }
 
   function navigate(nextPage: AppPage): void {
@@ -848,22 +920,23 @@ export function AppShell(): JSX.Element {
   }
 
   function openMapInBuilder(mapId: string, mapTitle: string): void {
-    if ((dirty || jsonDirty) && !window.confirm("Discard unsaved changes?")) return;
-    void (async () => {
-      const detail = await getMap(mapId);
-      if (!detail) return;
-      const designResult = parseDesignOrTemplateFileResult(detail.designJson);
-      const templateResult = designResult.ok ? designResult : parseDesignOrTemplateFileResult(detail.templateJson);
-      if (!templateResult.ok) {
-        setCommunityError(`Failed to load "${mapTitle}" into the builder. ${templateResult.errorMessage}`);
-        return;
-      }
-      const next = templateResult.design;
-      setCommunityError(undefined);
-      if (!commit(next, next.zones[0]?.id ?? "", { allowDirtyJsonOverwrite: true, markDirty: false })) return;
-      setCommunityNotice(`Loaded "${mapTitle}" into the builder.`);
-      navigate("builder");
-    })();
+    runAfterDiscardingUnsavedChanges(() => {
+      void (async () => {
+        const detail = await getMap(mapId);
+        if (!detail) return;
+        const designResult = parseDesignOrTemplateFileResult(detail.designJson);
+        const templateResult = designResult.ok ? designResult : parseDesignOrTemplateFileResult(detail.templateJson);
+        if (!templateResult.ok) {
+          setCommunityError(`Failed to load "${mapTitle}" into the builder. ${templateResult.errorMessage}`);
+          return;
+        }
+        const next = templateResult.design;
+        setCommunityError(undefined);
+        if (!commit(next, next.zones[0]?.id ?? "", { allowDirtyJsonOverwrite: true, markDirty: false })) return;
+        setCommunityNotice(`Loaded "${mapTitle}" into the builder.`);
+        navigate("builder");
+      })();
+    });
   }
 
   function handleOpenBrowseMap(map: BrowseMapCard): void {
@@ -895,10 +968,18 @@ export function AppShell(): JSX.Element {
   }
 
   function handleHideMap(mapId: string): void {
-    void updateMapListing(mapId, { status: "hidden" }).then(() => {
-      setDetailOpen(false);
-      void loadBrowseMaps();
-    }).catch(() => {});
+    requestConfirmation({
+      title: "Hide this map?",
+      message: "Hide this map from the catalog? It can be restored later.",
+      confirmLabel: "Hide listing",
+      confirmVariant: "danger",
+      onConfirm: () => {
+        void updateMapListing(mapId, { status: "hidden" }).then(() => {
+          setDetailOpen(false);
+          void loadBrowseMaps();
+        }).catch(() => {});
+      }
+    });
   }
 
   function handleShareMapClick(): void {
@@ -985,15 +1066,21 @@ export function AppShell(): JSX.Element {
   }
 
   function handleDeleteOwnedMap(map: ManagedMapCard): void {
-    if (!window.confirm(`Permanently delete "${map.title}"? This cannot be undone.`)) return;
-
-    void deleteMapListing(map.id)
-      .then(() => {
-        setMyMaps((current) => current.filter((entry) => entry.id !== map.id));
-      })
-      .catch((error: unknown) => {
-        setMyMapsError(error instanceof Error ? error.message : "Failed to delete map listing.");
-      });
+    requestConfirmation({
+      title: "Delete map listing?",
+      message: `Permanently delete "${map.title}"? This cannot be undone.`,
+      confirmLabel: "Delete listing",
+      confirmVariant: "danger",
+      onConfirm: () => {
+        void deleteMapListing(map.id)
+          .then(() => {
+            setMyMaps((current) => current.filter((entry) => entry.id !== map.id));
+          })
+          .catch((error: unknown) => {
+            setMyMapsError(error instanceof Error ? error.message : "Failed to delete map listing.");
+          });
+      }
+    });
   }
 
   function handleDownloadOwnedMap(map: ManagedMapCard): void {
@@ -1477,6 +1564,7 @@ export function AppShell(): JSX.Element {
         design={design}
         selectedConnectionId={selectedConnectionId}
         onAdd={() => commit(addConnection(design))}
+        onAddReversePortal={handleAddReversePortal}
         onUpdate={updateConnection}
         onDelete={handleDeleteConnection}
       />
@@ -1533,6 +1621,31 @@ export function AppShell(): JSX.Element {
             <Button onClick={() => setExportWarningOpen(false)}>Cancel</Button>
             <Button variant="danger" onClick={() => void handleForceExportClick()} disabled={forceExportJson === ""}>
               <HardDriveDownload size={14} />Force Export
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+      <Dialog open={Boolean(pendingConfirmation)} onOpenChange={(open) => {
+        if (!open) setPendingConfirmation(null);
+      }}>
+        <DialogContent className="auth-dialog">
+          <div className="dialog-heading">
+            <div>
+              <DialogTitle>{pendingConfirmation?.title ?? "Confirm action"}</DialogTitle>
+              <DialogDescription>{pendingConfirmation?.message ?? ""}</DialogDescription>
+            </div>
+          </div>
+          <div className="dialog-actions">
+            <Button variant="ghost" onClick={() => setPendingConfirmation(null)}>Cancel</Button>
+            <Button
+              variant={pendingConfirmation?.confirmVariant ?? "primary"}
+              onClick={() => {
+                const confirmation = pendingConfirmation;
+                setPendingConfirmation(null);
+                confirmation?.onConfirm();
+              }}
+            >
+              {pendingConfirmation?.confirmLabel ?? "Continue"}
             </Button>
           </div>
         </DialogContent>

@@ -1138,6 +1138,18 @@ describe("manual template design", () => {
     expect(zoneConfigSignature(design.zones[0])).toBe(zoneConfigSignature(design.zones[2]));
   });
 
+  it("keeps equivalent zone configs together when object field order differs", () => {
+    const design = createDefaultDesign();
+    const source = design.zones[0]!;
+    const reordered = Object.fromEntries(Object.entries(structuredClone(source)).reverse()) as typeof source;
+    reordered.id = "zone-reordered";
+    reordered.name = "Spawn-Reordered";
+    reordered.player = 2;
+    reordered.position = { x: 0.9, y: 0.8 };
+
+    expect(zoneConfigSignature(reordered)).toBe(zoneConfigSignature(source));
+  });
+
   it("derives manual spawn mandatory content from spawn castle counts", () => {
     const design = createDefaultDesign();
     design.zones[0].castleCount = 2;

@@ -23,6 +23,7 @@ interface CommunityMapCanvasPreviewProps {
   decorative?: boolean;
   simplify?: boolean;
   presentation?: RenderSchematicBoardOptions["presentation"];
+  showSpawnKeepMarkers?: boolean;
 }
 
 let schematicBoardBackground: HTMLImageElement | null = null;
@@ -37,6 +38,7 @@ export function CommunityMapCanvasPreview({
   decorative = false,
   simplify = false,
   presentation = "community",
+  showSpawnKeepMarkers = true,
 }: CommunityMapCanvasPreviewProps): JSX.Element {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const preview = useMemo(() => parsePreviewDesignJson(previewDesignJson), [previewDesignJson]);
@@ -64,6 +66,7 @@ export function CommunityMapCanvasPreview({
         dpr,
         backgroundImage: getSchematicBoardBackground(),
         presentation,
+        showSpawnKeepMarkers,
         simplify,
       });
     };
@@ -77,7 +80,7 @@ export function CommunityMapCanvasPreview({
       background.removeEventListener("load", paint);
       background.removeEventListener("error", paint);
     };
-  }, [height, presentation, preview, simplify, width]);
+  }, [height, presentation, preview, showSpawnKeepMarkers, simplify, width]);
 
   return (
     <canvas

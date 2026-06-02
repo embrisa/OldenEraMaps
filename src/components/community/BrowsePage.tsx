@@ -306,6 +306,7 @@ export function BrowsePage({
                         height={COMMUNITY_MAP_CARD_PREVIEW_SIZE.height}
                         decorative
                         simplify
+                        showSpawnKeepMarkers={false}
                         title={map.title}
                       />
                     </button>

@@ -205,11 +205,7 @@ export function MapDetailDialog({
                     <Eye size={14} />Make public
                   </Button>
                 )}
-                <Button size="sm" variant="ghost" onClick={() => {
-                  if (window.confirm("Hide this map from the catalog? It can be restored later.")) {
-                    onHide?.(map.id);
-                  }
-                }}>
+                <Button size="sm" variant="ghost" onClick={() => onHide?.(map.id)}>
                   <Trash2 size={14} />Hide listing
                 </Button>
               </div>

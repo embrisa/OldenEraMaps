@@ -2,7 +2,7 @@ import { findOpenBoardSlotPosition, normalizeBoardZonePositions } from "../board
 import { clamp } from "../math.ts";
 import { zoneSuffixes } from "../generator/math.ts";
 import type { Point } from "../types.ts";
-import { createZone, MAX_SPAWN_ZONES, type DesignZone, type DesignZoneRole, type TemplateDesign } from "./model.ts";
+import { createZone, MAX_SPAWN_ZONES, type DesignConnection, type DesignZone, type DesignZoneRole, type TemplateDesign } from "./model.ts";
 
 export function addZone(design: TemplateDesign, role: DesignZoneRole): TemplateDesign {
   const next = structuredClone(design);
@@ -128,7 +128,23 @@ export function setDesignPlayerCount(design: TemplateDesign, playerCount: number
 
 export function zoneConfigSignature(zone: DesignZone): string {
   const { id: _id, name: _name, player: _player, position: _position, ...config } = zone;
-  return JSON.stringify(config);
+  return JSON.stringify(canonicalizeSignatureValue(config));
+}
+
+function canonicalizeSignatureValue(value: unknown): unknown {
+  if (Array.isArray(value)) {
+    return value.map(canonicalizeSignatureValue);
+  }
+  if (!value || typeof value !== "object") {
+    return value;
+  }
+
+  return Object.fromEntries(
+    Object.entries(value as Record<string, unknown>)
+      .filter(([, entryValue]) => entryValue !== undefined)
+      .sort(([left], [right]) => left.localeCompare(right))
+      .map(([key, entryValue]) => [key, canonicalizeSignatureValue(entryValue)])
+  );
 }
 
 export function addConnection(design: TemplateDesign): TemplateDesign {
@@ -136,6 +152,17 @@ export function addConnection(design: TemplateDesign): TemplateDesign {
   const [from, to] = next.zones.slice(0, 2);
   if (!from || !to) return next;
   return addConnectionToDesign(next, from, to);
+}
+
+export function addConnectionFromDraft(design: TemplateDesign, connection: Omit<DesignConnection, "id">): TemplateDesign {
+  const next = structuredClone(design);
+  if (!next.zones.some((zone) => zone.id === connection.from) || !next.zones.some((zone) => zone.id === connection.to)) return next;
+  next.connections.push({
+    ...structuredClone(connection),
+    id: nextConnectionId(next),
+    name: uniqueName(next.connections.map((candidate) => candidate.name), connection.name)
+  });
+  return next;
 }
 
 export function addConnectionBetween(design: TemplateDesign, fromId: string, toId: string): TemplateDesign {

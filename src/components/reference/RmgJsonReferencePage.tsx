@@ -227,8 +227,8 @@ const fieldDirectory = [
     title: "connections",
     rows: [
       ["name", "Connection id. Roads and placement rules can point to it, so keep names stable."],
-      ["from / to", "The two zone names this connection links."],
-      ["connectionType", "Direct is a normal border route, Portal is teleport-style, Proximity is adjacency guidance."],
+      ["from / to", "The source and destination zone names. Portal connections travel from from to to; add a second reverse portal for return travel."],
+      ["connectionType", "Direct is a normal border route, Portal is a one-way teleporter-style route, Proximity is adjacency guidance."],
       ["guardZone", "Which zone owns the border guard for this route."],
       ["guardEscape / simTurnSquad", "Advanced guard behavior flags used by example-backed templates."],
       ["guardValue / guardRandomization / guardWeeklyIncrement", "Border guard strength, variance, and growth over time."],
@@ -300,7 +300,7 @@ const fieldDirectory = [
       ["valueOverrides[].guardValue", "Guard value override for the named entry."],
       ["globalBans.items", "Item ids that should not appear."],
       ["globalBans.heroes", "Hero ids that should not appear."],
-      ["globalBans.magics", "Magic ids that should not appear."]
+      ["globalBans.magics", "Magic or spell ids that should not appear, such as neutral_magic_town_portal."]
     ]
   }
 ] as const;

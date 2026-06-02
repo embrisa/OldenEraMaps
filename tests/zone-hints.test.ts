@@ -115,6 +115,18 @@ describe("zone hints", () => {
     expect(zoneHintStyle(spawn!).border).toBe("#8fdb85");
   });
 
+  it("colors spawn borders by guard pressure even when their quality is not low", () => {
+    const spawn = createZone("zone-spawn", "Spawn-1", "Spawn", {
+      quality: "Medium",
+      neutralStackStrengthPercent: 100,
+      guardMultiplier: 1.25,
+      guardWeeklyIncrement: 0.15,
+    });
+
+    expect(zoneHints(spawn).find((hint) => hint.id === "guards")?.label).toBe("Light guards");
+    expect(zoneHintStyle(spawn).border).toBe("#8fdb85");
+  });
+
   it("spreads common generated guard profiles across green, orange, and red", () => {
     const spawnLike = createZone("zone-spawn", "Spawn-1", "Spawn", {
       quality: "Low",

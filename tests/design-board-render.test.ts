@@ -31,6 +31,23 @@ function createStubContext(): { ctx: CanvasRenderingContext2D; calls: DrawCall[]
 }
 
 describe("design board renderer", () => {
+  it("uses the same fill color for equivalent zone configs even when field order differs", () => {
+    const design = createDefaultDesign();
+    const source = design.zones[0]!;
+    const reordered = Object.fromEntries(Object.entries(structuredClone(source)).reverse()) as typeof source;
+    reordered.id = "zone-reordered";
+    reordered.name = "Spawn-Reordered";
+    reordered.player = 2;
+    reordered.position = { x: 0.82, y: 0.5 };
+    design.zones = [source, reordered];
+    design.connections = [];
+
+    const preview = buildPreviewDesign(design);
+    const state = buildBoardRenderState(preview, 800, 600);
+
+    expect(state.zoneLayoutsById.get(source.id)?.color).toEqual(state.zoneLayoutsById.get(reordered.id)?.color);
+  });
+
   it("surrounds selected zones with a centered shadow without replacing their danger border color", () => {
     const design = createDefaultDesign();
     const dangerousZone = design.zones.find((zone) => zone.role === "Neutral");
@@ -193,6 +210,39 @@ describe("design board renderer", () => {
     expect(strokeStyles).toContain("#8fdb85");
     expect(strokeStyles).toContain("#ff8877");
     expect(strokeStyles).not.toContain("rgba(150, 174, 199, 0.46)");
+  });
+
+  it("can omit spawn keep markers from compact community previews", () => {
+    const design = createDefaultDesign();
+    const spawn = design.zones.find((zone) => zone.role === "Spawn" && zone.player === 1);
+    const neutral = design.zones.find((zone) => zone.role === "Neutral");
+    expect(spawn).toBeTruthy();
+    expect(neutral).toBeTruthy();
+    for (const zone of design.zones) zone.castleCount = 0;
+    spawn!.castleCount = 1;
+    neutral!.castleCount = 1;
+
+    const preview = buildPreviewDesign(design);
+    const state = buildBoardRenderState(preview, 384, 256);
+    const { ctx, calls } = createStubContext();
+
+    renderSchematicBoardPreview(ctx, state, {
+      width: 384,
+      height: 256,
+      dpr: 1,
+      presentation: "community",
+      simplify: true,
+      showSpawnKeepMarkers: false,
+    });
+
+    const keepFills = calls
+      .filter((call) => call.method === "set:fillStyle" && call.args[0] === "#f3d778");
+    const spawnLayout = state.zoneLayoutsById.get(spawn!.id);
+    const spawnLabelX = calls
+      .find((call) => call.method === "fillText" && call.args[0] === "S1")?.args[1];
+
+    expect(keepFills).toHaveLength(1);
+    expect(spawnLabelX).toBe(spawnLayout?.box.centerX);
   });
 
   it("shrinks dense layouts on small community preview canvases", () => {

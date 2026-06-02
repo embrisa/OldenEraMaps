@@ -43,7 +43,7 @@ export const DialogContent = React.forwardRef<
   <DialogPortal>
     <DialogOverlay />
     <DialogPrimitive.Content ref={ref} className={cn("oe-dialog", className)} {...props}>
-      {children}
+      <div className="oe-dialog__body">{children}</div>
       <DialogPrimitive.Close className="oe-dialog__close" aria-label="Close">
         <X size={16} />
       </DialogPrimitive.Close>

@@ -1,4 +1,4 @@
-import { CirclePlus, Trash2 } from "lucide-react";
+import { ArrowRightLeft, CirclePlus, Trash2 } from "lucide-react";
 import { useEffect, useRef, useState, type JSX } from "react";
 import type { DesignConnection, DesignConnectionType, TemplateDesign } from "@/design";
 import { Badge } from "@/components/ui/badge";
@@ -20,6 +20,7 @@ export function ConnectionsDialog({
   design,
   selectedConnectionId,
   onAdd,
+  onAddReversePortal,
   onUpdate,
   onDelete
 }: {
@@ -28,6 +29,7 @@ export function ConnectionsDialog({
   design: TemplateDesign;
   selectedConnectionId: string;
   onAdd(): void;
+  onAddReversePortal(connectionId: string): void;
   onUpdate(connectionId: string, mutator: (connection: DesignConnection) => void): void;
   onDelete(connectionId: string): void;
 }): JSX.Element {
@@ -80,13 +82,26 @@ export function ConnectionsDialog({
     });
   }
 
+  function zoneNameById(zoneId: string): string {
+    return design.zones.find((zone) => zone.id === zoneId)?.name ?? zoneId;
+  }
+
+  function hasReversePortal(connection: DesignConnection): boolean {
+    return design.connections.some((candidate) => (
+      candidate.id !== connection.id
+      && candidate.type === "Portal"
+      && candidate.from === connection.to
+      && candidate.to === connection.from
+    ));
+  }
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <div className="dialog-heading">
           <div>
             <DialogTitle>Connections</DialogTitle>
-            <DialogDescription>Add and configure the paths between zones.</DialogDescription>
+            <DialogDescription>Add paths between zones. Portal connections travel one way from From to To; add a reverse portal for return travel.</DialogDescription>
           </div>
           <Button type="button" variant="violet" onClick={onAdd}><CirclePlus size={16} />Add Connection</Button>
         </div>
@@ -109,6 +124,7 @@ export function ConnectionsDialog({
                   }} />
                 </ConfigField>
                 <Badge>{connection.road ? "Road" : "No road"}</Badge>
+                {connection.type === "Portal" ? <Badge>{zoneNameById(connection.from)} to {zoneNameById(connection.to)}</Badge> : null}
                 <Button type="button" size="sm" variant="danger" onClick={() => onDelete(connection.id)}><Trash2 size={14} />Delete</Button>
               </div>
               <div className="form-grid form-grid--three">
@@ -145,6 +161,19 @@ export function ConnectionsDialog({
                 </ConfigField>
                 <CheckField checked={connection.road} onCheckedChange={(checked) => onUpdate(connection.id, (draft) => { draft.road = checked; })}>Road</CheckField>
               </div>
+              {connection.type === "Portal" ? (
+                <div className="dialog-actions dialog-actions--inline">
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="blue"
+                    disabled={hasReversePortal(connection)}
+                    onClick={() => onAddReversePortal(connection.id)}
+                  >
+                    <ArrowRightLeft size={14} />{hasReversePortal(connection) ? "Reverse Portal Exists" : "Add Reverse Portal"}
+                  </Button>
+                </div>
+              ) : null}
               <details className="raw-details">
                 <summary>Advanced</summary>
                 <div className="form-grid form-grid--three">

@@ -53,6 +53,7 @@ export interface RenderSchematicBoardOptions {
   selectedConnectionId?: string;
   simplify?: boolean;
   presentation?: "builder" | "community";
+  showSpawnKeepMarkers?: boolean;
 }
 
 const boardZonePalette: BoardZoneColor[] = [
@@ -143,6 +144,7 @@ export function renderSchematicBoardPreview(
       simplify: options.simplify ?? false,
       canvasHeight: options.height,
       presentation,
+      showSpawnKeepMarkers: options.showSpawnKeepMarkers ?? true,
     });
   }
 }
@@ -229,6 +231,7 @@ function drawZone(
     simplify: boolean;
     canvasHeight: number;
     presentation: "builder" | "community";
+    showSpawnKeepMarkers: boolean;
   },
 ): void {
   const { box, color, badgeSize, zone } = layout;
@@ -263,7 +266,7 @@ function drawZone(
   ctx.stroke();
 
   if (options.presentation === "community") {
-    drawCommunityZoneDetails(ctx, zone, box.centerX, box.centerY, badgeRadius);
+    drawCommunityZoneDetails(ctx, zone, box.centerX, box.centerY, badgeRadius, options.showSpawnKeepMarkers);
     ctx.restore();
     return;
   }
@@ -294,8 +297,10 @@ function drawCommunityZoneDetails(
   centerX: number,
   centerY: number,
   badgeRadius: number,
+  showSpawnKeepMarkers: boolean,
 ): void {
-  if (zone.castleCount > 0) {
+  const drawsKeepMarker = zone.castleCount > 0 && (showSpawnKeepMarkers || zone.role !== "Spawn");
+  if (drawsKeepMarker) {
     const keepSize = Math.max(9, Math.min(14, badgeRadius * 0.34));
     const keepX = centerX + (zone.role === "Spawn" ? badgeRadius * 0.24 : 0);
     const keepY = centerY + (zone.role === "Spawn" ? badgeRadius * 0.2 : 0);
@@ -312,8 +317,8 @@ function drawCommunityZoneDetails(
   ctx.textBaseline = "middle";
   ctx.lineWidth = 3;
   ctx.strokeStyle = "rgba(5, 8, 12, 0.82)";
-  ctx.strokeText(label, centerX - (zone.castleCount > 0 ? badgeRadius * 0.14 : 0), centerY);
-  ctx.fillText(label, centerX - (zone.castleCount > 0 ? badgeRadius * 0.14 : 0), centerY);
+  ctx.strokeText(label, centerX - (drawsKeepMarker ? badgeRadius * 0.14 : 0), centerY);
+  ctx.fillText(label, centerX - (drawsKeepMarker ? badgeRadius * 0.14 : 0), centerY);
   ctx.restore();
 }
 
