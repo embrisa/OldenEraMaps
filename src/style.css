@@ -1992,6 +1992,99 @@ button {
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
 }
 
+.map-analysis-panel {
+  display: grid;
+  gap: 10px;
+  border: 1px solid rgba(70, 93, 116, 0.78);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--panel-2) 94%, #162233);
+  padding: 12px;
+}
+
+.map-analysis-panel__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.map-analysis-panel__header h3 {
+  margin: 0 0 2px;
+  color: var(--text);
+  font-size: 0.92rem;
+}
+
+.map-analysis-panel__header span {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.map-analysis-panel__header strong {
+  color: #f3d57d;
+  font-size: 1.35rem;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.map-analysis-panel__findings,
+.map-analysis-starts,
+.map-analysis-zones {
+  display: grid;
+  gap: 6px;
+}
+
+.map-analysis-finding,
+.map-analysis-starts span,
+.map-analysis-zones span {
+  border: 1px solid rgba(147, 161, 175, 0.18);
+  border-radius: 6px;
+  background: rgba(10, 16, 24, 0.38);
+  padding: 7px 8px;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.map-analysis-finding--warning {
+  border-color: rgba(197, 165, 96, 0.35);
+  color: #f0d991;
+}
+
+.map-analysis-finding--positive {
+  border-color: rgba(121, 167, 111, 0.35);
+  color: #c8edc0;
+}
+
+.map-analysis-stats {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(90px, 1fr));
+  gap: 6px;
+}
+
+.map-analysis-stats span {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+  border: 1px solid rgba(147, 161, 175, 0.16);
+  border-radius: 6px;
+  background: rgba(8, 13, 19, 0.44);
+  padding: 8px;
+  color: var(--muted);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+}
+
+.map-analysis-stats strong,
+.map-analysis-starts strong,
+.map-analysis-zones strong {
+  color: var(--text);
+  font-weight: 700;
+  text-transform: none;
+}
+
+.map-analysis-zones {
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+}
+
 .alert {
   border: 1px solid rgba(147, 161, 175, 0.22);
   border-radius: 6px;

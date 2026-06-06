@@ -68,6 +68,7 @@ import {
 } from "@/community/communityApi";
 import { renderCommunityMapPreviewImageBlob } from "@/community/communityPreviewImage";
 import { isSupabaseConfigured } from "@/community/supabaseClient";
+import { analyzeTemplate } from "@/analysis/templateAnalysis";
 import { generateTemplate, serializeTemplate } from "@/generator";
 import { zoneSuffixes } from "@/generator/math";
 import { BalancedRandomMapDialog } from "@/components/builder/BalancedRandomMapDialog";
@@ -362,6 +363,13 @@ export function AppShell(): JSX.Element {
       return serializeTemplate(designToTemplate(design, { skipValidation: true }));
     } catch {
       return "";
+    }
+  }, [design, validation.errors.length]);
+  const templateAnalysis = useMemo(() => {
+    try {
+      return analyzeTemplate(designToTemplate(design, validation.errors.length === 0 ? undefined : { skipValidation: true }));
+    } catch {
+      return null;
     }
   }, [design, validation.errors.length]);
   const jsonDirty = jsonDraft !== jsonSnapshot;
@@ -1431,6 +1439,7 @@ export function AppShell(): JSX.Element {
                   <ValidationOutputPanel
                     validation={validation}
                     showBuilderValidationMessages={builderWorkspaceTab === "json"}
+                    analysis={builderWorkspaceTab === "json" ? templateAnalysis : null}
                     jsonValue={jsonDraft}
                     jsonDirty={jsonDirty}
                     jsonParseError={jsonParseError}
