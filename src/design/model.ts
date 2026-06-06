@@ -1,5 +1,5 @@
 import { defaultGuardRandomization, spawnLayoutName, type GenerationTuning } from "../generator/math.ts";
-import { buildAllContentCountLimits, buildHubZone, buildNeutralZone, buildSpawnZone, buildZoneLayouts } from "../generator/templateContentBuilder.ts";
+import { buildAllContentCountLimits, buildHubZone, buildNeutralZone, buildSpawnZone, buildZoneLayouts, countDwellingContentItems, normalizeDwellingCount } from "../generator/templateContentBuilder.ts";
 import { normalizeBoardZonePositions } from "../boardSlots.ts";
 import { clamp } from "../math.ts";
 import { createDefaultSettings } from "../settings.ts";
@@ -94,6 +94,8 @@ export interface DesignZone {
   unguardedContentValuePerArea: number;
   resourcesValue: number;
   resourcesValuePerArea: number;
+  dwellingCount: number;
+  dwellingCountCustomized?: boolean;
   mandatoryContent: string[];
   encounterHolesSettings?: {
     affectedEncounters?: number | null;
@@ -219,6 +221,7 @@ export function createZone(id: string, name: string, role: DesignZoneRole, overr
     unguardedContentValuePerArea: prototype.unguardedContentValuePerArea ?? 0,
     resourcesValue: prototype.resourcesValue ?? 0,
     resourcesValuePerArea: prototype.resourcesValuePerArea ?? 0,
+    dwellingCount: defaultDwellingCountForRole(role),
     mandatoryContent: toStringList(prototype.mandatoryContent),
     useCustomMainObjects: false,
     customMainObjects: [],
@@ -259,6 +262,10 @@ export function syncZoneProfile(zone: DesignZone): void {
   zone.contentBiome = cloneSelector(prototype.contentBiome);
   zone.metaObjectsBiome = cloneSelector(prototype.metaObjectsBiome);
   zone.crossroadsPosition = prototype.crossroadsPosition ?? zone.crossroadsPosition;
+}
+
+export function defaultDwellingCountForRole(role: DesignZoneRole): number {
+  return role === "Hub" ? 0 : 1;
 }
 
 export function defaultDesignOrientation(zeroAngleZone?: string): DesignOrientation {
@@ -401,14 +408,19 @@ export function cloneNoiseEntries(value: unknown, fallback: NoiseEntry[]): Noise
 export function normalizeDesignLockState(design: TemplateDesign): TemplateDesign {
   const firstZoneName = design.zones[0]?.name;
   const spawnCount = design.zones.filter((zone) => zone.role === "Spawn").length;
-  const normalizedZones = normalizeBoardZonePositions(design.zones.map((zone) => ({
-    ...zone,
-    mandatoryContent: toStringList(zone.mandatoryContent),
-    useCustomMainObjects: zone.useCustomMainObjects === true,
-    customMainObjects: cloneMainObjects(zone.customMainObjects ?? []),
-    matchAdjacentNeutralCastleFactions: zone.matchAdjacentNeutralCastleFactions === true || (design.matchAdjacentNeutralCastleFactions === true && zone.role === "Neutral"),
-    neutralCastlesAsRuins: zone.neutralCastlesAsRuins === true || (design.neutralCastlesAsRuins === true && zone.role === "Neutral")
-  })));
+  const normalizedZones = normalizeBoardZonePositions(design.zones.map((zone) => {
+    const mandatoryContent = toStringList(zone.mandatoryContent);
+    return {
+      ...zone,
+      mandatoryContent,
+      dwellingCount: inferNormalizedZoneDwellingCount(zone, mandatoryContent, design.mandatoryContent),
+      dwellingCountCustomized: zone.dwellingCountCustomized === true,
+      useCustomMainObjects: zone.useCustomMainObjects === true,
+      customMainObjects: cloneMainObjects(zone.customMainObjects ?? []),
+      matchAdjacentNeutralCastleFactions: zone.matchAdjacentNeutralCastleFactions === true || (design.matchAdjacentNeutralCastleFactions === true && zone.role === "Neutral"),
+      neutralCastlesAsRuins: zone.neutralCastlesAsRuins === true || (design.neutralCastlesAsRuins === true && zone.role === "Neutral")
+    };
+  }));
   return {
     ...design,
     templateDescription: typeof design.templateDescription === "string" ? design.templateDescription : DEFAULT_TEMPLATE_DESCRIPTION,
@@ -441,4 +453,11 @@ export function toStringList(value: unknown): string[] {
   if (value === undefined || value === null) return [];
   if (Array.isArray(value)) return value.map((entry) => String(entry));
   return [String(value)];
+}
+
+function inferNormalizedZoneDwellingCount(zone: Partial<DesignZone>, mandatoryContentNames: string[], mandatoryContentGroups: MandatoryContentGroup[]): number {
+  if (typeof zone.dwellingCount === "number") return normalizeDwellingCount(zone.dwellingCount, defaultDwellingCountForRole(zone.role ?? "Neutral"));
+  const groupsByName = new Map(mandatoryContentGroups.map((group) => [group.name, group]));
+  const inferred = mandatoryContentNames.reduce((count, name) => count + countDwellingContentItems(groupsByName.get(name)?.content), 0);
+  return inferred > 0 ? normalizeDwellingCount(inferred, inferred) : defaultDwellingCountForRole(zone.role ?? "Neutral");
 }

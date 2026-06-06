@@ -1235,18 +1235,21 @@ export function AppShell(): JSX.Element {
             <strong>Olden Era RMG Studio</strong>
           </div>
         </div>
-        <div className="faction-mark-strip" aria-hidden="true">
-          {["temple", "grove", "dungeon", "hive", "necropolis", "schism"].map((name) => (
-            <img key={name} src={`/assets/olden-era/factions/${name}-icon.png`} alt="" />
-          ))}
-        </div>
-        <div className="topbar-stats">
-          {page === "browse" ? (
-            <>
-              <span><strong>{communityStats.mapCount}</strong>Maps</span>
-              <span><strong>{communityStats.ratingCount}</strong>Ratings</span>
-            </>
-          ) : null}
+        <nav className="topbar-nav" aria-label="Main navigation">
+          <Button className="topbar-nav__item" variant="ghost" aria-current={page === "builder" ? "page" : undefined} onClick={() => navigate("builder")}><FileJson size={16} />Builder</Button>
+          <Button className="topbar-nav__item" variant="ghost" aria-current={page === "browse" ? "page" : undefined} onClick={() => navigate("browse")}><Compass size={16} />Browse</Button>
+          <Button className="topbar-nav__item" variant="ghost" aria-current={page === "reference" ? "page" : undefined} onClick={() => navigate("reference")}><BookOpenText size={16} />Reference</Button>
+          <Button className="topbar-nav__item" variant="ghost" aria-current={page === "install" ? "page" : undefined} onClick={() => navigate("install")}><HardDriveDownload size={16} />Install</Button>
+        </nav>
+        <div className="topbar-context">
+          <div className="topbar-stats">
+            {page === "browse" ? (
+              <>
+                <span><strong>{communityStats.mapCount}</strong>Maps</span>
+                <span><strong>{communityStats.ratingCount}</strong>Ratings</span>
+              </>
+            ) : null}
+          </div>
         </div>
         {page === "builder" ? (
           <div className="topbar-file-actions">
@@ -1271,12 +1274,11 @@ export function AppShell(): JSX.Element {
           </Button>
           {topbarMenuOpen ? (
             <div id="topbar-action-menu" className="topbar-actions" aria-label="Header actions" onClick={() => setTopbarMenuOpen(false)}>
-              <Button variant={page === "builder" ? "gold" : "ghost"} onClick={() => navigate("builder")}><FileJson size={16} />Builder</Button>
-              <Button variant={page === "browse" ? "primary" : "ghost"} onClick={() => navigate("browse")}><Compass size={16} />Browse</Button>
-              <Button variant={page === "reference" ? "blue" : "ghost"} onClick={() => navigate("reference")}><BookOpenText size={16} />Reference</Button>
-              <Button variant={page === "install" ? "green" : "ghost"} onClick={() => navigate("install")}><HardDriveDownload size={16} />Install</Button>
+              {page === "builder" ? (
+                <Button onClick={handleNew}><Plus size={16} />New</Button>
+              ) : null}
               <a
-                className="oe-button oe-button--ghost report-bug-button"
+                className="oe-button oe-button--md oe-button--ghost report-bug-button"
                 href={GITHUB_ISSUES_URL}
                 target="_blank"
                 rel="noreferrer"
@@ -1301,11 +1303,6 @@ export function AppShell(): JSX.Element {
                 }}
                 onDeleteAccount={handleDeleteAccount}
               />
-              {page === "builder" ? (
-                <>
-                  <Button onClick={handleNew}><FileJson size={16} />New</Button>
-                </>
-              ) : null}
             </div>
           ) : null}
         </div>

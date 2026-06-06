@@ -1,7 +1,7 @@
 import { ArrowRightLeft, Copy, Layers, Palette, Shield, Trash2 } from "lucide-react";
 import { useEffect, useMemo, useState, type JSX } from "react";
 import { terrainOptions } from "@/settings";
-import { syncZoneProfile, type DesignZone, type DesignZoneRole } from "@/design";
+import { defaultDwellingCountForRole, syncZoneProfile, type DesignZone, type DesignZoneRole } from "@/design";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -121,6 +121,8 @@ export function ZoneInspector({
                 if (draft.role !== "Neutral") draft.neutralCastlesAsRuins = false;
                 if (draft.role !== "Neutral") draft.naturalExpansion = false;
                 if (draft.role === "Hub") draft.name = draft.name.startsWith("Hub") ? draft.name : "Hub";
+                draft.dwellingCount = defaultDwellingCountForRole(draft.role);
+                draft.dwellingCountCustomized = true;
                 syncZoneProfile(draft);
               });
             }}>
@@ -383,6 +385,16 @@ export function ZoneInspector({
           <ScrollArea className="zone-inspector-dialog__scroll">
             <div className="dialog-section">
               <h3 className="dialog-section__heading">Density &amp; Value</h3>
+              <div className="form-grid form-grid--two">
+                <ConfigField configKey="zone.dwellingCount" label="Dwellings">
+                  <SteppedValueSlider min={0} max={8} value={zone.dwellingCount} onChange={(event) => {
+                    onUpdate((draft) => {
+                      draft.dwellingCount = Number(event.currentTarget.value);
+                      draft.dwellingCountCustomized = true;
+                    });
+                  }} />
+                </ConfigField>
+              </div>
               <NumberGrid zone={zone} fields={[
                 ["resourceDensityPercent", "Resources %", 20, 400],
                 ["structureDensityPercent", "Structures %", 20, 200],

@@ -102,6 +102,7 @@ import {
 import { snapPointToBoardSlot } from "../src/boardSlots";
 import { addZone, createDefaultDesign, parseDesignOrTemplateFile, serializeDesignFile } from "../src/design";
 import { buildPreviewDesign, PREVIEW_RENDERER_VERSION } from "../src/community/previewDesign";
+import { countDwellingContentItems } from "../src/generator/templateContentBuilder";
 
 const BOARD_TEST_WIDTH = 800;
 const BOARD_TEST_HEIGHT = Math.round(
@@ -416,6 +417,12 @@ describe("React UI shell", () => {
     expect(screen.getByRole("link", { name: "RMG JSON Reference Guide" })).toBeTruthy();
     expect(screen.getByRole("link", { name: "Installation Guide" })).toBeTruthy();
     expect(screen.getByText(/Heroes of Might and Magic: Olden Era map templates/i)).toBeTruthy();
+    const headerNav = screen.getByRole("navigation", { name: "Main navigation" });
+    expect(within(headerNav).getByRole("button", { name: "Builder" }).getAttribute("aria-current")).toBe("page");
+    expect(within(headerNav).getByRole("button", { name: "Browse" }).getAttribute("aria-current")).toBeNull();
+    expect(screen.getByRole("button", { name: "Open" })).toBeTruthy();
+    expect(screen.getByRole("button", { name: "Save" })).toBeTruthy();
+    expect(screen.getByRole("button", { name: "Share" })).toBeTruthy();
     expect(screen.getByRole("button", { name: /Export/i })).toBeTruthy();
     const boardShell = document.querySelector(".design-board-shell");
     expect(boardShell).toBeTruthy();
@@ -554,14 +561,14 @@ describe("React UI shell", () => {
     expect((validationSummary as HTMLElement).contains(validationAlert)).toBe(true);
   });
 
-  it("navigates to the in-app RMG JSON reference page from the header menu and footer", async () => {
+  it("navigates to the in-app RMG JSON reference page from the header nav and footer", async () => {
     const user = userEvent.setup();
     render(<AppShell />);
 
-    await openHeaderMenu(user);
     await user.click(screen.getByRole("button", { name: "Reference" }));
 
     const referenceRegion = await screen.findByRole("region", { name: "RMG JSON reference guide page" });
+    expect(within(screen.getByRole("navigation", { name: "Main navigation" })).getByRole("button", { name: "Reference" }).getAttribute("aria-current")).toBe("page");
     expect(within(referenceRegion).getByText("RMG JSON Reference Guide")).toBeTruthy();
     expect(within(referenceRegion).getAllByText(/Builder to Export/i).length).toBeGreaterThan(0);
     expect(within(referenceRegion).getByText("Plain English Map Terms")).toBeTruthy();
@@ -615,7 +622,6 @@ describe("React UI shell", () => {
     const user = userEvent.setup();
     render(<AppShell />);
 
-    await openHeaderMenu(user);
     await user.click(screen.getByRole("button", { name: "Install" }));
 
     const installRegion = await screen.findByRole("region", { name: "Olden Era installation guide page" });
@@ -2258,6 +2264,27 @@ describe("React UI shell", () => {
     }
   });
 
+  it("exposes per-zone dwellings in the content dialog and exports the count", async () => {
+    const user = userEvent.setup();
+    render(<AppShell />);
+
+    await user.click(screen.getByRole("button", { name: "Content" }));
+    const dialog = screen.getByRole("dialog");
+    const dwellings = getSliderValueInputForLabel(dialog, "Dwellings");
+
+    expect(dwellings.value).toBe("1");
+    fireEvent.input(dwellings, { target: { value: "3" } });
+    fireEvent.blur(dwellings);
+
+    await waitFor(() => {
+      const template = JSON.parse((screen.getByLabelText("RMG JSON editor") as HTMLTextAreaElement).value) as {
+        mandatoryContent?: Array<{ name: string; content?: Array<Record<string, unknown>> }>;
+      };
+      const spawnGroup = template.mandatoryContent?.find((group) => group.name === "mandatory_content_side_1");
+      expect(countDwellingContentItems(spawnGroup?.content as never)).toBe(3);
+    });
+  });
+
   it("shows imported custom layout profiles in the zone terrain selector", async () => {
     const user = userEvent.setup();
     render(<AppShell />);
@@ -2402,7 +2429,6 @@ describe("React UI shell", () => {
     const user = userEvent.setup();
     render(<AppShell />);
 
-    await openHeaderMenu(user);
     await user.click(screen.getByRole("button", { name: "Browse" }));
 
     expect(await screen.findByRole("heading", { name: "Browse shared maps" })).toBeTruthy();
@@ -2414,7 +2440,6 @@ describe("React UI shell", () => {
     const user = userEvent.setup();
     render(<AppShell />);
 
-    await openHeaderMenu(user);
     await user.click(screen.getByRole("button", { name: "Browse" }));
 
     expect(await screen.findByRole("heading", { name: "Browse shared maps" })).toBeTruthy();
@@ -2449,7 +2474,6 @@ describe("React UI shell", () => {
     const user = userEvent.setup();
     render(<AppShell />);
 
-    await openHeaderMenu(user);
     await user.click(screen.getByRole("button", { name: "Browse" }));
 
     expect(await screen.findByRole("heading", { name: "Temple Border Clash" })).toBeTruthy();
@@ -2489,7 +2513,6 @@ describe("React UI shell", () => {
     const user = userEvent.setup();
     render(<AppShell />);
 
-    await openHeaderMenu(user);
     await user.click(screen.getByRole("button", { name: "Browse" }));
 
     // Browse heading should appear immediately
@@ -2502,7 +2525,6 @@ describe("React UI shell", () => {
     const user = userEvent.setup();
     render(<AppShell />);
 
-    await openHeaderMenu(user);
     await user.click(screen.getByRole("button", { name: "Browse" }));
 
     expect(await screen.findByRole("heading", { name: "Browse shared maps" })).toBeTruthy();
@@ -2538,7 +2560,6 @@ describe("React UI shell", () => {
 
     render(<AppShell />);
 
-    await openHeaderMenu(user);
     await user.click(screen.getByRole("button", { name: "Browse" }));
     expect(await screen.findByRole("heading", { name: "Browse shared maps" })).toBeTruthy();
     await screen.findByRole("heading", { name: "Temple Border Clash" });
@@ -2585,7 +2606,6 @@ describe("React UI shell", () => {
 
     render(<AppShell />);
 
-    await openHeaderMenu(user);
     await user.click(screen.getByRole("button", { name: "Browse" }));
     expect(await screen.findByRole("heading", { name: "Browse shared maps" })).toBeTruthy();
     await screen.findByRole("heading", { name: "Temple Border Clash" });
@@ -2607,7 +2627,6 @@ describe("React UI shell", () => {
     const user = userEvent.setup();
     render(<AppShell />);
 
-    await openHeaderMenu(user);
     await user.click(screen.getByRole("button", { name: "Browse" }));
 
     expect(await screen.findByRole("heading", { name: "Browse shared maps" })).toBeTruthy();
@@ -2631,7 +2650,6 @@ describe("React UI shell", () => {
     const user = userEvent.setup();
     render(<AppShell />);
 
-    await openHeaderMenu(user);
     await user.click(screen.getByRole("button", { name: "Browse" }));
 
     expect(await screen.findByRole("heading", { name: "Browse shared maps" })).toBeTruthy();
@@ -2650,7 +2668,6 @@ describe("React UI shell", () => {
     const user = userEvent.setup();
     render(<AppShell />);
 
-    await openHeaderMenu(user);
     await user.click(screen.getByRole("button", { name: "Browse" }));
 
     expect(await screen.findByRole("heading", { name: "Browse shared maps" })).toBeTruthy();

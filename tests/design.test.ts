@@ -18,6 +18,7 @@ import {
   zoneConfigSignature
 } from "../src/design";
 import { parseRmgTemplate, serializeRmgTemplate } from "../src/types";
+import { countDwellingContentItems } from "../src/generator/templateContentBuilder";
 
 describe("manual template design", () => {
   it("starts with a connected two-player starter design", () => {
@@ -26,6 +27,7 @@ describe("manual template design", () => {
     expect(design.templateDescription).toBe("Built with www.OldenEraMaps.com");
     expect(design.lockMapDimensions).toBe(true);
     expect(design.zones.map((zone) => zone.name)).toEqual(["Spawn-1", "Neutral-3", "Spawn-2"]);
+    expect(design.zones.map((zone) => zone.dwellingCount)).toEqual([1, 1, 1]);
     expect(design.zones.filter((zone) => zone.role === "Spawn")).toHaveLength(2);
     expect(design.connections.map((connection) => [connection.from, connection.to])).toEqual([
       ["zone-1", "zone-3"],
@@ -1161,6 +1163,100 @@ describe("manual template design", () => {
 
     expect(spawnZone?.mainObjects).toHaveLength(2);
     expect(footholdRules).toContainEqual(expect.objectContaining({ type: "MainObject", args: ["1"] }));
+  });
+
+  it("exports per-zone generated dwelling counts", () => {
+    const design = createDefaultDesign();
+    design.zones[0].dwellingCount = 0;
+    design.zones[1].dwellingCount = 3;
+
+    const template = designToTemplate(design);
+    const spawnGroup = template.mandatoryContent?.find((group) => group.name === "mandatory_content_side_1");
+    const neutralGroup = template.mandatoryContent?.find((group) => group.name === "mandatory_content_neutral_3");
+
+    expect(countDwellingContentItems(spawnGroup?.content)).toBe(0);
+    expect(countDwellingContentItems(neutralGroup?.content)).toBe(3);
+  });
+
+  it("normalizes legacy design files with missing dwelling counts", () => {
+    const saved = JSON.parse(serializeDesignFile(createDefaultDesign())) as {
+      design: { zones: Array<Record<string, unknown>> };
+    };
+    for (const zone of saved.design.zones) {
+      delete zone.dwellingCount;
+      delete zone.dwellingCountCustomized;
+    }
+
+    const reopened = parseDesignOrTemplateFile(JSON.stringify(saved));
+
+    expect(reopened.zones.map((zone) => zone.dwellingCount)).toEqual([1, 1, 1]);
+    expect(reopened.zones.every((zone) => zone.dwellingCountCustomized === false)).toBe(true);
+  });
+
+  it("infers imported template dwelling counts from referenced mandatory content", () => {
+    const imported = templateToDesign(parseRmgTemplate(`{
+      "name": "Imported Dwellings",
+      "sizeX": 160,
+      "sizeZ": 160,
+      "variants": [{
+        "zones": [
+          { "name": "Spawn-1", "mandatoryContent": ["mandatory_content_spawn"], "mainObjects": [{ "type": "Spawn", "spawn": "Player1" }] },
+          { "name": "Spawn-2", "mainObjects": [{ "type": "Spawn", "spawn": "Player2" }] }
+        ],
+        "connections": [{ "name": "Path-1-2", "from": "Spawn-1", "to": "Spawn-2", "guardValue": 1000 }]
+      }],
+      "mandatoryContent": [{
+        "name": "mandatory_content_spawn",
+        "content": [
+          { "sid": "random_hire_1" },
+          { "includeLists": ["content_list_building_random_hires_low_tier"] }
+        ]
+      }]
+    }`));
+
+    expect(imported.useCustomMandatoryContent).toBe(true);
+    expect(imported.zones.find((zone) => zone.name === "Spawn-1")?.dwellingCount).toBe(2);
+    expect(imported.zones.find((zone) => zone.name === "Spawn-2")?.dwellingCount).toBe(1);
+  });
+
+  it("adds a separate dwellings group without rewriting custom mandatory content", () => {
+    const imported = templateToDesign(parseRmgTemplate(`{
+      "name": "Custom Dwelling Preservation",
+      "sizeX": 160,
+      "sizeZ": 160,
+      "variants": [{
+        "zones": [
+          { "name": "Spawn-1", "mandatoryContent": ["mandatory_content_custom_spawn"], "mainObjects": [{ "type": "Spawn", "spawn": "Player1" }] },
+          { "name": "Spawn-2", "mainObjects": [{ "type": "Spawn", "spawn": "Player2" }] }
+        ],
+        "connections": [{ "name": "Path-1-2", "from": "Spawn-1", "to": "Spawn-2", "guardValue": 1000 }]
+      }],
+      "mandatoryContent": [{
+        "name": "mandatory_content_custom_spawn",
+        "content": [
+          { "sid": "market", "isGuarded": true },
+          { "sid": "random_hire_1" }
+        ]
+      }]
+    }`));
+    const spawn = imported.zones.find((zone) => zone.name === "Spawn-1")!;
+    spawn.dwellingCount = 2;
+    spawn.dwellingCountCustomized = true;
+
+    const exported = designToTemplate(imported);
+    const originalGroup = exported.mandatoryContent?.find((group) => group.name === "mandatory_content_custom_spawn");
+    const dwellingGroup = exported.mandatoryContent?.find((group) => group.name === "mandatory_content_dwellings_spawn_1");
+    const exportedSpawn = exported.variants?.[0].zones?.find((zone) => zone.name === "Spawn-1");
+
+    expect(originalGroup).toEqual({
+      name: "mandatory_content_custom_spawn",
+      content: [
+        { sid: "market", isGuarded: true },
+        { sid: "random_hire_1" }
+      ]
+    });
+    expect(countDwellingContentItems(dwellingGroup?.content)).toBe(2);
+    expect(exportedSpawn?.mandatoryContent).toEqual(["mandatory_content_custom_spawn", "mandatory_content_dwellings_spawn_1"]);
   });
 
   it("round-trips new design files", () => {

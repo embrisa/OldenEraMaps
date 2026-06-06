@@ -511,6 +511,15 @@ export const configHelp: Record<string, ConfigHelp> = {
       { label: "Rich", value: 600, description: "600/area — packed resource spots for economy zones" }
     ]
   },
+  "zone.dwellingCount": {
+    tooltip: "Guaranteed dwelling count for this zone.",
+    detail: "Controls how many random-hire dwelling entries are written into this zone's generated mandatory content. Content pools can still add additional random hire locations independently.",
+    suggestions: [
+      { label: "None", value: 0, description: "No guaranteed dwellings in this zone" },
+      { label: "Default", value: 1, description: "One guaranteed dwelling, matching current generated output" },
+      { label: "Rich", value: 3, description: "Three guaranteed dwellings for creature-heavy zones" }
+    ]
+  },
   "zone.guardedContentPool": {
     tooltip: "Content pool IDs used when generating guarded encounters.",
     detail: "One pool ID per line. Pools define what rewards can appear behind guards — items, pandora boxes, hire locations, banks, stat boosters, and magic shrines. Higher tiers (T4/T5) give more powerful rewards.",

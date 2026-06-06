@@ -4,6 +4,10 @@ import { centerLayoutName, normalizeZoneSize, scaleGuardMultiplier, scaleNeutral
 import type { NeutralZonePlan } from "./neutralZonePlanner.ts";
 import { buildConnectorZoneRoads, buildOuterZoneRoads } from "./connectionBuilder.ts";
 
+export const lowTierRandomHireList = "content_list_building_random_hires_low_tier";
+export const highTierRandomHireList = "content_list_building_random_hires_high_tier";
+export const maxDwellingCount = 8;
+
 const t2Guarded = ["classic_template_pool_random_t2_item", "classic_template_pool_random_t2_pandora", "classic_template_pool_random_t2_hire", "classic_template_pool_random_t2_unit_bank", "classic_template_pool_random_t2_res_bank", "classic_template_pool_random_t2_stat", "classic_template_pool_random_t2_magic"];
 const t2Unguarded = ["classic_template_pool_random_unguarded_t2_item", "classic_template_pool_random_unguarded_t2_pandora", "classic_template_pool_random_unguarded_t2_hire", "classic_template_pool_random_unguarded_t2_unit_bank", "classic_template_pool_random_unguarded_t2_res_bank", "classic_template_pool_random_unguarded_t2_stat", "classic_template_pool_random_unguarded_t2_magic"];
 const t3Guarded = t2Guarded.map((name) => name.replace("_t2_", "_t3_"));
@@ -483,30 +487,58 @@ function buildZoneLayout(name: string, obstaclesFill: number, obstaclesFillVoid:
   return { name, obstaclesFill, obstaclesFillVoid, lakesFill, minLakeArea, elevationClusterScale, elevationModes: [{ weight: 2, minElevatedFraction: 0.2, maxElevatedFraction: 0.4 }, { weight: 1, minElevatedFraction: 0.6, maxElevatedFraction: 0.8 }], roadClusterArea, guardedEncounterResourceFractions: { countBounds: [], fractions: [0.66] }, ambientPickupDistribution: { repulsion: 1, noise: ambientNoise, roadAttraction, obstacleAttraction: 0, groupSizeWeights } };
 }
 
-export function buildAllMandatoryContent(playerLetters: string[], neutralZones: NeutralZonePlan[], settings: { zoneCfg: { playerZoneCastles: number }, spawnRemoteFootholds: boolean, naturalExpansionZone: boolean }, tuning?: Pick<GenerationTuning, "neutralStackStrengthMultiplier">): MandatoryContentGroup[] {
-  const groups = playerLetters.map((letter) => ({ name: `mandatory_content_side_${letter}`, content: buildPlayerZoneMandatoryContent(settings.zoneCfg.playerZoneCastles, settings.spawnRemoteFootholds) }));
-  if (settings.naturalExpansionZone) groups.push(...playerLetters.map((letter) => ({ name: `mandatory_content_natural_${letter}`, content: buildLowNeutralMandatoryContent(1, settings.spawnRemoteFootholds) })));
-  groups.push(...neutralZones.map((zone) => ({ name: `mandatory_content_neutral_${zone.letter}`, content: zone.role === "Connector" ? buildConnectorNeutralMandatoryContent(zone.castleCount, settings.spawnRemoteFootholds) : zone.quality === "High" ? buildHighNeutralMandatoryContent(zone.castleCount, settings.spawnRemoteFootholds, tuning) : zone.quality === "Low" ? buildLowNeutralMandatoryContent(zone.castleCount, settings.spawnRemoteFootholds) : buildMediumNeutralMandatoryContent(zone.castleCount, settings.spawnRemoteFootholds) })));
+export interface MandatoryContentDwellingSettings {
+  dwellingCounts?: Record<string, number | undefined>;
+}
+
+export function buildAllMandatoryContent(
+  playerLetters: string[],
+  neutralZones: NeutralZonePlan[],
+  settings: { zoneCfg: { playerZoneCastles: number }, spawnRemoteFootholds: boolean, naturalExpansionZone: boolean } & MandatoryContentDwellingSettings,
+  tuning?: Pick<GenerationTuning, "neutralStackStrengthMultiplier">
+): MandatoryContentGroup[] {
+  const groups = playerLetters.map((letter) => ({
+    name: `mandatory_content_side_${letter}`,
+    content: buildPlayerZoneMandatoryContent(settings.zoneCfg.playerZoneCastles, settings.spawnRemoteFootholds, dwellingCountFor(settings, `Spawn-${letter}`, 1))
+  }));
+  if (settings.naturalExpansionZone) groups.push(...playerLetters.map((letter) => ({
+    name: `mandatory_content_natural_${letter}`,
+    content: buildLowNeutralMandatoryContent(1, settings.spawnRemoteFootholds, dwellingCountFor(settings, `Natural-${letter}`, 1))
+  })));
+  groups.push(...neutralZones.map((zone) => {
+    const zoneName = `Neutral-${zone.letter}`;
+    const dwellingCount = dwellingCountFor(settings, zoneName, 1);
+    return {
+      name: `mandatory_content_neutral_${zone.letter}`,
+      content: zone.role === "Connector"
+        ? buildConnectorNeutralMandatoryContent(zone.castleCount, settings.spawnRemoteFootholds, dwellingCount)
+        : zone.quality === "High"
+          ? buildHighNeutralMandatoryContent(zone.castleCount, settings.spawnRemoteFootholds, tuning, dwellingCount)
+          : zone.quality === "Low"
+            ? buildLowNeutralMandatoryContent(zone.castleCount, settings.spawnRemoteFootholds, dwellingCount)
+            : buildMediumNeutralMandatoryContent(zone.castleCount, settings.spawnRemoteFootholds, dwellingCount)
+    };
+  }));
   return groups;
 }
 
-function buildPlayerZoneMandatoryContent(castleCount: number, spawnFootholds: boolean): ContentItem[] {
-  return [...foothold(castleCount, spawnFootholds), { name: "name_mine_wood", sid: "mine_wood", isMine: true, isGuarded: true }, { name: "name_mine_ore", sid: "mine_ore", isMine: true, isGuarded: true }, { sid: "mine_gold", isMine: true }, { sid: "watchtower" }, { sid: "market", isGuarded: true }, { sid: "mana_well" }, { includeLists: ["content_list_building_random_hires_low_tier"] }, { sid: "random_item_epic", soloEncounter: true }, { sid: "pandora_box", soloEncounter: true }];
+function buildPlayerZoneMandatoryContent(castleCount: number, spawnFootholds: boolean, dwellingCount = 1): ContentItem[] {
+  return [...foothold(castleCount, spawnFootholds), { name: "name_mine_wood", sid: "mine_wood", isMine: true, isGuarded: true }, { name: "name_mine_ore", sid: "mine_ore", isMine: true, isGuarded: true }, { sid: "mine_gold", isMine: true }, { sid: "watchtower" }, { sid: "market", isGuarded: true }, { sid: "mana_well" }, ...buildDwellingContentItems(dwellingCount, "Low"), { sid: "random_item_epic", soloEncounter: true }, { sid: "pandora_box", soloEncounter: true }];
 }
 
-function buildLowNeutralMandatoryContent(castleCount: number, spawnFootholds: boolean): ContentItem[] {
-  return [...foothold(castleCount, spawnFootholds), { includeLists: ["basic_content_list_rare_mines_by_biome"], isMine: true }, { includeLists: ["basic_content_list_rare_mines"], isMine: true }, { sid: "market", isGuarded: true }, { includeLists: ["basic_content_list_vision_buildings_tier_1"] }, { includeLists: ["content_list_building_random_hires_low_tier"] }, { sid: "pandora_box", soloEncounter: true }];
+function buildLowNeutralMandatoryContent(castleCount: number, spawnFootholds: boolean, dwellingCount = 1): ContentItem[] {
+  return [...foothold(castleCount, spawnFootholds), { includeLists: ["basic_content_list_rare_mines_by_biome"], isMine: true }, { includeLists: ["basic_content_list_rare_mines"], isMine: true }, { sid: "market", isGuarded: true }, { includeLists: ["basic_content_list_vision_buildings_tier_1"] }, ...buildDwellingContentItems(dwellingCount, "Low"), { sid: "pandora_box", soloEncounter: true }];
 }
 
-function buildMediumNeutralMandatoryContent(castleCount: number, spawnFootholds: boolean): ContentItem[] {
-  return [...foothold(castleCount, spawnFootholds), { sid: "mine_crystals", isMine: true }, { sid: "mine_mercury", isMine: true }, { sid: "mine_gemstones", isMine: true }, { sid: "mine_gold", isMine: true }, { sid: "watchtower", isGuarded: true }, { includeLists: ["content_list_building_random_hires_high_tier"] }, { sid: "random_item_epic", soloEncounter: true }, { sid: "pandora_box", soloEncounter: true }];
+function buildMediumNeutralMandatoryContent(castleCount: number, spawnFootholds: boolean, dwellingCount = 1): ContentItem[] {
+  return [...foothold(castleCount, spawnFootholds), { sid: "mine_crystals", isMine: true }, { sid: "mine_mercury", isMine: true }, { sid: "mine_gemstones", isMine: true }, { sid: "mine_gold", isMine: true }, { sid: "watchtower", isGuarded: true }, ...buildDwellingContentItems(dwellingCount, "High"), { sid: "random_item_epic", soloEncounter: true }, { sid: "pandora_box", soloEncounter: true }];
 }
 
-function buildConnectorNeutralMandatoryContent(castleCount: number, spawnFootholds: boolean): ContentItem[] {
-  return [...foothold(castleCount, spawnFootholds), { includeLists: ["basic_content_list_rare_mines_by_biome"], isMine: true }, { sid: "watchtower", isGuarded: true }, { sid: "market", isGuarded: true }, { includeLists: ["content_list_building_random_hires_high_tier"] }, { sid: "random_item_epic", soloEncounter: true }, { sid: "pandora_box", soloEncounter: true }];
+function buildConnectorNeutralMandatoryContent(castleCount: number, spawnFootholds: boolean, dwellingCount = 1): ContentItem[] {
+  return [...foothold(castleCount, spawnFootholds), { includeLists: ["basic_content_list_rare_mines_by_biome"], isMine: true }, { sid: "watchtower", isGuarded: true }, { sid: "market", isGuarded: true }, ...buildDwellingContentItems(dwellingCount, "High"), { sid: "random_item_epic", soloEncounter: true }, { sid: "pandora_box", soloEncounter: true }];
 }
 
-function buildHighNeutralMandatoryContent(castleCount: number, spawnFootholds: boolean, tuning?: Pick<GenerationTuning, "neutralStackStrengthMultiplier">): ContentItem[] {
+function buildHighNeutralMandatoryContent(castleCount: number, spawnFootholds: boolean, tuning?: Pick<GenerationTuning, "neutralStackStrengthMultiplier">, dwellingCount = 1): ContentItem[] {
   const profile = profileFor("High");
   const objectiveGuardValue = objectiveGuardValueForRole(profile.marqueeObjectiveGuardValue ?? 60000, tuning ?? { neutralStackStrengthMultiplier: 1 });
   return [
@@ -522,11 +554,35 @@ function buildHighNeutralMandatoryContent(castleCount: number, spawnFootholds: b
       designatedEncounter: true
     },
     { includeLists: ["basic_content_list_building_hero_stats_and_skills_tier_3"] },
-    { includeLists: ["content_list_building_random_hires_high_tier"] },
+    ...buildDwellingContentItems(dwellingCount, "High"),
     { sid: "random_item_legendary", soloEncounter: true },
     { sid: "pandora_box", soloEncounter: true },
     { sid: "mine_gold", isMine: true }
   ];
+}
+
+export function buildDwellingContentItems(count: number, tier: "Low" | "High"): ContentItem[] {
+  const normalizedCount = normalizeDwellingCount(count);
+  const list = tier === "Low" ? lowTierRandomHireList : highTierRandomHireList;
+  return Array.from({ length: normalizedCount }, () => ({ includeLists: [list] }));
+}
+
+export function normalizeDwellingCount(count: unknown, fallback = 1): number {
+  const value = typeof count === "number" && Number.isFinite(count) ? count : fallback;
+  return Math.min(maxDwellingCount, Math.max(0, Math.trunc(value)));
+}
+
+export function countDwellingContentItems(content: ContentItem[] | undefined): number {
+  return (content ?? []).reduce((count, item) => count + (isDwellingContentItem(item) ? 1 : 0) + countDwellingContentItems(item.content), 0);
+}
+
+export function isDwellingContentItem(item: ContentItem): boolean {
+  if (typeof item.sid === "string" && /^random_hire_\d+$/.test(item.sid)) return true;
+  return item.includeLists?.some((list) => list.includes("random_hires")) ?? false;
+}
+
+function dwellingCountFor(settings: MandatoryContentDwellingSettings, zoneName: string, fallback: number): number {
+  return normalizeDwellingCount(settings.dwellingCounts?.[zoneName], fallback);
 }
 
 function objectiveGuardValueForRole(value: number, tuning: Pick<GenerationTuning, "neutralStackStrengthMultiplier">): number {

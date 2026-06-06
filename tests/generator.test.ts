@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { generateTemplate } from "../src/generator";
 import type { GenerationTuning } from "../src/generator/math";
-import { buildHubZone, buildNaturalExpansionZone, buildNeutralZone, buildSpawnZone } from "../src/generator/templateContentBuilder";
+import { buildAllMandatoryContent, buildHubZone, buildNaturalExpansionZone, buildNeutralZone, buildSpawnZone, countDwellingContentItems } from "../src/generator/templateContentBuilder";
 import { createDefaultSettings } from "../src/settings";
 import { parseRmgTemplate, serializeRmgTemplate } from "../src/types";
 import { expectDirectAndPortalGraphConnected } from "./template-invariants";
@@ -393,6 +393,29 @@ describe("generateTemplate", () => {
 
     expect(roundTripped.valueOverrides).toEqual(template.valueOverrides);
     expect(roundTripped.globalBans).toEqual(template.globalBans);
+  });
+
+  it("calibrates generated dwelling counts per mandatory content group", () => {
+    const groups = buildAllMandatoryContent(
+      ["1"],
+      [{ letter: "3", quality: "Medium", role: "Standard", castleCount: 1 }],
+      {
+        zoneCfg: { playerZoneCastles: 1 },
+        spawnRemoteFootholds: false,
+        naturalExpansionZone: false,
+        dwellingCounts: {
+          "Spawn-1": 0,
+          "Neutral-3": 3
+        }
+      }
+    );
+
+    const spawn = groups.find((group) => group.name === "mandatory_content_side_1");
+    const neutral = groups.find((group) => group.name === "mandatory_content_neutral_3");
+
+    expect(countDwellingContentItems(spawn?.content)).toBe(0);
+    expect(countDwellingContentItems(neutral?.content)).toBe(3);
+    expect(neutral?.content?.filter((item) => item.includeLists?.includes("content_list_building_random_hires_high_tier"))).toHaveLength(3);
   });
 });
 

@@ -79,11 +79,12 @@ button {
   top: 0;
   z-index: 20;
   display: grid;
-  grid-template-columns: minmax(18rem, 1fr) auto auto auto auto;
+  grid-template-columns: minmax(15rem, auto) minmax(0, 1fr) auto auto auto;
   gap: 12px;
   align-items: center;
-  padding: 10px 12px;
+  padding: 8px 10px;
   border-radius: 8px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.18);
 }
 
 .brand-lockup {
@@ -94,8 +95,8 @@ button {
 }
 
 .brand-lockup img {
-  width: 44px;
-  height: 50px;
+  width: 38px;
+  height: 44px;
   object-fit: contain;
 }
 
@@ -114,21 +115,29 @@ button {
   line-height: 1.2;
 }
 
-.faction-mark-strip {
-  display: flex;
+.topbar-nav {
+  display: inline-flex;
   align-items: center;
-  gap: 4px;
-  justify-content: center;
-  min-width: 188px;
-  border-inline: 1px solid rgba(147, 161, 175, 0.12);
+  justify-self: start;
+  gap: 3px;
+  min-width: 0;
+  border: 1px solid rgba(147, 161, 175, 0.16);
+  border-radius: 8px;
+  background: rgba(7, 11, 16, 0.32);
+  padding: 3px;
+}
+
+.topbar-nav__item.oe-button {
+  min-height: 32px;
+  border-color: transparent;
   padding-inline: 10px;
 }
 
-.faction-mark-strip img {
-  width: 27px;
-  height: 31px;
-  object-fit: contain;
-  opacity: 0.74;
+.topbar-nav__item.oe-button[aria-current="page"] {
+  border-color: rgba(214, 180, 94, 0.46);
+  background: rgba(214, 180, 94, 0.14);
+  color: #f2d993;
+  box-shadow: inset 0 0 0 1px rgba(234, 211, 149, 0.08);
 }
 
 .topbar-stats,
@@ -161,10 +170,15 @@ button {
   font-size: 0.9rem;
 }
 
+.topbar-context {
+  min-width: 0;
+}
+
 .topbar-file-actions {
   display: flex;
   align-items: center;
-  gap: 6px;
+  justify-content: flex-end;
+  gap: 5px;
 }
 
 .topbar-menu {
@@ -175,8 +189,8 @@ button {
 
 .topbar-menu__trigger {
   flex: 0 0 auto;
-  width: 42px;
-  min-height: 42px;
+  width: 36px;
+  min-height: 36px;
 }
 
 .topbar-actions {
@@ -185,14 +199,14 @@ button {
   right: 0;
   z-index: 30;
   display: grid;
-  width: min(320px, calc(100vw - 48px));
+  width: min(280px, calc(100vw - 48px));
   max-width: calc(100vw - 48px);
-  gap: 8px;
-  border: 1px solid var(--border-2);
+  gap: 6px;
+  border: 1px solid rgba(181, 140, 68, 0.42);
   border-radius: 8px;
-  background: color-mix(in srgb, var(--panel-3) 94%, black);
-  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.34);
-  padding: 10px;
+  background: color-mix(in srgb, var(--panel-3) 92%, black);
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.38);
+  padding: 8px;
 }
 
 .topbar-actions .oe-button,
@@ -206,7 +220,7 @@ button {
 }
 
 .studio-shell--builder .topbar-actions {
-  width: min(300px, calc(100vw - 48px));
+  width: min(280px, calc(100vw - 48px));
 }
 
 .studio-toolbar {
@@ -1099,22 +1113,26 @@ button {
 }
 
 .oe-button {
-  --button-accent: var(--border-2);
-  --button-accent-strong: var(--gold-2);
-  --button-surface: #1e2535;
-  --button-hover: #252d40;
+  --button-accent: rgba(147, 161, 175, 0.22);
+  --button-accent-strong: rgba(214, 180, 94, 0.56);
+  --button-surface: rgba(147, 161, 175, 0.09);
+  --button-hover: rgba(147, 161, 175, 0.15);
+  --button-text: var(--text);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 7px;
+  gap: 6px;
   min-height: 34px;
   border: 1px solid var(--button-accent);
   border-radius: 6px;
   background: var(--button-surface);
-  color: var(--text);
-  font-weight: 750;
+  color: var(--button-text);
+  font-weight: 720;
   line-height: 1;
-  transition: border-color 120ms ease, background 120ms ease;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: border-color 120ms ease, background 120ms ease, box-shadow 120ms ease, color 120ms ease, transform 120ms ease;
+  user-select: none;
 }
 
 .oe-button:hover {
@@ -1122,25 +1140,37 @@ button {
   background: var(--button-hover);
 }
 
+.oe-button:active {
+  transform: translateY(1px);
+}
+
+.oe-button:focus-visible {
+  outline: none;
+  border-color: rgba(234, 211, 149, 0.82);
+  box-shadow: 0 0 0 3px rgba(214, 180, 94, 0.18);
+}
+
 .oe-button[aria-pressed="true"] {
   border-color: var(--button-accent-strong);
   background: var(--button-hover);
-  box-shadow: inset 0 0 0 1px rgba(234, 211, 149, 0.42), 0 0 0 1px rgba(234, 211, 149, 0.12);
+  color: #f2d993;
+  box-shadow: inset 0 0 0 1px rgba(234, 211, 149, 0.24), 0 0 0 1px rgba(234, 211, 149, 0.08);
 }
 
 .oe-button:disabled {
   cursor: not-allowed;
   opacity: 0.52;
+  transform: none;
 }
 
 .oe-button--md {
-  padding: 0 10px;
+  padding: 0 11px;
   font-size: 0.82rem;
 }
 
 .oe-button--sm {
   min-height: 28px;
-  padding: 0 8px;
+  padding: 0 9px;
   font-size: 0.75rem;
 }
 
@@ -1150,48 +1180,54 @@ button {
 }
 
 .oe-button--primary {
-  --button-accent: rgba(214, 180, 94, 0.62);
+  --button-accent: rgba(214, 180, 94, 0.68);
   --button-accent-strong: rgba(234, 211, 149, 0.86);
-  --button-surface: #6d5a2e;
-  --button-hover: #806936;
+  --button-surface: #80632a;
+  --button-hover: #927334;
+  --button-text: #fff5d4;
 }
 
 .oe-button--blue {
-  --button-accent: rgba(111, 147, 184, 0.58);
+  --button-accent: rgba(111, 147, 184, 0.42);
   --button-accent-strong: rgba(188, 215, 242, 0.84);
-  --button-surface: #243d56;
-  --button-hover: #284661;
+  --button-surface: rgba(111, 147, 184, 0.16);
+  --button-hover: rgba(111, 147, 184, 0.24);
 }
 
 .oe-button--green {
-  --button-accent: rgba(121, 167, 111, 0.58);
+  --button-accent: rgba(121, 167, 111, 0.44);
   --button-accent-strong: rgba(185, 224, 174, 0.84);
-  --button-surface: #2a4a33;
-  --button-hover: #31553a;
+  --button-surface: rgba(121, 167, 111, 0.16);
+  --button-hover: rgba(121, 167, 111, 0.24);
 }
 
 .oe-button--violet {
-  --button-accent: rgba(157, 131, 201, 0.58);
+  --button-accent: rgba(157, 131, 201, 0.42);
   --button-accent-strong: rgba(213, 198, 239, 0.84);
-  --button-surface: #3f3459;
-  --button-hover: #4a3d67;
+  --button-surface: rgba(157, 131, 201, 0.16);
+  --button-hover: rgba(157, 131, 201, 0.24);
 }
 
 .oe-button--gold {
-  --button-accent: rgba(214, 180, 94, 0.5);
+  --button-accent: rgba(214, 180, 94, 0.46);
   --button-accent-strong: rgba(234, 211, 149, 0.8);
-  --button-surface: #4a3e22;
-  --button-hover: #594a29;
+  --button-surface: rgba(214, 180, 94, 0.14);
+  --button-hover: rgba(214, 180, 94, 0.22);
+  --button-text: #f2d993;
 }
 
 .oe-button--danger {
-  --button-accent: rgba(189, 107, 97, 0.56);
+  --button-accent: rgba(189, 107, 97, 0.48);
   --button-accent-strong: rgba(235, 171, 163, 0.82);
-  --button-surface: #4a2423;
-  --button-hover: #5b2d2b;
+  --button-surface: rgba(189, 107, 97, 0.16);
+  --button-hover: rgba(189, 107, 97, 0.24);
+  --button-text: #f2c0ba;
 }
 
 .oe-button--ghost {
+  --button-accent: transparent;
+  --button-surface: transparent;
+  --button-hover: rgba(147, 161, 175, 0.12);
   background: transparent;
 }
 
@@ -3005,11 +3041,7 @@ button {
   }
 
   .studio-shell--builder .studio-topbar {
-    grid-template-columns: minmax(16rem, 1fr) auto auto;
-  }
-
-  .studio-shell--builder .faction-mark-strip {
-    display: none;
+    grid-template-columns: minmax(14rem, auto) minmax(0, 1fr) auto auto auto;
   }
 
   .studio-shell--builder .studio-workspace {
@@ -3058,11 +3090,7 @@ button {
   }
 
   .studio-shell--browse .studio-topbar {
-    grid-template-columns: minmax(18rem, 1fr) auto auto;
-  }
-
-  .studio-shell--browse .faction-mark-strip {
-    display: none;
+    grid-template-columns: minmax(14rem, auto) minmax(0, 1fr) auto auto auto;
   }
 }
 
@@ -3072,7 +3100,7 @@ button {
   }
 
   .studio-shell--builder .studio-topbar {
-    grid-template-columns: minmax(0, 1fr) auto auto;
+    grid-template-columns: minmax(13rem, auto) minmax(0, 1fr) auto auto auto;
   }
 
   .studio-shell--builder .studio-topbar .topbar-stats {
@@ -3150,6 +3178,16 @@ button {
     grid-template-columns: 1fr;
   }
 
+  .studio-shell--browse .topbar-nav {
+    justify-self: stretch;
+    overflow-x: auto;
+  }
+
+  .studio-shell--browse .topbar-context,
+  .studio-shell--browse .topbar-menu {
+    justify-self: start;
+  }
+
   .community-hero,
   .community-stack-grid {
     grid-template-columns: 1fr;
@@ -3197,6 +3235,10 @@ button {
     align-items: stretch;
   }
 
+  .studio-shell--browse .topbar-nav {
+    flex-wrap: wrap;
+  }
+
   .studio-shell--browse .topbar-actions {
     right: auto;
     left: 0;
@@ -3227,8 +3269,13 @@ button {
     width: 100%;
   }
 
+  .studio-shell--browse .topbar-nav .oe-button {
+    width: auto;
+    flex: 1 1 9rem;
+  }
+
   .studio-shell--browse .topbar-menu__trigger {
-    width: 42px;
+    width: 36px;
   }
 }
 
