@@ -17,7 +17,12 @@ import type {
   TerrainTheme
 } from "./types";
 
-export type BalancedRandomMapSize = "Small" | "Medium" | "Large" | "XL";
+export type BalancedRandomGameType = "Duel" | "FreeForAll" | "PvE";
+export type BalancedRandomMapSize = "Small" | "Medium" | "Large" | "Huge";
+export type BalancedRandomGameLength = "Short" | "Medium" | "Long";
+export type BalancedRandomChaosLevel = "Tame" | "Normal" | "Wild";
+export type BalancedRandomVictoryCondition = "Classic" | "CityHold" | "Tournament";
+export type BalancedRandomBorderGuardLevel = "Weak" | "Normal" | "Strong" | "Fortress";
 export type BalancedRandomTopology = "Auto" | Exclude<MapTopology, "Random">;
 export type BalancedRandomToggleOverride = "Auto" | "Enabled" | "Disabled";
 
@@ -32,17 +37,23 @@ export interface BalancedRandomNeutralSplitDraft {
 
 export interface BalancedRandomMapDraft {
   templateName: string;
+  gameType: BalancedRandomGameType;
   playerCount: number;
   neutralZoneCount: number;
   mapSize: BalancedRandomMapSize;
+  gameLength: BalancedRandomGameLength;
+  chaosLevel: BalancedRandomChaosLevel;
+  victoryCondition: BalancedRandomVictoryCondition;
+  borderGuardLevel: BalancedRandomBorderGuardLevel;
   topology: BalancedRandomTopology;
   generationPreset: MapGenerationPreset;
   pacePreset: GamePacePreset;
   connectionStylePreset: ConnectionStyle;
   contentPreset: ContentPreset;
   terrainTheme: TerrainTheme;
+  water: boolean;
+  strongerNeutrals: boolean;
   naturalExpansion: boolean;
-  cityHold: boolean;
   randomPortals: boolean;
   neutralSplit: BalancedRandomNeutralSplitDraft;
   maxPortalConnections?: number;
@@ -56,7 +67,38 @@ export const balancedRandomMapSizeOptions: Array<{ value: BalancedRandomMapSize;
   { value: "Small", label: "Small" },
   { value: "Medium", label: "Medium" },
   { value: "Large", label: "Large" },
-  { value: "XL", label: "XL" }
+  { value: "Huge", label: "Huge (experimental)" }
+];
+
+export const balancedRandomGameTypeOptions: Array<{ value: BalancedRandomGameType; label: string }> = [
+  { value: "Duel", label: "Duel" },
+  { value: "FreeForAll", label: "Free-for-all" },
+  { value: "PvE", label: "PvE" }
+];
+
+export const balancedRandomGameLengthOptions: Array<{ value: BalancedRandomGameLength; label: string }> = [
+  { value: "Short", label: "Short" },
+  { value: "Medium", label: "Medium" },
+  { value: "Long", label: "Long" }
+];
+
+export const balancedRandomChaosLevelOptions: Array<{ value: BalancedRandomChaosLevel; label: string }> = [
+  { value: "Tame", label: "Tame" },
+  { value: "Normal", label: "Normal" },
+  { value: "Wild", label: "Wild" }
+];
+
+export const balancedRandomVictoryConditionOptions: Array<{ value: BalancedRandomVictoryCondition; label: string }> = [
+  { value: "Classic", label: "Classic" },
+  { value: "CityHold", label: "City Hold" },
+  { value: "Tournament", label: "Tournament" }
+];
+
+export const balancedRandomBorderGuardOptions: Array<{ value: BalancedRandomBorderGuardLevel; label: string }> = [
+  { value: "Weak", label: "Weak" },
+  { value: "Normal", label: "Normal" },
+  { value: "Strong", label: "Strong" },
+  { value: "Fortress", label: "Fortress" }
 ];
 
 export const balancedRandomTopologyOptions: Array<{ value: BalancedRandomTopology; label: string }> = [
@@ -72,17 +114,23 @@ export const balancedRandomTopologyOptions: Array<{ value: BalancedRandomTopolog
 export function createBalancedRandomMapDraft(): BalancedRandomMapDraft {
   return {
     templateName: "Balanced Random Map",
+    gameType: "FreeForAll",
     playerCount: 4,
     neutralZoneCount: 6,
     mapSize: "Large",
+    gameLength: "Medium",
+    chaosLevel: "Normal",
+    victoryCondition: "Classic",
+    borderGuardLevel: "Normal",
     topology: "Auto",
     generationPreset: "Custom",
-    pacePreset: "Competitive",
+    pacePreset: "Custom",
     connectionStylePreset: "Balanced",
     contentPreset: "Default",
     terrainTheme: "Mixed",
+    water: false,
+    strongerNeutrals: false,
     naturalExpansion: false,
-    cityHold: false,
     randomPortals: false,
     neutralSplit: {
       neutralLowNoCastleCount: 0,
@@ -102,8 +150,9 @@ export function createBalancedRandomMapDraft(): BalancedRandomMapDraft {
 
 export function buildBalancedRandomMapSettings(draft: BalancedRandomMapDraft): GeneratorSettings {
   let settings = createDefaultSettings();
+  const effectivePacePreset = draft.pacePreset === "Custom" ? pacePresetForGameLength(draft.gameLength) : draft.pacePreset;
   settings.preset = draft.generationPreset;
-  settings.pacePreset = draft.pacePreset;
+  settings.pacePreset = effectivePacePreset;
   settings.connectionStyle = draft.connectionStylePreset;
   settings.contentPreset = draft.contentPreset;
   settings = applyGenerationPreset(settings);
@@ -111,20 +160,21 @@ export function buildBalancedRandomMapSettings(draft: BalancedRandomMapDraft): G
   settings = applyConnectionStyle(settings);
   settings = applyContentPreset(settings);
 
-  const playerCount = clampRounded(draft.playerCount, 2, 8);
-  const topology = resolveBalancedTopology(draft.topology, playerCount, draft.cityHold, draft.naturalExpansion);
-  const requestedNeutralZones = Math.max(0, Math.round(draft.neutralZoneCount));
-  const simpleNeutralZoneCount = draft.cityHold && topology !== "HubAndSpoke" && topology !== "Triangle"
-    ? Math.max(1, requestedNeutralZones)
-    : requestedNeutralZones;
+  const victoryCondition = draft.victoryCondition;
+  const cityHold = victoryCondition === "CityHold";
+  const tournament = victoryCondition === "Tournament";
+  const playerCount = resolveBalancedPlayerCount(draft);
+  const topology = resolveBalancedTopology(draft.topology, playerCount, cityHold, draft.naturalExpansion, draft.gameType, victoryCondition);
+  const simpleNeutralZoneCount = resolveSimpleNeutralZoneCount(draft, playerCount, topology, cityHold, tournament);
   const advancedNeutralZoneCount = countNeutralSplitZones(draft.neutralSplit);
   const useAdvancedNeutralSplit = advancedNeutralZoneCount > 0;
   const neutralZoneCount = useAdvancedNeutralSplit ? advancedNeutralZoneCount : simpleNeutralZoneCount;
+  const naturalExpansionZone = draft.naturalExpansion;
   const totalZones = countBalancedRandomZones({
     ...settings,
     playerCount,
     topology,
-    naturalExpansionZone: draft.naturalExpansion,
+    naturalExpansionZone,
     zoneCfg: {
       ...settings.zoneCfg,
       neutralZoneCount,
@@ -135,7 +185,8 @@ export function buildBalancedRandomMapSettings(draft: BalancedRandomMapDraft): G
       }
     }
   });
-  const mapSide = balancedMapSideForSize(draft.mapSize, totalZones);
+  const effectiveMapSize = mapSizeForSimpleFlow(draft.mapSize, draft.gameType);
+  const mapSide = balancedMapSideForSize(effectiveMapSize, totalZones);
 
   settings.identityPreset = draft.generationPreset === "Custom" ? undefined : draft.generationPreset;
   settings.preset = "Custom";
@@ -143,30 +194,37 @@ export function buildBalancedRandomMapSettings(draft: BalancedRandomMapDraft): G
   settings.connectionStyle = draft.connectionStylePreset;
   settings.contentPreset = "Default";
   settings.templateName = draft.templateName.trim() || "Balanced Random Map";
+  settings.gameMode = tournament ? "Tournament" : settings.gameMode;
   settings.playerCount = playerCount;
   settings.mapWidth = mapSide;
   settings.mapHeight = mapSide;
+  settings.experimentalMapSizes = effectiveMapSize === "Huge";
+  settings.borderWaterWidth = draft.water ? 4 : 0;
   settings.seed = parseSeed(draft.seed) ?? randomSeed();
   settings.terrainTheme = draft.terrainTheme;
   settings.topology = topology;
-  settings.noDirectPlayerConnections = topology === "Chain" || topology === "HubAndSpoke" || topology === "Triangle" || playerCount >= 4;
-  settings.randomPortals = draft.randomPortals;
-  settings.maxPortalConnections = draft.randomPortals ? Math.min(16, Math.max(4, Math.ceil(totalZones / 2))) : 0;
+  settings.noDirectPlayerConnections = tournament || draft.gameType === "Duel" || topology === "Chain" || topology === "HubAndSpoke" || topology === "Triangle" || playerCount >= 4;
+  settings.randomPortals = draft.randomPortals || draft.chaosLevel === "Wild";
+  settings.maxPortalConnections = settings.randomPortals ? Math.min(16, Math.max(4, Math.ceil(totalZones / 2))) : 0;
   settings.experimentalBalancedZonePlacement = true;
   settings.matchAdjacentNeutralCastleFactions = neutralZoneCount > 0;
-  settings.naturalExpansionZone = draft.naturalExpansion;
-  settings.minNeutralZonesBetweenPlayers = topology === "HubAndSpoke" || topology === "Triangle"
+  settings.naturalExpansionZone = naturalExpansionZone;
+  settings.minNeutralZonesBetweenPlayers = tournament
+    ? 2
+    : topology === "HubAndSpoke" || topology === "Triangle"
     ? 0
     : neutralZoneCount === 0
       ? 0
-      : playerCount >= 6
+      : draft.gameType === "Duel" || playerCount >= 6
         ? 2
         : 1;
   settings.zoneCfg.neutralZoneCount = neutralZoneCount;
   settings.zoneCfg.playerZoneCastles = 1;
   settings.zoneCfg.neutralZoneCastles = draft.contentPreset === "TownFocused" ? 2 : 1;
-  settings.zoneCfg.hubZoneSize = draft.cityHold ? 1.5 : 1.2;
-  settings.zoneCfg.hubZoneCastles = draft.cityHold ? 1 : 0;
+  settings.zoneCfg.hubZoneSize = cityHold ? 1.5 : 1.2;
+  settings.zoneCfg.hubZoneCastles = cityHold ? 1 : 0;
+  settings.zoneCfg.borderGuardStrengthPercent = borderGuardStrengthPercent(draft.borderGuardLevel);
+  settings.zoneCfg.neutralStackStrengthPercent = adjustedNeutralStrength(settings.zoneCfg.neutralStackStrengthPercent, draft);
   settings.zoneCfg.advanced.enabled = useAdvancedNeutralSplit;
   settings.zoneCfg.advanced.neutralLowNoCastleCount = draft.neutralSplit.neutralLowNoCastleCount;
   settings.zoneCfg.advanced.neutralLowCastleCount = draft.neutralSplit.neutralLowCastleCount;
@@ -174,9 +232,12 @@ export function buildBalancedRandomMapSettings(draft: BalancedRandomMapDraft): G
   settings.zoneCfg.advanced.neutralMediumCastleCount = draft.neutralSplit.neutralMediumCastleCount;
   settings.zoneCfg.advanced.neutralHighNoCastleCount = draft.neutralSplit.neutralHighNoCastleCount;
   settings.zoneCfg.advanced.neutralHighCastleCount = draft.neutralSplit.neutralHighCastleCount;
-  settings.gameEndConditions.victoryCondition = draft.cityHold ? "win_condition_5" : "win_condition_1";
-  settings.gameEndConditions.cityHold = draft.cityHold;
-  settings.gameEndConditions.cityHoldDays = draft.cityHold ? 7 : settings.gameEndConditions.cityHoldDays;
+  settings.zoneCfg.advanced.guardRandomization = guardRandomizationForChaos(draft.chaosLevel);
+  settings.gameEndConditions.victoryCondition = victoryConditionSid(victoryCondition);
+  settings.gameEndConditions.cityHold = cityHold;
+  settings.gameEndConditions.cityHoldDays = cityHold ? cityHoldDaysForGameLength(draft.gameLength) : settings.gameEndConditions.cityHoldDays;
+  settings.tournamentRules.enabled = tournament;
+  if (tournament) applyTournamentLength(settings, draft.gameLength);
 
   if (draft.maxPortalConnections !== undefined) {
     settings.maxPortalConnections = Math.max(0, Math.round(draft.maxPortalConnections));
@@ -191,7 +252,7 @@ export function buildBalancedRandomMapSettings(draft: BalancedRandomMapDraft): G
     settings.matchPlayerCastleFactions = draft.matchPlayerCastleFactions === "Enabled";
   }
 
-  applyHiddenIdentityPresetRules(settings, draft.generationPreset, draft.cityHold);
+  applyHiddenIdentityPresetRules(settings, draft.generationPreset, cityHold);
 
   return settings;
 }
@@ -227,6 +288,113 @@ function applyHiddenIdentityPresetRules(settings: GeneratorSettings, preset: Map
     case "Chaos":
       break;
   }
+}
+
+function resolveBalancedPlayerCount(draft: BalancedRandomMapDraft): number {
+  if (draft.victoryCondition === "Tournament" || draft.gameType === "Duel") return 2;
+  const playerCount = clampRounded(draft.playerCount, 2, 8);
+  return draft.gameType === "PvE" ? Math.max(4, playerCount) : playerCount;
+}
+
+function resolveSimpleNeutralZoneCount(
+  draft: BalancedRandomMapDraft,
+  playerCount: number,
+  topology: Exclude<MapTopology, "Random">,
+  cityHold: boolean,
+  tournament: boolean
+): number {
+  const requestedNeutralZones = Math.max(0, Math.round(draft.neutralZoneCount));
+  let neutralZoneCount = requestedNeutralZones;
+
+  if (draft.gameType === "Duel") neutralZoneCount = Math.max(neutralZoneCount, 4);
+  if (draft.gameType === "FreeForAll") neutralZoneCount = Math.max(neutralZoneCount, playerCount + 2);
+  if (draft.gameType === "PvE") neutralZoneCount = Math.max(neutralZoneCount, playerCount + 4);
+  if (draft.gameLength === "Short") neutralZoneCount = Math.max(2, neutralZoneCount - 2);
+  if (draft.gameLength === "Long") neutralZoneCount += 2;
+  if (draft.chaosLevel === "Tame") neutralZoneCount = Math.max(1, neutralZoneCount - 1);
+  if (draft.chaosLevel === "Wild") neutralZoneCount += 2;
+  if (tournament) neutralZoneCount = Math.max(4, neutralZoneCount);
+  if (cityHold && topology !== "HubAndSpoke" && topology !== "Triangle") neutralZoneCount = Math.max(1, neutralZoneCount);
+
+  const reservedZones = playerCount
+    + (draft.naturalExpansion ? playerCount : 0)
+    + (topology === "HubAndSpoke" || topology === "Triangle" ? 1 : 0);
+  return clampRounded(neutralZoneCount, 0, Math.max(0, 32 - reservedZones));
+}
+
+function pacePresetForGameLength(gameLength: BalancedRandomGameLength): GamePacePreset {
+  switch (gameLength) {
+    case "Short": return "Quick";
+    case "Long": return "Epic";
+    case "Medium": return "Competitive";
+  }
+}
+
+function cityHoldDaysForGameLength(gameLength: BalancedRandomGameLength): number {
+  switch (gameLength) {
+    case "Short": return 5;
+    case "Long": return 10;
+    case "Medium": return 7;
+  }
+}
+
+function applyTournamentLength(settings: GeneratorSettings, gameLength: BalancedRandomGameLength): void {
+  switch (gameLength) {
+    case "Short":
+      settings.tournamentRules.firstTournamentDay = 10;
+      settings.tournamentRules.interval = 5;
+      settings.tournamentRules.pointsToWin = 2;
+      break;
+    case "Long":
+      settings.tournamentRules.firstTournamentDay = 21;
+      settings.tournamentRules.interval = 7;
+      settings.tournamentRules.pointsToWin = 3;
+      break;
+    case "Medium":
+      settings.tournamentRules.firstTournamentDay = 14;
+      settings.tournamentRules.interval = 7;
+      settings.tournamentRules.pointsToWin = 2;
+      break;
+  }
+}
+
+function victoryConditionSid(victoryCondition: BalancedRandomVictoryCondition): string {
+  switch (victoryCondition) {
+    case "CityHold": return "win_condition_5";
+    case "Tournament": return "win_condition_6";
+    case "Classic": return "win_condition_1";
+  }
+}
+
+export function borderGuardStrengthPercent(borderGuardLevel: BalancedRandomBorderGuardLevel): number {
+  switch (borderGuardLevel) {
+    case "Weak": return 70;
+    case "Strong": return 130;
+    case "Fortress": return 165;
+    case "Normal": return 100;
+  }
+}
+
+function adjustedNeutralStrength(baseStrength: number, draft: BalancedRandomMapDraft): number {
+  const chaosAdjustment = draft.chaosLevel === "Tame" ? -10 : draft.chaosLevel === "Wild" ? 15 : 0;
+  const strongerNeutralAdjustment = draft.strongerNeutrals ? 25 : 0;
+  return clampRounded(baseStrength + chaosAdjustment + strongerNeutralAdjustment, 50, 250);
+}
+
+function guardRandomizationForChaos(chaosLevel: BalancedRandomChaosLevel): number {
+  switch (chaosLevel) {
+    case "Tame": return 0.02;
+    case "Wild": return 0.22;
+    case "Normal": return 0.05;
+  }
+}
+
+function mapSizeForSimpleFlow(mapSize: BalancedRandomMapSize, gameType: BalancedRandomGameType): BalancedRandomMapSize {
+  if (gameType !== "PvE") return mapSize;
+  if (mapSize === "Small") return "Medium";
+  if (mapSize === "Medium") return "Large";
+  if (mapSize === "Large") return "Huge";
+  return "Huge";
 }
 
 export function countBalancedRandomZones(settings: Pick<GeneratorSettings, "playerCount" | "topology" | "naturalExpansionZone" | "zoneCfg">): number {
@@ -278,11 +446,16 @@ function resolveBalancedTopology(
   topology: BalancedRandomTopology,
   playerCount: number,
   cityHold: boolean,
-  naturalExpansion: boolean
+  naturalExpansion: boolean,
+  gameType: BalancedRandomGameType,
+  victoryCondition: BalancedRandomVictoryCondition
 ): Exclude<MapTopology, "Random"> {
   if (topology !== "Auto") return topology;
+  if (victoryCondition === "Tournament") return "Chain";
+  if (gameType === "Duel") return cityHold ? "HubAndSpoke" : "Default";
   if (playerCount === 3 && (cityHold || naturalExpansion)) return "Triangle";
   if (cityHold) return "HubAndSpoke";
+  if (gameType === "PvE") return playerCount <= 4 ? "SharedWeb" : "Ladder";
   if (playerCount <= 2) return "Default";
   if (playerCount <= 4) return "SharedWeb";
   return "Ladder";
@@ -294,15 +467,18 @@ function balancedMapSideForSize(size: BalancedRandomMapSize, totalZones: number)
     : size === "Medium"
       ? 160
       : size === "Large"
-        ? 192
-        : 240;
+        ? 208
+        : 256;
   const target = base + Math.max(0, totalZones - 8) * 4;
 
-  for (const candidate of [128, 144, 160, 176, 192, 208, 240]) {
+  const candidates = size === "Huge"
+    ? [256, 272, 288, 304, 320, 336, 352]
+    : [128, 144, 160, 176, 192, 208, 224, 240];
+  for (const candidate of candidates) {
     if (candidate >= target) return candidate;
   }
 
-  return 240;
+  return candidates.at(-1) ?? 240;
 }
 
 function clampRounded(value: number, min: number, max: number): number {

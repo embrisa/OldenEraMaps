@@ -75,6 +75,7 @@ export interface GeneratorSettings {
   mapWidth: number;
   mapHeight: number;
   experimentalMapSizes: boolean;
+  borderWaterWidth: number;
   heroSettings: HeroSettings;
   noDirectPlayerConnections: boolean;
   randomPortals: boolean;

@@ -105,6 +105,7 @@ export function createDefaultSettings(): GeneratorSettings {
     mapWidth: 160,
     mapHeight: 160,
     experimentalMapSizes: false,
+    borderWaterWidth: 0,
     heroSettings: {
       heroCountMin: 4,
       heroCountMax: 8,
@@ -484,6 +485,7 @@ export function normalizeSettings(settings: GeneratorSettings): GeneratorSetting
   next.playerCount = clampInt(next.playerCount, 2, 8);
   next.mapWidth = clampInt(next.mapWidth, 96, 512);
   next.mapHeight = clampInt(next.mapHeight, 96, 512);
+  next.borderWaterWidth = clampInt(next.borderWaterWidth, 0, 32);
   next.zoneCfg.neutralZoneCount = clampInt(next.zoneCfg.neutralZoneCount, 0, 24);
   next.zoneCfg.playerZoneCastles = clampInt(next.zoneCfg.playerZoneCastles, 0, 8);
   next.zoneCfg.neutralZoneCastles = clampInt(next.zoneCfg.neutralZoneCastles, 0, 8);

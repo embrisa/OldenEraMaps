@@ -1,8 +1,13 @@
-import { Sparkles } from "lucide-react";
+import { Copy, RefreshCw, Sparkles } from "lucide-react";
 import { useMemo, useState, type JSX } from "react";
 import {
+  balancedRandomBorderGuardOptions,
+  balancedRandomChaosLevelOptions,
+  balancedRandomGameLengthOptions,
+  balancedRandomGameTypeOptions,
   balancedRandomMapSizeOptions,
   balancedRandomTopologyOptions,
+  balancedRandomVictoryConditionOptions,
   buildBalancedRandomMapSettings,
   countBalancedRandomZones,
   createBalancedRandomMapDraft,
@@ -35,6 +40,22 @@ export function BalancedRandomMapDialog({
     setDraft((current) => ({ ...current, [key]: value }));
   }
 
+  function updateGameType(value: BalancedRandomMapDraft["gameType"]): void {
+    setDraft((current) => ({
+      ...current,
+      gameType: value,
+      playerCount: value === "Duel" ? 2 : value === "PvE" ? Math.max(4, current.playerCount) : current.playerCount
+    }));
+  }
+
+  function updateVictoryCondition(value: BalancedRandomMapDraft["victoryCondition"]): void {
+    setDraft((current) => ({
+      ...current,
+      victoryCondition: value,
+      playerCount: value === "Tournament" ? 2 : current.playerCount
+    }));
+  }
+
   function updateNeutralSplit<K extends keyof BalancedRandomNeutralSplitDraft>(key: K, value: BalancedRandomNeutralSplitDraft[K]): void {
     setDraft((current) => ({
       ...current,
@@ -58,6 +79,14 @@ export function BalancedRandomMapDialog({
     if (onGenerate(settings)) onOpenChange(false);
   }
 
+  function randomizeSeed(): void {
+    update("seed", String(Math.floor(Math.random() * 2_147_483_647)));
+  }
+
+  function copySeed(): void {
+    void navigator.clipboard?.writeText(String(settings.seed ?? ""));
+  }
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
@@ -65,7 +94,7 @@ export function BalancedRandomMapDialog({
           <div>
             <DialogTitle>Balanced Random Map</DialogTitle>
             <DialogDescription>
-              Generates a fresh layout with fairer spawn spacing, balanced routes, and enough structure to stay competitive instead of chaotic.
+              Simple generator for complete maps from a few player-facing choices, with advanced map-shaping controls still available when needed.
             </DialogDescription>
           </div>
         </header>
@@ -76,20 +105,18 @@ export function BalancedRandomMapDialog({
               <ConfigField configKey="global.templateName" label="Template Name">
                 <Input value={draft.templateName} onChange={(event) => update("templateName", event.currentTarget.value)} />
               </ConfigField>
+              <ConfigField configKey="game.type" label="Game Type">
+                <NativeSelect value={draft.gameType} onChange={(event) => updateGameType(event.currentTarget.value as BalancedRandomMapDraft["gameType"])}>
+                  {balancedRandomGameTypeOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+                </NativeSelect>
+              </ConfigField>
               <ConfigField configKey="players.count" label="Players">
                 <SteppedValueSlider
                   min={2}
                   max={8}
                   value={draft.playerCount}
+                  disabled={draft.gameType === "Duel" || draft.victoryCondition === "Tournament"}
                   onChange={(event) => update("playerCount", Number(event.currentTarget.value) as BalancedRandomMapDraft["playerCount"])}
-                />
-              </ConfigField>
-              <ConfigField configKey="zones.neutral.count" label="Neutral Zones">
-                <SteppedValueSlider
-                  min={0}
-                  max={24}
-                  value={draft.neutralZoneCount}
-                  onChange={(event) => update("neutralZoneCount", Number(event.currentTarget.value) as BalancedRandomMapDraft["neutralZoneCount"])}
                 />
               </ConfigField>
             </div>
@@ -100,39 +127,44 @@ export function BalancedRandomMapDialog({
                   {balancedRandomMapSizeOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
                 </NativeSelect>
               </ConfigField>
-              <ConfigField configKey="topology" label="Topology">
-                <NativeSelect value={draft.topology} onChange={(event) => update("topology", event.currentTarget.value as BalancedRandomMapDraft["topology"])}>
-                  {balancedRandomTopologyOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+              <ConfigField configKey="game.length" label="Game Length">
+                <NativeSelect value={draft.gameLength} onChange={(event) => update("gameLength", event.currentTarget.value as BalancedRandomMapDraft["gameLength"])}>
+                  {balancedRandomGameLengthOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
                 </NativeSelect>
               </ConfigField>
-              <ConfigField configKey="pace" label="Pace">
-                <NativeSelect value={draft.pacePreset} onChange={(event) => update("pacePreset", event.currentTarget.value as BalancedRandomMapDraft["pacePreset"])}>
-                  {paceOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+              <ConfigField configKey="chaos.level" label="Chaos Level">
+                <NativeSelect value={draft.chaosLevel} onChange={(event) => update("chaosLevel", event.currentTarget.value as BalancedRandomMapDraft["chaosLevel"])}>
+                  {balancedRandomChaosLevelOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
                 </NativeSelect>
               </ConfigField>
             </div>
 
             <div className="form-grid form-grid--three">
-              <ConfigField configKey="content.preset" label="Content Focus">
-                <NativeSelect value={draft.contentPreset} onChange={(event) => update("contentPreset", event.currentTarget.value as BalancedRandomMapDraft["contentPreset"])}>
-                  {contentPresetOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+              <ConfigField configKey="victory.condition" label="Victory Condition">
+                <NativeSelect value={draft.victoryCondition} onChange={(event) => updateVictoryCondition(event.currentTarget.value as BalancedRandomMapDraft["victoryCondition"])}>
+                  {balancedRandomVictoryConditionOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
                 </NativeSelect>
               </ConfigField>
-              <ConfigField configKey="terrain.theme" label="Terrain Theme">
-                <NativeSelect value={draft.terrainTheme} onChange={(event) => update("terrainTheme", event.currentTarget.value as BalancedRandomMapDraft["terrainTheme"])}>
-                  {terrainOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+              <ConfigField configKey="border.guards" label="Border Guards">
+                <NativeSelect value={draft.borderGuardLevel} onChange={(event) => update("borderGuardLevel", event.currentTarget.value as BalancedRandomMapDraft["borderGuardLevel"])}>
+                  {balancedRandomBorderGuardOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
                 </NativeSelect>
               </ConfigField>
               <ConfigField configKey="seed" label="Seed (optional)">
-                <Input value={draft.seed} inputMode="numeric" placeholder="Random every time" onChange={(event) => update("seed", event.currentTarget.value)} />
+                <div className="balanced-random-dialog__seed">
+                  <Input value={draft.seed} inputMode="numeric" placeholder="Random every time" onChange={(event) => update("seed", event.currentTarget.value)} />
+                  <Button type="button" variant="ghost" size="icon" title="Randomize seed" aria-label="Randomize seed" onClick={randomizeSeed}><RefreshCw size={14} /></Button>
+                  <Button type="button" variant="ghost" size="icon" title="Copy resolved seed" aria-label="Copy resolved seed" onClick={copySeed}><Copy size={14} /></Button>
+                </div>
               </ConfigField>
             </div>
           </div>
 
           <div className="checks">
-            <CheckField checked={draft.cityHold} onCheckedChange={(checked) => update("cityHold", checked)}>Enable City Hold objective</CheckField>
+            <CheckField checked={draft.water} onCheckedChange={(checked) => update("water", checked)}>Add water border</CheckField>
             <CheckField checked={draft.naturalExpansion} onCheckedChange={(checked) => update("naturalExpansion", checked)}>Add natural expansion zones</CheckField>
             <CheckField checked={draft.randomPortals} onCheckedChange={(checked) => update("randomPortals", checked)}>Allow extra random portals</CheckField>
+            <CheckField checked={draft.strongerNeutrals} onCheckedChange={(checked) => update("strongerNeutrals", checked)}>Use stronger neutral armies</CheckField>
           </div>
 
           <details className="raw-details">
@@ -140,11 +172,45 @@ export function BalancedRandomMapDialog({
 
             <div className="balanced-random-dialog__grid">
               <div className="form-grid form-grid--three">
+                <ConfigField configKey="zones.neutral.count" label="Neutral Zones">
+                  <SteppedValueSlider
+                    min={0}
+                    max={24}
+                    value={draft.neutralZoneCount}
+                    onChange={(event) => update("neutralZoneCount", Number(event.currentTarget.value) as BalancedRandomMapDraft["neutralZoneCount"])}
+                  />
+                </ConfigField>
                 <ConfigField configKey="generation.preset" label="Generation Preset">
                   <NativeSelect value={draft.generationPreset} onChange={(event) => update("generationPreset", event.currentTarget.value as BalancedRandomMapDraft["generationPreset"])}>
                     {presetOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
                   </NativeSelect>
                 </ConfigField>
+                <ConfigField configKey="pace" label="Pace Override">
+                  <NativeSelect value={draft.pacePreset} onChange={(event) => update("pacePreset", event.currentTarget.value as BalancedRandomMapDraft["pacePreset"])}>
+                    {paceOptions.map((option) => <option key={option.value} value={option.value}>{option.value === "Custom" ? "Auto" : option.label}</option>)}
+                  </NativeSelect>
+                </ConfigField>
+              </div>
+
+              <div className="form-grid form-grid--three">
+                <ConfigField configKey="topology" label="Topology">
+                  <NativeSelect value={draft.topology} onChange={(event) => update("topology", event.currentTarget.value as BalancedRandomMapDraft["topology"])}>
+                    {balancedRandomTopologyOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+                  </NativeSelect>
+                </ConfigField>
+                <ConfigField configKey="content.preset" label="Content Focus">
+                  <NativeSelect value={draft.contentPreset} onChange={(event) => update("contentPreset", event.currentTarget.value as BalancedRandomMapDraft["contentPreset"])}>
+                    {contentPresetOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+                  </NativeSelect>
+                </ConfigField>
+                <ConfigField configKey="terrain.theme" label="Terrain Theme">
+                  <NativeSelect value={draft.terrainTheme} onChange={(event) => update("terrainTheme", event.currentTarget.value as BalancedRandomMapDraft["terrainTheme"])}>
+                    {terrainOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+                  </NativeSelect>
+                </ConfigField>
+              </div>
+
+              <div className="form-grid form-grid--three">
                 <ConfigField configKey="connection.style" label="Connection Style">
                   <NativeSelect value={draft.connectionStylePreset} onChange={(event) => update("connectionStylePreset", event.currentTarget.value as BalancedRandomMapDraft["connectionStylePreset"])}>
                     {connectionStyleOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
@@ -218,6 +284,8 @@ export function BalancedRandomMapDialog({
             <span><Sparkles size={14} />{zoneCount} total zones</span>
             <span><Sparkles size={14} />{settings.topology === "Default" ? "Ring" : settings.topology}</span>
             <span><Sparkles size={14} />Seed {settings.seed}</span>
+            <span><Sparkles size={14} />{draft.borderGuardLevel} guards</span>
+            <span><Sparkles size={14} />{balancedRandomVictoryConditionOptions.find((option) => option.value === draft.victoryCondition)?.label ?? draft.victoryCondition}</span>
           </div>
 
           {validation.errors.length > 0 ? (
@@ -234,7 +302,7 @@ export function BalancedRandomMapDialog({
 
           <div className="dialog-actions">
             <Button variant="ghost" onClick={() => onOpenChange(false)}>Cancel</Button>
-            <Button variant="primary" onClick={handleGenerate} disabled={validation.errors.length > 0}>Generate Balanced Map</Button>
+            <Button variant="primary" onClick={handleGenerate} disabled={validation.errors.length > 0}>Generate Simple Map</Button>
           </div>
         </div>
       </DialogContent>

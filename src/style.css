@@ -2242,6 +2242,13 @@ button {
   gap: 12px;
 }
 
+.balanced-random-dialog__seed {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: 6px;
+  align-items: center;
+}
+
 .balanced-random-dialog__summary {
   display: flex;
   flex-wrap: wrap;

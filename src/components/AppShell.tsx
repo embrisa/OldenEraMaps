@@ -1430,7 +1430,7 @@ export function AppShell(): JSX.Element {
                         <Button variant="violet" onClick={() => setContentLibraryOpen(true)}><FileJson size={16} />Content Library</Button>
                         <Button variant="violet" onClick={() => setExpertTemplateSettingsOpen(true)}><FileJson size={16} />Expert Settings</Button>
                         <Button variant="green" onClick={() => setMandatoryContentOpen(true)}><PackageCheck size={16} />Mandatory Content</Button>
-                        <Button variant="gold" onClick={() => setBalancedRandomOpen(true)}><Sparkles size={16} />Balanced Random</Button>
+                        <Button variant="gold" onClick={() => setBalancedRandomOpen(true)}><Sparkles size={16} />Simple Generator</Button>
                       </div>
                     </CardContent>
                   </Card>

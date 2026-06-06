@@ -216,15 +216,6 @@ HTMLCanvasElement.prototype.toBlob = vi.fn(function (
 }) as never;
 
 describe("React UI shell", () => {
-  async function chooseSelectOption(user: ReturnType<typeof userEvent.setup>, label: string, option: string): Promise<void> {
-    const field = screen.getByText(label).closest(".config-field");
-    const select = field?.querySelector<HTMLSelectElement>("select");
-    expect(select).toBeTruthy();
-    const nextOption = Array.from((select as HTMLSelectElement).options).find((candidate) => candidate.text === option);
-    expect(nextOption).toBeTruthy();
-    await user.selectOptions(select as HTMLSelectElement, (nextOption as HTMLOptionElement).value);
-  }
-
   async function chooseSelectOptionInContainer(
     user: ReturnType<typeof userEvent.setup>,
     container: HTMLElement,
@@ -435,7 +426,7 @@ describe("React UI shell", () => {
     expect(advancedSettings).toBeTruthy();
     expect(within(advancedSettings as HTMLElement).getByRole("heading", { name: "Advanced Settings" })).toBeTruthy();
     expect(within(advancedSettings as HTMLElement).getByRole("button", { name: "Layout Profiles" })).toBeTruthy();
-    expect(within(advancedSettings as HTMLElement).getByRole("button", { name: "Balanced Random" })).toBeTruthy();
+    expect(within(advancedSettings as HTMLElement).getByRole("button", { name: "Simple Generator" })).toBeTruthy();
     const legend = screen.getByRole("list", { name: "Schematic board legend" });
     expect(within(legend).getByText("Badge: role or player")).toBeTruthy();
     expect(within(legend).getByText("Same fill color: matching zone settings")).toBeTruthy();
@@ -1932,24 +1923,24 @@ describe("React UI shell", () => {
 
     const advancedSettings = document.querySelector(".advanced-settings-shell");
     expect(advancedSettings).toBeTruthy();
-    await user.click(within(advancedSettings as HTMLElement).getByRole("button", { name: "Balanced Random" }));
+    await user.click(within(advancedSettings as HTMLElement).getByRole("button", { name: "Simple Generator" }));
 
     const dialog = screen.getByRole("dialog");
     expect(within(dialog).getByRole("heading", { name: "Balanced Random Map" })).toBeTruthy();
     const templateName = getInputForLabel(dialog, "Template Name");
     const players = getInputForLabel(dialog, "Players");
-    const neutralZones = getInputForLabel(dialog, "Neutral Zones");
 
     await user.clear(templateName);
     await user.type(templateName, "Balanced Siege");
     expect(players.type).toBe("range");
-    expect(neutralZones.type).toBe("range");
     fireEvent.input(players, { target: { value: "4" } });
-    fireEvent.input(neutralZones, { target: { value: "6" } });
-    await user.click(screen.getByText("Enable City Hold objective"));
-    await chooseSelectOption(user, "Content Focus", "Town Focused");
+    await chooseSelectOptionInContainer(user, dialog, "Victory Condition", "City Hold");
 
     await user.click(within(dialog).getByText("Advanced"));
+    await chooseSelectOptionInContainer(user, dialog, "Content Focus", "Town Focused");
+    const neutralZones = getInputForLabel(dialog, "Neutral Zones");
+    expect(neutralZones.type).toBe("range");
+    fireEvent.input(neutralZones, { target: { value: "6" } });
     await chooseSelectOptionInContainer(user, dialog, "Generation Preset", "King of the Hill");
     await chooseSelectOptionInContainer(user, dialog, "Connection Style", "Portal Heavy");
     const maxPortalConnections = getInputForLabel(dialog, "Max Portal Connections");
@@ -1959,7 +1950,7 @@ describe("React UI shell", () => {
     await user.clear(neutralHighCastle);
     await user.type(neutralHighCastle, "6");
 
-    await user.click(screen.getByRole("button", { name: "Generate Balanced Map" }));
+    await user.click(screen.getByRole("button", { name: "Generate Simple Map" }));
 
     expect(screen.queryByRole("dialog")).toBeNull();
     expect(screen.getByDisplayValue("Balanced Siege")).toBeTruthy();

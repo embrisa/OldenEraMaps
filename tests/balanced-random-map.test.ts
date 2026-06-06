@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   applyBalancedRandomBoardLayout,
+  borderGuardStrengthPercent,
   buildBalancedRandomMapSettings,
   countBalancedRandomZones,
   createBalancedRandomMapDraft
@@ -8,13 +9,14 @@ import {
 import { templateToDesign } from "../src/design";
 import { generateTemplate } from "../src/generator";
 import { validateSettings } from "../src/settings";
+import { validateDesign } from "../src/design/validation";
 
 describe("balanced random map settings", () => {
   it("builds balanced defaults that favor fair routes instead of chaos", () => {
     const draft = createBalancedRandomMapDraft();
     draft.playerCount = 4;
     draft.neutralZoneCount = 6;
-    draft.cityHold = true;
+    draft.victoryCondition = "CityHold";
 
     const settings = buildBalancedRandomMapSettings(draft);
 
@@ -28,18 +30,18 @@ describe("balanced random map settings", () => {
     expect(settings.seed).toEqual(expect.any(Number));
   });
 
-  it("keeps city-hold chain maps valid by forcing at least one neutral zone", () => {
+  it("keeps city-hold chain maps valid by forcing neutral buffer zones", () => {
     const draft = createBalancedRandomMapDraft();
     draft.topology = "Chain";
     draft.playerCount = 2;
     draft.neutralZoneCount = 0;
-    draft.cityHold = true;
+    draft.victoryCondition = "CityHold";
     draft.seed = "42";
 
     const settings = buildBalancedRandomMapSettings(draft);
 
     expect(settings.topology).toBe("Chain");
-    expect(settings.zoneCfg.neutralZoneCount).toBe(1);
+    expect(settings.zoneCfg.neutralZoneCount).toBeGreaterThanOrEqual(1);
     expect(settings.seed).toBe(42);
     expect(validateSettings(settings).errors).toEqual([]);
   });
@@ -161,6 +163,121 @@ describe("balanced random map settings", () => {
     expect(neutrals.every((zone) => Math.abs(zone.position.x - 0.5) <= 0.25 && Math.abs(zone.position.y - 0.5) <= 0.25)).toBe(true);
     expect(spawns.map((zone) => clockwiseAngle(zone.position))).toEqual([...spawns.map((zone) => clockwiseAngle(zone.position))].sort((left, right) => left - right));
     expect(neutrals.map((zone) => clockwiseAngle(zone.position))).toEqual([...neutrals.map((zone) => clockwiseAngle(zone.position))].sort((left, right) => left - right));
+  });
+
+  it("produces stable settings and generated design for the same simple options and seed", () => {
+    const draft = createBalancedRandomMapDraft();
+    draft.templateName = "Stable Simple Map";
+    draft.gameType = "PvE";
+    draft.playerCount = 5;
+    draft.mapSize = "Medium";
+    draft.gameLength = "Long";
+    draft.chaosLevel = "Wild";
+    draft.victoryCondition = "Classic";
+    draft.borderGuardLevel = "Strong";
+    draft.water = true;
+    draft.naturalExpansion = true;
+    draft.strongerNeutrals = true;
+    draft.seed = "12345";
+
+    const leftSettings = buildBalancedRandomMapSettings(draft);
+    const rightSettings = buildBalancedRandomMapSettings(structuredClone(draft));
+    const leftDesign = templateToDesign(generateTemplate(leftSettings));
+    const rightDesign = templateToDesign(generateTemplate(rightSettings));
+
+    expect(leftSettings).toEqual(rightSettings);
+    expect(leftDesign).toEqual(rightDesign);
+    expect(validateDesign(leftDesign).errors).toEqual([]);
+  });
+
+  it("creates a numeric seed when the seed field is blank", () => {
+    const settings = buildBalancedRandomMapSettings(createBalancedRandomMapDraft());
+
+    expect(settings.seed).toEqual(expect.any(Number));
+    expect(Number.isInteger(settings.seed)).toBe(true);
+  });
+
+  it("creates a valid City Hold target path from simple options", () => {
+    const draft = createBalancedRandomMapDraft();
+    draft.victoryCondition = "CityHold";
+    draft.gameType = "Duel";
+    draft.neutralZoneCount = 0;
+    draft.seed = "8301";
+
+    const settings = buildBalancedRandomMapSettings(draft);
+    const design = templateToDesign(generateTemplate(settings));
+
+    expect(settings.playerCount).toBe(2);
+    expect(settings.topology).toBe("HubAndSpoke");
+    expect(settings.zoneCfg.hubZoneCastles).toBe(1);
+    expect(validateSettings(settings).errors).toEqual([]);
+    expect(validateDesign(design).errors).toEqual([]);
+    expect(design.zones.filter((zone) => zone.holdCity && zone.castleCount > 0)).toHaveLength(1);
+  });
+
+  it("forces tournament simple maps to two isolated player lanes", () => {
+    const draft = createBalancedRandomMapDraft();
+    draft.victoryCondition = "Tournament";
+    draft.playerCount = 6;
+    draft.neutralZoneCount = 6;
+    draft.seed = "44";
+
+    const settings = buildBalancedRandomMapSettings(draft);
+    const design = templateToDesign(generateTemplate(settings));
+
+    expect(settings.playerCount).toBe(2);
+    expect(settings.gameMode).toBe("Tournament");
+    expect(settings.gameEndConditions.victoryCondition).toBe("win_condition_6");
+    expect(settings.tournamentRules.enabled).toBe(true);
+    expect(validateSettings(settings).errors).toEqual([]);
+    expect(validateDesign(design).errors).toEqual([]);
+    expect(design.zones.filter((zone) => zone.role === "Spawn")).toHaveLength(2);
+    expect(design.connections.every((connection) => connection.name.startsWith("Tourney-"))).toBe(true);
+  });
+
+  it("maps border guard labels to explicit guard strength percentages", () => {
+    expect(borderGuardStrengthPercent("Weak")).toBe(70);
+    expect(borderGuardStrengthPercent("Normal")).toBe(100);
+    expect(borderGuardStrengthPercent("Strong")).toBe(130);
+    expect(borderGuardStrengthPercent("Fortress")).toBe(165);
+
+    const draft = createBalancedRandomMapDraft();
+    draft.borderGuardLevel = "Fortress";
+
+    expect(buildBalancedRandomMapSettings(draft).zoneCfg.borderGuardStrengthPercent).toBe(165);
+  });
+
+  it("marks Huge simple maps as experimental without creating validation errors", () => {
+    const draft = createBalancedRandomMapDraft();
+    draft.mapSize = "Huge";
+    draft.seed = "91";
+
+    const settings = buildBalancedRandomMapSettings(draft);
+    const validation = validateSettings(settings);
+
+    expect(settings.experimentalMapSizes).toBe(true);
+    expect(settings.mapWidth).toBeGreaterThan(240);
+    expect(validation.errors).toEqual([]);
+    expect(validation.warnings).toContain("Official examples top out at 240x240. Larger or rectangular maps are experimental.");
+  });
+
+  it("applies simple extras for water, stronger neutrals, portals, and natural expansions", () => {
+    const draft = createBalancedRandomMapDraft();
+    draft.water = true;
+    draft.strongerNeutrals = true;
+    draft.randomPortals = true;
+    draft.naturalExpansion = true;
+    draft.seed = "314";
+
+    const settings = buildBalancedRandomMapSettings(draft);
+    const design = templateToDesign(generateTemplate(settings));
+
+    expect(settings.borderWaterWidth).toBe(4);
+    expect(settings.zoneCfg.neutralStackStrengthPercent).toBeGreaterThan(100);
+    expect(settings.randomPortals).toBe(true);
+    expect(design.border.waterWidth).toBe(4);
+    expect(design.zones.filter((zone) => zone.name.startsWith("Natural-"))).toHaveLength(settings.playerCount);
+    expect(validateDesign(design).errors).toEqual([]);
   });
 });
 

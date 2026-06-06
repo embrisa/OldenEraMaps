@@ -58,7 +58,7 @@ function buildVariantDefault(settings: GeneratorSettings, playerLetters: string[
   addCommonExtras(settings, playerLetters, orderedLetters, zones, connections, neutralZones.length, tuning, rng);
   if (isolate) ensurePlayerZonesConnected(playerLetters, zones, connections, tuning, settings.generateRoads);
   stampRingPositions(zones);
-  return makeVariant(playerLetters, orderedLetters[0], orderedLetters.length, zones, connections);
+  return makeVariant(settings, playerLetters, orderedLetters[0], orderedLetters.length, zones, connections);
 }
 
 function buildVariantChain(settings: GeneratorSettings, playerLetters: string[], neutralZones: NeutralZonePlan[], tuning: GenerationTuning, rng: RandomSource, holdCityNeutralLetter?: string): Variant {
@@ -81,7 +81,7 @@ function buildVariantChain(settings: GeneratorSettings, playerLetters: string[],
   addCommonExtras(settings, playerLetters, orderedLetters, zones, connections, neutralZones.length, tuning, rng);
   if (isolate) ensurePlayerZonesConnected(playerLetters, zones, connections, tuning, settings.generateRoads);
   stampChainPositions(zones);
-  return makeVariant(playerLetters, orderedLetters[0], orderedLetters.length, zones, connections);
+  return makeVariant(settings, playerLetters, orderedLetters[0], orderedLetters.length, zones, connections);
 }
 
 function buildVariantHubAndSpoke(settings: GeneratorSettings, playerLetters: string[], neutralZones: NeutralZonePlan[], tuning: GenerationTuning, rng: RandomSource, hubIsHoldCity = false): Variant {
@@ -105,7 +105,7 @@ function buildVariantHubAndSpoke(settings: GeneratorSettings, playerLetters: str
   }
   addCommonExtras(settings, playerLetters, outerLetters, zones, connections, neutralZones.length, tuning, rng);
   stampRingPositions(zones.filter((zone) => zone.name !== "Hub"));
-  return makeVariant(playerLetters, outerLetters[0], outerLetters.length + 1, zones, connections);
+  return makeVariant(settings, playerLetters, outerLetters[0], outerLetters.length + 1, zones, connections);
 }
 
 function buildVariantSharedWeb(settings: GeneratorSettings, playerLetters: string[], neutralZones: NeutralZonePlan[], tuning: GenerationTuning, rng: RandomSource, holdCityNeutralLetter?: string): Variant {
@@ -133,7 +133,7 @@ function buildVariantSharedWeb(settings: GeneratorSettings, playerLetters: strin
   if (neutrals.length > 1) for (let i = 0; i < neutrals.length; i++) connections.push(directConnection(ringConns[i], `Neutral-${neutrals[i]}`, `Neutral-${neutrals[(i + 1) % neutrals.length]}`, `Neutral-${neutrals[i]}`, 20000, `nring_guard_${neutrals[i]}_${neutrals[(i + 1) % neutrals.length]}`, tuning));
   addCommonExtras(settings, playerLetters, [...playerLetters, ...neutrals], zones, connections, neutrals.length, tuning, rng);
   stampRingPositions(zones);
-  return makeVariant(playerLetters, playerLetters[0], zones.length, zones, connections);
+  return makeVariant(settings, playerLetters, playerLetters[0], zones.length, zones, connections);
 }
 
 function buildVariantLadder(settings: GeneratorSettings, playerLetters: string[], neutralZones: NeutralZonePlan[], tuning: GenerationTuning, rng: RandomSource, holdCityNeutralLetter?: string): Variant {
@@ -161,7 +161,7 @@ function buildVariantLadder(settings: GeneratorSettings, playerLetters: string[]
   ];
   addCommonExtras(settings, playerLetters, [...playerLetters, ...neutrals], zones, connections, neutrals.length, tuning, rng);
   stampChainPositions(zones);
-  return makeVariant(playerLetters, neutrals[0], zones.length, zones, connections);
+  return makeVariant(settings, playerLetters, neutrals[0], zones.length, zones, connections);
 }
 
 function buildVariantRandom(settings: GeneratorSettings, playerLetters: string[], neutralZones: NeutralZonePlan[], tuning: GenerationTuning, rng: RandomSource, holdCityNeutralLetter?: string): Variant {
@@ -189,7 +189,7 @@ function buildVariantRandom(settings: GeneratorSettings, playerLetters: string[]
   });
   addCommonExtras(settings, playerLetters, allLetters, zones, connections, neutralZones.length, tuning, rng);
   if (isolate) ensurePlayerZonesConnected(playerLetters, zones, connections, tuning, settings.generateRoads);
-  return makeVariant(playerLetters, allLetters[0], allLetters.length, zones, connections);
+  return makeVariant(settings, playerLetters, allLetters[0], allLetters.length, zones, connections);
 }
 
 function buildVariantTriangle(settings: GeneratorSettings, playerLetters: string[], neutralZones: NeutralZonePlan[], tuning: GenerationTuning, rng: RandomSource, hubIsHoldCity = false): Variant {
@@ -223,7 +223,7 @@ function buildVariantTriangle(settings: GeneratorSettings, playerLetters: string
   zones.push(...players.map((letter, i) => Object.assign(buildSpawnZone(letter, playerNameForLetter(letter), [...new Set(connsByPlayer.get(letter)!)], settings.zoneCfg.playerZoneCastles, settings.matchPlayerCastleFactions, settings.zoneCfg.advanced.playerZoneSize, settings.spawnRemoteFootholds, settings.generateRoads, tuning), { generatorPosition: triangleCornerPoint(i) })));
   zones.push(...contested.map((plan, i) => Object.assign(buildNeutralZone(plan, [...new Set(connsByNeutral.get(plan.letter)!)], settings.zoneCfg.advanced.neutralZoneSize, settings.spawnRemoteFootholds, settings.generateRoads, tuning), { generatorPosition: triangleSidePoint(i) })));
   addCommonExtras(settings, players, [...players, ...contested.map((z) => z.letter)], zones, connections, contested.length, tuning, rng);
-  return makeVariant(players, players[0], zones.length, zones, connections);
+  return makeVariant(settings, players, players[0], zones.length, zones, connections);
 }
 
 function buildVariantTriangleWithNaturalExpansions(settings: GeneratorSettings, players: string[], tuning: GenerationTuning, rng: RandomSource, hubIsHoldCity = false): Variant {
@@ -258,7 +258,7 @@ function buildVariantTriangleWithNaturalExpansions(settings: GeneratorSettings, 
   zones.push(...players.map((letter, i) => Object.assign(buildNaturalExpansionZone(letter, [...new Set(connsByNatural.get(letter)!)], settings.zoneCfg.advanced.neutralZoneSize, settings.spawnRemoteFootholds, settings.generateRoads, tuning), { generatorPosition: triangleSidePoint(i) })));
 
   addCommonExtras(settings, players, players, zones, connections, 0, tuning, rng);
-  return makeVariant(players, players[0], zones.length, zones, connections);
+  return makeVariant(settings, players, players[0], zones.length, zones, connections);
 }
 
 function buildVariantTournament(settings: GeneratorSettings, playerLetters: string[], neutralZones: NeutralZonePlan[], tuning: GenerationTuning, rng: RandomSource): Variant {
@@ -277,7 +277,7 @@ function buildVariantTournament(settings: GeneratorSettings, playerLetters: stri
     for (let i = 0; i < chain.length - 1; i++) connections.push(directConnection(`Tourney-${chain[i]}-${chain[i + 1]}`, i === 0 ? `Spawn-${chain[i]}` : `Neutral-${chain[i]}`, `Neutral-${chain[i + 1]}`, i === 0 ? `Spawn-${chain[i]}` : `Neutral-${chain[i]}`, 30000, `tourney_guard_${chain[i]}_${chain[i + 1]}`, tuning));
   }
   void rng;
-  return makeVariant(playerLetters, playerLetters[0], zones.length, zones, connections);
+  return makeVariant(settings, playerLetters, playerLetters[0], zones.length, zones, connections);
 }
 
 function addCommonExtras(settings: GeneratorSettings, playerLetters: string[], orderedLetters: string[], zones: Zone[], connections: Connection[], neutralCount: number, tuning: GenerationTuning, rng: RandomSource): void {
@@ -285,10 +285,10 @@ function addCommonExtras(settings: GeneratorSettings, playerLetters: string[], o
   if (settings.connectionStyle === "ManyRoutes") addAlternateNeutralRoutes(playerLetters, orderedLetters, zones, connections, tuning, settings.generateRoads, neutralCount);
 }
 
-function makeVariant(playerLetters: string[], firstLetter: string, totalZones: number, zones: Zone[], connections: Connection[]): Variant {
+function makeVariant(settings: GeneratorSettings, playerLetters: string[], firstLetter: string, totalZones: number, zones: Zone[], connections: Connection[]): Variant {
   return {
     orientation: { zeroAngleZone: playerLetters.includes(firstLetter) ? `Spawn-${firstLetter}` : `Neutral-${firstLetter}`, baseAngleMin: 45, baseAngleMax: 45, randomAngleAmplitude: 360, randomAngleStep: 360 / totalZones },
-    border: { cornerRadius: 0, obstaclesWidth: 3, obstaclesNoise: [{ amp: 1, freq: 12 }], waterWidth: 0, waterNoise: [{ amp: 1, freq: 12 }], waterType: "water grass" },
+    border: { cornerRadius: 0, obstaclesWidth: 3, obstaclesNoise: [{ amp: 1, freq: 12 }], waterWidth: settings.borderWaterWidth, waterNoise: [{ amp: 1, freq: 12 }], waterType: "water grass" },
     zones,
     connections
   };
