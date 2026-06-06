@@ -1,7 +1,7 @@
-import { ArrowRightLeft, Copy, Layers, Palette, Shield, Trash2 } from "lucide-react";
+import { ArrowRightLeft, Castle, Copy, Layers, Palette, Shield, Trash2 } from "lucide-react";
 import { useEffect, useMemo, useState, type JSX } from "react";
 import { terrainOptions } from "@/settings";
-import { defaultDwellingCountForRole, syncZoneProfile, type DesignZone, type DesignZoneRole } from "@/design";
+import { defaultDwellingCountForRole, defaultDwellingSettingsForZone, dwellingCountFromSettings, syncDwellingSettingsFromCount, syncZoneProfile, type DesignZone, type DesignZoneRole, type DwellingSettings } from "@/design";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,6 +9,7 @@ import { Input, NativeSelect, SteppedValueSlider, Textarea } from "@/components/
 import { Dialog, DialogContent, DialogDescription, DialogTitle, ScrollArea } from "@/components/ui/radix";
 import { BiomeField } from "@/components/builder/BiomeField";
 import { ContentPoolField, SidListField } from "@/components/builder/ContentPoolField";
+import { DwellingSettingsDialog } from "@/components/builder/DwellingSettingsDialog";
 import { MainObjectsEditor } from "@/components/builder/MainObjectsEditor";
 import {
   CheckField,
@@ -51,6 +52,7 @@ export function ZoneInspector({
   const [terrainDialogOpen, setTerrainDialogOpen] = useState(false);
   const [guardsRulesDialogOpen, setGuardsRulesDialogOpen] = useState(false);
   const [contentDialogOpen, setContentDialogOpen] = useState(false);
+  const [dwellingSettingsDialogOpen, setDwellingSettingsDialogOpen] = useState(false);
 
   useEffect(() => {
     if (transferTargetOptions.some((candidate) => candidate.id === transferTargetId)) return;
@@ -122,6 +124,7 @@ export function ZoneInspector({
                 if (draft.role !== "Neutral") draft.naturalExpansion = false;
                 if (draft.role === "Hub") draft.name = draft.name.startsWith("Hub") ? draft.name : "Hub";
                 draft.dwellingCount = defaultDwellingCountForRole(draft.role);
+                draft.dwellingSettings = defaultDwellingSettingsForZone(draft, draft.dwellingCount);
                 draft.dwellingCountCustomized = true;
                 syncZoneProfile(draft);
               });
@@ -132,7 +135,11 @@ export function ZoneInspector({
           <ConfigField configKey="zone.quality" label="Quality">
             <NativeSelect value={zone.quality} onChange={(event) => {
               const value = event.currentTarget.value as DesignZone["quality"];
-              onUpdate((draft) => { draft.quality = value; syncZoneProfile(draft); });
+              onUpdate((draft) => {
+                draft.quality = value;
+                if (!draft.dwellingCountCustomized) draft.dwellingSettings = defaultDwellingSettingsForZone(draft, draft.dwellingCount);
+                syncZoneProfile(draft);
+              });
             }}>
               {["Low", "Medium", "High"].map((value) => <option key={value} value={value}>{value}</option>)}
             </NativeSelect>
@@ -385,15 +392,19 @@ export function ZoneInspector({
           <ScrollArea className="zone-inspector-dialog__scroll">
             <div className="dialog-section">
               <h3 className="dialog-section__heading">Density &amp; Value</h3>
-              <div className="form-grid form-grid--two">
+              <div className="zone-dwellings-summary">
                 <ConfigField configKey="zone.dwellingCount" label="Dwellings">
                   <SteppedValueSlider min={0} max={8} value={zone.dwellingCount} onChange={(event) => {
                     onUpdate((draft) => {
                       draft.dwellingCount = Number(event.currentTarget.value);
+                      syncDwellingSettingsFromCount(draft);
                       draft.dwellingCountCustomized = true;
                     });
                   }} />
                 </ConfigField>
+                <Button type="button" variant="gold" onClick={() => setDwellingSettingsDialogOpen(true)}>
+                  <Castle size={14} />Dwelling Settings
+                </Button>
               </div>
               <NumberGrid zone={zone} fields={[
                 ["resourceDensityPercent", "Resources %", 20, 400],
@@ -432,6 +443,16 @@ export function ZoneInspector({
           </ScrollArea>
         </DialogContent>
       </Dialog>
+      <DwellingSettingsDialog
+        open={dwellingSettingsDialogOpen}
+        onOpenChange={setDwellingSettingsDialogOpen}
+        zone={zone}
+        onChange={(settings: DwellingSettings) => onUpdate((draft) => {
+          draft.dwellingSettings = settings;
+          draft.dwellingCount = dwellingCountFromSettings(settings);
+          draft.dwellingCountCustomized = true;
+        })}
+      />
     </Card>
   );
 }

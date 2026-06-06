@@ -1,20 +1,24 @@
 import { buildGameRules } from "../generator/gameRulesBuilder.ts";
 import { directConnection } from "../generator/connectionBuilder.ts";
 import { computeContentScale, defaultGuardRandomization, sideLayoutName, treasureLayoutName, type GenerationTuning } from "../generator/math.ts";
-import { buildAllMandatoryContent, buildDwellingContentItems, buildHubZone, buildNeutralZone, buildSpawnZone, countDwellingContentItems, normalizeDwellingCount } from "../generator/templateContentBuilder.ts";
+import { buildAllMandatoryContent, buildDwellingContentItems, buildHubZone, buildNeutralZone, buildSpawnZone, buildSpecificDwellingContentItems, normalizeDwellingCount } from "../generator/templateContentBuilder.ts";
 import { applyNeutralCastleRuinsToZone } from "../generator/topologyVariantBuilder.ts";
 import { normalizeBoardZonePositions } from "../boardSlots.ts";
 import { createDefaultSettings } from "../settings.ts";
 import { matchZoneBiomeSelector, terrainSelector } from "../terrain.ts";
-import { parseRmgTemplate, type BiomeSelector, type Bonus, type Border, type Connection, type ContentCountLimit, type ContentPlacementRule, type GlobalBans, type JsonValue, type MainObject, type MandatoryContentGroup, type NeutralZoneQuality, type NoiseEntry, type Orientation, type RmgTemplate, type TerrainTheme, type ValidationResult, type ValueOverride, type Zone, type ZoneLayout } from "../types.ts";
+import { parseRmgTemplate, type BiomeSelector, type Bonus, type Border, type Connection, type ContentCountLimit, type ContentItem, type ContentPlacementRule, type GlobalBans, type JsonValue, type MainObject, type MandatoryContentGroup, type NeutralZoneQuality, type NoiseEntry, type Orientation, type RmgTemplate, type TerrainTheme, type ValidationResult, type ValueOverride, type Zone, type ZoneLayout } from "../types.ts";
 import {
   cloneSelector,
   clampPoint,
   createZone,
   createDefaultDesign,
   defaultDwellingCountForRole,
+  defaultDwellingSettingsForZone,
+  dwellingCountFromSettings,
+  inferDwellingSettingsFromContent,
   isFiniteNumber,
   isNoiseEntry,
+  normalizeDwellingSettings,
   normalizeDesignLockState,
   ringPosition,
   suffixForZone,
@@ -23,6 +27,7 @@ import {
   type DesignFile,
   type DesignBorder,
   type DesignOrientation,
+  type DwellingSettings,
   type DesignZone,
   type DesignZoneRole,
   type TemplateDesign
@@ -419,6 +424,7 @@ export function templateToDesign(template: RmgTemplate): TemplateDesign {
     const role = inferDesignZoneRole(zone);
     const quality: NeutralZoneQuality = zone.layout === sideLayoutName ? "Low" : zone.layout === treasureLayoutName ? "Medium" : "High";
     const prototype = defaultZonePrototype(role, quality);
+    const dwellingSettings = inferZoneDwellingSettings(zone, template.mandatoryContent, role, quality);
     return createZone(`zone-${index + 1}`, zone.name, role, {
       player: role === "Spawn" ? inferImportedSpawnPlayer(zone, usedSpawnPlayers) : undefined,
       quality,
@@ -442,7 +448,8 @@ export function templateToDesign(template: RmgTemplate): TemplateDesign {
       unguardedContentValuePerArea: zone.unguardedContentValuePerArea ?? prototype.unguardedContentValuePerArea ?? 0,
       resourcesValue: zone.resourcesValue ?? prototype.resourcesValue ?? 0,
       resourcesValuePerArea: zone.resourcesValuePerArea ?? prototype.resourcesValuePerArea ?? 0,
-      dwellingCount: inferZoneDwellingCount(zone, template.mandatoryContent, role),
+      dwellingCount: dwellingCountFromSettings(dwellingSettings),
+      dwellingSettings,
       mandatoryContent: zone.mandatoryContent !== undefined ? toStringList(zone.mandatoryContent) : toStringList(prototype.mandatoryContent),
       encounterHolesSettings: importEncounterHolesSettings(zone.encounterHolesSettings),
       randomHireEnableWeeklyUnitIncrement: typeof zone.randomHireEnableWeeklyUnitIncrement === "boolean" ? zone.randomHireEnableWeeklyUnitIncrement : undefined,
@@ -704,10 +711,11 @@ function buildDesignMandatoryContent(design: TemplateDesign, playerZoneCastles: 
     zoneCfg: { playerZoneCastles },
     spawnRemoteFootholds: true,
     naturalExpansionZone: false,
-    dwellingCounts: Object.fromEntries(design.zones.map((zone) => [zone.name, zone.dwellingCount]))
+    dwellingCounts: Object.fromEntries(design.zones.map((zone) => [zone.name, normalizeDwellingCount(zone.dwellingCount, defaultDwellingCountForRole(zone.role))])),
+    dwellingContent: Object.fromEntries(design.zones.map((zone) => [zone.name, buildDwellingContentForZone(zone)]))
   });
   groups.push(...design.zones
-    .filter((zone) => zone.role === "Hub" && normalizeDwellingCount(zone.dwellingCount, 0) > 0)
+    .filter((zone) => zone.role === "Hub" && dwellingCountFromSettings(effectiveDwellingSettingsForZone(zone)) > 0)
     .map((zone) => buildZoneDwellingGroup(zone)));
   return groups;
 }
@@ -734,8 +742,7 @@ function buildCustomMandatoryContentWithDwellingOverrides(design: TemplateDesign
       zone.mandatoryContent = toStringList(zone.mandatoryContent).filter((name) => name !== groupName);
     }
 
-    const dwellingCount = normalizeDwellingCount(designZone.dwellingCount, defaultDwellingCountForRole(designZone.role));
-    if (dwellingCount === 0) continue;
+    if (dwellingCountFromSettings(effectiveDwellingSettingsForZone(designZone)) === 0) continue;
 
     groups.push(buildZoneDwellingGroup(designZone));
     const exportedZone = exportedZonesByName.get(designZone.name);
@@ -751,7 +758,7 @@ function buildCustomMandatoryContentWithDwellingOverrides(design: TemplateDesign
 function applyGeneratedDwellingZoneReferences(design: TemplateDesign, exportedZones: Zone[]): void {
   const exportedZonesByName = new Map(exportedZones.map((zone) => [zone.name, zone]));
   for (const designZone of design.zones) {
-    if (designZone.role !== "Hub" || normalizeDwellingCount(designZone.dwellingCount, 0) === 0) continue;
+    if (designZone.role !== "Hub" || dwellingCountFromSettings(effectiveDwellingSettingsForZone(designZone)) === 0) continue;
     const exportedZone = exportedZonesByName.get(designZone.name);
     if (!exportedZone) continue;
     const groupName = dwellingGroupNameForZone(designZone.name);
@@ -760,16 +767,33 @@ function applyGeneratedDwellingZoneReferences(design: TemplateDesign, exportedZo
   }
 }
 
-function buildZoneDwellingGroup(zone: Pick<DesignZone, "name" | "role" | "quality" | "dwellingCount">): MandatoryContentGroup {
+function buildZoneDwellingGroup(zone: Pick<DesignZone, "name" | "role" | "quality" | "dwellingCount" | "dwellingSettings">): MandatoryContentGroup {
   return {
     name: dwellingGroupNameForZone(zone.name),
-    content: buildDwellingContentItems(zone.dwellingCount, dwellingTierForDesignZone(zone))
+    content: buildDwellingContentForZone(zone)
   };
 }
 
-function dwellingTierForDesignZone(zone: Pick<DesignZone, "role" | "quality" | "name">): "Low" | "High" {
-  if (zone.role === "Spawn" || zone.quality === "Low" || zone.name.startsWith("Natural-")) return "Low";
-  return "High";
+function buildDwellingContentForZone(zone: Pick<DesignZone, "name" | "role" | "quality" | "dwellingCount" | "dwellingSettings">): ContentItem[] {
+  const settings = effectiveDwellingSettingsForZone(zone);
+  if (settings.mode === "Specific") {
+    return [
+      ...buildDwellingContentItems(settings.lowTierCount, "Low"),
+      ...buildDwellingContentItems(settings.highTierCount, "High"),
+      ...buildSpecificDwellingContentItems(settings.specific)
+    ];
+  }
+  return [
+    ...buildDwellingContentItems(settings.lowTierCount, "Low"),
+    ...buildDwellingContentItems(settings.highTierCount, "High")
+  ];
+}
+
+function effectiveDwellingSettingsForZone(zone: Pick<DesignZone, "name" | "role" | "quality" | "dwellingCount" | "dwellingSettings">): DwellingSettings {
+  const normalizedCount = normalizeDwellingCount(zone.dwellingCount, defaultDwellingCountForRole(zone.role));
+  const fallback = defaultDwellingSettingsForZone(zone, normalizedCount);
+  const settings = normalizeDwellingSettings(zone.dwellingSettings, fallback);
+  return dwellingCountFromSettings(settings) === normalizedCount ? settings : fallback;
 }
 
 function dwellingGroupNameForZone(zoneName: string): string {
@@ -777,11 +801,13 @@ function dwellingGroupNameForZone(zoneName: string): string {
   return `mandatory_content_dwellings_${slug || "zone"}`;
 }
 
-function inferZoneDwellingCount(zone: Zone, groups: MandatoryContentGroup[] | undefined, role: DesignZoneRole): number {
-  if (!Array.isArray(groups) || zone.mandatoryContent === undefined) return defaultDwellingCountForRole(role);
+function inferZoneDwellingSettings(zone: Zone, groups: MandatoryContentGroup[] | undefined, role: DesignZoneRole, quality: NeutralZoneQuality): DwellingSettings {
+  if (!Array.isArray(groups) || zone.mandatoryContent === undefined) {
+    return defaultDwellingSettingsForZone({ role, quality, name: zone.name }, defaultDwellingCountForRole(role));
+  }
   const groupsByName = new Map(groups.map((group) => [group.name, group]));
-  const count = toStringList(zone.mandatoryContent).reduce((sum, name) => sum + countDwellingContentItems(groupsByName.get(name)?.content), 0);
-  return count > 0 ? normalizeDwellingCount(count, count) : 0;
+  const content = toStringList(zone.mandatoryContent).flatMap((name) => groupsByName.get(name)?.content ?? []);
+  return inferDwellingSettingsFromContent(content, defaultDwellingSettingsForZone({ role, quality, name: zone.name }, 0));
 }
 
 function applyZoneTerrain(zone: Zone, terrainTheme: TerrainTheme): void {

@@ -513,7 +513,7 @@ export const configHelp: Record<string, ConfigHelp> = {
   },
   "zone.dwellingCount": {
     tooltip: "Guaranteed dwelling count for this zone.",
-    detail: "Controls how many random-hire dwelling entries are written into this zone's generated mandatory content. Content pools can still add additional random hire locations independently.",
+    detail: "Controls how many random-hire dwelling entries are written into this zone's generated mandatory content. Use Dwelling Settings for low/high tier mixes or asset-backed specific random hires. Content pools can still add additional random hire locations independently.",
     suggestions: [
       { label: "None", value: 0, description: "No guaranteed dwellings in this zone" },
       { label: "Default", value: 1, description: "One guaranteed dwelling, matching current generated output" },

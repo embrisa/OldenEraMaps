@@ -2285,6 +2285,29 @@ describe("React UI shell", () => {
     });
   });
 
+  it("opens the asset-backed dwelling settings dialog and exports a specific dwelling", async () => {
+    const user = userEvent.setup();
+    render(<AppShell />);
+
+    await user.click(screen.getByRole("button", { name: "Content" }));
+    await user.click(screen.getByRole("button", { name: "Dwelling Settings" }));
+    const dwellingDialog = screen.getAllByRole("dialog").find((dialog) => within(dialog).queryByText("Dwelling Settings"));
+    expect(dwellingDialog).toBeTruthy();
+
+    await user.click(within(dwellingDialog!).getByRole("tab", { name: /Specific Dwellings/ }));
+    expect(within(dwellingDialog!).getByAltText("Human Dwelling 3 art")).toBeTruthy();
+
+    await user.click(within(dwellingDialog!).getByRole("button", { name: "Add Human Dwelling 3" }));
+
+    await waitFor(() => {
+      const template = JSON.parse((screen.getByLabelText("RMG JSON editor") as HTMLTextAreaElement).value) as {
+        mandatoryContent?: Array<{ name: string; content?: Array<Record<string, unknown>> }>;
+      };
+      const spawnGroup = template.mandatoryContent?.find((group) => group.name === "mandatory_content_side_1");
+      expect(spawnGroup?.content?.filter((item) => item.sid === "random_hire_3")).toHaveLength(1);
+    });
+  });
+
   it("shows imported custom layout profiles in the zone terrain selector", async () => {
     const user = userEvent.setup();
     render(<AppShell />);

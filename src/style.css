@@ -2399,6 +2399,271 @@ button {
   max-height: min(820px, calc(100vh - 28px));
 }
 
+.zone-dwellings-summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.dwelling-settings-dialog {
+  display: grid;
+  grid-template-rows: auto auto auto minmax(0, 1fr) auto;
+  width: min(1040px, calc(100vw - 28px));
+  max-height: min(860px, calc(100vh - 28px));
+  overflow: hidden;
+}
+
+.studio-shell--builder .oe-dialog.dwelling-settings-dialog {
+  width: min(1040px, calc(100vw - 28px));
+  max-height: min(860px, calc(100vh - 28px));
+}
+
+.dwelling-settings-dialog__count {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid rgba(214, 180, 94, 0.3);
+  border-radius: 999px;
+  background: rgba(214, 180, 94, 0.1);
+  color: #efdba5;
+  padding: 6px 10px;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.dwelling-mode-tabs {
+  display: inline-grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+  width: min(410px, 100%);
+  border: 1px solid rgba(147, 161, 175, 0.18);
+  border-radius: 8px;
+  background: rgba(7, 11, 16, 0.34);
+  padding: 4px;
+}
+
+.dwelling-mode-tabs button,
+.dwelling-faction-filter button,
+.dwelling-card__controls button {
+  border: 0;
+  color: var(--muted);
+  font: inherit;
+  cursor: pointer;
+}
+
+.dwelling-mode-tabs button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 34px;
+  border-radius: 6px;
+  background: transparent;
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.dwelling-mode-tabs button[aria-selected="true"] {
+  background: rgba(214, 180, 94, 0.15);
+  color: #efdba5;
+}
+
+.dwelling-generated-panel {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid rgba(147, 161, 175, 0.16);
+  border-radius: 8px;
+  background: rgba(7, 11, 16, 0.22);
+}
+
+.dwelling-generated-panel label {
+  display: grid;
+  gap: 8px;
+  color: var(--text);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.dwelling-toolbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+}
+
+.dwelling-search {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgba(147, 161, 175, 0.22);
+  border-radius: 8px;
+  background: rgba(7, 11, 16, 0.32);
+  color: var(--muted);
+  padding: 0 10px;
+}
+
+.dwelling-search .oe-input {
+  border: 0;
+  background: transparent;
+  padding-inline: 0;
+}
+
+.dwelling-faction-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 10px 0;
+}
+
+.dwelling-faction-filter button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 30px;
+  border: 1px solid rgba(147, 161, 175, 0.18);
+  border-radius: 999px;
+  background: rgba(7, 11, 16, 0.26);
+  padding: 4px 9px;
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+.dwelling-faction-filter button[aria-pressed="true"] {
+  border-color: rgba(214, 180, 94, 0.42);
+  background: rgba(214, 180, 94, 0.12);
+  color: #efdba5;
+}
+
+.dwelling-faction-filter img {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+.dwelling-card-scroll {
+  min-height: 0;
+  height: min(490px, calc(100vh - 366px));
+  padding-right: 8px;
+}
+
+.dwelling-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 8px;
+}
+
+.dwelling-card {
+  display: grid;
+  grid-template-columns: 58px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  min-height: 78px;
+  border: 1px solid rgba(39, 53, 68, 0.9);
+  border-radius: 8px;
+  background: rgba(7, 11, 16, 0.36);
+  padding: 8px;
+}
+
+.dwelling-card[data-selected="true"] {
+  border-color: rgba(214, 180, 94, 0.54);
+  background: rgba(214, 180, 94, 0.1);
+}
+
+.dwelling-card > img {
+  width: 58px;
+  height: 58px;
+  border-radius: 7px;
+  object-fit: cover;
+}
+
+.dwelling-card__body {
+  display: grid;
+  min-width: 0;
+  gap: 3px;
+}
+
+.dwelling-card__body strong,
+.dwelling-card__body span,
+.dwelling-card__body code {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dwelling-card__body strong {
+  color: var(--text);
+  font-size: 0.84rem;
+}
+
+.dwelling-card__body span {
+  color: var(--muted);
+  font-size: 0.74rem;
+}
+
+.dwelling-card__body code {
+  color: #9fb3c7;
+  font-size: 0.68rem;
+}
+
+.dwelling-card__controls {
+  display: grid;
+  grid-template-columns: 28px 24px 28px;
+  align-items: center;
+  gap: 4px;
+}
+
+.dwelling-card__controls button {
+  display: inline-flex;
+  width: 28px;
+  height: 28px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(147, 161, 175, 0.2);
+  border-radius: 6px;
+  background: rgba(7, 11, 16, 0.38);
+}
+
+.dwelling-card__controls button:disabled {
+  cursor: not-allowed;
+  opacity: 0.38;
+}
+
+.dwelling-card__controls span {
+  color: var(--text);
+  text-align: center;
+  font-size: 0.82rem;
+  font-weight: 900;
+}
+
+.dwelling-preview {
+  display: flex;
+  flex-wrap: wrap;
+  min-height: 38px;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid rgba(147, 161, 175, 0.16);
+  border-radius: 8px;
+  background: rgba(7, 11, 16, 0.24);
+  color: var(--muted);
+  padding: 8px;
+  font-size: 0.78rem;
+}
+
+.dwelling-preview code {
+  border: 1px solid rgba(147, 161, 175, 0.18);
+  border-radius: 999px;
+  background: rgba(7, 11, 16, 0.32);
+  color: #cbd6e1;
+  padding: 4px 8px;
+  font-size: 0.68rem;
+}
+
 .zone-inspector-dialog__scroll {
   min-height: 0;
   height: min(680px, calc(100vh - 126px));

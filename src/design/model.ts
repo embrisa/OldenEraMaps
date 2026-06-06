@@ -1,9 +1,9 @@
 import { defaultGuardRandomization, spawnLayoutName, type GenerationTuning } from "../generator/math.ts";
-import { buildAllContentCountLimits, buildHubZone, buildNeutralZone, buildSpawnZone, buildZoneLayouts, countDwellingContentItems, normalizeDwellingCount } from "../generator/templateContentBuilder.ts";
+import { buildAllContentCountLimits, buildHubZone, buildNeutralZone, buildSpawnZone, buildZoneLayouts, countDwellingContentItems, highTierRandomHireList, lowTierRandomHireList, maxDwellingCount, normalizeDwellingCount } from "../generator/templateContentBuilder.ts";
 import { normalizeBoardZonePositions } from "../boardSlots.ts";
 import { clamp } from "../math.ts";
 import { createDefaultSettings } from "../settings.ts";
-import type { AmbientPickupDistribution, BiomeSelector, ContentCountLimit, ContentPlacementRule, ElevationMode, GameEndConditions, GladiatorArenaRules, GlobalBans, GuardedEncounterResourceFractions, HeroSettings, JsonValue, MainObject, MandatoryContentGroup, NeutralZoneQuality, NoiseEntry, Point, TerrainTheme, TournamentRules, ValueOverride, Zone, ZoneLayout } from "../types.ts";
+import type { AmbientPickupDistribution, BiomeSelector, ContentCountLimit, ContentItem, ContentPlacementRule, ElevationMode, GameEndConditions, GladiatorArenaRules, GlobalBans, GuardedEncounterResourceFractions, HeroSettings, JsonValue, MainObject, MandatoryContentGroup, NeutralZoneQuality, NoiseEntry, Point, TerrainTheme, TournamentRules, ValueOverride, Zone, ZoneLayout } from "../types.ts";
 
 export type DesignZoneRole = "Spawn" | "Neutral" | "Hub";
 export type DesignConnectionType = "Direct" | "Portal" | "Proximity";
@@ -95,6 +95,7 @@ export interface DesignZone {
   resourcesValue: number;
   resourcesValuePerArea: number;
   dwellingCount: number;
+  dwellingSettings: DwellingSettings;
   dwellingCountCustomized?: boolean;
   mandatoryContent: string[];
   encounterHolesSettings?: {
@@ -134,6 +135,27 @@ export interface DesignConnection {
   guardMatchGroup?: string;
   portalPlacementRulesFrom?: ContentPlacementRule[];
   portalPlacementRulesTo?: ContentPlacementRule[];
+}
+
+export type DwellingSettingsMode = "Generated" | "Specific";
+
+export interface DwellingSpecificEntry {
+  id: string;
+  sid: string;
+  count: number;
+  title?: string;
+  image?: string;
+  faction?: string;
+  tier?: number;
+  isGuarded?: boolean;
+  guardValue?: number;
+}
+
+export interface DwellingSettings {
+  mode: DwellingSettingsMode;
+  lowTierCount: number;
+  highTierCount: number;
+  specific: DwellingSpecificEntry[];
 }
 
 export interface DesignFile {
@@ -222,6 +244,7 @@ export function createZone(id: string, name: string, role: DesignZoneRole, overr
     resourcesValue: prototype.resourcesValue ?? 0,
     resourcesValuePerArea: prototype.resourcesValuePerArea ?? 0,
     dwellingCount: defaultDwellingCountForRole(role),
+    dwellingSettings: defaultDwellingSettingsForZone({ role, quality, name }, defaultDwellingCountForRole(role)),
     mandatoryContent: toStringList(prototype.mandatoryContent),
     useCustomMainObjects: false,
     customMainObjects: [],
@@ -266,6 +289,59 @@ export function syncZoneProfile(zone: DesignZone): void {
 
 export function defaultDwellingCountForRole(role: DesignZoneRole): number {
   return role === "Hub" ? 0 : 1;
+}
+
+export function defaultDwellingSettingsForZone(zone: Pick<DesignZone, "role" | "quality" | "name"> | { role: DesignZoneRole, quality?: NeutralZoneQuality, name?: string }, count = defaultDwellingCountForRole(zone.role)): DwellingSettings {
+  const normalizedCount = normalizeDwellingCount(count, defaultDwellingCountForRole(zone.role));
+  const lowTier = zone.role === "Spawn" || zone.quality === "Low" || zone.name?.startsWith("Natural-");
+  return {
+    mode: "Generated",
+    lowTierCount: lowTier ? normalizedCount : 0,
+    highTierCount: lowTier ? 0 : normalizedCount,
+    specific: []
+  };
+}
+
+export function normalizeDwellingSettings(settings: unknown, fallback: DwellingSettings): DwellingSettings {
+  if (!settings || typeof settings !== "object") return structuredClone(fallback);
+  const value = settings as Partial<DwellingSettings>;
+  if (value.mode === "Specific") {
+    const specific = normalizeSpecificDwellingEntries(value.specific);
+    let lowTierCount = normalizeDwellingCount(value.lowTierCount, fallback.lowTierCount);
+    let highTierCount = normalizeDwellingCount(value.highTierCount, fallback.highTierCount);
+    const specificCount = specific.reduce((sum, entry) => sum + entry.count, 0);
+    if (lowTierCount + highTierCount + specificCount > maxDwellingCount) {
+      const remaining = Math.max(0, maxDwellingCount - specificCount);
+      highTierCount = Math.min(highTierCount, Math.max(0, remaining - lowTierCount));
+      lowTierCount = Math.min(lowTierCount, remaining);
+    }
+    return {
+      mode: "Specific",
+      lowTierCount,
+      highTierCount,
+      specific
+    };
+  }
+
+  let lowTierCount = normalizeDwellingCount(value.lowTierCount, fallback.lowTierCount);
+  let highTierCount = normalizeDwellingCount(value.highTierCount, fallback.highTierCount);
+  if (lowTierCount + highTierCount > maxDwellingCount) {
+    highTierCount = Math.max(0, maxDwellingCount - lowTierCount);
+    lowTierCount = Math.min(lowTierCount, maxDwellingCount);
+  }
+  return { mode: "Generated", lowTierCount, highTierCount, specific: [] };
+}
+
+export function dwellingCountFromSettings(settings: DwellingSettings): number {
+  const generatedCount = normalizeDwellingCount(settings.lowTierCount, 0) + normalizeDwellingCount(settings.highTierCount, 0);
+  const specificCount = settings.mode === "Specific"
+    ? normalizeSpecificDwellingEntries(settings.specific).reduce((sum, entry) => sum + entry.count, 0)
+    : 0;
+  return Math.min(maxDwellingCount, generatedCount + specificCount);
+}
+
+export function syncDwellingSettingsFromCount(zone: Pick<DesignZone, "role" | "quality" | "name" | "dwellingCount" | "dwellingSettings">): void {
+  zone.dwellingSettings = defaultDwellingSettingsForZone(zone, normalizeDwellingCount(zone.dwellingCount, defaultDwellingCountForRole(zone.role)));
 }
 
 export function defaultDesignOrientation(zeroAngleZone?: string): DesignOrientation {
@@ -410,10 +486,15 @@ export function normalizeDesignLockState(design: TemplateDesign): TemplateDesign
   const spawnCount = design.zones.filter((zone) => zone.role === "Spawn").length;
   const normalizedZones = normalizeBoardZonePositions(design.zones.map((zone) => {
     const mandatoryContent = toStringList(zone.mandatoryContent);
+    const inferredDwellingCount = inferNormalizedZoneDwellingCount(zone, mandatoryContent, design.mandatoryContent);
+    const fallbackDwellingSettings = inferZoneDwellingSettingsFromMandatoryContent(zone, mandatoryContent, design.mandatoryContent, inferredDwellingCount);
+    const dwellingSettings = normalizeDwellingSettings(zone.dwellingSettings, fallbackDwellingSettings);
+    const dwellingCount = dwellingCountFromSettings(dwellingSettings);
     return {
       ...zone,
       mandatoryContent,
-      dwellingCount: inferNormalizedZoneDwellingCount(zone, mandatoryContent, design.mandatoryContent),
+      dwellingCount,
+      dwellingSettings,
       dwellingCountCustomized: zone.dwellingCountCustomized === true,
       useCustomMainObjects: zone.useCustomMainObjects === true,
       customMainObjects: cloneMainObjects(zone.customMainObjects ?? []),
@@ -460,4 +541,85 @@ function inferNormalizedZoneDwellingCount(zone: Partial<DesignZone>, mandatoryCo
   const groupsByName = new Map(mandatoryContentGroups.map((group) => [group.name, group]));
   const inferred = mandatoryContentNames.reduce((count, name) => count + countDwellingContentItems(groupsByName.get(name)?.content), 0);
   return inferred > 0 ? normalizeDwellingCount(inferred, inferred) : defaultDwellingCountForRole(zone.role ?? "Neutral");
+}
+
+function inferZoneDwellingSettingsFromMandatoryContent(zone: Partial<DesignZone>, mandatoryContentNames: string[], mandatoryContentGroups: MandatoryContentGroup[], fallbackCount: number): DwellingSettings {
+  const fallback = defaultDwellingSettingsForZone({ role: zone.role ?? "Neutral", quality: zone.quality, name: zone.name }, fallbackCount);
+  const groupsByName = new Map(mandatoryContentGroups.map((group) => [group.name, group]));
+  const content = mandatoryContentNames.flatMap((name) => groupsByName.get(name)?.content ?? []);
+  return content.length > 0 ? inferDwellingSettingsFromContent(content, fallback) : fallback;
+}
+
+function normalizeSpecificDwellingEntries(entries: unknown): DwellingSpecificEntry[] {
+  if (!Array.isArray(entries)) return [];
+  const normalized: DwellingSpecificEntry[] = [];
+  let remaining = maxDwellingCount;
+  for (const entry of entries) {
+    if (remaining <= 0 || !entry || typeof entry !== "object") break;
+    const value = entry as Partial<DwellingSpecificEntry>;
+    if (typeof value.sid !== "string" || !/^random_hire_\d+$/.test(value.sid)) continue;
+    const count = Math.min(remaining, normalizeDwellingCount(value.count, 0));
+    if (count <= 0) continue;
+    normalized.push({
+      id: typeof value.id === "string" && value.id.trim() ? value.id : value.sid,
+      sid: value.sid,
+      count,
+      ...(typeof value.title === "string" ? { title: value.title } : {}),
+      ...(typeof value.image === "string" ? { image: value.image } : {}),
+      ...(typeof value.faction === "string" ? { faction: value.faction } : {}),
+      ...(typeof value.tier === "number" && Number.isFinite(value.tier) ? { tier: value.tier } : {}),
+      ...(typeof value.isGuarded === "boolean" ? { isGuarded: value.isGuarded } : {}),
+      ...(typeof value.guardValue === "number" && Number.isFinite(value.guardValue) ? { guardValue: value.guardValue } : {})
+    });
+    remaining -= count;
+  }
+  return normalized;
+}
+
+export function inferDwellingSettingsFromContent(content: ContentItem[] | undefined, fallback: DwellingSettings): DwellingSettings {
+  const counts = scanDwellingContent(content);
+  if (counts.specific.size > 0) {
+    return normalizeDwellingSettings({
+      mode: "Specific",
+      lowTierCount: counts.lowTier,
+      highTierCount: counts.highTier,
+      specific: Array.from(counts.specific.entries()).map(([sid, count]) => ({
+        id: sid,
+        sid,
+        count,
+        title: sid.replaceAll("_", " "),
+        tier: Number(sid.replace("random_hire_", ""))
+      }))
+    }, fallback);
+  }
+  if (counts.lowTier > 0 || counts.highTier > 0) {
+    return normalizeDwellingSettings({
+      mode: "Generated",
+      lowTierCount: counts.lowTier,
+      highTierCount: counts.highTier,
+      specific: []
+    }, fallback);
+  }
+  return structuredClone(fallback);
+}
+
+function scanDwellingContent(content: ContentItem[] | undefined): { lowTier: number, highTier: number, specific: Map<string, number> } {
+  const result = { lowTier: 0, highTier: 0, specific: new Map<string, number>() };
+  for (const item of content ?? []) {
+    if (typeof item.sid === "string" && /^random_hire_\d+$/.test(item.sid)) {
+      result.specific.set(item.sid, (result.specific.get(item.sid) ?? 0) + 1);
+    }
+    for (const list of item.includeLists ?? []) {
+      if (list === lowTierRandomHireList) result.lowTier += 1;
+      else if (list === highTierRandomHireList) result.highTier += 1;
+      else if (list.includes("random_hires")) result.highTier += 1;
+    }
+    const nested = scanDwellingContent(item.content);
+    result.lowTier += nested.lowTier;
+    result.highTier += nested.highTier;
+    for (const [sid, count] of nested.specific) {
+      result.specific.set(sid, (result.specific.get(sid) ?? 0) + count);
+    }
+  }
+  return result;
 }

@@ -1178,6 +1178,35 @@ describe("manual template design", () => {
     expect(countDwellingContentItems(neutralGroup?.content)).toBe(3);
   });
 
+  it("exports generated dwelling low and high tier mixes", () => {
+    const design = createDefaultDesign();
+    design.zones[0].dwellingSettings = { mode: "Generated", lowTierCount: 2, highTierCount: 1, specific: [] };
+    design.zones[0].dwellingCount = 3;
+
+    const template = designToTemplate(design);
+    const spawnGroup = template.mandatoryContent?.find((group) => group.name === "mandatory_content_side_1");
+
+    expect(spawnGroup?.content?.filter((item) => item.includeLists?.includes("content_list_building_random_hires_low_tier"))).toHaveLength(2);
+    expect(spawnGroup?.content?.filter((item) => item.includeLists?.includes("content_list_building_random_hires_high_tier"))).toHaveLength(1);
+  });
+
+  it("exports specific dwelling settings as direct random hire entries", () => {
+    const design = createDefaultDesign();
+    design.zones[0].dwellingSettings = {
+      mode: "Specific",
+      lowTierCount: 0,
+      highTierCount: 0,
+      specific: [{ id: "human-3", sid: "random_hire_3", count: 2, title: "Human Dwelling 3", image: "/assets/olden-era/map-objects/barracks-human-3.png", faction: "Human", tier: 3 }]
+    };
+    design.zones[0].dwellingCount = 2;
+
+    const template = designToTemplate(design);
+    const spawnGroup = template.mandatoryContent?.find((group) => group.name === "mandatory_content_side_1");
+
+    expect(spawnGroup?.content?.filter((item) => item.sid === "random_hire_3")).toHaveLength(2);
+    expect(spawnGroup?.content?.some((item) => item.includeLists?.some((list) => list.includes("random_hires")))).toBe(false);
+  });
+
   it("normalizes legacy design files with missing dwelling counts", () => {
     const saved = JSON.parse(serializeDesignFile(createDefaultDesign())) as {
       design: { zones: Array<Record<string, unknown>> };
@@ -1216,6 +1245,11 @@ describe("manual template design", () => {
 
     expect(imported.useCustomMandatoryContent).toBe(true);
     expect(imported.zones.find((zone) => zone.name === "Spawn-1")?.dwellingCount).toBe(2);
+    expect(imported.zones.find((zone) => zone.name === "Spawn-1")?.dwellingSettings).toMatchObject({
+      mode: "Specific",
+      lowTierCount: 1,
+      specific: [{ sid: "random_hire_1", count: 1 }]
+    });
     expect(imported.zones.find((zone) => zone.name === "Spawn-2")?.dwellingCount).toBe(1);
   });
 
@@ -1240,6 +1274,7 @@ describe("manual template design", () => {
       }]
     }`));
     const spawn = imported.zones.find((zone) => zone.name === "Spawn-1")!;
+    spawn.dwellingSettings = { mode: "Specific", lowTierCount: 0, highTierCount: 0, specific: [{ id: "nature-4", sid: "random_hire_4", count: 2, title: "Nature Dwelling 4", tier: 4 }] };
     spawn.dwellingCount = 2;
     spawn.dwellingCountCustomized = true;
 
@@ -1255,7 +1290,7 @@ describe("manual template design", () => {
         { sid: "random_hire_1" }
       ]
     });
-    expect(countDwellingContentItems(dwellingGroup?.content)).toBe(2);
+    expect(dwellingGroup?.content).toEqual([{ sid: "random_hire_4" }, { sid: "random_hire_4" }]);
     expect(exportedSpawn?.mandatoryContent).toEqual(["mandatory_content_custom_spawn", "mandatory_content_dwellings_spawn_1"]);
   });
 

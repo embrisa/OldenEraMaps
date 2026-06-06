@@ -427,6 +427,7 @@ function toDesignZoneLike(zone: PreviewDesignZone): DesignZone {
     resourcesValue: zone.resourcesValue,
     resourcesValuePerArea: zone.resourcesValuePerArea,
     dwellingCount: 0,
+    dwellingSettings: { mode: "Generated", lowTierCount: 0, highTierCount: 0, specific: [] },
     mandatoryContent: [],
     encounterHolesSettings: null,
     randomHireEnableWeeklyUnitIncrement: null,
