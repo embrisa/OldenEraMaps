@@ -31,8 +31,7 @@ Useful source areas from the reference project:
 2. [Simple generation flow](aurora-simple-generation-flow.md)
 3. [Preset library expansion](aurora-preset-library-expansion.md)
 4. [City Hold target selection](aurora-city-hold-target-selection.md)
-5. [Generated template fixture pack](aurora-generated-template-fixture-pack.md)
-6. [Export and install workflow polish](aurora-export-install-workflow-polish.md)
+5. [Export and install workflow polish](aurora-export-install-workflow-polish.md)
 
 ## Suggested Order
 
@@ -40,8 +39,7 @@ Useful source areas from the reference project:
 2. Improve City Hold target selection next because it is a narrow generator-quality upgrade.
 3. Expand Balanced Random into a clearer simple generation flow.
 4. Add curated presets once the analysis panel can tell users what a preset produced.
-5. Add generated fixtures to lock behavior down.
-6. Polish export/install workflow after generation and analysis behavior settles.
+5. Polish export/install workflow after generation and analysis behavior settles.
 
 ## Common Verification
 
