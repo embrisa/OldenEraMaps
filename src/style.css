@@ -1986,10 +1986,11 @@ button {
 .output-grid {
   display: grid;
   gap: 10px;
-  grid-template-columns: minmax(0, 1fr) minmax(300px, 360px);
+  grid-template-columns: minmax(0, 1fr);
   grid-template-areas:
-    "messages messages"
-    "json analysis";
+    "messages"
+    "analysis"
+    "json";
   align-items: start;
 }
 
@@ -3072,14 +3073,6 @@ button {
 }
 
 @media (max-width: 1160px) {
-  .output-grid {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-areas:
-      "messages"
-      "analysis"
-      "json";
-  }
-
   .topbar-nav {
     display: none;
   }

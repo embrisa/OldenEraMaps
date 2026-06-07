@@ -28,10 +28,12 @@ import {
 import { renderCommunityMapPreviewImageBlob } from "@/community/communityPreviewImage";
 import { isSupabaseConfigured } from "@/community/supabaseClient";
 import { downloadBlob, downloadText, communityDownloadBaseName } from "@/components/appShell/templateDownloads";
-import type { TemplateDesign } from "@/design";
+import { parseDesignOrTemplateFileResult, type TemplateDesign } from "@/design";
 import type { CommunityAuthState } from "@/community/auth";
 import type { ButtonProps } from "@/components/ui/button";
 import type { AppPage } from "./useAppRoute";
+
+type BrowseStatus = "idle" | "loading" | "loaded" | "error";
 
 interface PendingConfirmation {
   title: string;
@@ -47,6 +49,10 @@ function uploadErrorMessage(error: unknown): string {
   }
   if (error instanceof Error) return error.message;
   return "Upload validation failed. Review the map and try again.";
+}
+
+function actionErrorMessage(error: unknown, fallback: string): string {
+  return error instanceof Error ? error.message : fallback;
 }
 
 function summarizeBrowseResult(result: BrowseResult): CommunityCatalogStats {
@@ -124,7 +130,7 @@ export function useCommunityBrowse({
   const [uploadSubmitting, setUploadSubmitting] = useState(false);
   const [uploadError, setUploadError] = useState<string>();
 
-  const [browseStatus, setBrowseStatus] = useState<any>("idle");
+  const [browseStatus, setBrowseStatus] = useState<BrowseStatus>("idle");
   const [browseResult, setBrowseResult] = useState<BrowseResult | null>(null);
   const [browseError, setBrowseError] = useState<string>();
   const [browseQuery, setBrowseQuery] = useState("");
@@ -284,14 +290,18 @@ export function useCommunityBrowse({
 
   const handleUpdateMapListing = useCallback(
     (mapId: string, patch: MapListingPatch): void => {
-      void updateMapListing(mapId, patch)
-        .then(() => {
-          void loadBrowseMaps();
+      setCommunityError(undefined);
+      void (async () => {
+        try {
+          await updateMapListing(mapId, patch);
+          await loadBrowseMaps();
           if (detailMap?.id === mapId) {
-            void getMap(mapId).then((updated) => setDetailMap(updated));
+            setDetailMap(await getMap(mapId));
           }
-        })
-        .catch(() => {});
+        } catch (error: unknown) {
+          setCommunityError(actionErrorMessage(error, "Failed to update map listing."));
+        }
+      })();
     },
     [detailMap, loadBrowseMaps]
   );
@@ -304,12 +314,16 @@ export function useCommunityBrowse({
         confirmLabel: "Hide listing",
         confirmVariant: "danger",
         onConfirm: () => {
-          void updateMapListing(mapId, { status: "hidden" })
-            .then(() => {
+          setCommunityError(undefined);
+          void (async () => {
+            try {
+              await updateMapListing(mapId, { status: "hidden" });
               setDetailOpen(false);
-              void loadBrowseMaps();
-            })
-            .catch(() => {});
+              await loadBrowseMaps();
+            } catch (error: unknown) {
+              setCommunityError(actionErrorMessage(error, "Failed to hide map listing."));
+            }
+          })();
         }
       });
     },
@@ -465,8 +479,3 @@ export function useCommunityBrowse({
     handleDownloadDetailMapImage
   };
 }
-
-// Inline implementation of parseDesignOrTemplateFileResult from "@/design"
-// to avoid importing full design parsing files if needed, or we can import it.
-// Let's import parseDesignOrTemplateFileResult.
-import { parseDesignOrTemplateFileResult } from "@/design";

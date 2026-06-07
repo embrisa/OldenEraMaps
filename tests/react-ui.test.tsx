@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import { cleanup, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
+import { cleanup, fireEvent, render, renderHook, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useState, type JSX } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -20,6 +20,7 @@ const communityApiMocks = vi.hoisted(() => ({
   myMaps: [] as Array<Record<string, unknown>>,
   deletedMapIds: [] as string[],
   updatePatches: [] as Array<{ mapId: string; patch: Record<string, unknown> }>,
+  updateError: null as Error | null,
   deleteAccountCalls: 0
 }));
 
@@ -57,6 +58,7 @@ vi.mock("../src/community/communityApi", async (importOriginal) => {
     ...actual,
     listMyMaps: vi.fn(async () => ({ maps: communityApiMocks.myMaps })),
     updateMapListing: vi.fn(async (mapId: string, patch: Record<string, unknown>) => {
+      if (communityApiMocks.updateError) throw communityApiMocks.updateError;
       communityApiMocks.updatePatches.push({ mapId, patch });
       communityApiMocks.myMaps = communityApiMocks.myMaps.map((map) => map.id === mapId ? { ...map, ...patch } : map);
     }),
@@ -103,6 +105,7 @@ import { snapPointToBoardSlot } from "../src/boardSlots";
 import { addZone, createDefaultDesign, parseDesignOrTemplateFile, serializeDesignFile } from "../src/design";
 import { buildPreviewDesign, PREVIEW_RENDERER_VERSION } from "../src/community/previewDesign";
 import { countDwellingContentItems } from "../src/generator/templateContentBuilder";
+import { useCommunityBrowse } from "../src/hooks/useCommunityBrowse";
 
 const BOARD_TEST_WIDTH = 800;
 const BOARD_TEST_HEIGHT = Math.round(
@@ -174,6 +177,7 @@ afterEach(() => {
   communityApiMocks.myMaps = [];
   communityApiMocks.deletedMapIds = [];
   communityApiMocks.updatePatches = [];
+  communityApiMocks.updateError = null;
   communityApiMocks.deleteAccountCalls = 0;
   window.localStorage.clear();
   window.sessionStorage.clear();
@@ -2839,6 +2843,37 @@ describe("React UI shell", () => {
         mapId: "author-map",
         patch: expect.objectContaining({ authorName: "New Author" })
       });
+    });
+  });
+
+  it("surfaces browse listing update failures", async () => {
+    communityApiMocks.updateError = new Error("Update failed in test");
+    const design = createDefaultDesign();
+    const { result } = renderHook(() => useCommunityBrowse({
+      page: "browse",
+      authState: {
+        status: "signed-in",
+        session: null,
+        profile: { userId: "auth-user-1", displayName: "OAuth Cartographer", avatarUrl: null },
+        error: null
+      },
+      design,
+      exportJson: "{}",
+      exportHasBlockingIssues: false,
+      selectedZoneId: design.zones[0]?.id ?? "",
+      designBoardCanvas: null,
+      commit: () => true,
+      requestSignIn: vi.fn(),
+      requestSignInForUpload: vi.fn(),
+      requestConfirmation: vi.fn(),
+      navigate: vi.fn(),
+      runAfterDiscardingUnsavedChanges: (action) => action()
+    }));
+
+    result.current.handleUpdateMapListing("failing-map", { title: "New title" });
+
+    await waitFor(() => {
+      expect(result.current.communityError).toBe("Update failed in test");
     });
   });
 

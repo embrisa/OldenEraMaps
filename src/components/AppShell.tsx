@@ -569,7 +569,11 @@ export function AppShell(): JSX.Element {
             if (route.page === "browse") void browse.loadBrowseMaps();
             if (route.page === "my-maps") void myMaps.loadMyMaps();
             if (browse.detailMap?.ownerId && browse.detailMap.ownerId === auth.authState.profile?.userId) {
-              void getMap(browse.detailMap.id).then((updated) => browse.setDetailMap(updated)).catch(() => {});
+              void getMap(browse.detailMap.id)
+                .then((updated) => browse.setDetailMap(updated))
+                .catch((error: unknown) => {
+                  browse.setCommunityError(error instanceof Error ? error.message : "Failed to refresh map details.");
+                });
             }
           })}
         />
