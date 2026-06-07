@@ -2,8 +2,9 @@ import { useEffect, useState, type JSX } from "react";
 import type { TemplateDesign } from "@/design";
 import type { GlobalBans, NoiseEntry, ValueOverride } from "@/types";
 import { Button } from "@/components/ui/button";
-import { Input, SteppedValueSlider, Textarea } from "@/components/ui/form-controls";
-import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/radix";
+import { Input, SteppedValueSlider } from "@/components/ui/form-controls";
+import { Dialog, DialogContent } from "@/components/ui/radix";
+import { RmgJsonEditor } from "@/components/builder/RmgJsonEditor";
 import { Alert, ConfigField, formatJsonInput, parseJsonInput } from "@/components/builder/formHelpers";
 
 interface JsonDraft {
@@ -39,6 +40,28 @@ export function ExpertTemplateSettingsDialog({
   onUpdate(mutator: (design: TemplateDesign) => void): void;
   onGlobal<K extends keyof TemplateDesign>(key: K, value: TemplateDesign[K]): void;
 }): JSX.Element {
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="content-limits-dialog content-library-dialog">
+        <ExpertTemplateSettingsPanel active={open} design={design} onUpdate={onUpdate} onGlobal={onGlobal} onClose={() => onOpenChange(false)} />
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+export function ExpertTemplateSettingsPanel({
+  active,
+  design,
+  onUpdate,
+  onGlobal,
+  onClose
+}: {
+  active: boolean;
+  design: TemplateDesign;
+  onUpdate(mutator: (design: TemplateDesign) => void): void;
+  onGlobal<K extends keyof TemplateDesign>(key: K, value: TemplateDesign[K]): void;
+  onClose(): void;
+}): JSX.Element {
   const [valueOverridesDraft, setValueOverridesDraft] = useState<JsonDraft>({ value: "[]" });
   const [globalBansDraft, setGlobalBansDraft] = useState<GlobalBansDraftState>(() => toGlobalBansDraft(design.globalBans));
   const [noiseDrafts, setNoiseDrafts] = useState<NoiseDraftState>(() => ({
@@ -47,14 +70,14 @@ export function ExpertTemplateSettingsDialog({
   }));
 
   useEffect(() => {
-    if (!open) return;
+    if (!active) return;
     setValueOverridesDraft({ value: formatJsonInput(design.valueOverrides) });
     setGlobalBansDraft(toGlobalBansDraft(design.globalBans));
     setNoiseDrafts({
       obstacles: cloneNoiseEntries(design.border.obstaclesNoise),
       water: cloneNoiseEntries(design.border.waterNoise)
     });
-  }, [design.globalBans, design.valueOverrides, design.border.obstaclesNoise, design.border.waterNoise, open]);
+  }, [active, design.globalBans, design.valueOverrides, design.border.obstaclesNoise, design.border.waterNoise]);
 
   function updateOrientation<K extends keyof TemplateDesign["orientation"]>(key: K, value: TemplateDesign["orientation"][K]): void {
     onGlobal("orientation", { ...design.orientation, [key]: value });
@@ -88,18 +111,17 @@ export function ExpertTemplateSettingsDialog({
       draft.valueOverrides = parsedValueOverrides.value;
       draft.globalBans = fromGlobalBansDraft(globalBansDraft);
     });
-    onOpenChange(false);
+    onClose();
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="content-limits-dialog content-library-dialog">
-        <div className="dialog-heading">
-          <div>
-            <DialogTitle>Expert Settings</DialogTitle>
-            <DialogDescription>Map geometry, orientation, and raw JSON overrides.</DialogDescription>
-          </div>
+    <>
+      <div className="dialog-heading">
+        <div>
+          <h3>Expert Settings</h3>
+          <p>Map geometry, orientation, bans, and JSON overrides.</p>
         </div>
+      </div>
         <div className="dialog-section">
           <h3 className="dialog-section__heading">Map Orientation</h3>
           <div className="form-grid form-grid--three">
@@ -207,23 +229,21 @@ export function ExpertTemplateSettingsDialog({
           <h3 className="dialog-section__heading">JSON Overrides</h3>
           <div className="content-library-dialog__grid">
             <ConfigField configKey="template.valueOverrides" label="Value Overrides JSON">
-              <Textarea
-                className="code"
-                rows={18}
-                aria-invalid={valueOverridesDraft.error ? true : undefined}
+              <RmgJsonEditor
+                ariaLabel="Value Overrides JSON editor"
+                className="rmg-json-editor--compact"
                 value={valueOverridesDraft.value}
-                onChange={(event) => setValueOverridesDraft({ value: event.currentTarget.value })}
+                onChange={(value) => setValueOverridesDraft({ value })}
               />
             </ConfigField>
           </div>
         </div>
         {valueOverridesDraft.error ? <Alert tone="danger">Value Overrides JSON: {valueOverridesDraft.error}</Alert> : null}
         <div className="dialog-actions">
-          <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>Cancel</Button>
+          <Button type="button" variant="ghost" onClick={onClose}>Cancel</Button>
           <Button type="button" variant="blue" onClick={handleApply}>Apply</Button>
         </div>
-      </DialogContent>
-    </Dialog>
+    </>
   );
 }
 

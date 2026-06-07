@@ -1,14 +1,10 @@
 import { Compass, FileJson, Link2, ListChecks, PackageCheck, Plus, RotateCcw, Sparkles } from "lucide-react";
 import { useState, type JSX } from "react";
 import { addConnection, type DesignConnection, type DesignZone, type DesignZoneRole, type TemplateDesign } from "@/design";
+import { AdvancedConfigurationDialog, type AdvancedConfigurationTab } from "@/components/builder/AdvancedConfigurationDialog";
 import { BalancedRandomMapDialog } from "@/components/builder/BalancedRandomMapDialog";
-import { ContentLibraryDialog } from "@/components/builder/ContentLibraryDialog";
 import { DesignBoardCanvas } from "@/components/DesignBoardCanvas";
 import { ConnectionsDialog } from "@/components/builder/ConnectionsDialog";
-import { ContentLimitsDialog } from "@/components/builder/ContentLimitsDialog";
-import { ExpertTemplateSettingsDialog } from "@/components/builder/ExpertTemplateSettingsDialog";
-import { LayoutProfilesDialog } from "@/components/builder/LayoutProfilesDialog";
-import { MandatoryContentDialog } from "@/components/builder/MandatoryContentDialog";
 import { TemplateSettingsPanel } from "@/components/builder/TemplateSettingsPanel";
 import { BuilderValidationMessages, ValidationOutputPanel } from "@/components/builder/ValidationOutputPanel";
 import { ZoneInspector } from "@/components/builder/ZoneInspector";
@@ -111,11 +107,8 @@ export function BuilderWorkspacePage({
   const [builderWorkspaceTab, setBuilderWorkspaceTab] = useState<BuilderWorkspaceTab>("layout");
   const [connectionsOpen, setConnectionsOpen] = useState(false);
   const [roadMode, setRoadMode] = useState(false);
-  const [contentLimitsOpen, setContentLimitsOpen] = useState(false);
-  const [contentLibraryOpen, setContentLibraryOpen] = useState(false);
-  const [expertTemplateSettingsOpen, setExpertTemplateSettingsOpen] = useState(false);
-  const [layoutProfilesOpen, setLayoutProfilesOpen] = useState(false);
-  const [mandatoryContentOpen, setMandatoryContentOpen] = useState(false);
+  const [advancedConfigurationOpen, setAdvancedConfigurationOpen] = useState(false);
+  const [advancedConfigurationTab, setAdvancedConfigurationTab] = useState<AdvancedConfigurationTab>("layout");
   const [balancedRandomOpen, setBalancedRandomOpen] = useState(false);
 
   function handleConnectionsOpenChange(open: boolean): void {
@@ -126,6 +119,11 @@ export function BuilderWorkspacePage({
   function handleEditConnectionLocal(connectionId: string): void {
     handleEditConnection(connectionId);
     setConnectionsOpen(true);
+  }
+
+  function openAdvancedConfiguration(tab: AdvancedConfigurationTab): void {
+    setAdvancedConfigurationTab(tab);
+    setAdvancedConfigurationOpen(true);
   }
 
   return (
@@ -211,11 +209,11 @@ export function BuilderWorkspacePage({
                   </CardHeader>
                   <CardContent>
                     <div className="advanced-settings-actions" aria-label="Advanced settings actions">
-                      <Button variant="blue" onClick={() => setLayoutProfilesOpen(true)}><Compass size={16} />Layout Profiles</Button>
-                      <Button variant="blue" onClick={() => setContentLimitsOpen(true)}><ListChecks size={16} />Content Limits</Button>
-                      <Button variant="violet" onClick={() => setContentLibraryOpen(true)}><FileJson size={16} />Content Library</Button>
-                      <Button variant="violet" onClick={() => setExpertTemplateSettingsOpen(true)}><FileJson size={16} />Expert Settings</Button>
-                      <Button variant="green" onClick={() => setMandatoryContentOpen(true)}><PackageCheck size={16} />Mandatory Content</Button>
+                      <Button variant="blue" onClick={() => openAdvancedConfiguration("layout")}><Compass size={16} />Layout Profiles</Button>
+                      <Button variant="blue" onClick={() => openAdvancedConfiguration("limits")}><ListChecks size={16} />Content Limits</Button>
+                      <Button variant="violet" onClick={() => openAdvancedConfiguration("content")}><FileJson size={16} />Content Library</Button>
+                      <Button variant="violet" onClick={() => openAdvancedConfiguration("expert")}><FileJson size={16} />Expert Settings</Button>
+                      <Button variant="green" onClick={() => openAdvancedConfiguration("mandatory")}><PackageCheck size={16} />Mandatory Content</Button>
                       <Button variant="gold" onClick={() => setBalancedRandomOpen(true)}><Sparkles size={16} />Simple Generator</Button>
                     </div>
                   </CardContent>
@@ -265,36 +263,14 @@ export function BuilderWorkspacePage({
         onUpdate={updateConnection}
         onDelete={handleDeleteConnection}
       />
-      <ContentLimitsDialog
-        open={contentLimitsOpen}
-        onOpenChange={setContentLimitsOpen}
-        design={design}
-        onUpdate={updateDesign}
-      />
-      <LayoutProfilesDialog
-        open={layoutProfilesOpen}
-        onOpenChange={setLayoutProfilesOpen}
-        design={design}
-        onUpdate={updateDesign}
-      />
-      <ContentLibraryDialog
-        open={contentLibraryOpen}
-        onOpenChange={setContentLibraryOpen}
-        design={design}
-        onUpdate={updateDesign}
-      />
-      <ExpertTemplateSettingsDialog
-        open={expertTemplateSettingsOpen}
-        onOpenChange={setExpertTemplateSettingsOpen}
+      <AdvancedConfigurationDialog
+        open={advancedConfigurationOpen}
+        activeTab={advancedConfigurationTab}
+        onOpenChange={setAdvancedConfigurationOpen}
+        onActiveTabChange={setAdvancedConfigurationTab}
         design={design}
         onUpdate={updateDesign}
         onGlobal={handleGlobal}
-      />
-      <MandatoryContentDialog
-        open={mandatoryContentOpen}
-        onOpenChange={setMandatoryContentOpen}
-        design={design}
-        onUpdate={updateDesign}
       />
       <BalancedRandomMapDialog
         open={balancedRandomOpen}

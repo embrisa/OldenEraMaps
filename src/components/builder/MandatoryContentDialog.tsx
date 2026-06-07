@@ -4,7 +4,8 @@ import { getDesignMandatoryContentGroups, type TemplateDesign } from "@/design";
 import type { ContentItem, ContentPlacementRule, MandatoryContentGroup } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Input, Textarea } from "@/components/ui/form-controls";
-import { Checkbox, Dialog, DialogContent, DialogDescription, DialogTitle, ScrollArea } from "@/components/ui/radix";
+import { Checkbox, Dialog, DialogContent, ScrollArea } from "@/components/ui/radix";
+import { RmgJsonEditor } from "@/components/builder/RmgJsonEditor";
 import { Alert, CheckField, ConfigField, formatJsonInput, formatLineList, formatNumberInput, parseJsonInput, parseLineList, parseNumberInput } from "@/components/builder/formHelpers";
 
 export function MandatoryContentDialog({
@@ -18,6 +19,24 @@ export function MandatoryContentDialog({
   design: TemplateDesign;
   onUpdate(mutator: (design: TemplateDesign) => void): void;
 }): JSX.Element {
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="content-limits-dialog mandatory-content-dialog">
+        <MandatoryContentPanel active={open} design={design} onUpdate={onUpdate} />
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+export function MandatoryContentPanel({
+  active,
+  design,
+  onUpdate
+}: {
+  active: boolean;
+  design: TemplateDesign;
+  onUpdate(mutator: (design: TemplateDesign) => void): void;
+}): JSX.Element {
   const groups = getDesignMandatoryContentGroups(design);
   const [jsonDrafts, setJsonDrafts] = useState<Record<string, { value: string; error?: string }>>({});
   const [selectedGroupIndex, setSelectedGroupIndex] = useState(0);
@@ -25,10 +44,10 @@ export function MandatoryContentDialog({
   const selectedIndex = selectedGroup ? groups.indexOf(selectedGroup) : -1;
 
   useEffect(() => {
-    if (!open) return;
+    if (!active) return;
     setJsonDrafts({});
     setSelectedGroupIndex(0);
-  }, [open]);
+  }, [active]);
 
   useEffect(() => {
     if (selectedGroupIndex < groups.length) return;
@@ -109,15 +128,14 @@ export function MandatoryContentDialog({
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="content-limits-dialog mandatory-content-dialog">
-        <div className="dialog-heading">
-          <div>
-            <DialogTitle>Mandatory Content</DialogTitle>
-            <DialogDescription>Edit the named top-level mandatoryContent groups referenced by zones.</DialogDescription>
-          </div>
-          <Button type="button" variant="gold" onClick={addGroup}><CirclePlus size={16} />Add Group</Button>
+    <>
+      <div className="dialog-heading">
+        <div>
+          <h3>Mandatory Content</h3>
+          <p>Edit the named top-level mandatoryContent groups referenced by zones.</p>
         </div>
+        <Button type="button" variant="gold" onClick={addGroup}><CirclePlus size={16} />Add Group</Button>
+      </div>
         <ScrollArea className="content-limits-dialog__scroll">
           {groups.length === 0 ? <div className="empty-state">No mandatory content groups yet.</div> : null}
           {groups.length > 0 ? (
@@ -191,10 +209,20 @@ export function MandatoryContentDialog({
                         </div>
                         <div className="form-grid form-grid--two">
                           <ConfigField configKey="contentItem.rules" label="Rules JSON">
-                            <Textarea rows={4} value={rulesDraft?.value ?? formatJsonInput(item.rules)} onChange={(event) => updateJson<ContentPlacementRule[]>(rulesKey, event.currentTarget.value, Array.isArray, "Use a JSON array of placement rules.", (parsed) => updateItem(selectedIndex, itemIndex, (draft) => { draft.rules = parsed; }))} />
+                            <RmgJsonEditor
+                              ariaLabel={`Rules JSON editor for ${item.sid ?? item.name ?? "content item"}`}
+                              className="rmg-json-editor--mini"
+                              value={rulesDraft?.value ?? formatJsonInput(item.rules)}
+                              onChange={(value) => updateJson<ContentPlacementRule[]>(rulesKey, value, Array.isArray, "Use a JSON array of placement rules.", (parsed) => updateItem(selectedIndex, itemIndex, (draft) => { draft.rules = parsed; }))}
+                            />
                           </ConfigField>
                           <ConfigField configKey="contentItem.content" label="Advanced Content JSON">
-                            <Textarea rows={4} value={contentDraft?.value ?? formatJsonInput(item.content)} onChange={(event) => updateJson<ContentItem[]>(contentKey, event.currentTarget.value, Array.isArray, "Use a JSON array of content items.", (parsed) => updateItem(selectedIndex, itemIndex, (draft) => { draft.content = parsed; }))} />
+                            <RmgJsonEditor
+                              ariaLabel={`Advanced Content JSON editor for ${item.sid ?? item.name ?? "content item"}`}
+                              className="rmg-json-editor--mini"
+                              value={contentDraft?.value ?? formatJsonInput(item.content)}
+                              onChange={(value) => updateJson<ContentItem[]>(contentKey, value, Array.isArray, "Use a JSON array of content items.", (parsed) => updateItem(selectedIndex, itemIndex, (draft) => { draft.content = parsed; }))}
+                            />
                           </ConfigField>
                         </div>
                         {rulesDraft?.error ? <Alert tone="danger">Rules JSON: {rulesDraft.error}</Alert> : null}
@@ -212,8 +240,7 @@ export function MandatoryContentDialog({
             </div>
           ) : null}
         </ScrollArea>
-      </DialogContent>
-    </Dialog>
+    </>
   );
 }
 

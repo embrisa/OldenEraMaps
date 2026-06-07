@@ -2072,6 +2072,18 @@ button {
   min-height: 360px;
 }
 
+.rmg-json-editor--compact,
+.rmg-json-editor--compact.rmg-json-editor__fallback,
+.rmg-json-editor--compact :where(.jse-main) {
+  min-height: 260px;
+}
+
+.rmg-json-editor--mini,
+.rmg-json-editor--mini.rmg-json-editor__fallback,
+.rmg-json-editor--mini :where(.jse-main) {
+  min-height: 150px;
+}
+
 .rmg-json-editor {
   overflow: hidden;
   min-width: 0;
@@ -3015,6 +3027,40 @@ button {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
+}
+
+.advanced-configuration-dialog {
+  width: min(1180px, calc(100vw - 28px));
+}
+
+.advanced-configuration {
+  display: grid;
+  grid-template-columns: minmax(190px, 0.24fr) minmax(0, 1fr);
+  gap: 14px;
+  min-height: 0;
+}
+
+.advanced-configuration__tabs {
+  align-content: start;
+  grid-auto-flow: row;
+  grid-template-columns: 1fr;
+}
+
+.advanced-configuration__tabs .oe-tab {
+  justify-content: flex-start;
+}
+
+.advanced-configuration__panel {
+  min-width: 0;
+  min-height: 0;
+}
+
+.advanced-configuration__panel .oe-tab-panel {
+  min-height: 0;
+}
+
+.advanced-configuration__panel .dialog-heading {
+  margin-bottom: 10px;
 }
 
 .structured-list-editor {

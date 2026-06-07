@@ -12,12 +12,16 @@ export interface RmgJsonEditorHandle {
 interface RmgJsonEditorProps {
   value: string;
   disabled?: boolean;
+  ariaLabel?: string;
+  className?: string;
   onChange(value: string, parseError?: string): void;
 }
 
 export const RmgJsonEditor = forwardRef<RmgJsonEditorHandle, RmgJsonEditorProps>(function RmgJsonEditor({
   value,
   disabled,
+  ariaLabel = "RMG JSON editor",
+  className,
   onChange
 }, ref): JSX.Element {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -75,11 +79,11 @@ export const RmgJsonEditor = forwardRef<RmgJsonEditorHandle, RmgJsonEditorProps>
   if (USE_TEXTAREA_FALLBACK) {
     return (
       <Textarea
-        className="rmg-json-editor__fallback"
+        className={["rmg-json-editor__fallback", className].filter(Boolean).join(" ")}
         spellCheck={false}
         value={value}
         readOnly={disabled}
-        aria-label="RMG JSON editor"
+        aria-label={ariaLabel}
         onChange={(event) => {
           latestValueRef.current = event.currentTarget.value;
           onChange(event.currentTarget.value);
@@ -88,7 +92,7 @@ export const RmgJsonEditor = forwardRef<RmgJsonEditorHandle, RmgJsonEditorProps>
     );
   }
 
-  return <div ref={containerRef} className="rmg-json-editor jse-theme-dark" aria-label="RMG JSON editor" />;
+  return <div ref={containerRef} className={["rmg-json-editor jse-theme-dark", className].filter(Boolean).join(" ")} aria-label={ariaLabel} />;
 });
 
 function collapseJsonViewer(editor: JsonEditor, mode: Mode): void {

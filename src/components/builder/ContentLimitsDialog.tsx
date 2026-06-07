@@ -4,7 +4,8 @@ import type { ContentCountLimit, ContentItem, ContentSidLimit } from "@/types";
 import type { TemplateDesign } from "@/design";
 import { Button } from "@/components/ui/button";
 import { Input, Textarea } from "@/components/ui/form-controls";
-import { Dialog, DialogContent, DialogDescription, DialogTitle, ScrollArea } from "@/components/ui/radix";
+import { Dialog, DialogContent, ScrollArea } from "@/components/ui/radix";
+import { RmgJsonEditor } from "@/components/builder/RmgJsonEditor";
 import { Alert, ConfigField, formatJsonInput, formatLineList, formatNumberInput, parseJsonInput, parseLineList, parseNumberInput } from "@/components/builder/formHelpers";
 
 export function ContentLimitsDialog({
@@ -18,16 +19,34 @@ export function ContentLimitsDialog({
   design: TemplateDesign;
   onUpdate(mutator: (design: TemplateDesign) => void): void;
 }): JSX.Element {
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="content-limits-dialog">
+        <ContentLimitsPanel active={open} design={design} onUpdate={onUpdate} />
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+export function ContentLimitsPanel({
+  active,
+  design,
+  onUpdate
+}: {
+  active: boolean;
+  design: TemplateDesign;
+  onUpdate(mutator: (design: TemplateDesign) => void): void;
+}): JSX.Element {
   const [contentDrafts, setContentDrafts] = useState<Record<string, { value: string; error?: string }>>({});
   const [selectedGroupIndex, setSelectedGroupIndex] = useState(0);
   const selectedGroup = design.contentCountLimits[selectedGroupIndex] ?? design.contentCountLimits[0];
   const selectedIndex = selectedGroup ? design.contentCountLimits.indexOf(selectedGroup) : -1;
 
   useEffect(() => {
-    if (!open) return;
+    if (!active) return;
     setContentDrafts({});
     setSelectedGroupIndex(0);
-  }, [open]);
+  }, [active]);
 
   useEffect(() => {
     if (selectedGroupIndex < design.contentCountLimits.length) return;
@@ -103,15 +122,14 @@ export function ContentLimitsDialog({
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="content-limits-dialog">
-        <div className="dialog-heading">
-          <div>
-            <DialogTitle>Advanced Content Limits</DialogTitle>
-            <DialogDescription>Edit the named top-level contentCountLimits blocks used by zones.</DialogDescription>
-          </div>
-          <Button type="button" variant="gold" onClick={addGroup}><CirclePlus size={16} />Add Limit</Button>
+    <>
+      <div className="dialog-heading">
+        <div>
+          <h3>Advanced Content Limits</h3>
+          <p>Edit the named top-level contentCountLimits blocks used by zones.</p>
         </div>
+        <Button type="button" variant="gold" onClick={addGroup}><CirclePlus size={16} />Add Limit</Button>
+      </div>
         <ScrollArea className="content-limits-dialog__scroll">
           {design.contentCountLimits.length === 0 ? <div className="empty-state">No content limits yet.</div> : null}
           {design.contentCountLimits.length > 0 ? (
@@ -172,7 +190,12 @@ export function ContentLimitsDialog({
                         <Textarea rows={3} value={formatLineList(limit.includeLists)} onChange={(event) => updateSidLimit(selectedIndex, limitIndex, (draft) => { draft.includeLists = parseLineList(event.currentTarget.value); })} />
                       </ConfigField>
                       <ConfigField configKey="contentSidLimit.content" label="Content JSON">
-                        <Textarea rows={3} value={contentDraft?.value ?? formatJsonInput(limit.content)} onChange={(event) => updateContentJson(selectedIndex, limitIndex, event.currentTarget.value)} />
+                        <RmgJsonEditor
+                          ariaLabel={`Content JSON editor for ${limit.sid}`}
+                          className="rmg-json-editor--mini"
+                          value={contentDraft?.value ?? formatJsonInput(limit.content)}
+                          onChange={(value) => updateContentJson(selectedIndex, limitIndex, value)}
+                        />
                       </ConfigField>
                     </div>
                     {contentDraft?.error ? <Alert tone="danger">Content JSON: {contentDraft.error}</Alert> : null}
@@ -189,8 +212,7 @@ export function ContentLimitsDialog({
             </div>
           ) : null}
         </ScrollArea>
-      </DialogContent>
-    </Dialog>
+    </>
   );
 }
 

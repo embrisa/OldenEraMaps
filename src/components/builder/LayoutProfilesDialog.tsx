@@ -3,8 +3,9 @@ import { useEffect, useState, type JSX } from "react";
 import type { TemplateDesign } from "@/design";
 import type { AmbientPickupDistribution, ElevationMode, GuardedEncounterResourceFractions, ZoneLayout } from "@/types";
 import { Button } from "@/components/ui/button";
-import { Input, Textarea } from "@/components/ui/form-controls";
-import { Dialog, DialogContent, DialogDescription, DialogTitle, ScrollArea } from "@/components/ui/radix";
+import { Input } from "@/components/ui/form-controls";
+import { Dialog, DialogContent, ScrollArea } from "@/components/ui/radix";
+import { RmgJsonEditor } from "@/components/builder/RmgJsonEditor";
 import { Alert, ConfigField, formatJsonInput, formatNumberInput, parseJsonInput, parseNumberInput } from "@/components/builder/formHelpers";
 
 interface JsonDraft {
@@ -23,6 +24,24 @@ export function LayoutProfilesDialog({
   design: TemplateDesign;
   onUpdate(mutator: (design: TemplateDesign) => void): void;
 }): JSX.Element {
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="content-limits-dialog">
+        <LayoutProfilesPanel active={open} design={design} onUpdate={onUpdate} />
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+export function LayoutProfilesPanel({
+  active,
+  design,
+  onUpdate
+}: {
+  active: boolean;
+  design: TemplateDesign;
+  onUpdate(mutator: (design: TemplateDesign) => void): void;
+}): JSX.Element {
   const [selectedProfileIndex, setSelectedProfileIndex] = useState(0);
   const [elevationDrafts, setElevationDrafts] = useState<Record<number, JsonDraft>>({});
   const [guardedFractionsDrafts, setGuardedFractionsDrafts] = useState<Record<number, JsonDraft>>({});
@@ -31,12 +50,12 @@ export function LayoutProfilesDialog({
   const selectedIndex = selectedProfile ? design.zoneLayouts.indexOf(selectedProfile) : -1;
 
   useEffect(() => {
-    if (!open) return;
+    if (!active) return;
     setSelectedProfileIndex(0);
     setElevationDrafts({});
     setGuardedFractionsDrafts({});
     setAmbientDrafts({});
-  }, [open]);
+  }, [active]);
 
   useEffect(() => {
     if (selectedProfileIndex < design.zoneLayouts.length) return;
@@ -149,15 +168,14 @@ export function LayoutProfilesDialog({
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="content-limits-dialog">
-        <div className="dialog-heading">
-          <div>
-            <DialogTitle>Layout Profiles</DialogTitle>
-            <DialogDescription>Edit the named top-level zoneLayouts blocks referenced by zones.</DialogDescription>
-          </div>
-          <Button type="button" variant="gold" onClick={addProfile}><CirclePlus size={16} />Add Profile</Button>
+    <>
+      <div className="dialog-heading">
+        <div>
+          <h3>Layout Profiles</h3>
+          <p>Edit the named top-level zoneLayouts blocks referenced by zones.</p>
         </div>
+        <Button type="button" variant="gold" onClick={addProfile}><CirclePlus size={16} />Add Profile</Button>
+      </div>
         <ScrollArea className="content-limits-dialog__scroll">
           {design.zoneLayouts.length === 0 ? <div className="empty-state">No layout profiles yet.</div> : null}
           {design.zoneLayouts.length > 0 ? (
@@ -209,15 +227,30 @@ export function LayoutProfilesDialog({
                     </ConfigField>
                   </div>
                   <ConfigField configKey="zoneLayout.elevationModes" label="Elevation Modes JSON">
-                    <Textarea rows={6} className="code" value={elevationDrafts[selectedIndex]?.value ?? formatJsonInput(selectedProfile.elevationModes)} onChange={(event) => updateElevationModes(selectedIndex, event.currentTarget.value)} />
+                    <RmgJsonEditor
+                      ariaLabel="Elevation Modes JSON editor"
+                      className="rmg-json-editor--mini"
+                      value={elevationDrafts[selectedIndex]?.value ?? formatJsonInput(selectedProfile.elevationModes)}
+                      onChange={(value) => updateElevationModes(selectedIndex, value)}
+                    />
                   </ConfigField>
                   {elevationDrafts[selectedIndex]?.error ? <Alert tone="danger">Elevation Modes JSON: {elevationDrafts[selectedIndex]?.error}</Alert> : null}
                   <ConfigField configKey="zoneLayout.guardedEncounterResourceFractions" label="Guarded Encounter Fractions JSON">
-                    <Textarea rows={5} className="code" value={guardedFractionsDrafts[selectedIndex]?.value ?? formatJsonInput(selectedProfile.guardedEncounterResourceFractions)} onChange={(event) => updateGuardedFractions(selectedIndex, event.currentTarget.value)} />
+                    <RmgJsonEditor
+                      ariaLabel="Guarded Encounter Fractions JSON editor"
+                      className="rmg-json-editor--mini"
+                      value={guardedFractionsDrafts[selectedIndex]?.value ?? formatJsonInput(selectedProfile.guardedEncounterResourceFractions)}
+                      onChange={(value) => updateGuardedFractions(selectedIndex, value)}
+                    />
                   </ConfigField>
                   {guardedFractionsDrafts[selectedIndex]?.error ? <Alert tone="danger">Guarded Encounter Fractions JSON: {guardedFractionsDrafts[selectedIndex]?.error}</Alert> : null}
                   <ConfigField configKey="zoneLayout.ambientPickupDistribution" label="Ambient Pickup Distribution JSON">
-                    <Textarea rows={6} className="code" value={ambientDrafts[selectedIndex]?.value ?? formatJsonInput(selectedProfile.ambientPickupDistribution)} onChange={(event) => updateAmbientDistribution(selectedIndex, event.currentTarget.value)} />
+                    <RmgJsonEditor
+                      ariaLabel="Ambient Pickup Distribution JSON editor"
+                      className="rmg-json-editor--mini"
+                      value={ambientDrafts[selectedIndex]?.value ?? formatJsonInput(selectedProfile.ambientPickupDistribution)}
+                      onChange={(value) => updateAmbientDistribution(selectedIndex, value)}
+                    />
                   </ConfigField>
                   {ambientDrafts[selectedIndex]?.error ? <Alert tone="danger">Ambient Pickup Distribution JSON: {ambientDrafts[selectedIndex]?.error}</Alert> : null}
                 </article>
@@ -225,8 +258,7 @@ export function LayoutProfilesDialog({
             </div>
           ) : null}
         </ScrollArea>
-      </DialogContent>
-    </Dialog>
+    </>
   );
 }
 

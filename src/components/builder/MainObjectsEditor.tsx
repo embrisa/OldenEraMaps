@@ -3,7 +3,8 @@ import { useEffect, useState, type JSX } from "react";
 import type { DesignZone } from "@/design";
 import type { MainObject, TypedSelector } from "@/types";
 import { Button } from "@/components/ui/button";
-import { Input, Textarea } from "@/components/ui/form-controls";
+import { Input } from "@/components/ui/form-controls";
+import { RmgJsonEditor } from "@/components/builder/RmgJsonEditor";
 import { Alert, CheckField, ConfigField, formatJsonInput, formatNumberInput, parseJsonInput, parseNumberInput } from "@/components/builder/formHelpers";
 
 interface MainObjectJsonDraft {
@@ -146,14 +147,29 @@ export function MainObjectsEditor({
                     }} />
                   </ConfigField>
                   <ConfigField configKey="zone.mainObjects.faction" label="Faction Selector JSON">
-                    <Textarea className="code" rows={5} value={draft.faction} aria-invalid={draft.factionError ? true : undefined} onChange={(event) => updateJsonField(index, "faction", event.currentTarget.value)} />
+                    <RmgJsonEditor
+                      ariaLabel={`Faction Selector JSON editor for main object ${index + 1}`}
+                      className="rmg-json-editor--mini"
+                      value={draft.faction}
+                      onChange={(value) => updateJsonField(index, "faction", value)}
+                    />
                   </ConfigField>
                   <ConfigField configKey="zone.mainObjects.factions" label="Factions Selector JSON">
-                    <Textarea className="code" rows={5} value={draft.factions} aria-invalid={draft.factionsError ? true : undefined} onChange={(event) => updateJsonField(index, "factions", event.currentTarget.value)} />
+                    <RmgJsonEditor
+                      ariaLabel={`Factions Selector JSON editor for main object ${index + 1}`}
+                      className="rmg-json-editor--mini"
+                      value={draft.factions}
+                      onChange={(value) => updateJsonField(index, "factions", value)}
+                    />
                   </ConfigField>
                 </div>
                 <ConfigField configKey="zone.mainObjects.placementArgs" label="Placement Args JSON">
-                  <Textarea className="code" rows={3} value={draft.placementArgs} aria-invalid={draft.placementArgsError ? true : undefined} onChange={(event) => updateJsonField(index, "placementArgs", event.currentTarget.value)} />
+                  <RmgJsonEditor
+                    ariaLabel={`Placement Args JSON editor for main object ${index + 1}`}
+                    className="rmg-json-editor--mini"
+                    value={draft.placementArgs}
+                    onChange={(value) => updateJsonField(index, "placementArgs", value)}
+                  />
                 </ConfigField>
                 <div className="checks checks--vertical">
                   <CheckField checked={mainObject.removeGuardIfHasOwner === true} onCheckedChange={(checked) => updateMainObject(index, (draft) => { draft.removeGuardIfHasOwner = checked; })}>Remove guard if has owner</CheckField>

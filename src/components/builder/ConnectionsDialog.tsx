@@ -3,8 +3,9 @@ import { useEffect, useRef, useState, type JSX } from "react";
 import type { DesignConnection, DesignConnectionType, TemplateDesign } from "@/design";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Input, NativeSelect, SteppedValueSlider, Textarea } from "@/components/ui/form-controls";
+import { Input, NativeSelect, SteppedValueSlider } from "@/components/ui/form-controls";
 import { Dialog, DialogContent, DialogDescription, DialogTitle, ScrollArea } from "@/components/ui/radix";
+import { RmgJsonEditor } from "@/components/builder/RmgJsonEditor";
 import { Alert, CheckField, ConfigField, formatJsonInput, formatNumberInput, parseJsonInput, parseNumberInput } from "@/components/builder/formHelpers";
 
 interface PortalRuleDraftState {
@@ -227,10 +228,20 @@ export function ConnectionsDialog({
                     <>
                       <div className="form-grid form-grid--two">
                         <ConfigField configKey="connection.portalPlacementRulesFrom" label="Portal Rules From (JSON)">
-                          <Textarea rows={6} value={draft.from} onChange={(event) => updatePortalRules(connection, "from", event.currentTarget.value)} />
+                          <RmgJsonEditor
+                            ariaLabel={`Portal Rules From JSON editor for ${connection.name}`}
+                            className="rmg-json-editor--mini"
+                            value={draft.from}
+                            onChange={(value) => updatePortalRules(connection, "from", value)}
+                          />
                         </ConfigField>
                         <ConfigField configKey="connection.portalPlacementRulesTo" label="Portal Rules To (JSON)">
-                          <Textarea rows={6} value={draft.to} onChange={(event) => updatePortalRules(connection, "to", event.currentTarget.value)} />
+                          <RmgJsonEditor
+                            ariaLabel={`Portal Rules To JSON editor for ${connection.name}`}
+                            className="rmg-json-editor--mini"
+                            value={draft.to}
+                            onChange={(value) => updatePortalRules(connection, "to", value)}
+                          />
                         </ConfigField>
                       </div>
                       {draft.fromError ? <Alert tone="danger">Portal Rules From: {draft.fromError}</Alert> : null}

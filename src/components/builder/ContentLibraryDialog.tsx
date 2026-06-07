@@ -2,8 +2,8 @@ import { useEffect, useState, type JSX } from "react";
 import type { TemplateDesign } from "@/design";
 import type { JsonValue } from "@/types";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/form-controls";
-import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/radix";
+import { Dialog, DialogContent } from "@/components/ui/radix";
+import { RmgJsonEditor } from "@/components/builder/RmgJsonEditor";
 import { Alert, ConfigField, formatJsonInput, parseJsonInput } from "@/components/builder/formHelpers";
 
 interface JsonDraft {
@@ -26,14 +26,34 @@ export function ContentLibraryDialog({
   design: TemplateDesign;
   onUpdate(mutator: (design: TemplateDesign) => void): void;
 }): JSX.Element {
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="content-limits-dialog content-library-dialog">
+        <ContentLibraryPanel active={open} design={design} onUpdate={onUpdate} onClose={() => onOpenChange(false)} />
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+export function ContentLibraryPanel({
+  active,
+  design,
+  onUpdate,
+  onClose
+}: {
+  active: boolean;
+  design: TemplateDesign;
+  onUpdate(mutator: (design: TemplateDesign) => void): void;
+  onClose(): void;
+}): JSX.Element {
   const [contentPoolsDraft, setContentPoolsDraft] = useState<JsonDraft>({ value: "[]" });
   const [contentListsDraft, setContentListsDraft] = useState<JsonDraft>({ value: "[]" });
 
   useEffect(() => {
-    if (!open) return;
+    if (!active) return;
     setContentPoolsDraft({ value: formatJsonInput(design.contentPools) });
     setContentListsDraft({ value: formatJsonInput(design.contentLists) });
-  }, [design.contentLists, design.contentPools, open]);
+  }, [active, design.contentLists, design.contentPools]);
 
   function handleApply(): void {
     const parsedPools = parseArrayDraft(contentPoolsDraft.value, "Use a JSON array of content pool blocks.");
@@ -48,46 +68,42 @@ export function ContentLibraryDialog({
       draft.contentPools = parsedPools.value;
       draft.contentLists = parsedLists.value;
     });
-    onOpenChange(false);
+    onClose();
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="content-limits-dialog content-library-dialog">
-        <div className="dialog-heading">
-          <div>
-            <DialogTitle>Advanced Content Library</DialogTitle>
-            <DialogDescription>Edit expert-level top-level contentPools and contentLists blocks as raw JSON arrays.</DialogDescription>
-          </div>
+    <>
+      <div className="dialog-heading">
+        <div>
+          <h3>Advanced Content Library</h3>
+          <p>Edit expert-level top-level contentPools and contentLists blocks as JSON arrays.</p>
         </div>
+      </div>
         <div className="content-library-dialog__grid">
           <ConfigField configKey="template.contentPools" label="Content Pools JSON">
-            <Textarea
-              className="code"
-              rows={18}
-              aria-invalid={contentPoolsDraft.error ? true : undefined}
+            <RmgJsonEditor
+              ariaLabel="Content Pools JSON editor"
+              className="rmg-json-editor--compact"
               value={contentPoolsDraft.value}
-              onChange={(event) => setContentPoolsDraft({ value: event.currentTarget.value })}
+              onChange={(value) => setContentPoolsDraft({ value })}
             />
           </ConfigField>
           <ConfigField configKey="template.contentLists" label="Content Lists JSON">
-            <Textarea
-              className="code"
-              rows={18}
-              aria-invalid={contentListsDraft.error ? true : undefined}
+            <RmgJsonEditor
+              ariaLabel="Content Lists JSON editor"
+              className="rmg-json-editor--compact"
               value={contentListsDraft.value}
-              onChange={(event) => setContentListsDraft({ value: event.currentTarget.value })}
+              onChange={(value) => setContentListsDraft({ value })}
             />
           </ConfigField>
         </div>
         {contentPoolsDraft.error ? <Alert tone="danger">Content Pools JSON: {contentPoolsDraft.error}</Alert> : null}
         {contentListsDraft.error ? <Alert tone="danger">Content Lists JSON: {contentListsDraft.error}</Alert> : null}
         <div className="dialog-actions">
-          <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>Cancel</Button>
+          <Button type="button" variant="ghost" onClick={onClose}>Cancel</Button>
           <Button type="button" variant="blue" onClick={handleApply}>Apply</Button>
         </div>
-      </DialogContent>
-    </Dialog>
+    </>
   );
 }
 
