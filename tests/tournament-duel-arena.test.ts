@@ -134,8 +134,14 @@ describe("Tournament Duel Arena template", () => {
     // Re-parse the clean template
     const canonicalTemplate = parseRmgTemplate(cleanTemplateText);
     const cleanDesign = templateToDesign(canonicalTemplate);
+    const roundTripDiagnostics = collectRmgDiagnostics(canonicalTemplate);
     const preview = buildPreviewDesign(cleanDesign);
- 
+
+    expect(roundTripDiagnostics.errors).toEqual([]);
+    expect(roundTripDiagnostics.warnings).toEqual([
+      expect.objectContaining({ code: "size_pacing_large_retest" })
+    ]);
+
     const request = {
       title: "Tournament Duel Arena",
       description: "Tested upload",

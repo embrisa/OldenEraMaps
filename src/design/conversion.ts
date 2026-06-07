@@ -121,7 +121,15 @@ export function designToTemplate(design: TemplateDesign, options: DesignToTempla
     if (designZone.useCustomMainObjects) {
       zone.mainObjects = cloneCustomMainObjectsForDesignZone(designZone);
     }
-    zone.crossroadsPosition = designZone.crossroadsPosition;
+    if ((zone.mainObjects?.length ?? 0) === 0 && design.useCustomMandatoryContent) {
+      const anchoredRoads = buildAnchoredRoadsForEmptyZone(zone, roadNames, design.mandatoryContent);
+      if (anchoredRoads) zone.roads = anchoredRoads;
+    }
+    if ((zone.mainObjects?.length ?? 0) > 0) {
+      zone.crossroadsPosition = designZone.crossroadsPosition;
+    } else {
+      delete zone.crossroadsPosition;
+    }
     zone.generatorPosition = clampPoint(designZone.position);
     const effectiveTerrainTheme = designZone.terrainTheme === "FactionMatched" ? design.terrainTheme : designZone.terrainTheme;
     if (hasCustomBiomeOverrides(designZone, zone)) {
@@ -131,7 +139,9 @@ export function designToTemplate(design: TemplateDesign, options: DesignToTempla
     } else if (effectiveTerrainTheme !== "FactionMatched") {
       applyZoneTerrain(zone, effectiveTerrainTheme);
     }
-    if (index === 0) zone.crossroadsPosition = 0;
+    if (index === 0 && (zone.mainObjects?.length ?? 0) > 0 && zone.crossroadsPosition === undefined) {
+      zone.crossroadsPosition = 0;
+    }
     return zone;
   });
 
@@ -362,7 +372,7 @@ export function mergeImportedDesign(previous: TemplateDesign, imported: Template
       resourceDensityPercent: previousZone?.resourceDensityPercent ?? zone.resourceDensityPercent,
       structureDensityPercent: previousZone?.structureDensityPercent ?? zone.structureDensityPercent,
       neutralStackStrengthPercent: previousZone?.neutralStackStrengthPercent ?? zone.neutralStackStrengthPercent,
-      footholds: previousZone?.footholds ?? zone.footholds,
+      footholds: zone.footholds,
       roads: templateZone?.roads !== undefined ? templateZone.roads.length > 0 : (previousZone?.roads ?? zone.roads),
       position: templateZone?.generatorPosition ? zone.position : (previousZone?.position ?? zone.position)
     };
@@ -462,6 +472,7 @@ export function templateToDesign(template: RmgTemplate): TemplateDesign {
       contentBiome: cloneSelector(zone.contentBiome),
       metaObjectsBiome: cloneSelector(zone.metaObjectsBiome),
       crossroadsPosition: zone.crossroadsPosition ?? prototype.crossroadsPosition ?? 0,
+      footholds: zoneUsesRemoteFoothold(zone),
       roads: (zone.roads?.length ?? 0) > 0,
       holdCity: zone.mainObjects?.some((object) => object.holdCityWinCon === true) ?? false,
       matchAdjacentNeutralCastleFactions: role === "Neutral" && (zone.mainObjects?.some((object) =>
@@ -812,6 +823,35 @@ function inferZoneDwellingSettings(zone: Zone, groups: MandatoryContentGroup[] |
   const groupsByName = new Map(groups.map((group) => [group.name, group]));
   const content = toStringList(zone.mandatoryContent).flatMap((name) => groupsByName.get(name)?.content ?? []);
   return inferDwellingSettingsFromContent(content, defaultDwellingSettingsForZone({ role, quality, name: zone.name }, 0));
+}
+
+function zoneUsesRemoteFoothold(zone: Zone): boolean {
+  return (zone.roads ?? []).some((road) =>
+    [road.from, road.to].some((endpoint) =>
+      endpoint?.type === "MandatoryContent" && endpoint.args?.[0] === "name_remote_foothold_1"
+    )
+  );
+}
+
+function buildAnchoredRoadsForEmptyZone(zone: Zone, roadNames: string[], groups: MandatoryContentGroup[]): Zone["roads"] | undefined {
+  if (roadNames.length === 0) return [];
+  const anchorName = firstNamedMandatoryContentItem(zone, groups);
+  if (!anchorName) return undefined;
+  return roadNames.map((connectionName) => ({
+    from: { type: "MandatoryContent", args: [anchorName] },
+    to: { type: "Connection", args: [connectionName] }
+  }));
+}
+
+function firstNamedMandatoryContentItem(zone: Zone, groups: MandatoryContentGroup[]): string | undefined {
+  const groupsByName = new Map(groups.map((group) => [group.name, group]));
+  const queue: ContentItem[] = toStringList(zone.mandatoryContent).flatMap((name) => groupsByName.get(name)?.content ?? []);
+  while (queue.length > 0) {
+    const item = queue.shift()!;
+    if (typeof item.name === "string" && item.name.trim()) return item.name;
+    if (Array.isArray(item.content)) queue.push(...item.content);
+  }
+  return undefined;
 }
 
 function applyZoneTerrain(zone: Zone, terrainTheme: TerrainTheme): void {
