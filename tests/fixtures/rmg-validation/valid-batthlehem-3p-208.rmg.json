@@ -1,0 +1,57 @@
+{
+  "name": "Valid Batthlehem 3P",
+  "displayWinCondition": "win_condition_1",
+  "sizeX": 208,
+  "sizeZ": 208,
+  "variants": [
+    {
+      "zones": [
+        { "name": "Spawn-1", "mandatoryContent": ["mandatory_content_spawn_1"], "contentCountLimits": ["content_limits_default"], "crossroadsPosition": 0, "mainObjects": [{ "type": "Spawn", "spawn": "Player1" }, { "type": "City" }], "roads": [{ "from": { "type": "MainObject", "args": ["0"] }, "to": { "type": "Connection", "args": ["Spawn-1-P1-N1"] } }] },
+        { "name": "P1-N1", "guardWeeklyIncrement": 0.18, "guardMultiplier": 1.1, "mandatoryContent": ["mandatory_content_p1_n1"], "contentCountLimits": ["content_limits_default"], "crossroadsPosition": 0, "mainObjects": [{ "type": "City", "faction": { "type": "Match", "args": ["0", "Spawn-1"] } }], "roads": [{ "from": { "type": "MainObject", "args": ["0"] }, "to": { "type": "Connection", "args": ["Spawn-1-P1-N1"] } }, { "from": { "type": "MainObject", "args": ["0"] }, "to": { "type": "Connection", "args": ["P1-N1-P1-N2"] } }] },
+        { "name": "P1-N2", "guardWeeklyIncrement": 0.36, "guardMultiplier": 1.2, "mandatoryContent": ["mandatory_content_p1_n2"], "contentCountLimits": ["content_limits_default"], "crossroadsPosition": 0, "mainObjects": [{ "type": "City", "faction": { "type": "Match", "args": ["0", "Spawn-1"] } }], "roads": [{ "from": { "type": "MainObject", "args": ["0"] }, "to": { "type": "Connection", "args": ["P1-N1-P1-N2"] } }, { "from": { "type": "MainObject", "args": ["0"] }, "to": { "type": "Connection", "args": ["P1-N2-P1-N3"] } }] },
+        { "name": "P1-N3", "guardWeeklyIncrement": 0.52, "guardMultiplier": 1.35, "mandatoryContent": ["mandatory_content_p1_n3"], "contentCountLimits": ["content_limits_default"], "crossroadsPosition": 0, "mainObjects": [{ "type": "City", "faction": { "type": "Match", "args": ["0", "Spawn-1"] } }], "roads": [{ "from": { "type": "MainObject", "args": ["0"] }, "to": { "type": "Connection", "args": ["P1-N2-P1-N3"] } }, { "from": { "type": "MainObject", "args": ["0"] }, "to": { "type": "Connection", "args": ["P1-N3-Center"] } }] },
+        { "name": "Spawn-2", "mandatoryContent": ["mandatory_content_spawn_2"], "contentCountLimits": ["content_limits_default"], "crossroadsPosition": 0, "mainObjects": [{ "type": "Spawn", "spawn": "Player2" }, { "type": "City" }], "roads": [{ "from": { "type": "MainObject", "args": ["0"] }, "to": { "type": "Connection", "args": ["Spawn-2-P2-N1"] } }] },
+        { "name": "P2-N1", "guardWeeklyIncrement": 0.18, "guardMultiplier": 1.1, "mandatoryContent": ["mandatory_content_p2_n1"], "contentCountLimits": ["content_limits_default"], "crossroadsPosition": 0, "mainObjects": [{ "type": "City", "faction": { "type": "Match", "args": ["0", "Spawn-2"] } }], "roads": [{ "from": { "type": "MainObject", "args": ["0"] }, "to": { "type": "Connection", "args": ["Spawn-2-P2-N1"] } }, { "from": { "type": "MainObject", "args": ["0"] }, "to": { "type": "Connection", "args": ["P2-N1-P2-N2"] } }] },
+        { "name": "P2-N2", "guardWeeklyIncrement": 0.36, "guardMultiplier": 1.2, "mandatoryContent": ["mandatory_content_p2_n2"], "contentCountLimits": ["content_limits_default"], "crossroadsPosition": 0, "mainObjects": [{ "type": "City", "faction": { "type": "Match", "args": ["0", "Spawn-2"] } }], "roads": [{ "from": { "type": "MainObject", "args": ["0"] }, "to": { "type": "Connection", "args": ["P2-N1-P2-N2"] } }, { "from": { "type": "MainObject", "args": ["0"] }, "to": { "type": "Connection", "args": ["P2-N2-P2-N3"] } }] },
+        { "name": "P2-N3", "guardWeeklyIncrement": 0.52, "guardMultiplier": 1.35, "mandatoryContent": ["mandatory_content_p2_n3"], "contentCountLimits": ["content_limits_default"], "crossroadsPosition": 0, "mainObjects": [{ "type": "City", "faction": { "type": "Match", "args": ["0", "Spawn-2"] } }], "roads": [{ "from": { "type": "MainObject", "args": ["0"] }, "to": { "type": "Connection", "args": ["P2-N2-P2-N3"] } }, { "from": { "type": "MainObject", "args": ["0"] }, "to": { "type": "Connection", "args": ["P2-N3-Center"] } }] },
+        { "name": "Spawn-3", "mandatoryContent": ["mandatory_content_spawn_3"], "contentCountLimits": ["content_limits_default"], "crossroadsPosition": 0, "mainObjects": [{ "type": "Spawn", "spawn": "Player3" }, { "type": "City" }], "roads": [{ "from": { "type": "MainObject", "args": ["0"] }, "to": { "type": "Connection", "args": ["Spawn-3-P3-N1"] } }] },
+        { "name": "P3-N1", "guardWeeklyIncrement": 0.18, "guardMultiplier": 1.1, "mandatoryContent": ["mandatory_content_p3_n1"], "contentCountLimits": ["content_limits_default"], "crossroadsPosition": 0, "mainObjects": [{ "type": "City", "faction": { "type": "Match", "args": ["0", "Spawn-3"] } }], "roads": [{ "from": { "type": "MainObject", "args": ["0"] }, "to": { "type": "Connection", "args": ["Spawn-3-P3-N1"] } }, { "from": { "type": "MainObject", "args": ["0"] }, "to": { "type": "Connection", "args": ["P3-N1-P3-N2"] } }] },
+        { "name": "P3-N2", "guardWeeklyIncrement": 0.36, "guardMultiplier": 1.2, "mandatoryContent": ["mandatory_content_p3_n2"], "contentCountLimits": ["content_limits_default"], "crossroadsPosition": 0, "mainObjects": [{ "type": "City", "faction": { "type": "Match", "args": ["0", "Spawn-3"] } }], "roads": [{ "from": { "type": "MainObject", "args": ["0"] }, "to": { "type": "Connection", "args": ["P3-N1-P3-N2"] } }, { "from": { "type": "MainObject", "args": ["0"] }, "to": { "type": "Connection", "args": ["P3-N2-P3-N3"] } }] },
+        { "name": "P3-N3", "guardWeeklyIncrement": 0.52, "guardMultiplier": 1.35, "mandatoryContent": ["mandatory_content_p3_n3"], "contentCountLimits": ["content_limits_default"], "crossroadsPosition": 0, "mainObjects": [{ "type": "City", "faction": { "type": "Match", "args": ["0", "Spawn-3"] } }], "roads": [{ "from": { "type": "MainObject", "args": ["0"] }, "to": { "type": "Connection", "args": ["P3-N2-P3-N3"] } }, { "from": { "type": "MainObject", "args": ["0"] }, "to": { "type": "Connection", "args": ["P3-N3-Center"] } }] },
+        { "name": "Center", "guardWeeklyIncrement": 0.65, "guardMultiplier": 1.5, "mandatoryContent": ["mandatory_content_center"], "contentCountLimits": ["content_limits_default"], "crossroadsPosition": 0, "mainObjects": [{ "type": "City", "faction": { "type": "FromList", "args": [] } }], "roads": [{ "from": { "type": "MainObject", "args": ["0"] }, "to": { "type": "Connection", "args": ["P1-N3-Center"] } }, { "from": { "type": "MainObject", "args": ["0"] }, "to": { "type": "Connection", "args": ["P2-N3-Center"] } }, { "from": { "type": "MainObject", "args": ["0"] }, "to": { "type": "Connection", "args": ["P3-N3-Center"] } }] }
+      ],
+      "connections": [
+        { "name": "Spawn-1-P1-N1", "from": "Spawn-1", "to": "P1-N1", "connectionType": "Direct", "guardZone": "P1-N1", "guardWeeklyIncrement": 0.2 },
+        { "name": "P1-N1-P1-N2", "from": "P1-N1", "to": "P1-N2", "connectionType": "Direct", "guardZone": "P1-N2", "guardWeeklyIncrement": 0.3 },
+        { "name": "P1-N2-P1-N3", "from": "P1-N2", "to": "P1-N3", "connectionType": "Direct", "guardZone": "P1-N3", "guardWeeklyIncrement": 0.45 },
+        { "name": "P1-N3-Center", "from": "P1-N3", "to": "Center", "connectionType": "Direct", "guardZone": "Center", "guardWeeklyIncrement": 0.7 },
+        { "name": "Spawn-2-P2-N1", "from": "Spawn-2", "to": "P2-N1", "connectionType": "Direct", "guardZone": "P2-N1", "guardWeeklyIncrement": 0.2 },
+        { "name": "P2-N1-P2-N2", "from": "P2-N1", "to": "P2-N2", "connectionType": "Direct", "guardZone": "P2-N2", "guardWeeklyIncrement": 0.3 },
+        { "name": "P2-N2-P2-N3", "from": "P2-N2", "to": "P2-N3", "connectionType": "Direct", "guardZone": "P2-N3", "guardWeeklyIncrement": 0.45 },
+        { "name": "P2-N3-Center", "from": "P2-N3", "to": "Center", "connectionType": "Direct", "guardZone": "Center", "guardWeeklyIncrement": 0.7 },
+        { "name": "Spawn-3-P3-N1", "from": "Spawn-3", "to": "P3-N1", "connectionType": "Direct", "guardZone": "P3-N1", "guardWeeklyIncrement": 0.2 },
+        { "name": "P3-N1-P3-N2", "from": "P3-N1", "to": "P3-N2", "connectionType": "Direct", "guardZone": "P3-N2", "guardWeeklyIncrement": 0.3 },
+        { "name": "P3-N2-P3-N3", "from": "P3-N2", "to": "P3-N3", "connectionType": "Direct", "guardZone": "P3-N3", "guardWeeklyIncrement": 0.45 },
+        { "name": "P3-N3-Center", "from": "P3-N3", "to": "Center", "connectionType": "Direct", "guardZone": "Center", "guardWeeklyIncrement": 0.7 }
+      ]
+    }
+  ],
+  "mandatoryContent": [
+    { "name": "mandatory_content_spawn_1", "content": [{ "sid": "gold_pile" }] },
+    { "name": "mandatory_content_p1_n1", "content": [{ "sid": "treasure_chest" }] },
+    { "name": "mandatory_content_p1_n2", "content": [{ "sid": "gold_pile" }] },
+    { "name": "mandatory_content_p1_n3", "content": [{ "sid": "gold_pile" }] },
+    { "name": "mandatory_content_spawn_2", "content": [{ "sid": "gold_pile" }] },
+    { "name": "mandatory_content_p2_n1", "content": [{ "sid": "treasure_chest" }] },
+    { "name": "mandatory_content_p2_n2", "content": [{ "sid": "gold_pile" }] },
+    { "name": "mandatory_content_p2_n3", "content": [{ "sid": "gold_pile" }] },
+    { "name": "mandatory_content_spawn_3", "content": [{ "sid": "gold_pile" }] },
+    { "name": "mandatory_content_p3_n1", "content": [{ "sid": "treasure_chest" }] },
+    { "name": "mandatory_content_p3_n2", "content": [{ "sid": "gold_pile" }] },
+    { "name": "mandatory_content_p3_n3", "content": [{ "sid": "gold_pile" }] },
+    { "name": "mandatory_content_center", "content": [{ "sid": "gold_pile" }] }
+  ],
+  "contentCountLimits": [
+    { "name": "content_limits_default", "limits": [] }
+  ]
+}

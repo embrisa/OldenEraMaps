@@ -9,7 +9,16 @@ export type MapGenerationPreset =
   | "SingleHero"
   | "BlitzLike"
   | "JebusLikeObjective"
-  | "AnarchyLike";
+  | "AnarchyLike"
+  | "PvE1v2"
+  | "PvE1v4"
+  | "PvE1v7"
+  | "Islands"
+  | "DeepWater"
+  | "PeacefulEconomy"
+  | "AsceticSurvival"
+  | "TwoTowns"
+  | "HubTreasury";
 
 export type GamePacePreset =
   | "Custom"

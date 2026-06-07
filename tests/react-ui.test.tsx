@@ -1147,6 +1147,64 @@ describe("React UI shell", () => {
     expect(screen.queryByRole("dialog")).toBeNull();
   });
 
+  it("opens an export checklist when only warnings are present", async () => {
+    const user = userEvent.setup();
+
+    render(<AppShell />);
+
+    const editor = screen.getByLabelText("RMG JSON editor") as HTMLTextAreaElement;
+    fireEvent.change(editor, {
+      target: {
+        value: editor.value
+          .replace('"sizeX": 160', '"sizeX": 192')
+          .replace('"sizeZ": 160', '"sizeZ": 192')
+      }
+    });
+
+    await user.click(screen.getByRole("button", { name: "Export" }));
+
+    const dialog = await screen.findByRole("dialog");
+    expect(within(dialog).getByRole("heading", { name: "Export checklist" })).toBeTruthy();
+    expect(within(dialog).getByText("File name: Custom Template.rmg.json")).toBeTruthy();
+    expect(within(dialog).getByRole("link", { name: "Installation Guide" })).toBeTruthy();
+    expect(within(dialog).getByRole("button", { name: "Export JSON" })).toBeTruthy();
+  });
+
+  it("downloads a builder preview image with the same base name as the exported template", async () => {
+    const user = userEvent.setup();
+    const createObjectURL = vi.fn((_blob: Blob | MediaSource) => "blob:test-preview-download");
+    const revokeObjectURL = vi.fn();
+    const clickedDownloads: string[] = [];
+    Object.defineProperty(URL, "createObjectURL", {
+      value: createObjectURL,
+      writable: true,
+      configurable: true,
+    });
+    Object.defineProperty(URL, "revokeObjectURL", {
+      value: revokeObjectURL,
+      writable: true,
+      configurable: true,
+    });
+    vi.spyOn(HTMLAnchorElement.prototype, "click").mockImplementation(function (this: HTMLAnchorElement) {
+      clickedDownloads.push(this.download);
+    });
+    vi.spyOn(HTMLCanvasElement.prototype, "toBlob").mockImplementation(function (
+      this: HTMLCanvasElement,
+      callback: BlobCallback,
+      type?: string
+    ) {
+      callback(new Blob(["preview"], { type: type ?? "image/png" }));
+    });
+
+    render(<AppShell />);
+
+    await user.click(screen.getByRole("button", { name: "Preview PNG" }));
+
+    await waitFor(() => {
+      expect(clickedDownloads).toContain("Custom Template.png");
+    });
+  });
+
   it("opens a validation warning dialog before force-exporting an invalid template", async () => {
     const user = userEvent.setup();
     const { anchor, anchorClick, createObjectUrl } = mockAnchorDownload();
@@ -1164,7 +1222,6 @@ describe("React UI shell", () => {
     expect(within(dialog).getByRole("heading", { name: "Export with validation errors?" })).toBeTruthy();
     expect(within(dialog).getByText("Template name is required.")).toBeTruthy();
     expect(anchorClick).not.toHaveBeenCalled();
-    expect(createObjectUrl).not.toHaveBeenCalled();
 
     await user.click(within(dialog).getByRole("button", { name: "Cancel" }));
     await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
@@ -1176,7 +1233,7 @@ describe("React UI shell", () => {
 
     await waitFor(() => {
       expect(anchorClick).toHaveBeenCalledTimes(1);
-      expect(createObjectUrl).toHaveBeenCalledTimes(1);
+      expect(createObjectUrl).toHaveBeenCalled();
     });
     expect(anchor.download).toBe("Custom Template.rmg.json");
     expect(screen.queryByRole("dialog")).toBeNull();

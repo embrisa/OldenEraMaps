@@ -52,7 +52,16 @@ export const configHelp: Record<string, ConfigHelp> = {
       { label: "Single Hero", value: "SingleHero", description: "Locks the map into a start-hero format with hiring banned and a one-hero cap" },
       { label: "Blitz-Like", value: "BlitzLike", description: "Small, fast-contact layout with stricter guard pressure and lighter economy" },
       { label: "Jebus-Like Objective", value: "JebusLikeObjective", description: "Hub-centered city-hold contest with a jackpot-style middle" },
-      { label: "Anarchy-Like", value: "AnarchyLike", description: "Chaotic shared-web format with encounter holes and volatile routes" }
+      { label: "Anarchy-Like", value: "AnarchyLike", description: "Chaotic shared-web format with encounter holes and volatile routes" },
+      { label: "PvE 1v2", value: "PvE1v2", description: "Three-player survival lane with one human-style start facing two opponents" },
+      { label: "PvE 1v4", value: "PvE1v4", description: "Five-player pressure map with isolated starts, more neutrals, and natural expansion room" },
+      { label: "PvE 1v7", value: "PvE1v7", description: "Large eight-player survival format with a broad shared web and long progression" },
+      { label: "Islands", value: "Islands", description: "Water-heavy ring map with portal support for sea-separated starts" },
+      { label: "Deep Water", value: "DeepWater", description: "Even stronger water identity with wider seas and more portal dependence" },
+      { label: "Peaceful Economy", value: "PeacefulEconomy", description: "Economic growth map with delayed contact and softer early guards" },
+      { label: "Ascetic Survival", value: "AsceticSurvival", description: "Sparse, high-pressure duel with fewer resources and stronger neutral resistance" },
+      { label: "Two Towns", value: "TwoTowns", description: "Duel preset where each player start begins with two city slots" },
+      { label: "Hub Treasury", value: "HubTreasury", description: "Rich center-hub contest without forcing a City Hold win condition" }
     ]
   },
   "global.templateName": {

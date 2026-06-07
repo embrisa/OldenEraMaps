@@ -1,0 +1,25 @@
+{
+  "name": "Invalid City Hold No City",
+  "displayWinCondition": "win_condition_5",
+  "sizeX": 160,
+  "sizeZ": 160,
+  "gameRules": {
+    "winConditions": {
+      "cityHold": true,
+      "cityHoldDays": 6
+    }
+  },
+  "variants": [
+    {
+      "zones": [
+        { "name": "Spawn-1", "mainObjects": [{ "type": "Spawn", "spawn": "Player1" }] },
+        { "name": "Spawn-2", "mainObjects": [{ "type": "Spawn", "spawn": "Player2" }] },
+        { "name": "Center", "mainObjects": [] }
+      ],
+      "connections": [
+        { "name": "Spawn-1-Center", "from": "Spawn-1", "to": "Center", "connectionType": "Direct" },
+        { "name": "Spawn-2-Center", "from": "Spawn-2", "to": "Center", "connectionType": "Direct" }
+      ]
+    }
+  ]
+}

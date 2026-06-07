@@ -1,0 +1,26 @@
+{
+  "name": "Invalid Missing Content Count Limit Ref",
+  "displayWinCondition": "win_condition_1",
+  "sizeX": 160,
+  "sizeZ": 160,
+  "variants": [
+    {
+      "zones": [
+        {
+          "name": "Spawn-1",
+          "contentCountLimits": ["content_limits_missing"],
+          "mainObjects": [{ "type": "Spawn", "spawn": "Player1" }]
+        },
+        {
+          "name": "Spawn-2",
+          "mainObjects": [{ "type": "Spawn", "spawn": "Player2" }]
+        }
+      ],
+      "connections": [
+        { "name": "Spawn-1-Spawn-2", "from": "Spawn-1", "to": "Spawn-2", "connectionType": "Direct" }
+      ]
+    }
+  ],
+  "mandatoryContent": [],
+  "contentCountLimits": []
+}

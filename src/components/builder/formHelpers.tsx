@@ -43,7 +43,7 @@ export function CheckField({ checked, onCheckedChange, children }: { checked: bo
   );
 }
 
-export function Alert({ tone, children }: { tone: "success" | "warning" | "danger"; children: ReactNode }): JSX.Element {
+export function Alert({ tone, children }: { tone: "success" | "warning" | "danger" | "info"; children: ReactNode }): JSX.Element {
   return <div className={`alert alert--${tone}`} role={tone === "danger" ? "alert" : "status"}>{children}</div>;
 }
 

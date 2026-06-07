@@ -2,8 +2,9 @@ import type { GeneratorSettings, GlobalBans, RmgTemplate, ValueOverride, Variant
 import { serializeRmgTemplate } from "../types";
 import { normalizeSettings, validateSettings } from "../settings";
 import { buildGameRules } from "./gameRulesBuilder";
-import { assignNeutralZoneRoles, buildNeutralZonePlan, type NeutralZonePlan } from "./neutralZonePlanner";
+import { assignNeutralZoneRoles, buildNeutralZonePlan } from "./neutralZonePlanner";
 import { buildVariant } from "./topologyVariantBuilder";
+import { applyHoldCityTargetToVariant, pickGraphAwareHoldCityNeutralLetter } from "./cityHoldTarget";
 import { buildAllContentCountLimits, buildAllMandatoryContent, buildZoneLayouts } from "./templateContentBuilder";
 import { computeContentScale, createRng, effectiveGuardRandomization, zoneSuffixes, type GenerationTuning } from "./math";
 import { mixedTerrainSelector, terrainSelector } from "../terrain";
@@ -39,7 +40,6 @@ export function generateTemplate(input: GeneratorSettings): RmgTemplate {
   const neutralZones = assignNeutralZoneRoles(settings, playerLetters, buildNeutralZonePlan(settings));
   const useCityHold = settings.gameEndConditions.cityHold || settings.gameEndConditions.victoryCondition === "win_condition_5";
   const hubOrTriangleHold = useCityHold && (settings.topology === "HubAndSpoke" || settings.topology === "Triangle");
-  const holdCityNeutralLetter = useCityHold && !hubOrTriangleHold ? pickHoldCityNeutralLetter(neutralZones) : undefined;
   const totalZones = playerLetters.length + neutralZones.length + (settings.naturalExpansionZone ? playerLetters.length : 0) + (settings.topology === "Triangle" ? 1 : 0);
   const tuning: GenerationTuning = {
     contentScale: computeContentScale(settings.mapWidth, settings.mapHeight, totalZones),
@@ -51,7 +51,10 @@ export function generateTemplate(input: GeneratorSettings): RmgTemplate {
   };
 
   const effectiveVictoryCondition = settings.gameEndConditions.victoryCondition;
-  const variant = buildVariant(settings, playerLetters, neutralZones, tuning, rng, holdCityNeutralLetter, hubOrTriangleHold);
+  const variant = buildVariant(settings, playerLetters, neutralZones, tuning, rng, undefined, hubOrTriangleHold);
+  if (useCityHold && !hubOrTriangleHold) {
+    applyHoldCityTargetToVariant(variant, pickGraphAwareHoldCityNeutralLetter(neutralZones, variant));
+  }
   applyTerrainTheme(variant, settings.terrainTheme);
 
   return {
@@ -95,13 +98,6 @@ function buildGlobalBans(settings: GeneratorSettings): GlobalBans | undefined {
     default:
       return undefined;
   }
-}
-
-function pickHoldCityNeutralLetter(neutralZones: NeutralZonePlan[]): string | undefined {
-  return [...neutralZones].sort((a, b) =>
-    (b.quality === "High" ? 3 : b.quality === "Medium" ? 2 : 1) - (a.quality === "High" ? 3 : a.quality === "Medium" ? 2 : 1)
-    || b.castleCount - a.castleCount
-    || a.letter.localeCompare(b.letter))[0]?.letter;
 }
 
 function applyTerrainTheme(variant: Variant, terrainTheme: GeneratorSettings["terrainTheme"]): void {

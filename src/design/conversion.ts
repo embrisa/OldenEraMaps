@@ -108,7 +108,9 @@ export function designToTemplate(design: TemplateDesign, options: DesignToTempla
     zone.unguardedContentPool = [...designZone.unguardedContentPool];
     zone.resourcesContentPool = [...designZone.resourcesContentPool];
     zone.contentCountLimits = [...designZone.contentCountLimits];
-    zone.mandatoryContent = [...designZone.mandatoryContent];
+    if (design.useCustomMandatoryContent) {
+      zone.mandatoryContent = [...designZone.mandatoryContent];
+    }
     zone.guardedContentValue = designZone.guardedContentValue;
     zone.guardedContentValuePerArea = designZone.guardedContentValuePerArea;
     zone.unguardedContentValue = designZone.unguardedContentValue;

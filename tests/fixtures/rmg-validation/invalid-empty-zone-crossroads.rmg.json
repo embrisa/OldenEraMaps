@@ -1,0 +1,23 @@
+{
+  "name": "Invalid Empty Zone Crossroads",
+  "displayWinCondition": "win_condition_1",
+  "sizeX": 160,
+  "sizeZ": 160,
+  "variants": [
+    {
+      "zones": [
+        {
+          "name": "Spawn-1",
+          "mainObjects": [{ "type": "Spawn", "spawn": "Player1" }]
+        },
+        {
+          "name": "Empty-Transit",
+          "crossroadsPosition": 0.5
+        }
+      ],
+      "connections": [
+        { "name": "Spawn-1-Empty", "from": "Spawn-1", "to": "Empty-Transit", "connectionType": "Direct" }
+      ]
+    }
+  ]
+}

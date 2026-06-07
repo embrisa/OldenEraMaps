@@ -21,7 +21,16 @@ export const presetOptions: Array<{ value: MapGenerationPreset; label: string }>
   { value: "SingleHero", label: "Single Hero" },
   { value: "BlitzLike", label: "Blitz-Like" },
   { value: "JebusLikeObjective", label: "Jebus-Like Objective" },
-  { value: "AnarchyLike", label: "Anarchy-Like" }
+  { value: "AnarchyLike", label: "Anarchy-Like" },
+  { value: "PvE1v2", label: "PvE 1v2" },
+  { value: "PvE1v4", label: "PvE 1v4" },
+  { value: "PvE1v7", label: "PvE 1v7" },
+  { value: "Islands", label: "Islands" },
+  { value: "DeepWater", label: "Deep Water" },
+  { value: "PeacefulEconomy", label: "Peaceful Economy" },
+  { value: "AsceticSurvival", label: "Ascetic Survival" },
+  { value: "TwoTowns", label: "Two Towns" },
+  { value: "HubTreasury", label: "Hub Treasury" }
 ];
 
 export const paceOptions: Array<{ value: GamePacePreset; label: string }> = [
@@ -328,6 +337,127 @@ export function applyGenerationPreset(settings: GeneratorSettings): GeneratorSet
       next.zoneCfg.advanced.guardRandomization = 0.3;
       next.gameEndConditions.victoryCondition = "win_condition_1";
       next.gameEndConditions.cityHold = false;
+      break;
+    case "PvE1v2":
+      next.playerCount = 3;
+      next.mapWidth = 176;
+      next.mapHeight = 176;
+      next.topology = "Chain";
+      next.zoneCfg.neutralZoneCount = 4;
+      next.zoneCfg.playerZoneCastles = 1;
+      next.zoneCfg.neutralZoneCastles = 1;
+      next.noDirectPlayerConnections = true;
+      next.minNeutralZonesBetweenPlayers = 1;
+      next.experimentalBalancedZonePlacement = true;
+      next.matchAdjacentNeutralCastleFactions = true;
+      break;
+    case "PvE1v4":
+      next.playerCount = 5;
+      next.mapWidth = 208;
+      next.mapHeight = 208;
+      next.topology = "Default";
+      next.zoneCfg.neutralZoneCount = 7;
+      next.zoneCfg.playerZoneCastles = 1;
+      next.zoneCfg.neutralZoneCastles = 1;
+      next.noDirectPlayerConnections = true;
+      next.minNeutralZonesBetweenPlayers = 2;
+      next.experimentalBalancedZonePlacement = true;
+      next.naturalExpansionZone = true;
+      break;
+    case "PvE1v7":
+      next.playerCount = 8;
+      next.mapWidth = 240;
+      next.mapHeight = 240;
+      next.topology = "SharedWeb";
+      next.zoneCfg.neutralZoneCount = 10;
+      next.zoneCfg.playerZoneCastles = 1;
+      next.zoneCfg.neutralZoneCastles = 1;
+      next.naturalExpansionZone = true;
+      next.zoneCfg.resourceDensityPercent = 120;
+      next.zoneCfg.structureDensityPercent = 125;
+      break;
+    case "Islands":
+      next.playerCount = 4;
+      next.mapWidth = 208;
+      next.mapHeight = 208;
+      next.topology = "Default";
+      next.zoneCfg.neutralZoneCount = 6;
+      next.borderWaterWidth = 12;
+      next.randomPortals = true;
+      next.maxPortalConnections = 8;
+      next.terrainTheme = "Mixed";
+      next.experimentalBalancedZonePlacement = true;
+      break;
+    case "DeepWater":
+      next.playerCount = 4;
+      next.mapWidth = 224;
+      next.mapHeight = 224;
+      next.topology = "SharedWeb";
+      next.zoneCfg.neutralZoneCount = 6;
+      next.borderWaterWidth = 18;
+      next.randomPortals = true;
+      next.maxPortalConnections = 12;
+      next.terrainTheme = "Mixed";
+      next.experimentalBalancedZonePlacement = true;
+      break;
+    case "PeacefulEconomy":
+      next.playerCount = 4;
+      next.mapWidth = 208;
+      next.mapHeight = 208;
+      next.topology = "Default";
+      next.zoneCfg.neutralZoneCount = 6;
+      next.noDirectPlayerConnections = true;
+      next.minNeutralZonesBetweenPlayers = 2;
+      next.zoneCfg.resourceDensityPercent = 145;
+      next.zoneCfg.structureDensityPercent = 135;
+      next.zoneCfg.neutralStackStrengthPercent = 90;
+      next.zoneCfg.borderGuardStrengthPercent = 85;
+      next.experimentalBalancedZonePlacement = true;
+      break;
+    case "AsceticSurvival":
+      next.playerCount = 2;
+      next.mapWidth = 160;
+      next.mapHeight = 160;
+      next.topology = "Chain";
+      next.zoneCfg.neutralZoneCount = 3;
+      next.zoneCfg.neutralZoneCastles = 0;
+      next.zoneCfg.resourceDensityPercent = 70;
+      next.zoneCfg.structureDensityPercent = 80;
+      next.zoneCfg.neutralStackStrengthPercent = 135;
+      next.zoneCfg.borderGuardStrengthPercent = 125;
+      next.heroSettings.heroCountMin = 3;
+      next.heroSettings.heroCountMax = 5;
+      next.noDirectPlayerConnections = true;
+      break;
+    case "TwoTowns":
+      next.playerCount = 2;
+      next.mapWidth = 176;
+      next.mapHeight = 176;
+      next.topology = "Default";
+      next.zoneCfg.neutralZoneCount = 4;
+      next.zoneCfg.playerZoneCastles = 2;
+      next.zoneCfg.neutralZoneCastles = 1;
+      next.matchPlayerCastleFactions = true;
+      next.noDirectPlayerConnections = true;
+      next.minNeutralZonesBetweenPlayers = 1;
+      next.experimentalBalancedZonePlacement = true;
+      break;
+    case "HubTreasury":
+      next.playerCount = 4;
+      next.mapWidth = 208;
+      next.mapHeight = 208;
+      next.topology = "HubAndSpoke";
+      next.zoneCfg.neutralZoneCount = 4;
+      next.zoneCfg.hubZoneSize = 1.9;
+      next.zoneCfg.hubZoneCastles = 1;
+      next.zoneCfg.resourceDensityPercent = 110;
+      next.zoneCfg.structureDensityPercent = 145;
+      next.zoneCfg.neutralStackStrengthPercent = 125;
+      next.zoneCfg.borderGuardStrengthPercent = 120;
+      next.contentPreset = "HighRiskHighReward";
+      next.noDirectPlayerConnections = true;
+      next.minNeutralZonesBetweenPlayers = 1;
+      next.experimentalBalancedZonePlacement = true;
       break;
     case "Custom":
       break;

@@ -27,11 +27,11 @@ Useful source areas from the reference project:
 
 ## Task Set
 
-1. [Post-generation map analysis](aurora-post-generation-map-analysis.md)
-2. [Simple generation flow](aurora-simple-generation-flow.md)
-3. [Preset library expansion](aurora-preset-library-expansion.md)
-4. [City Hold target selection](aurora-city-hold-target-selection.md)
-5. [Export and install workflow polish](aurora-export-install-workflow-polish.md)
+- [x] [Post-generation map analysis](aurora-post-generation-map-analysis.md) (Implemented: `src/analysis/templateAnalysis.ts`)
+- [x] [Simple generation flow](aurora-simple-generation-flow.md) (Implemented: `src/balancedRandomMap.ts` & `src/components/builder/BalancedRandomMapDialog.tsx`)
+- [x] [Preset library expansion](aurora-preset-library-expansion.md) (Implemented: Added new presets like PeacefulEconomy, TwoTowns, HubTreasury, etc. in `src/settings.ts`)
+- [x] [City Hold target selection](aurora-city-hold-target-selection.md) (Implemented: Strategic target selection in `src/generator/cityHoldTarget.ts`)
+- [x] [Export and install workflow polish](aurora-export-install-workflow-polish.md) (Implemented: File system save picker, install guide, stale preview warnings in `src/components/appShell/templateDownloads.ts` and `AppShell.tsx`)
 
 ## Suggested Order
 

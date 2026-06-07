@@ -17,14 +17,14 @@ Do not treat these files as proof that generated templates are guaranteed playab
 
 ## Task Set
 
-1. [Structural template validation](rmg-structural-template-validation.md)
-2. [City Hold objective validation](rmg-city-hold-objective-validation.md)
-3. [Route and road consistency](rmg-route-road-consistency.md)
-4. [Branch mirroring and naming](rmg-branch-mirroring-and-naming.md)
-5. [Guard and reward scaling](rmg-guard-and-reward-scaling.md)
-6. [Size and pacing presets](rmg-size-and-pacing-presets.md)
-7. [Fixture-backed regression pack](rmg-fixture-regression-pack.md)
-8. [Export diagnostics and troubleshooting](rmg-export-diagnostics-and-troubleshooting.md)
+- [x] [Structural template validation](rmg-structural-template-validation.md) (Implemented: `src/rmgDiagnostics.ts` - `validateTemplateStructure`)
+- [x] [City Hold objective validation](rmg-city-hold-objective-validation.md) (Implemented: `src/rmgDiagnostics.ts` - `validateCityHoldObjective`)
+- [x] [Route and road consistency](rmg-route-road-consistency.md) (Implemented: `src/rmgDiagnostics.ts` - `validateRouteAndRoadConsistency`)
+- [x] [Branch mirroring and naming](rmg-branch-mirroring-and-naming.md) (Implemented: `src/rmgDiagnostics.ts` - `validateBranchMirroring`)
+- [x] [Guard and reward scaling](rmg-guard-and-reward-scaling.md) (Implemented: `src/rmgDiagnostics.ts` - `recommendGuardRewardScaling`)
+- [x] [Size and pacing presets](rmg-size-and-pacing-presets.md) (Implemented: `src/rmgDiagnostics.ts` - `recommendTemplateSizeAndPacing`)
+- [x] [Fixture-backed regression pack](rmg-fixture-regression-pack.md) (Implemented: JSON validation fixtures in `tests/fixtures/rmg-validation/`)
+- [x] [Export diagnostics and troubleshooting](rmg-export-diagnostics-and-troubleshooting.md) (Implemented: Export dialog warning panel integrating diagnostics in `src/components/builder/ValidationOutputPanel.tsx`)
 
 ## Suggested Order
 

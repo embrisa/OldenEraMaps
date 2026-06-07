@@ -2,6 +2,7 @@ import { FileJson } from "lucide-react";
 import type { JSX } from "react";
 import type { ValidationResult } from "@/types";
 import type { TemplateAnalysis, TemplateAnalysisFindingSeverity } from "@/analysis/templateAnalysis";
+import type { RmgDiagnosticSummary } from "@/rmgDiagnostics";
 import { RmgJsonEditor } from "@/components/builder/RmgJsonEditor";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert } from "@/components/builder/formHelpers";
@@ -22,6 +23,7 @@ export function BuilderValidationMessages({ validation }: { validation: Validati
 
 export function ValidationOutputPanel({
   validation,
+  templateDiagnostics,
   showBuilderValidationMessages = true,
   analysis,
   jsonValue,
@@ -32,6 +34,7 @@ export function ValidationOutputPanel({
   onJsonChange
 }: {
   validation: ValidationResult;
+  templateDiagnostics: RmgDiagnosticSummary;
   showBuilderValidationMessages?: boolean;
   analysis?: TemplateAnalysis | null;
   jsonValue: string;
@@ -49,11 +52,16 @@ export function ValidationOutputPanel({
       <CardContent className="output-grid">
         <div className="messages">
           {showBuilderValidationMessages ? <BuilderValidationMessages validation={validation} /> : null}
+          {templateDiagnostics.errors.map((diagnostic) => <Alert key={`diag-${diagnostic.code}-${diagnostic.message}`} tone="danger">{diagnostic.message}</Alert>)}
+          {templateDiagnostics.warnings.map((diagnostic) => <Alert key={`diag-${diagnostic.code}-${diagnostic.message}`} tone="warning">{diagnostic.message}</Alert>)}
+          {templateDiagnostics.infos.map((diagnostic) => <Alert key={`diag-${diagnostic.code}-${diagnostic.message}`} tone="info">{diagnostic.message}</Alert>)}
           {jsonDirty ? <Alert tone="warning">JSON edits will auto-apply as soon as they parse and validate.</Alert> : null}
           {jsonParseError ? <Alert tone="danger">{jsonParseError}</Alert> : null}
           {jsonApplyError ? <Alert tone="danger">{jsonApplyError}</Alert> : null}
           {jsonValidationErrors.map((message) => <Alert key={`json-${message}`} tone="danger">{message}</Alert>)}
-          {validation.errors.length === 0 ? <Alert tone="success">Ready to export.</Alert> : null}
+          {validation.errors.length === 0 && templateDiagnostics.errors.length === 0
+            ? <Alert tone="success">{templateDiagnostics.warnings.length > 0 ? "Ready to export with warnings." : "Ready to export."}</Alert>
+            : null}
         </div>
         {analysis ? <MapAnalysisPanel analysis={analysis} /> : null}
         <RmgJsonEditor value={jsonValue} onChange={onJsonChange} />
