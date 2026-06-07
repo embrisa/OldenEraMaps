@@ -170,43 +170,54 @@ export function ContentLimitsPanel({
                   <CirclePlus size={14} />Add SID
                 </Button>
               </div>
-              {(selectedGroup.limits ?? []).map((limit, limitIndex) => {
-                const contentDraft = contentDrafts[draftKey(selectedIndex, limitIndex)];
+              {(() => {
+                const maxMaxCount = Math.max(...(selectedGroup.limits ?? []).map((l) => l.maxCount ?? 0), 1);
                 return (
-                  <div key={`${limit.sid}-${limitIndex}`} className="content-limit-row">
-                    <div className="form-grid form-grid--three">
-                      <ConfigField configKey="contentSidLimit.sid" label="SID">
-                        <Input value={limit.sid} onChange={(event) => updateSidLimit(selectedIndex, limitIndex, (draft) => { draft.sid = event.currentTarget.value; })} />
-                      </ConfigField>
-                      <ConfigField configKey="contentSidLimit.variant" label="Variant">
-                        <Input type="number" value={formatNumberInput(limit.variant)} onChange={(event) => updateSidLimit(selectedIndex, limitIndex, (draft) => { draft.variant = parseNumberInput(event.currentTarget.value); })} />
-                      </ConfigField>
-                      <ConfigField configKey="contentSidLimit.maxCount" label="Max Count">
-                        <Input type="number" value={formatNumberInput(limit.maxCount)} onChange={(event) => updateSidLimit(selectedIndex, limitIndex, (draft) => { draft.maxCount = parseNumberInput(event.currentTarget.value); })} />
-                      </ConfigField>
-                    </div>
-                    <div className="form-grid form-grid--two">
-                      <ConfigField configKey="contentSidLimit.includeLists" label="Include Lists">
-                        <Textarea rows={3} value={formatLineList(limit.includeLists)} onChange={(event) => updateSidLimit(selectedIndex, limitIndex, (draft) => { draft.includeLists = parseLineList(event.currentTarget.value); })} />
-                      </ConfigField>
-                      <ConfigField configKey="contentSidLimit.content" label="Content JSON">
-                        <RmgJsonEditor
-                          ariaLabel={`Content JSON editor for ${limit.sid}`}
-                          className="rmg-json-editor--mini"
-                          value={contentDraft?.value ?? formatJsonInput(limit.content)}
-                          onChange={(value) => updateContentJson(selectedIndex, limitIndex, value)}
-                        />
-                      </ConfigField>
-                    </div>
-                    {contentDraft?.error ? <Alert tone="danger">Content JSON: {contentDraft.error}</Alert> : null}
-                    <div className="dialog-actions dialog-actions--compact">
-                      <Button type="button" size="sm" variant="danger" onClick={() => updateGroup(selectedIndex, (draft) => { draft.limits = (draft.limits ?? []).filter((_limit, index) => index !== limitIndex); })}>
-                        <Trash2 size={14} />Delete SID
-                      </Button>
-                    </div>
+                  <div className="dialog-card-grid content-limit-group__limits">
+                    {(selectedGroup.limits ?? []).map((limit, limitIndex) => {
+                      const contentDraft = contentDrafts[draftKey(selectedIndex, limitIndex)];
+                      const limitPct = Math.round(((limit.maxCount ?? 0) / maxMaxCount) * 100);
+                      return (
+                        <div key={`${limit.sid}-${limitIndex}`} className="content-limit-row dialog-card">
+                          <div className="form-grid form-grid--three">
+                            <ConfigField configKey="contentSidLimit.sid" label="SID">
+                              <Input value={limit.sid} onChange={(event) => updateSidLimit(selectedIndex, limitIndex, (draft) => { draft.sid = event.currentTarget.value; })} />
+                            </ConfigField>
+                            <ConfigField configKey="contentSidLimit.variant" label="Variant">
+                              <Input type="number" value={formatNumberInput(limit.variant)} onChange={(event) => updateSidLimit(selectedIndex, limitIndex, (draft) => { draft.variant = parseNumberInput(event.currentTarget.value); })} />
+                            </ConfigField>
+                            <ConfigField configKey="contentSidLimit.maxCount" label="Max Count">
+                              <Input type="number" value={formatNumberInput(limit.maxCount)} onChange={(event) => updateSidLimit(selectedIndex, limitIndex, (draft) => { draft.maxCount = parseNumberInput(event.currentTarget.value); })} />
+                              <div className="metric-bar-bg" style={{ marginTop: "6px" }} title={`${limitPct}% of maximum limit in group`}>
+                                <div className={`metric-bar-fill ${limitPct >= 50 ? "expansion-fill" : "wealth-fill"}`} style={{ width: `${limitPct}%` }} />
+                              </div>
+                            </ConfigField>
+                          </div>
+                          <div className="form-grid form-grid--two content-limit-row__content-grid">
+                            <ConfigField configKey="contentSidLimit.includeLists" label="Include Lists">
+                              <Textarea rows={3} value={formatLineList(limit.includeLists)} onChange={(event) => updateSidLimit(selectedIndex, limitIndex, (draft) => { draft.includeLists = parseLineList(event.currentTarget.value); })} />
+                            </ConfigField>
+                            <ConfigField configKey="contentSidLimit.content" label="Content JSON">
+                              <RmgJsonEditor
+                                ariaLabel={`Content JSON editor for ${limit.sid}`}
+                                className="rmg-json-editor--mini content-limit-row__json-editor"
+                                value={contentDraft?.value ?? formatJsonInput(limit.content)}
+                                onChange={(value) => updateContentJson(selectedIndex, limitIndex, value)}
+                              />
+                            </ConfigField>
+                          </div>
+                          {contentDraft?.error ? <Alert tone="danger">Content JSON: {contentDraft.error}</Alert> : null}
+                          <div className="dialog-actions dialog-actions--compact">
+                            <Button type="button" size="sm" variant="danger" onClick={() => updateGroup(selectedIndex, (draft) => { draft.limits = (draft.limits ?? []).filter((_limit, index) => index !== limitIndex); })}>
+                              <Trash2 size={14} />Delete SID
+                            </Button>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 );
-              })}
+              })()}
             </article>
               ) : null}
             </div>

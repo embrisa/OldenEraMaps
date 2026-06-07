@@ -1,6 +1,8 @@
-import { useEffect, useState, type JSX } from "react";
+import { Ban, Search, X } from "lucide-react";
+import { useEffect, useMemo, useState, type JSX } from "react";
 import type { TemplateDesign } from "@/design";
 import type { GlobalBans, NoiseEntry, ValueOverride } from "@/types";
+import { HERO_BAN_CATALOG, ITEM_BAN_CATALOG, ITEM_RARITY_ORDER, type HeroFaction, type ItemRarity } from "@/components/builder/banCatalogs";
 import { Button } from "@/components/ui/button";
 import { Input, SteppedValueSlider } from "@/components/ui/form-controls";
 import { Dialog, DialogContent } from "@/components/ui/radix";
@@ -183,31 +185,17 @@ export function ExpertTemplateSettingsPanel({
         </div>
         <div className="dialog-section">
           <h3 className="dialog-section__heading">Global Bans</h3>
-          <div className="content-library-dialog__grid">
+          <div className="expert-ban-grid">
             <ConfigField configKey="template.globalBans.items" label="Banned Items">
-              <StringListEditor
-                values={globalBansDraft.items}
-                emptyLabel="No banned items."
-                addLabel="Add item"
-                onAdd={() => setGlobalBansDraft((current) => ({ ...current, items: [...current.items, ""] }))}
-                onRemove={(index) => setGlobalBansDraft((current) => ({ ...current, items: current.items.filter((_value, valueIndex) => valueIndex !== index) }))}
-                onChange={(index, value) => setGlobalBansDraft((current) => ({
-                  ...current,
-                  items: current.items.map((entry, entryIndex) => entryIndex === index ? value : entry)
-                }))}
+              <ItemBanPicker
+                ids={globalBansDraft.items}
+                onChange={(items) => setGlobalBansDraft((current) => ({ ...current, items }))}
               />
             </ConfigField>
             <ConfigField configKey="template.globalBans.heroes" label="Banned Heroes">
-              <StringListEditor
-                values={globalBansDraft.heroes}
-                emptyLabel="No banned heroes."
-                addLabel="Add hero"
-                onAdd={() => setGlobalBansDraft((current) => ({ ...current, heroes: [...current.heroes, ""] }))}
-                onRemove={(index) => setGlobalBansDraft((current) => ({ ...current, heroes: current.heroes.filter((_value, valueIndex) => valueIndex !== index) }))}
-                onChange={(index, value) => setGlobalBansDraft((current) => ({
-                  ...current,
-                  heroes: current.heroes.map((entry, entryIndex) => entryIndex === index ? value : entry)
-                }))}
+              <HeroBanPicker
+                ids={globalBansDraft.heroes}
+                onChange={(heroes) => setGlobalBansDraft((current) => ({ ...current, heroes }))}
               />
             </ConfigField>
             <ConfigField configKey="template.globalBans.magics" label="Banned Magics">
@@ -289,6 +277,306 @@ function fromGlobalBansDraft(draft: GlobalBansDraftState): GlobalBans {
 
 function sanitizeStringList(values: string[]): string[] {
   return values.map((value) => value.trim()).filter(Boolean);
+}
+
+function HeroBanPicker({
+  ids,
+  onChange
+}: {
+  ids: string[];
+  onChange(ids: string[]): void;
+}): JSX.Element {
+  const [query, setQuery] = useState("");
+  const [factionFilter, setFactionFilter] = useState<HeroFaction | "All">("All");
+  const selectedIds = useMemo(() => new Set(ids), [ids]);
+  const catalogById = useMemo(() => new Map(HERO_BAN_CATALOG.map((hero) => [hero.id, hero])), []);
+  const normalizedQuery = query.trim().toLowerCase();
+
+  const filteredHeroes = useMemo(() => HERO_BAN_CATALOG.filter((hero) => {
+    if (factionFilter !== "All" && hero.faction !== factionFilter) return false;
+    if (!normalizedQuery) return true;
+    return hero.title.toLowerCase().includes(normalizedQuery)
+      || hero.id.toLowerCase().includes(normalizedQuery)
+      || hero.heroClass.toLowerCase().includes(normalizedQuery)
+      || hero.faction.toLowerCase().includes(normalizedQuery);
+  }), [factionFilter, normalizedQuery]);
+
+  const selectedCatalogHeroes = ids.map((id) => catalogById.get(id)).filter(Boolean);
+  const customIds = ids.filter((id) => !catalogById.has(id));
+  const factions = ["All", ...Array.from(new Set(HERO_BAN_CATALOG.map((hero) => hero.faction)))] as const;
+
+  function commit(nextIds: string[]): void {
+    onChange([...new Set(nextIds.map((id) => id.trim()).filter(Boolean))]);
+  }
+
+  function toggleHero(id: string): void {
+    if (selectedIds.has(id)) {
+      commit(ids.filter((heroId) => heroId !== id));
+      return;
+    }
+    commit([...ids, id]);
+  }
+
+  function addCustomHero(): void {
+    const customId = query.trim();
+    if (!customId) return;
+    commit([...ids, customId]);
+    setQuery("");
+  }
+
+  return (
+    <div className="catalog-ban-picker">
+      <div className="catalog-ban-picker__toolbar">
+        <label className="catalog-ban-picker__search">
+          <Search size={15} aria-hidden="true" />
+          <Input
+            value={query}
+            onChange={(event) => setQuery(event.currentTarget.value)}
+            onKeyDown={(event) => {
+              if (event.key === "Enter") {
+                event.preventDefault();
+                addCustomHero();
+              }
+            }}
+            placeholder="Search heroes or add a custom hero ID"
+            aria-label="Search heroes or add a custom hero ID"
+          />
+        </label>
+        <Button type="button" variant="blue" onClick={addCustomHero} disabled={!query.trim()}>
+          <Ban size={14} />Add hero
+        </Button>
+        <Button type="button" variant="ghost" onClick={() => commit([])} disabled={ids.length === 0}>
+          <X size={14} />Clear
+        </Button>
+      </div>
+      <div className="filter-chip-row" aria-label="Hero faction filter">
+        {factions.map((faction) => (
+          <button
+            key={faction}
+            type="button"
+            className="filter-chip"
+            aria-pressed={factionFilter === faction}
+            onClick={() => setFactionFilter(faction)}
+          >
+            <span>{faction}</span>
+          </button>
+        ))}
+      </div>
+      <div className="catalog-ban-picker__selected" aria-label="Selected banned heroes">
+        {ids.length === 0 ? <span>No banned heroes selected.</span> : null}
+        {selectedCatalogHeroes.map((hero) => hero ? (
+          <button
+            key={hero.id}
+            type="button"
+            className="catalog-ban-chip catalog-ban-chip--hero"
+            onClick={() => toggleHero(hero.id)}
+            aria-label={`Remove ${hero.title}`}
+          >
+            <img src={hero.image} alt="" />
+            <span>{hero.title}</span>
+            <X size={12} />
+          </button>
+        ) : null)}
+        {customIds.map((id) => (
+          <button
+            key={id}
+            type="button"
+            className="catalog-ban-chip catalog-ban-chip--custom"
+            onClick={() => toggleHero(id)}
+            aria-label={`Remove ${id}`}
+          >
+            <span>{id}</span>
+            <X size={12} />
+          </button>
+        ))}
+      </div>
+      <div className="hero-ban-grid">
+        {filteredHeroes.map((hero) => {
+          const selected = selectedIds.has(hero.id);
+          return (
+            <button
+              key={hero.id}
+              type="button"
+              className="hero-ban-card"
+              data-selected={selected ? "true" : undefined}
+              aria-pressed={selected}
+              aria-label={selected ? `Unban ${hero.title}` : `Ban ${hero.title}`}
+              onClick={() => toggleHero(hero.id)}
+            >
+              <img className="hero-ban-card__portrait" src={hero.image} alt={`${hero.title} portrait`} />
+              <span className="hero-ban-card__body">
+                <strong>{hero.title}</strong>
+                <span className="hero-ban-card__meta">
+                  <img src={hero.factionImage} alt="" />
+                  {hero.faction}
+                </span>
+                <code>{hero.id}</code>
+              </span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function ItemBanPicker({
+  ids,
+  onChange
+}: {
+  ids: string[];
+  onChange(ids: string[]): void;
+}): JSX.Element {
+  const [query, setQuery] = useState("");
+  const selectedIds = useMemo(() => new Set(ids), [ids]);
+  const catalogById = useMemo(() => new Map(ITEM_BAN_CATALOG.map((item) => [item.id, item])), []);
+  const normalizedQuery = query.trim().toLowerCase();
+
+  const filteredItems = useMemo(() => ITEM_BAN_CATALOG.filter((item) => {
+    if (!normalizedQuery) return true;
+    return item.title.toLowerCase().includes(normalizedQuery)
+      || item.id.toLowerCase().includes(normalizedQuery)
+      || item.rarity.toLowerCase().includes(normalizedQuery)
+      || item.note.toLowerCase().includes(normalizedQuery);
+  }), [normalizedQuery]);
+
+  const groupedItems = useMemo(() => ITEM_RARITY_ORDER.map((rarity) => ({
+    rarity,
+    items: filteredItems.filter((item) => item.rarity === rarity)
+  })).filter((group) => group.items.length > 0), [filteredItems]);
+
+  const selectedCatalogItems = ids.map((id) => catalogById.get(id)).filter(Boolean);
+  const customIds = ids.filter((id) => !catalogById.has(id));
+
+  function commit(nextIds: string[]): void {
+    onChange([...new Set(nextIds.map((id) => id.trim()).filter(Boolean))]);
+  }
+
+  function toggleItem(id: string): void {
+    if (selectedIds.has(id)) {
+      commit(ids.filter((itemId) => itemId !== id));
+      return;
+    }
+    commit([...ids, id]);
+  }
+
+  function addCustomItem(): void {
+    const customId = query.trim();
+    if (!customId) return;
+    commit([...ids, customId]);
+    setQuery("");
+  }
+
+  return (
+    <div className="catalog-ban-picker">
+      <div className="catalog-ban-picker__toolbar">
+        <label className="catalog-ban-picker__search">
+          <Search size={15} aria-hidden="true" />
+          <Input
+            value={query}
+            onChange={(event) => setQuery(event.currentTarget.value)}
+            onKeyDown={(event) => {
+              if (event.key === "Enter") {
+                event.preventDefault();
+                addCustomItem();
+              }
+            }}
+            placeholder="Search artifacts or add a custom item ID"
+            aria-label="Search artifacts or add a custom item ID"
+          />
+        </label>
+        <Button type="button" variant="blue" onClick={addCustomItem} disabled={!query.trim()}>
+          <Ban size={14} />Add item
+        </Button>
+        <Button type="button" variant="ghost" onClick={() => commit([])} disabled={ids.length === 0}>
+          <X size={14} />Clear
+        </Button>
+      </div>
+      <div className="catalog-ban-picker__selected" aria-label="Selected banned items">
+        {ids.length === 0 ? <span>No banned items selected.</span> : null}
+        {selectedCatalogItems.map((item) => item ? (
+          <button
+            key={item.id}
+            type="button"
+            className="catalog-ban-chip"
+            onClick={() => toggleItem(item.id)}
+            aria-label={`Remove ${item.title}`}
+          >
+            <img src={item.image} alt="" />
+            <span>{item.title}</span>
+            <X size={12} />
+          </button>
+        ) : null)}
+        {customIds.map((id) => (
+          <button
+            key={id}
+            type="button"
+            className="catalog-ban-chip catalog-ban-chip--custom"
+            onClick={() => toggleItem(id)}
+            aria-label={`Remove ${id}`}
+          >
+            <span>{id}</span>
+            <X size={12} />
+          </button>
+        ))}
+      </div>
+      <div className="item-ban-groups">
+        {groupedItems.map((group) => (
+          <ItemBanGroup
+            key={group.rarity}
+            rarity={group.rarity}
+            items={group.items}
+            selectedIds={selectedIds}
+            onToggle={toggleItem}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ItemBanGroup({
+  rarity,
+  items,
+  selectedIds,
+  onToggle
+}: {
+  rarity: ItemRarity;
+  items: typeof ITEM_BAN_CATALOG;
+  selectedIds: Set<string>;
+  onToggle(id: string): void;
+}): JSX.Element {
+  return (
+    <section className="item-ban-group">
+      <div className="item-ban-group__heading">
+        <strong>{rarity}</strong>
+        <span>{items.length} curated bans</span>
+      </div>
+      <div className="item-ban-grid">
+        {items.map((item) => {
+          const selected = selectedIds.has(item.id);
+          return (
+            <button
+              key={item.id}
+              type="button"
+              className="item-ban-card"
+              data-selected={selected ? "true" : undefined}
+              aria-pressed={selected}
+              aria-label={selected ? `Unban ${item.title}` : `Ban ${item.title}`}
+              onClick={() => onToggle(item.id)}
+            >
+              <img src={item.image} alt={`${item.title} icon`} />
+              <span className="item-ban-card__body">
+                <strong>{item.title}</strong>
+                <span>{item.note}</span>
+                <code>{item.id}</code>
+              </span>
+            </button>
+          );
+        })}
+      </div>
+    </section>
+  );
 }
 
 function StringListEditor({

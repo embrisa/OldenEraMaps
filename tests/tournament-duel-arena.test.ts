@@ -21,10 +21,18 @@ describe("Tournament Duel Arena template", () => {
     expect(template.name).toBe("Tournament Duel Arena");
     expect(template.gameMode).toBe("Tournament");
     expect(template.displayWinCondition).toBe("win_condition_6");
-    expect(template.sizeX).toBe(176);
-    expect(template.sizeZ).toBe(176);
+    expect(template.sizeX).toBe(208);
+    expect(template.sizeZ).toBe(208);
 
     // 2. Win & Tournament rules
+    expect(template.gameRules?.heroCountMin).toBe(1);
+    expect(template.gameRules?.heroCountMax).toBe(1);
+    expect(template.gameRules?.heroCountIncrement).toBe(0);
+    expect(template.gameRules?.heroHireBan).toBe(true);
+    expect(template.gameRules?.bonuses).toContainEqual(expect.objectContaining({
+      sid: "add_bonus_hero_stat",
+      parameters: ["movementBonus", "175"]
+    }));
     const winConditions = template.gameRules?.winConditions;
     expect(winConditions?.tournament).toBe(true);
     expect(winConditions?.tournamentPointsToWin).toBe(7);
@@ -46,7 +54,9 @@ describe("Tournament Duel Arena template", () => {
     const diagnostics = collectRmgDiagnostics(template);
     expect(validation.errors).toEqual([]);
     expect(diagnostics.errors).toEqual([]);
-    expect(diagnostics.warnings).toEqual([]);
+    expect(diagnostics.warnings).toEqual([
+      expect.objectContaining({ code: "size_pacing_large_retest" })
+    ]);
     expect(zones).toHaveLength(7);
     expect(connections).toHaveLength(6);
     expectDirectAndPortalGraphConnected(zones, connections);

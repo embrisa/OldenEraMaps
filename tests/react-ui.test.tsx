@@ -526,6 +526,8 @@ describe("React UI shell", () => {
     expect(layoutTab.getAttribute("data-state")).toBe("active");
     expect(jsonTab.getAttribute("data-state")).toBe("inactive");
     expect(screen.getByRole("list", { name: "Schematic board legend" })).toBeTruthy();
+    expect(screen.getByLabelText("Schematic design board").closest(".builder-workspace-panel")).toBeTruthy();
+    expect(screen.getByLabelText("RMG JSON editor").closest(".builder-workspace-panel")).toBeTruthy();
     expect(tabPanelDisplay(screen.getByLabelText("RMG JSON editor"))).toBe("none");
 
     await user.click(jsonTab);
@@ -536,6 +538,24 @@ describe("React UI shell", () => {
     expect(screen.getByText("Ready to export.")).toBeTruthy();
     expect(screen.getByRole("heading", { name: "Map analysis" })).toBeTruthy();
     expect(tabPanelDisplay(screen.getByLabelText("RMG JSON editor"))).not.toBe("none");
+  });
+
+  it("pulses the validation tab only when new issues are generated off-tab", async () => {
+    const user = userEvent.setup();
+    render(<AppShell />);
+
+    const workspaceTabs = screen.getByRole("tablist", { name: "Builder workspace view" });
+    const jsonTab = within(workspaceTabs).getByRole("tab", { name: "Validation & JSON" });
+    expect(jsonTab.className).not.toContain("tab-pulse-glow");
+
+    await user.clear(screen.getByDisplayValue("Custom Template"));
+
+    await waitFor(() => expect(jsonTab.className).toContain("tab-pulse-glow"));
+
+    await user.click(jsonTab);
+
+    expect(jsonTab.getAttribute("data-state")).toBe("active");
+    expect(jsonTab.className).not.toContain("tab-pulse-glow");
   });
 
   it("keeps builder validation errors visible on the design board tab", async () => {
@@ -550,11 +570,25 @@ describe("React UI shell", () => {
 
     const validationAlert = screen.getByText("Template name is required.");
     const validationSummary = validationAlert.closest(".builder-validation-summary");
-    const layoutPanel = validationAlert.closest(".oe-tab-panel");
-    expect(layoutPanel).toBeTruthy();
-    expect(layoutPanel?.getAttribute("data-state")).toBe("active");
+    const validationRow = validationAlert.closest(".studio-validation-row");
     expect(validationSummary).toBeTruthy();
+    expect(validationRow).toBeTruthy();
+    expect(validationAlert.closest(".oe-tab-panel")).toBeNull();
     expect((validationSummary as HTMLElement).contains(validationAlert)).toBe(true);
+  });
+
+  it("shows browse header metrics as compact stat cards", async () => {
+    const user = userEvent.setup();
+    render(<AppShell />);
+
+    await user.click(screen.getByRole("button", { name: "Browse" }));
+
+    const headerStats = document.querySelector(".studio-topbar .topbar-stats");
+    expect(headerStats).toBeTruthy();
+    expect((headerStats as HTMLElement).querySelectorAll(".stat-card.stat-card--compact")).toHaveLength(3);
+    expect(within(headerStats as HTMLElement).getByText("Public maps")).toBeTruthy();
+    expect(within(headerStats as HTMLElement).getByText("Ratings")).toBeTruthy();
+    expect(within(headerStats as HTMLElement).getByText("Avg score")).toBeTruthy();
   });
 
   it("navigates to the in-app RMG JSON reference page from the header nav and footer", async () => {
@@ -1266,6 +1300,33 @@ describe("React UI shell", () => {
     expect(screen.getByDisplayValue("Path-1-3")).toBeTruthy();
   });
 
+  it("switches sections inside the combined advanced configuration dialog", async () => {
+    const user = userEvent.setup();
+    render(<AppShell />);
+
+    await user.click(screen.getByRole("button", { name: "Layout Profiles" }));
+
+    const dialog = screen.getByRole("dialog", { name: "Advanced Configuration" });
+    const tablist = within(dialog).getByRole("tablist", { name: "Advanced configuration sections" });
+    expect(within(tablist).getByRole("tab", { name: "Layout & Profiles" }).getAttribute("data-state")).toBe("active");
+    expect(within(dialog).getByRole("heading", { name: "Layout Profiles" })).toBeTruthy();
+
+    await user.click(within(tablist).getByRole("tab", { name: "Mandatory Content" }));
+
+    await waitFor(() => {
+      expect(within(tablist).getByRole("tab", { name: "Mandatory Content" }).getAttribute("data-state")).toBe("active");
+      expect(within(dialog).getByRole("heading", { name: "Mandatory Content" })).toBeTruthy();
+      expect(dialog.querySelector(".mandatory-content-group__json-grid")).toBeTruthy();
+    });
+
+    await user.click(within(tablist).getByRole("tab", { name: "Count Limits" }));
+
+    await waitFor(() => {
+      expect(within(dialog).getByRole("heading", { name: "Advanced Content Limits" })).toBeTruthy();
+      expect(within(tablist).getByRole("tab", { name: "Count Limits" }).getAttribute("data-state")).toBe("active");
+    });
+  }, 12000);
+
   it("edits a content limit max count from the advanced content limits dialog", async () => {
     const user = userEvent.setup();
     render(<AppShell />);
@@ -1274,6 +1335,9 @@ describe("React UI shell", () => {
 
     const dialog = screen.getByRole("dialog");
     expect(within(dialog).getByRole("heading", { name: "Advanced Content Limits" })).toBeTruthy();
+    expect(dialog.querySelector(".content-limit-group__limits")).toBeTruthy();
+    expect(dialog.querySelector(".content-limit-row__content-grid")).toBeTruthy();
+    expect(dialog.querySelector(".content-limit-row__json-editor")).toBeTruthy();
     const firstMaxCountField = within(dialog).getAllByText("Max Count")[0].closest(".config-field") as HTMLElement;
     const firstMaxCount = firstMaxCountField.querySelector("input") as HTMLInputElement;
     fireEvent.change(firstMaxCount, { target: { value: "6" } });
@@ -1365,10 +1429,10 @@ describe("React UI shell", () => {
     });
     const bannedItemsField = within(dialog).getByText("Banned Items").closest(".config-field") as HTMLElement;
     const bannedHeroesField = within(dialog).getByText("Banned Heroes").closest(".config-field") as HTMLElement;
-    await user.click(within(bannedItemsField).getByRole("button", { name: "Add item" }));
-    await user.click(within(bannedHeroesField).getByRole("button", { name: "Add hero" }));
     fireEvent.change(bannedItemsField.querySelector("input") as HTMLInputElement, { target: { value: "artifact_1" } });
     fireEvent.change(bannedHeroesField.querySelector("input") as HTMLInputElement, { target: { value: "hero_1" } });
+    await user.click(within(bannedItemsField).getByRole("button", { name: "Add item" }));
+    await user.click(within(bannedHeroesField).getByRole("button", { name: "Add hero" }));
 
     await user.click(within(dialog).getByRole("button", { name: "Apply" }));
 
@@ -1556,7 +1620,6 @@ describe("React UI shell", () => {
 
     const inspector = screen.getByRole("heading", { name: "Zone Inspector" }).closest("section");
     expect(getInputForLabel(inspector as HTMLElement, "Castles")).toBeTruthy();
-    expect(getInputForLabel(inspector as HTMLElement, "Guard Strength")).toBeTruthy();
 
     const castles = getInputForLabel(inspector as HTMLElement, "Castles");
     expect(castles.type).toBe("range");
@@ -1570,11 +1633,14 @@ describe("React UI shell", () => {
     expect(castles.value).toBe("4");
     expect(within(inspector as HTMLElement).getByText(/4 cities/)).toBeTruthy();
 
+    fireEvent.click(screen.getByRole("button", { name: "Guards & Rules" }));
+    expect(getInputForLabel(inspector as HTMLElement, "Guard Strength")).toBeTruthy();
     const guardStrength = getInputForLabel(inspector as HTMLElement, "Guard Strength");
     expect(guardStrength.type).toBe("range");
     fireEvent.input(guardStrength, { target: { value: "1.75" } });
     expect(guardStrength.value).toBe("1.75");
 
+    fireEvent.click(screen.getByRole("button", { name: "Content" }));
     const resources = getInputForLabel(inspector as HTMLElement, "Resources");
     expect(resources.type).toBe("range");
     fireEvent.input(resources, { target: { value: "60000" } });
@@ -2079,9 +2145,9 @@ describe("React UI shell", () => {
     const user = userEvent.setup();
     render(<AppShell />);
 
-    await user.click(screen.getByRole("button", { name: /Terrain & Biomes/ }));
-    const dialog = screen.getByRole("dialog");
-    const zoneBiome = within(dialog).getByLabelText("Zone Biome") as HTMLTextAreaElement;
+    await user.click(screen.getByRole("button", { name: "General" }));
+    const inspector = screen.getByRole("heading", { name: "Zone Inspector" }).closest("section") as HTMLElement;
+    const zoneBiome = within(inspector).getByLabelText("Zone Biome") as HTMLTextAreaElement;
 
     await user.clear(zoneBiome);
     await user.paste("{");
@@ -2283,21 +2349,21 @@ describe("React UI shell", () => {
     const user = userEvent.setup();
     render(<AppShell />);
 
-    await user.click(screen.getByRole("button", { name: /Guards & Rules/ }));
-    const dialog = screen.getByRole("dialog");
+    await user.click(screen.getByRole("button", { name: "Guards & Rules" }));
+    const inspector = screen.getByRole("heading", { name: "Zone Inspector" }).closest("section") as HTMLElement;
 
-    await user.click(within(dialog).getByRole("checkbox", { name: "Configure encounter holes for this zone" }));
-    const affectedEncounters = getSliderValueInputForLabel(dialog, "Affected Encounters");
+    await user.click(within(inspector).getByRole("checkbox", { name: "Configure encounter holes for this zone" }));
+    const affectedEncounters = getSliderValueInputForLabel(inspector, "Affected Encounters");
     fireEvent.input(affectedEncounters, { target: { value: "7" } });
     fireEvent.blur(affectedEncounters);
 
-    const twoHoleEncounters = getSliderValueInputForLabel(dialog, "Two-Hole Encounters");
+    const twoHoleEncounters = getSliderValueInputForLabel(inspector, "Two-Hole Encounters");
     fireEvent.input(twoHoleEncounters, { target: { value: "3" } });
     fireEvent.blur(twoHoleEncounters);
 
-    await user.click(within(dialog).getByRole("checkbox", { name: "Enable weekly random hire unit increment" }));
-    await user.click(within(dialog).getByRole("checkbox", { name: "Set initial random hire unit increment" }));
-    const initialIncrement = getSliderValueInputForLabel(dialog, "Initial Unit Increment");
+    await user.click(within(inspector).getByRole("checkbox", { name: "Enable weekly random hire unit increment" }));
+    await user.click(within(inspector).getByRole("checkbox", { name: "Set initial random hire unit increment" }));
+    const initialIncrement = getSliderValueInputForLabel(inspector, "Initial Unit Increment");
     fireEvent.input(initialIncrement, { target: { value: "4" } });
     fireEvent.blur(initialIncrement);
 
@@ -2311,28 +2377,32 @@ describe("React UI shell", () => {
     });
   });
 
-  it("renders zone inspector detail dialogs with scrollable content regions", async () => {
+  it("switches tabs in the zone inspector and renders their contents", async () => {
     const user = userEvent.setup();
     render(<AppShell />);
 
-    for (const dialogButtonName of [/Terrain & Biomes/, /Guards & Rules/, "Content"]) {
-      await user.click(screen.getByRole("button", { name: dialogButtonName }));
-      const dialog = screen.getByRole("dialog");
+    const inspector = screen.getByRole("heading", { name: "Zone Inspector" }).closest("section") as HTMLElement;
 
-      expect(dialog.querySelector(".zone-inspector-dialog__scroll")).toBeTruthy();
+    // Check General tab fields
+    await user.click(screen.getByRole("button", { name: "General" }));
+    expect(within(inspector).getByLabelText("Zone Biome")).toBeTruthy();
 
-      await user.click(within(dialog).getByRole("button", { name: "Close" }));
-      await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
-    }
+    // Check Guards & Rules tab fields
+    await user.click(screen.getByRole("button", { name: "Guards & Rules" }));
+    expect(within(inspector).getByRole("checkbox", { name: "Configure encounter holes for this zone" })).toBeTruthy();
+
+    // Check Content tab fields
+    await user.click(screen.getByRole("button", { name: "Content" }));
+    expect(within(inspector).getByText("Dwellings")).toBeTruthy();
   });
 
-  it("exposes per-zone dwellings in the content dialog and exports the count", async () => {
+  it("exposes per-zone dwellings in the content tab and exports the count", async () => {
     const user = userEvent.setup();
     render(<AppShell />);
 
     await user.click(screen.getByRole("button", { name: "Content" }));
-    const dialog = screen.getByRole("dialog");
-    const dwellings = getSliderValueInputForLabel(dialog, "Dwellings");
+    const inspector = screen.getByRole("heading", { name: "Zone Inspector" }).closest("section") as HTMLElement;
+    const dwellings = getSliderValueInputForLabel(inspector, "Dwellings");
 
     expect(dwellings.value).toBe("1");
     fireEvent.input(dwellings, { target: { value: "3" } });
@@ -2352,7 +2422,8 @@ describe("React UI shell", () => {
     render(<AppShell />);
 
     await user.click(screen.getByRole("button", { name: "Content" }));
-    await user.click(screen.getByRole("button", { name: "Dwelling Settings" }));
+    const inspector = screen.getByRole("heading", { name: "Zone Inspector" }).closest("section") as HTMLElement;
+    await user.click(within(inspector).getByRole("button", { name: "Dwelling Settings" }));
     const dwellingDialog = screen.getAllByRole("dialog").find((dialog) => within(dialog).queryByText("Dwelling Settings"));
     expect(dwellingDialog).toBeTruthy();
 
@@ -2392,11 +2463,11 @@ describe("React UI shell", () => {
 
     fireEvent.change(editor, { target: { value: JSON.stringify(parsed, null, 2) } });
 
-    await user.click(screen.getByRole("button", { name: /Terrain & Biomes/ }));
+    await user.click(screen.getByRole("button", { name: "General" }));
+    const inspector = screen.getByRole("heading", { name: "Zone Inspector" }).closest("section") as HTMLElement;
 
     await waitFor(() => {
-      const dialog = screen.getByRole("dialog");
-      const field = within(dialog).getByText("Layout").closest(".config-field");
+      const field = within(inspector).getByText("Layout").closest(".config-field");
       const select = field?.querySelector("select") as HTMLSelectElement;
       expect(select.value).toBe("custom_layout_alpha");
       expect(Array.from(select.options).map((option) => option.value)).toContain("custom_layout_alpha");
@@ -2432,17 +2503,14 @@ describe("React UI shell", () => {
     const user = userEvent.setup();
     render(<AppShell />);
 
-    await user.click(screen.getByRole("button", { name: /Terrain & Biomes/ }));
-    const dialog = screen.getByRole("dialog");
+    await user.click(screen.getByRole("button", { name: "General" }));
+    const inspector = screen.getByRole("heading", { name: "Zone Inspector" }).closest("section") as HTMLElement;
 
-    await user.click(within(dialog).getByRole("button", { name: "Snow" }));
+    await user.click(within(inspector).getByRole("button", { name: "Snow" }));
 
-    const terrain = dialog.querySelector("select");
+    const terrain = getSelectForLabel(inspector, "Terrain");
     expect(terrain).toBeTruthy();
-    expect((terrain as HTMLSelectElement).value).toBe("Snow");
-
-    await user.click(within(dialog).getByRole("button", { name: "Close" }));
-    expect(screen.getByRole("heading", { name: "Zone Inspector" })).toBeTruthy();
+    expect(terrain.value).toBe("Snow");
   });
 
   it("shares a valid template into browse and allows rating it", async () => {

@@ -3,13 +3,13 @@
   "gameMode": "Tournament",
   "description": "1v1 tournament rules template. First fight on Week 3 Day 5 (Day 19), recurring every other week on Day 5, first to 7 points wins. Players start with mirrored zones: Spawn -> Matched Expansion -> Treasure Zone. The Center is a very small, insanely guarded chokepoint zone to prevent players from invading each other's territory before the late game. Validate actual map playability in game.",
   "displayWinCondition": "win_condition_6",
-  "sizeX": 176,
-  "sizeZ": 176,
+  "sizeX": 208,
+  "sizeZ": 208,
   "gameRules": {
     "heroCountMin": 1,
-    "heroCountMax": 8,
-    "heroCountIncrement": 1,
-    "heroHireBan": false,
+    "heroCountMax": 1,
+    "heroCountIncrement": 0,
+    "heroHireBan": true,
     "encounterHoles": false,
     "factionLawsExpModifier": 1,
     "astrologyExpModifier": 1,
@@ -20,7 +20,7 @@
         "receiverFilter": "all_heroes",
         "parameters": [
           "movementBonus",
-          "0"
+          "175"
         ]
       }
     ],
@@ -32,28 +32,10 @@
       "heroLighting": true,
       "heroLightingDay": 1,
       "lostStartCity": false,
-      "lostStartCityDay": 3,
       "lostStartHero": true,
-      "cityHold": false,
-      "cityHoldDays": 6,
-      "championSelectRule": "StartHero",
       "tournament": true,
+      "tournamentPointsToWin": 7,
       "tournamentSaveArmy": true,
-      "tournamentAnnounceDays": [
-        1,
-        20,
-        34,
-        48,
-        62,
-        76,
-        90,
-        104,
-        118,
-        132,
-        146,
-        160,
-        174
-      ],
       "tournamentDays": [
         18,
         13,
@@ -69,7 +51,21 @@
         13,
         13
       ],
-      "tournamentPointsToWin": 7
+      "tournamentAnnounceDays": [
+        1,
+        20,
+        34,
+        48,
+        62,
+        76,
+        90,
+        104,
+        118,
+        132,
+        146,
+        160,
+        174
+      ]
     }
   },
   "variants": [
@@ -313,7 +309,6 @@
               "0"
             ]
           },
-          "crossroadsPosition": 0,
           "roads": [
             {
               "from": {
@@ -343,7 +338,8 @@
                 ]
               }
             }
-          ]
+          ],
+          "crossroadsPosition": 0
         },
         {
           "name": "Expansion-A",
@@ -458,7 +454,6 @@
               "Spawn-A"
             ]
           },
-          "crossroadsPosition": 0,
           "roads": [
             {
               "from": {
@@ -474,7 +469,8 @@
                 ]
               }
             }
-          ]
+          ],
+          "crossroadsPosition": 0
         },
         {
           "name": "Treasure-A",
@@ -681,7 +677,6 @@
               "0"
             ]
           },
-          "crossroadsPosition": 0,
           "roads": [
             {
               "from": {
@@ -711,7 +706,8 @@
                 ]
               }
             }
-          ]
+          ],
+          "crossroadsPosition": 0
         },
         {
           "name": "Expansion-B",
@@ -826,7 +822,6 @@
               "Spawn-B"
             ]
           },
-          "crossroadsPosition": 0,
           "roads": [
             {
               "from": {
@@ -842,7 +837,8 @@
                 ]
               }
             }
-          ]
+          ],
+          "crossroadsPosition": 0
         },
         {
           "name": "Treasure-B",

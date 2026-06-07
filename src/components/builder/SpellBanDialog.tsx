@@ -19,16 +19,23 @@ export function SpellBanDialog({
 }): JSX.Element {
   const [query, setQuery] = useState("");
   const [customDraft, setCustomDraft] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState<"All" | "Adventure" | "Combat">("All");
+
   const selectedIds = useMemo(() => new Set(bannedSpellIds), [bannedSpellIds]);
   const catalogById = useMemo(() => new Map(SPELL_BAN_CATALOG.map((spell) => [spell.id, spell])), []);
   const normalizedQuery = query.trim().toLowerCase();
+
   const filteredSpells = useMemo(() => {
-    if (!normalizedQuery) return SPELL_BAN_CATALOG;
-    return SPELL_BAN_CATALOG.filter((spell) => (
+    let list = SPELL_BAN_CATALOG;
+    if (categoryFilter !== "All") {
+      list = list.filter((spell) => getSpellCategory(spell.id) === categoryFilter);
+    }
+    if (!normalizedQuery) return list;
+    return list.filter((spell) => (
       spell.title.toLowerCase().includes(normalizedQuery)
       || spell.id.toLowerCase().includes(normalizedQuery)
     ));
-  }, [normalizedQuery]);
+  }, [categoryFilter, normalizedQuery]);
 
   function commitIds(ids: string[]): void {
     onChange([...new Set(ids)]);
@@ -72,6 +79,19 @@ export function SpellBanDialog({
           <Button type="button" variant="ghost" disabled={bannedSpellIds.length === 0} onClick={() => commitIds([])}>
             <X size={14} />Clear
           </Button>
+        </div>
+        <div className="filter-chip-row" aria-label="Spell category filter">
+          {(["All", "Adventure", "Combat"] as const).map((cat) => (
+            <button
+              key={cat}
+              type="button"
+              className="filter-chip"
+              aria-pressed={categoryFilter === cat}
+              onClick={() => setCategoryFilter(cat)}
+            >
+              <span>{cat}</span>
+            </button>
+          ))}
         </div>
         <div className="spell-ban-custom">
           <Input
@@ -131,4 +151,25 @@ export function SpellBanDialog({
       </DialogContent>
     </Dialog>
   );
+}
+
+function getSpellCategory(id: string): "Adventure" | "Combat" {
+  if (
+    id.startsWith("neutral_magic_") ||
+    [
+      "back_to_town",
+      "dimension_door",
+      "gate_of_light",
+      "town_portal",
+      "shadow_form",
+      "pocket_dimension",
+      "groundsight",
+      "read_minds",
+      "relocation",
+      "clear_fog"
+    ].includes(id)
+  ) {
+    return "Adventure";
+  }
+  return "Combat";
 }

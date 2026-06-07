@@ -38,6 +38,7 @@ const sideContentLimits = (() => {
 
 const mainObject = (index) => ({ type: "MainObject", args: [String(index)] });
 const connectionEndpoint = (name) => ({ type: "Connection", args: [name] });
+const mandatoryContentEndpoint = (name) => ({ type: "MandatoryContent", args: [name] });
 const road = (from, to) => ({ from, to });
 
 function zone({
@@ -60,9 +61,10 @@ function zone({
   guardReactionDistribution = [0, 10, 10, 10, 10, 0],
   mainObjects = [],
   biome = mainObjects.length > 0 ? { type: "MatchMainObject", args: ["0"] } : { type: "MatchZone", args: [] },
+  crossroadsPosition = mainObjects.length > 0 ? 0 : undefined,
   roads = []
 }) {
-  return {
+  const result = {
     name,
     size,
     layout,
@@ -87,9 +89,10 @@ function zone({
     zoneBiome: biome,
     contentBiome: biome,
     metaObjectsBiome: biome,
-    crossroadsPosition: 0,
     roads
   };
+  if (crossroadsPosition !== undefined) result.crossroadsPosition = crossroadsPosition;
+  return result;
 }
 
 function directConnection(name, from, to, guardZone, guardValue, guardMatchGroup, guardWeeklyIncrement = 0.15) {
@@ -126,11 +129,12 @@ const zones = [
     resourcesValuePerArea: 0,
     guardCutoffValue: 4500,
     guardMultiplier: 3.5,
-    guardWeeklyIncrement: 0.3,
+    guardWeeklyIncrement: 0.5,
     guardReactionDistribution: [0, 5, 10, 20, 15, 0],
     biome: { type: "FromList", args: ["Grass"] },
     roads: [
-      road(connectionEndpoint("Treasure-A-Center"), connectionEndpoint("Treasure-B-Center"))
+      road(mandatoryContentEndpoint("name_center_anchor"), connectionEndpoint("Treasure-A-Center")),
+      road(mandatoryContentEndpoint("name_center_anchor"), connectionEndpoint("Treasure-B-Center"))
     ]
   }),
 
@@ -225,9 +229,8 @@ const zones = [
     guardMultiplier: 2.2,
     guardReactionDistribution: [0, 5, 10, 20, 15, 0],
     biome: { type: "MatchZone", args: ["Spawn-A"] },
-    roads: [
-      road(connectionEndpoint("Spawn-A-Treasure-A"), connectionEndpoint("Treasure-A-Center"))
-    ]
+    crossroadsPosition: undefined,
+    roads: []
   }),
 
   // Player B - Spawn-B
@@ -321,9 +324,8 @@ const zones = [
     guardMultiplier: 2.2,
     guardReactionDistribution: [0, 5, 10, 20, 15, 0],
     biome: { type: "MatchZone", args: ["Spawn-B"] },
-    roads: [
-      road(connectionEndpoint("Spawn-B-Treasure-B"), connectionEndpoint("Treasure-B-Center"))
-    ]
+    crossroadsPosition: undefined,
+    roads: []
   })
 ];
 
@@ -337,8 +339,8 @@ const connections = [
   directConnection("Spawn-B-Treasure-B", "Spawn-B", "Treasure-B", "Treasure-B", 25000, "p2_guard_treasure"),
 
   // Treasure to Center (Insanely hard guards)
-  directConnection("Treasure-A-Center", "Treasure-A", "Center", "Center", 450000, "guard_center_a", 0.25),
-  directConnection("Treasure-B-Center", "Treasure-B", "Center", "Center", 450000, "guard_center_b", 0.25)
+  directConnection("Treasure-A-Center", "Treasure-A", "Center", "Center", 450000, "guard_center_a", 0.6),
+  directConnection("Treasure-B-Center", "Treasure-B", "Center", "Center", 450000, "guard_center_b", 0.6)
 ];
 
 const mandatoryContentGroups = [
@@ -399,7 +401,7 @@ const mandatoryContentGroups = [
   {
     name: "mandatory_content_center",
     content: [
-      { includeLists: ["basic_content_list_building_hero_stats_and_skills_tier_3"] },
+      { name: "name_center_anchor", includeLists: ["basic_content_list_building_hero_stats_and_skills_tier_3"] },
       { sid: "random_item_legendary", soloEncounter: true }
     ]
   }
@@ -446,13 +448,13 @@ const template = {
   gameMode: "Tournament",
   description: "1v1 tournament rules template. First fight on Week 3 Day 5 (Day 19), recurring every other week on Day 5, first to 7 points wins. Players start with mirrored zones: Spawn -> Matched Expansion -> Treasure Zone. The Center is a very small, insanely guarded chokepoint zone to prevent players from invading each other's territory before the late game. Validate actual map playability in game.",
   displayWinCondition: "win_condition_6",
-  sizeX: 176,
-  sizeZ: 176,
+  sizeX: 208,
+  sizeZ: 208,
   gameRules: {
     heroCountMin: 1,
-    heroCountMax: 8,
-    heroCountIncrement: 1,
-    heroHireBan: false,
+    heroCountMax: 1,
+    heroCountIncrement: 0,
+    heroHireBan: true,
     encounterHoles: false,
     factionLawsExpModifier: 1,
     astrologyExpModifier: 1,
@@ -461,7 +463,7 @@ const template = {
         sid: "add_bonus_hero_stat",
         receiverSide: -1,
         receiverFilter: "all_heroes",
-        parameters: ["movementBonus", "0"]
+        parameters: ["movementBonus", "175"]
       }
     ],
     winConditions: {

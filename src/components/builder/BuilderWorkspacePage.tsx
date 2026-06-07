@@ -1,5 +1,5 @@
-import { Compass, FileJson, Link2, ListChecks, PackageCheck, Plus, RotateCcw, Sparkles } from "lucide-react";
-import { useState, type JSX } from "react";
+import { Activity, Compass, FileJson, Link2, ListChecks, MapPin, PackageCheck, Plus, RotateCcw, Sparkles } from "lucide-react";
+import { useEffect, useMemo, useRef, useState, type JSX } from "react";
 import { addConnection, type DesignConnection, type DesignZone, type DesignZoneRole, type TemplateDesign } from "@/design";
 import { AdvancedConfigurationDialog, type AdvancedConfigurationTab } from "@/components/builder/AdvancedConfigurationDialog";
 import { BalancedRandomMapDialog } from "@/components/builder/BalancedRandomMapDialog";
@@ -11,6 +11,7 @@ import { ZoneInspector } from "@/components/builder/ZoneInspector";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/radix";
+import { StatCard } from "@/components/ui/stat-card";
 import type { GeneratorSettings, Point, ValidationResult } from "@/types";
 import type { RmgDiagnosticSummary } from "@/rmgDiagnostics";
 import type { TemplateAnalysis } from "@/analysis/templateAnalysis";
@@ -110,6 +111,35 @@ export function BuilderWorkspacePage({
   const [advancedConfigurationOpen, setAdvancedConfigurationOpen] = useState(false);
   const [advancedConfigurationTab, setAdvancedConfigurationTab] = useState<AdvancedConfigurationTab>("layout");
   const [balancedRandomOpen, setBalancedRandomOpen] = useState(false);
+  const [jsonTabNeedsAttention, setJsonTabNeedsAttention] = useState(false);
+
+  const validationIssues = useMemo(() => {
+    const issues = [
+      ...validation.errors.map((message) => `builder:${message}`),
+      ...templateDiagnostics.errors.map((diagnostic) => `template:${diagnostic.code}:${diagnostic.message}`),
+      ...jsonValidationErrors.map((message) => `json:${message}`)
+    ];
+    if (jsonParseError) issues.push(`json-parse:${jsonParseError}`);
+    if (jsonApplyError) issues.push(`json-apply:${jsonApplyError}`);
+    return issues;
+  }, [jsonApplyError, jsonParseError, jsonValidationErrors, templateDiagnostics.errors, validation.errors]);
+
+  const previousValidationIssuesRef = useRef(validationIssues);
+
+  useEffect(() => {
+    const previousIssues = previousValidationIssuesRef.current;
+    const hasNewIssues = validationIssues.some((issue) => !previousIssues.includes(issue));
+
+    if (builderWorkspaceTab === "json") {
+      setJsonTabNeedsAttention(false);
+    } else if (hasNewIssues && validationIssues.length > 0) {
+      setJsonTabNeedsAttention(true);
+    } else if (validationIssues.length === 0) {
+      setJsonTabNeedsAttention(false);
+    }
+
+    previousValidationIssuesRef.current = validationIssues;
+  }, [builderWorkspaceTab, validationIssues]);
 
   function handleConnectionsOpenChange(open: boolean): void {
     setConnectionsOpen(open);
@@ -139,25 +169,47 @@ export function BuilderWorkspacePage({
           onGameEnd={handleGameEnd}
         />
         <div className="studio-workspace">
+          {builderWorkspaceTab === "layout" && (validation.errors.length > 0 || validation.warnings.length > 0) ? (
+            <section className="studio-validation-row">
+              <BuilderValidationMessages validation={validation} />
+            </section>
+          ) : null}
           <div className="studio-main">
             <Tabs value={builderWorkspaceTab} onValueChange={(value) => setBuilderWorkspaceTab(value as BuilderWorkspaceTab)} className="builder-workspace-root">
               <div className="studio-toolbar">
                 <div className="dirty-state">{fileName}</div>
                 <div className="topbar-stats">
-                  <span><strong>{design.zones.length}</strong>Zones</span>
-                  <span><strong>{design.connections.length}</strong>Paths</span>
+                  <StatCard
+                    compact
+                    label="Zones"
+                    value={design.zones.length}
+                    icon={<MapPin className="stat-icon text-gold" size={14} />}
+                  />
+                  <StatCard
+                    compact
+                    label="Paths"
+                    value={design.connections.length}
+                    icon={<Activity className="stat-icon text-violet" size={14} />}
+                  />
                 </div>
                 <TabsList aria-label="Builder workspace view" className="builder-workspace-tabs">
                   <TabsTrigger value="layout" className="oe-tab--gold">
                     <Sparkles size={15} />Design Board
                   </TabsTrigger>
-                  <TabsTrigger value="json" className="oe-tab--violet">
+                  <TabsTrigger
+                    value="json"
+                    className={`oe-tab--violet${jsonTabNeedsAttention ? " tab-pulse-glow" : ""}`}
+                  >
                     <FileJson size={15} />Validation & JSON
                   </TabsTrigger>
                 </TabsList>
               </div>
-              <TabsContent value="layout" forceMount style={builderWorkspaceTab === "layout" ? undefined : { display: "none" }}>
-                <BuilderValidationMessages validation={validation} />
+              <TabsContent
+                value="layout"
+                forceMount
+                className="builder-workspace-panel"
+                style={builderWorkspaceTab === "layout" ? undefined : { display: "none" }}
+              >
                 <Card className="design-board-shell">
                   <CardHeader className="design-board-shell__header">
                     <CardTitle><Sparkles size={17} />Template Layout</CardTitle>
@@ -219,7 +271,12 @@ export function BuilderWorkspacePage({
                   </CardContent>
                 </Card>
               </TabsContent>
-              <TabsContent value="json" forceMount style={builderWorkspaceTab === "json" ? undefined : { display: "none" }}>
+              <TabsContent
+                value="json"
+                forceMount
+                className="builder-workspace-panel"
+                style={builderWorkspaceTab === "json" ? undefined : { display: "none" }}
+              >
                 <ValidationOutputPanel
                   validation={validation}
                   templateDiagnostics={templateDiagnostics}

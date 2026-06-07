@@ -135,8 +135,13 @@ export function SteppedValueSlider({
   onBlur,
   onKeyDown,
   disabled,
+  defaultValue,
+  badgeColor = "gold",
   ...props
-}: SteppedValueSliderProps): React.JSX.Element {
+}: SteppedValueSliderProps & {
+  defaultValue?: number;
+  badgeColor?: "gold" | "violet";
+}): React.JSX.Element {
   const minValue = parseNumericAttribute(min);
   const maxValue = parseNumericAttribute(max);
   const stepValue = parseNumericAttribute(step) ?? 1;
@@ -183,8 +188,17 @@ export function SteppedValueSlider({
     return ((numericValue - minValue) / (maxValue - minValue)) * 100;
   }, [maxValue, minValue, value]);
 
+  const isDeviated = defaultValue !== undefined && Number(value) !== defaultValue;
+
   return (
-    <div className={cn("oe-value-slider", className)} data-disabled={disabled ? "true" : "false"}>
+    <div
+      className={cn(
+        "oe-value-slider",
+        isDeviated && `oe-value-slider--deviated-${badgeColor}`,
+        className
+      )}
+      data-disabled={disabled ? "true" : "false"}
+    >
       <div className="oe-value-slider__main">
         <input
           {...props}

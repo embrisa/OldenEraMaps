@@ -182,11 +182,11 @@ export function DwellingSettingsDialog({
           <div className="dwelling-generated-panel">
             <label>
               <span>Low-tier dwellings</span>
-              <SteppedValueSlider min={0} max={maxDwellingCount} value={settings.lowTierCount} onChange={(event) => updateGeneratedCount("lowTierCount", Number(event.currentTarget.value))} />
+              <SteppedValueSlider min={0} max={maxDwellingCount} value={settings.lowTierCount} onChange={(event) => updateGeneratedCount("lowTierCount", Number(event.currentTarget.value))} defaultValue={zone.role === "Hub" ? 0 : 1} badgeColor="gold" />
             </label>
             <label>
               <span>High-tier dwellings</span>
-              <SteppedValueSlider min={0} max={maxDwellingCount} value={settings.highTierCount} onChange={(event) => updateGeneratedCount("highTierCount", Number(event.currentTarget.value))} />
+              <SteppedValueSlider min={0} max={maxDwellingCount} value={settings.highTierCount} onChange={(event) => updateGeneratedCount("highTierCount", Number(event.currentTarget.value))} defaultValue={0} badgeColor="gold" />
             </label>
           </div>
         ) : (
@@ -200,20 +200,62 @@ export function DwellingSettingsDialog({
                 <X size={14} />Clear
               </Button>
             </div>
-            <div className="dwelling-faction-filter" aria-label="Dwelling faction filter">
+            <div className="filter-chip-row" aria-label="Dwelling faction filter" style={{ marginTop: "10px", marginBottom: "10px" }}>
               {factions.map((faction) => (
-                <button key={faction} type="button" aria-pressed={factionFilter === faction} onClick={() => setFactionFilter(faction)}>
-                  {factionIcons[faction] ? <img src={factionIcons[faction]} alt="" /> : null}
+                <button
+                  key={faction}
+                  type="button"
+                  className="filter-chip"
+                  aria-pressed={factionFilter === faction}
+                  onClick={() => setFactionFilter(faction)}
+                >
+                  {factionIcons[faction] ? (
+                    <img src={factionIcons[faction]} alt="" style={{ width: "14px", height: "14px", borderRadius: "2px", objectFit: "cover" }} />
+                  ) : null}
                   <span>{faction}</span>
                 </button>
               ))}
+            </div>
+            <div className="spell-ban-selected" aria-label="Selected dwellings" style={{ marginBottom: "12px" }}>
+              {settings.specific.length === 0 ? <span>No specific dwellings selected.</span> : null}
+              {settings.specific.map((entry) => {
+                const catalogEntry = DWELLING_CATALOG.find((cat) => cat.id === entry.id);
+                if (!catalogEntry) return null;
+                return (
+                  <button
+                    key={entry.id}
+                    type="button"
+                    className="spell-ban-chip"
+                    onClick={() => setSpecificCount(catalogEntry, entry.count - 1)}
+                    aria-label={`Remove ${catalogEntry.title}`}
+                  >
+                    <img src={catalogEntry.image} alt="" style={{ width: "14px", height: "14px", borderRadius: "2px", objectFit: "cover" }} />
+                    <span>{catalogEntry.title} x{entry.count}</span>
+                    <X size={12} />
+                  </button>
+                );
+              })}
             </div>
             <ScrollArea className="dwelling-card-scroll">
               <div className="dwelling-card-grid">
                 {filteredCatalog.map((entry) => {
                   const selectedCount = selectedById.get(entry.id)?.count ?? 0;
+                  const canAdd = totalCount < maxDwellingCount;
                   return (
-                    <div key={entry.id} className="dwelling-card" data-selected={selectedCount > 0 ? "true" : undefined}>
+                    <div
+                      key={entry.id}
+                      className="dwelling-card"
+                      data-selected={selectedCount > 0 ? "true" : undefined}
+                      style={{ cursor: canAdd ? "pointer" : "default" }}
+                      onClick={(e) => {
+                        if ((e.target as HTMLElement).closest(".dwelling-card__controls")) {
+                          return;
+                        }
+                        if (canAdd) {
+                          setSpecificCount(entry, selectedCount + 1);
+                        }
+                      }}
+                    >
                       <img src={entry.image} alt={`${entry.title} art`} />
                       <div className="dwelling-card__body">
                         <strong>{entry.title}</strong>
@@ -221,11 +263,21 @@ export function DwellingSettingsDialog({
                         <code>{entry.sid}</code>
                       </div>
                       <div className="dwelling-card__controls">
-                        <button type="button" aria-label={`Remove ${entry.title}`} disabled={selectedCount === 0} onClick={() => setSpecificCount(entry, selectedCount - 1)}>
+                        <button
+                          type="button"
+                          aria-label={`Remove ${entry.title}`}
+                          disabled={selectedCount === 0}
+                          onClick={() => setSpecificCount(entry, selectedCount - 1)}
+                        >
                           <Minus size={13} />
                         </button>
                         <span>{selectedCount}</span>
-                        <button type="button" aria-label={`Add ${entry.title}`} disabled={totalCount >= maxDwellingCount && selectedCount === 0} onClick={() => setSpecificCount(entry, selectedCount + 1)}>
+                        <button
+                          type="button"
+                          aria-label={`Add ${entry.title}`}
+                          disabled={totalCount >= maxDwellingCount && selectedCount === 0}
+                          onClick={() => setSpecificCount(entry, selectedCount + 1)}
+                        >
                           <Plus size={13} />
                         </button>
                       </div>

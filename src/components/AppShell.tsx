@@ -1,4 +1,4 @@
-import { BookOpenText, Bug, Compass, Download, FileJson, FolderOpen, HardDriveDownload, Menu, Plus, RotateCcw, Save, Share2, X } from "lucide-react";
+import { BookOpenText, Bug, Compass, Download, FileJson, FolderOpen, HardDriveDownload, Menu, Plus, RotateCcw, Save, Share2, Sparkles, Star, X } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState, type JSX } from "react";
 import { analyzeTemplate } from "@/analysis/templateAnalysis";
 import { getMap } from "@/community/communityApi";
@@ -19,6 +19,7 @@ import { RmgJsonReferencePage } from "@/components/reference/RmgJsonReferencePag
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogTitle, TooltipProvider } from "@/components/ui/radix";
+import { StatCard } from "@/components/ui/stat-card";
 import { designToTemplate, parseDesignOrTemplateFileResult, serializeDesignFile } from "@/design";
 import { validateDesign } from "@/design/validation";
 import { serializeTemplate } from "@/generator";
@@ -228,8 +229,24 @@ export function AppShell(): JSX.Element {
             <div className="topbar-stats">
               {route.page === "browse" ? (
                 <>
-                  <span><strong>{browse.communityStats.mapCount}</strong>Maps</span>
-                  <span><strong>{browse.communityStats.ratingCount}</strong>Ratings</span>
+                  <StatCard
+                    compact
+                    label="Public maps"
+                    value={browse.communityStats.mapCount}
+                    icon={<FileJson className="stat-icon text-gold" size={14} />}
+                  />
+                  <StatCard
+                    compact
+                    label="Ratings"
+                    value={browse.communityStats.ratingCount}
+                    icon={<Star className="stat-icon text-blue" size={14} />}
+                  />
+                  <StatCard
+                    compact
+                    label="Avg score"
+                    value={browse.communityStats.averageRating.toFixed(1)}
+                    icon={<Sparkles className="stat-icon text-violet" size={14} />}
+                  />
                 </>
               ) : null}
             </div>

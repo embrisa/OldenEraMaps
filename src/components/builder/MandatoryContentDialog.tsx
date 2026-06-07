@@ -168,73 +168,75 @@ export function MandatoryContentPanel({
                       <CirclePlus size={14} />Add Item
                     </Button>
                   </div>
-                  {(selectedGroup.content ?? []).map((item, itemIndex) => {
-                    const rulesKey = draftKey(selectedIndex, itemIndex, "rules");
-                    const contentKey = draftKey(selectedIndex, itemIndex, "content");
-                    const rulesDraft = jsonDrafts[rulesKey];
-                    const contentDraft = jsonDrafts[contentKey];
-                    return (
-                      <div key={`${item.name ?? item.sid ?? "item"}-${itemIndex}`} className="content-limit-row">
-                        <div className="form-grid form-grid--three">
-                          <ConfigField configKey="contentItem.name" label="Name">
-                            <Input value={item.name ?? ""} onChange={(event) => updateItem(selectedIndex, itemIndex, (draft) => { draft.name = emptyToUndefined(event.currentTarget.value); })} />
-                          </ConfigField>
-                          <ConfigField configKey="contentItem.sid" label="SID">
-                            <Input value={item.sid ?? ""} onChange={(event) => updateItem(selectedIndex, itemIndex, (draft) => { draft.sid = emptyToUndefined(event.currentTarget.value); })} />
-                          </ConfigField>
-                          <ConfigField configKey="contentItem.variant" label="Variant">
-                            <Input type="number" value={formatNumberInput(item.variant)} onChange={(event) => updateItem(selectedIndex, itemIndex, (draft) => { draft.variant = parseNumberInput(event.currentTarget.value); })} />
-                          </ConfigField>
+                  <div className="dialog-card-grid">
+                    {(selectedGroup.content ?? []).map((item, itemIndex) => {
+                      const rulesKey = draftKey(selectedIndex, itemIndex, "rules");
+                      const contentKey = draftKey(selectedIndex, itemIndex, "content");
+                      const rulesDraft = jsonDrafts[rulesKey];
+                      const contentDraft = jsonDrafts[contentKey];
+                      return (
+                        <div key={`${item.name ?? item.sid ?? "item"}-${itemIndex}`} className="content-limit-row dialog-card">
+                          <div className="form-grid form-grid--three">
+                            <ConfigField configKey="contentItem.name" label="Name">
+                              <Input value={item.name ?? ""} onChange={(event) => updateItem(selectedIndex, itemIndex, (draft) => { draft.name = emptyToUndefined(event.currentTarget.value); })} />
+                            </ConfigField>
+                            <ConfigField configKey="contentItem.sid" label="SID">
+                              <Input value={item.sid ?? ""} onChange={(event) => updateItem(selectedIndex, itemIndex, (draft) => { draft.sid = emptyToUndefined(event.currentTarget.value); })} />
+                            </ConfigField>
+                            <ConfigField configKey="contentItem.variant" label="Variant">
+                              <Input type="number" value={formatNumberInput(item.variant)} onChange={(event) => updateItem(selectedIndex, itemIndex, (draft) => { draft.variant = parseNumberInput(event.currentTarget.value); })} />
+                            </ConfigField>
+                          </div>
+                          <div className="checks checks--compact">
+                            <CheckField checked={item.isGuarded === true} onCheckedChange={(checked) => updateItem(selectedIndex, itemIndex, (draft) => { draft.isGuarded = checked; })}>Guarded</CheckField>
+                            <CheckField checked={item.isMine === true} onCheckedChange={(checked) => updateItem(selectedIndex, itemIndex, (draft) => { draft.isMine = checked; })}>Mine</CheckField>
+                            <CheckField checked={item.soloEncounter === true} onCheckedChange={(checked) => updateItem(selectedIndex, itemIndex, (draft) => { draft.soloEncounter = checked; })}>Solo encounter</CheckField>
+                            <CheckField checked={item.designatedEncounter === true} onCheckedChange={(checked) => updateItem(selectedIndex, itemIndex, (draft) => { draft.designatedEncounter = checked; })}>Designated encounter</CheckField>
+                            <label className="checkline">
+                              <Checkbox checked={item.road === true} onCheckedChange={(value) => updateItem(selectedIndex, itemIndex, (draft) => { draft.road = value === true; })} />
+                              <span>Road</span>
+                            </label>
+                          </div>
+                          <div className="form-grid form-grid--three">
+                            <ConfigField configKey="contentItem.guardValue" label="Guard Value">
+                              <Input type="number" value={formatNumberInput(item.guardValue)} onChange={(event) => updateItem(selectedIndex, itemIndex, (draft) => { draft.guardValue = parseNumberInput(event.currentTarget.value); })} />
+                            </ConfigField>
+                            <ConfigField configKey="contentItem.owner" label="Owner">
+                              <Input value={formatOwnerInput(item.owner)} onChange={(event) => updateItem(selectedIndex, itemIndex, (draft) => { draft.owner = parseOwnerInput(event.currentTarget.value); })} />
+                            </ConfigField>
+                            <ConfigField configKey="contentItem.includeLists" label="Include Lists">
+                              <Textarea rows={2} value={formatLineList(item.includeLists)} onChange={(event) => updateItem(selectedIndex, itemIndex, (draft) => { draft.includeLists = parseLineList(event.currentTarget.value); })} />
+                            </ConfigField>
+                          </div>
+                          <div className="form-grid form-grid--two mandatory-content-group__json-grid">
+                            <ConfigField configKey="contentItem.rules" label="Rules JSON">
+                              <RmgJsonEditor
+                                ariaLabel={`Rules JSON editor for ${item.sid ?? item.name ?? "content item"}`}
+                                className="rmg-json-editor--mini"
+                                value={rulesDraft?.value ?? formatJsonInput(item.rules)}
+                                onChange={(value) => updateJson<ContentPlacementRule[]>(rulesKey, value, Array.isArray, "Use a JSON array of placement rules.", (parsed) => updateItem(selectedIndex, itemIndex, (draft) => { draft.rules = parsed; }))}
+                              />
+                            </ConfigField>
+                            <ConfigField configKey="contentItem.content" label="Advanced Content JSON">
+                              <RmgJsonEditor
+                                ariaLabel={`Advanced Content JSON editor for ${item.sid ?? item.name ?? "content item"}`}
+                                className="rmg-json-editor--mini"
+                                value={contentDraft?.value ?? formatJsonInput(item.content)}
+                                onChange={(value) => updateJson<ContentItem[]>(contentKey, value, Array.isArray, "Use a JSON array of content items.", (parsed) => updateItem(selectedIndex, itemIndex, (draft) => { draft.content = parsed; }))}
+                              />
+                            </ConfigField>
+                          </div>
+                          {rulesDraft?.error ? <Alert tone="danger">Rules JSON: {rulesDraft.error}</Alert> : null}
+                          {contentDraft?.error ? <Alert tone="danger">Advanced Content JSON: {contentDraft.error}</Alert> : null}
+                          <div className="dialog-actions dialog-actions--compact">
+                            <Button type="button" size="sm" variant="danger" onClick={() => updateGroup(selectedIndex, (draft) => { draft.content = (draft.content ?? []).filter((_item, index) => index !== itemIndex); })}>
+                              <Trash2 size={14} />Delete Item
+                            </Button>
+                          </div>
                         </div>
-                        <div className="checks checks--compact">
-                          <CheckField checked={item.isGuarded === true} onCheckedChange={(checked) => updateItem(selectedIndex, itemIndex, (draft) => { draft.isGuarded = checked; })}>Guarded</CheckField>
-                          <CheckField checked={item.isMine === true} onCheckedChange={(checked) => updateItem(selectedIndex, itemIndex, (draft) => { draft.isMine = checked; })}>Mine</CheckField>
-                          <CheckField checked={item.soloEncounter === true} onCheckedChange={(checked) => updateItem(selectedIndex, itemIndex, (draft) => { draft.soloEncounter = checked; })}>Solo encounter</CheckField>
-                          <CheckField checked={item.designatedEncounter === true} onCheckedChange={(checked) => updateItem(selectedIndex, itemIndex, (draft) => { draft.designatedEncounter = checked; })}>Designated encounter</CheckField>
-                          <label className="checkline">
-                            <Checkbox checked={item.road === true} onCheckedChange={(value) => updateItem(selectedIndex, itemIndex, (draft) => { draft.road = value === true; })} />
-                            <span>Road</span>
-                          </label>
-                        </div>
-                        <div className="form-grid form-grid--three">
-                          <ConfigField configKey="contentItem.guardValue" label="Guard Value">
-                            <Input type="number" value={formatNumberInput(item.guardValue)} onChange={(event) => updateItem(selectedIndex, itemIndex, (draft) => { draft.guardValue = parseNumberInput(event.currentTarget.value); })} />
-                          </ConfigField>
-                          <ConfigField configKey="contentItem.owner" label="Owner">
-                            <Input value={formatOwnerInput(item.owner)} onChange={(event) => updateItem(selectedIndex, itemIndex, (draft) => { draft.owner = parseOwnerInput(event.currentTarget.value); })} />
-                          </ConfigField>
-                          <ConfigField configKey="contentItem.includeLists" label="Include Lists">
-                            <Textarea rows={2} value={formatLineList(item.includeLists)} onChange={(event) => updateItem(selectedIndex, itemIndex, (draft) => { draft.includeLists = parseLineList(event.currentTarget.value); })} />
-                          </ConfigField>
-                        </div>
-                        <div className="form-grid form-grid--two">
-                          <ConfigField configKey="contentItem.rules" label="Rules JSON">
-                            <RmgJsonEditor
-                              ariaLabel={`Rules JSON editor for ${item.sid ?? item.name ?? "content item"}`}
-                              className="rmg-json-editor--mini"
-                              value={rulesDraft?.value ?? formatJsonInput(item.rules)}
-                              onChange={(value) => updateJson<ContentPlacementRule[]>(rulesKey, value, Array.isArray, "Use a JSON array of placement rules.", (parsed) => updateItem(selectedIndex, itemIndex, (draft) => { draft.rules = parsed; }))}
-                            />
-                          </ConfigField>
-                          <ConfigField configKey="contentItem.content" label="Advanced Content JSON">
-                            <RmgJsonEditor
-                              ariaLabel={`Advanced Content JSON editor for ${item.sid ?? item.name ?? "content item"}`}
-                              className="rmg-json-editor--mini"
-                              value={contentDraft?.value ?? formatJsonInput(item.content)}
-                              onChange={(value) => updateJson<ContentItem[]>(contentKey, value, Array.isArray, "Use a JSON array of content items.", (parsed) => updateItem(selectedIndex, itemIndex, (draft) => { draft.content = parsed; }))}
-                            />
-                          </ConfigField>
-                        </div>
-                        {rulesDraft?.error ? <Alert tone="danger">Rules JSON: {rulesDraft.error}</Alert> : null}
-                        {contentDraft?.error ? <Alert tone="danger">Advanced Content JSON: {contentDraft.error}</Alert> : null}
-                        <div className="dialog-actions dialog-actions--compact">
-                          <Button type="button" size="sm" variant="danger" onClick={() => updateGroup(selectedIndex, (draft) => { draft.content = (draft.content ?? []).filter((_item, index) => index !== itemIndex); })}>
-                            <Trash2 size={14} />Delete Item
-                          </Button>
-                        </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
+                  </div>
                 </article>
               ) : null}
             </div>
