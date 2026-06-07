@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import { snapPointToBoardSlot } from "../src/boardSlots";
 import {
@@ -1444,6 +1446,21 @@ describe("manual template design", () => {
     expect(preserved?.position).toEqual(snapPointToBoardSlot({ x: 0.23, y: 0.77 }));
     expect(preserved?.resourceDensityPercent).toBe(180);
     expect(result.design.lockMapDimensions).toBe(true);
+  });
+
+  it("overrides stale foothold toggles when importing a template that has no foothold road anchors", () => {
+    const previous = createDefaultDesign();
+    for (const zone of previous.zones) zone.footholds = true;
+
+    const tournamentJson = readFileSync(resolve(import.meta.dirname, "../generated/tournament-duel-arena.rmg.json"), "utf8");
+    const result = applyRmgJsonToDesign(tournamentJson, previous);
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+
+    for (const zoneName of ["Spawn-A", "Expansion-A", "Spawn-B", "Expansion-B"]) {
+      expect(result.design.zones.find((zone) => zone.name === zoneName)?.footholds, zoneName).toBe(false);
+    }
   });
 
   it("clears the dimension lock after importing a rectangular template", () => {
