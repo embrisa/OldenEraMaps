@@ -58,6 +58,8 @@ interface BuilderWorkspacePageProps {
   handleDeleteConnection(connectionId: string): void;
   handleEditConnection(connectionId: string): void;
   handleGenerateBalancedRandomMap(settings: GeneratorSettings): boolean;
+  balancedRandomOpen: boolean;
+  onBalancedRandomOpenChange(open: boolean): void;
   getMandatoryContentNames(): string[];
   onCanvasChange(canvas: HTMLCanvasElement | null): void;
   commit: CommitDesign;
@@ -100,6 +102,8 @@ export function BuilderWorkspacePage({
   handleDeleteConnection,
   handleEditConnection,
   handleGenerateBalancedRandomMap,
+  balancedRandomOpen,
+  onBalancedRandomOpenChange,
   getMandatoryContentNames,
   onCanvasChange,
   commit,
@@ -110,7 +114,6 @@ export function BuilderWorkspacePage({
   const [roadMode, setRoadMode] = useState(false);
   const [advancedConfigurationOpen, setAdvancedConfigurationOpen] = useState(false);
   const [advancedConfigurationTab, setAdvancedConfigurationTab] = useState<AdvancedConfigurationTab>("layout");
-  const [balancedRandomOpen, setBalancedRandomOpen] = useState(false);
   const [jsonTabNeedsAttention, setJsonTabNeedsAttention] = useState(false);
 
   const validationIssues = useMemo(() => {
@@ -266,7 +269,7 @@ export function BuilderWorkspacePage({
                       <Button variant="violet" onClick={() => openAdvancedConfiguration("content")}><FileJson size={16} />Content Library</Button>
                       <Button variant="violet" onClick={() => openAdvancedConfiguration("expert")}><FileJson size={16} />Expert Settings</Button>
                       <Button variant="green" onClick={() => openAdvancedConfiguration("mandatory")}><PackageCheck size={16} />Mandatory Content</Button>
-                      <Button variant="gold" onClick={() => setBalancedRandomOpen(true)}><Sparkles size={16} />Simple Generator</Button>
+                      <Button variant="gold" onClick={() => onBalancedRandomOpenChange(true)}><Sparkles size={16} />Simple Generator</Button>
                     </div>
                   </CardContent>
                 </Card>
@@ -331,12 +334,8 @@ export function BuilderWorkspacePage({
       />
       <BalancedRandomMapDialog
         open={balancedRandomOpen}
-        onOpenChange={setBalancedRandomOpen}
-        onGenerate={(settings) => {
-          const generated = handleGenerateBalancedRandomMap(settings);
-          if (generated) setBalancedRandomOpen(false);
-          return generated;
-        }}
+        onOpenChange={onBalancedRandomOpenChange}
+        onGenerate={handleGenerateBalancedRandomMap}
       />
     </>
   );

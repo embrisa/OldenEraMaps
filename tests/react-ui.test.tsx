@@ -2095,6 +2095,34 @@ describe("React UI shell", () => {
     expect(screen.getByText("11")).toBeTruthy();
   });
 
+  it("closes the balanced random map dialog after confirming generation over a dirty design", async () => {
+    const user = userEvent.setup();
+    render(<AppShell />);
+
+    await user.click(screen.getAllByRole("button", { name: "Neutral" })[0]);
+    expect(screen.getByText("Neutral-4")).toBeTruthy();
+
+    const advancedSettings = document.querySelector(".advanced-settings-shell");
+    expect(advancedSettings).toBeTruthy();
+    await user.click(within(advancedSettings as HTMLElement).getByRole("button", { name: "Simple Generator" }));
+
+    const balancedDialog = screen.getByRole("dialog", { name: "Balanced Random Map" });
+    const templateName = getInputForLabel(balancedDialog, "Template Name");
+    await user.clear(templateName);
+    await user.type(templateName, "Confirmed Simple Map");
+
+    await user.click(within(balancedDialog).getByRole("button", { name: "Generate Simple Map" }));
+
+    const confirmDialog = screen.getByRole("dialog", { name: "Discard unsaved changes?" });
+    await user.click(within(confirmDialog).getByRole("button", { name: "Discard changes" }));
+
+    await waitFor(() => {
+      expect(screen.queryByRole("dialog", { name: "Balanced Random Map" })).toBeNull();
+    });
+    expect(screen.getByDisplayValue("Confirmed Simple Map")).toBeTruthy();
+    expect(screen.getByText("* Confirmed Simple Map.oetd.json")).toBeTruthy();
+  });
+
   it("applies JSON editor changes back into visible builder fields", async () => {
     render(<AppShell />);
 

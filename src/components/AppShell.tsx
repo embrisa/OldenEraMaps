@@ -37,6 +37,7 @@ const GITHUB_ISSUES_URL = "https://github.com/embrisa/OldenEraMaps/issues";
 export function AppShell(): JSX.Element {
   const [designBoardCanvas, setDesignBoardCanvas] = useState<HTMLCanvasElement | null>(null);
   const [topbarMenuOpen, setTopbarMenuOpen] = useState(false);
+  const [balancedRandomOpen, setBalancedRandomOpen] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const topbarMenuRef = useRef<HTMLDivElement>(null);
@@ -50,6 +51,7 @@ export function AppShell(): JSX.Element {
   const workspace = useBuilderWorkspace({
     getJsonDirty: () => json.jsonDirty,
     requestConfirmation: (confirmation) => download.requestConfirmation(confirmation),
+    onGenerateSuccess: () => setBalancedRandomOpen(false),
     onSyncJsonSnapshot: (next) => json.syncJsonSnapshot(next),
     onClearJsonMessages: () => json.clearJsonMessages()
   });
@@ -382,6 +384,8 @@ export function AppShell(): JSX.Element {
             handleDeleteConnection={workspace.handleDeleteConnection}
             handleEditConnection={workspace.handleEditConnection}
             handleGenerateBalancedRandomMap={workspace.handleGenerateBalancedRandomMap}
+            balancedRandomOpen={balancedRandomOpen}
+            onBalancedRandomOpenChange={setBalancedRandomOpen}
             getMandatoryContentNames={workspace.getMandatoryContentNames}
             onCanvasChange={setDesignBoardCanvas}
             commit={workspace.commit}
