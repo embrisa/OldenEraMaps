@@ -1602,7 +1602,7 @@ describe("React UI shell", () => {
     const width = getInputForLabel(document.body, "Width");
     expect(width.type).toBe("range");
     fireEvent.input(width, { target: { value: "200" } });
-    expect(width.value).toBe("200");
+    expect(width.value).toBe("208");
 
     const widthValue = getSliderValueInputForLabel(document.body, "Width");
     expect(widthValue.type).toBe("number");
@@ -1692,11 +1692,11 @@ describe("React UI shell", () => {
     expect(document.body.querySelector('[data-config-key="global.mapHeight"]')).toBeNull();
 
     fireEvent.input(width, { target: { value: "200" } });
-    expect(width.value).toBe("200");
+    expect(width.value).toBe("208");
 
     // Unlock to verify height was kept in sync
     await user.click(screen.getByRole("checkbox", { name: "Lock width and height together" }));
-    expect(getInputForLabel(document.body, "Height").value).toBe("200");
+    expect(getInputForLabel(document.body, "Height").value).toBe("208");
   });
 
   it("syncs height back to width when enabling the dimension lock from a rectangular size", async () => {
@@ -1708,7 +1708,7 @@ describe("React UI shell", () => {
 
     const height = getInputForLabel(document.body, "Height");
     fireEvent.input(height, { target: { value: "216" } });
-    expect(height.value).toBe("216");
+    expect(height.value).toBe("224");
 
     await user.click(screen.getByRole("checkbox", { name: "Lock width and height together" }));
 
@@ -2126,8 +2126,8 @@ describe("React UI shell", () => {
     expect(settingsCard).toBeTruthy();
 
     await waitFor(() => {
-      expect(getSliderValueInputForLabel(settingsCard as HTMLElement, "Width").value).toBe("200");
-      expect(getSliderValueInputForLabel(settingsCard as HTMLElement, "Height").value).toBe("216");
+      expect(getSliderValueInputForLabel(settingsCard as HTMLElement, "Width").value).toBe("208");
+      expect(getSliderValueInputForLabel(settingsCard as HTMLElement, "Height").value).toBe("224");
       expect(getSelectForLabel(settingsCard as HTMLElement, "Game Mode").value).toBe("Tournament");
     });
     expect(screen.queryByText(/Unexpected identifier "undefined"/i)).toBeNull();
@@ -2636,7 +2636,7 @@ describe("React UI shell", () => {
     await waitFor(() => {
       expect(screen.queryByRole("heading", { name: "Temple Border Clash" })).toBeNull();
     });
-    expect(screen.queryByRole("heading", { name: "Crossroads Pressure" })).toBeNull();
+    expect(screen.getByRole("heading", { name: "Crossroads Pressure" })).toBeTruthy();
     expect(await screen.findByRole("heading", { name: "Merchant Ring" })).toBeTruthy();
 
     await user.click(screen.getByRole("button", { name: "Remove map width range" }));

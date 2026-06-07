@@ -1,7 +1,7 @@
 import { defaultGuardRandomization, spawnLayoutName, type GenerationTuning } from "../generator/math.ts";
 import { buildAllContentCountLimits, buildHubZone, buildNeutralZone, buildSpawnZone, buildZoneLayouts, countDwellingContentItems, highTierRandomHireList, lowTierRandomHireList, maxDwellingCount, normalizeDwellingCount } from "../generator/templateContentBuilder.ts";
 import { normalizeBoardZonePositions } from "../boardSlots.ts";
-import { clamp } from "../math.ts";
+import { clamp, clampToStep } from "../math.ts";
 import { createDefaultSettings } from "../settings.ts";
 import type { AmbientPickupDistribution, BiomeSelector, ContentCountLimit, ContentItem, ContentPlacementRule, ElevationMode, GameEndConditions, GladiatorArenaRules, GlobalBans, GuardedEncounterResourceFractions, HeroSettings, JsonValue, MainObject, MandatoryContentGroup, NeutralZoneQuality, NoiseEntry, Point, TerrainTheme, TournamentRules, ValueOverride, Zone, ZoneLayout } from "../types.ts";
 
@@ -502,11 +502,12 @@ export function normalizeDesignLockState(design: TemplateDesign): TemplateDesign
       neutralCastlesAsRuins: zone.neutralCastlesAsRuins === true || (design.neutralCastlesAsRuins === true && zone.role === "Neutral")
     };
   }));
+  const normalizedMap = normalizeMapDimensions(design);
   return {
     ...design,
+    ...normalizedMap,
     templateDescription: typeof design.templateDescription === "string" ? design.templateDescription : DEFAULT_TEMPLATE_DESCRIPTION,
     playerCount: Number.isInteger(design.playerCount) ? clamp(design.playerCount, 2, 8) : clamp(spawnCount, 2, 8),
-    lockMapDimensions: design.lockMapDimensions === true && design.mapWidth === design.mapHeight,
     orientation: importOrientation(design.orientation, firstZoneName),
     border: importBorder(design.border),
     zoneLayouts: cloneZoneLayouts(Array.isArray(design.zoneLayouts) ? design.zoneLayouts.filter((layout): layout is ZoneLayout => Boolean(layout && typeof layout.name === "string")).map((layout) => ({
@@ -523,6 +524,16 @@ export function normalizeDesignLockState(design: TemplateDesign): TemplateDesign
     globalBans: cloneGlobalBans(design.globalBans) ?? {},
     importedGameRulesGlobalBans: cloneGlobalBans(design.importedGameRulesGlobalBans),
     zones: normalizedZones
+  };
+}
+
+export function normalizeMapDimensions(design: Pick<TemplateDesign, "mapWidth" | "mapHeight" | "lockMapDimensions">): Pick<TemplateDesign, "mapWidth" | "mapHeight" | "lockMapDimensions"> {
+  const mapWidth = clampToStep(design.mapWidth, 80, 512, 16);
+  const mapHeight = clampToStep(design.mapHeight, 80, 512, 16);
+  return {
+    mapWidth,
+    mapHeight,
+    lockMapDimensions: design.lockMapDimensions === true && mapWidth === mapHeight
   };
 }
 

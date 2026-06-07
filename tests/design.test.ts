@@ -1489,8 +1489,8 @@ describe("manual template design", () => {
     expect(imported.ok).toBe(true);
     if (!imported.ok) return;
 
-    expect(imported.design.mapWidth).toBe(200);
-    expect(imported.design.mapHeight).toBe(216);
+    expect(imported.design.mapWidth).toBe(208);
+    expect(imported.design.mapHeight).toBe(224);
     expect(imported.design.lockMapDimensions).toBe(false);
   });
 

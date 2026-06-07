@@ -195,8 +195,8 @@ describe("previewRenderer", () => {
 
     const design2 = createDefaultDesign();
     design2.templateName = "Design B";
-    design2.mapWidth = 200;
-    design2.mapHeight = 200;
+    design2.mapWidth = 208;
+    design2.mapHeight = 208;
     const template2 = designToTemplate(design2);
     const { ctx: ctx2, calls: calls2 } = createStubContext();
     renderPreview(ctx2, template2, { width: 480, height: 270, title: "Design B" });

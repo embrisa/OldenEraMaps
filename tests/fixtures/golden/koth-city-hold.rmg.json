@@ -3,8 +3,8 @@
   "gameMode": "Classic",
   "description": "Built with www.OldenEraMaps.com: Hub layout, 6 neutral zones, 1 castle per player zone, 1 castle per neutral zone.",
   "displayWinCondition": "win_condition_5",
-  "sizeX": 180,
-  "sizeZ": 180,
+  "sizeX": 176,
+  "sizeZ": 176,
   "gameRules": {
     "heroCountMin": 4,
     "heroCountMax": 12,
@@ -129,8 +129,8 @@
             "content_limits_side_4_6",
             "content_limits_side_5_6"
           ],
-          "guardedContentValue": 601228,
-          "guardedContentValuePerArea": 3947,
+          "guardedContentValue": 587867,
+          "guardedContentValuePerArea": 3903,
           "unguardedContentValue": 0,
           "unguardedContentValuePerArea": 0,
           "resourcesValue": 0,
@@ -371,12 +371,12 @@
             "content_limits_side_4_6",
             "content_limits_side_5_6"
           ],
-          "guardedContentValue": 277489,
-          "guardedContentValuePerArea": 2631,
-          "unguardedContentValue": 41623,
-          "unguardedContentValuePerArea": 394,
-          "resourcesValue": 10672,
-          "resourcesValuePerArea": 101,
+          "guardedContentValue": 271323,
+          "guardedContentValuePerArea": 2602,
+          "unguardedContentValue": 40698,
+          "unguardedContentValuePerArea": 390,
+          "resourcesValue": 10435,
+          "resourcesValuePerArea": 100,
           "mainObjects": [
             {
               "type": "Spawn",
@@ -502,12 +502,12 @@
             "content_limits_side_4_6",
             "content_limits_side_5_6"
           ],
-          "guardedContentValue": 277489,
-          "guardedContentValuePerArea": 2631,
-          "unguardedContentValue": 41623,
-          "unguardedContentValuePerArea": 394,
-          "resourcesValue": 10672,
-          "resourcesValuePerArea": 101,
+          "guardedContentValue": 271323,
+          "guardedContentValuePerArea": 2602,
+          "unguardedContentValue": 40698,
+          "unguardedContentValuePerArea": 390,
+          "resourcesValue": 10435,
+          "resourcesValuePerArea": 100,
           "mainObjects": [
             {
               "type": "Spawn",
@@ -633,12 +633,12 @@
             "content_limits_side_4_6",
             "content_limits_side_5_6"
           ],
-          "guardedContentValue": 277489,
-          "guardedContentValuePerArea": 2631,
-          "unguardedContentValue": 41623,
-          "unguardedContentValuePerArea": 394,
-          "resourcesValue": 10672,
-          "resourcesValuePerArea": 101,
+          "guardedContentValue": 271323,
+          "guardedContentValuePerArea": 2602,
+          "unguardedContentValue": 40698,
+          "unguardedContentValuePerArea": 390,
+          "resourcesValue": 10435,
+          "resourcesValuePerArea": 100,
           "mainObjects": [
             {
               "type": "Spawn",
@@ -764,12 +764,12 @@
             "content_limits_side_4_6",
             "content_limits_side_5_6"
           ],
-          "guardedContentValue": 277489,
-          "guardedContentValuePerArea": 2631,
-          "unguardedContentValue": 41623,
-          "unguardedContentValuePerArea": 394,
-          "resourcesValue": 10672,
-          "resourcesValuePerArea": 101,
+          "guardedContentValue": 271323,
+          "guardedContentValuePerArea": 2602,
+          "unguardedContentValue": 40698,
+          "unguardedContentValuePerArea": 390,
+          "resourcesValue": 10435,
+          "resourcesValuePerArea": 100,
           "mainObjects": [
             {
               "type": "Spawn",
@@ -909,11 +909,11 @@
             "content_limits_side_4_6",
             "content_limits_side_5_6"
           ],
-          "guardedContentValue": 416234,
-          "guardedContentValuePerArea": 2631,
-          "unguardedContentValue": 18499,
-          "unguardedContentValuePerArea": 197,
-          "resourcesValue": 1778,
+          "guardedContentValue": 406985,
+          "guardedContentValuePerArea": 2602,
+          "unguardedContentValue": 18088,
+          "unguardedContentValuePerArea": 195,
+          "resourcesValue": 1739,
           "resourcesValuePerArea": 0,
           "mainObjects": [
             {
@@ -1056,11 +1056,11 @@
             "content_limits_side_4_6",
             "content_limits_side_5_6"
           ],
-          "guardedContentValue": 416234,
-          "guardedContentValuePerArea": 2631,
-          "unguardedContentValue": 18499,
-          "unguardedContentValuePerArea": 197,
-          "resourcesValue": 1778,
+          "guardedContentValue": 406985,
+          "guardedContentValuePerArea": 2602,
+          "unguardedContentValue": 18088,
+          "unguardedContentValuePerArea": 195,
+          "resourcesValue": 1739,
           "resourcesValuePerArea": 0,
           "mainObjects": [
             {
@@ -1203,11 +1203,11 @@
             "content_limits_side_4_6",
             "content_limits_side_5_6"
           ],
-          "guardedContentValue": 416234,
-          "guardedContentValuePerArea": 2631,
-          "unguardedContentValue": 18499,
-          "unguardedContentValuePerArea": 197,
-          "resourcesValue": 1778,
+          "guardedContentValue": 406985,
+          "guardedContentValuePerArea": 2602,
+          "unguardedContentValue": 18088,
+          "unguardedContentValuePerArea": 195,
+          "resourcesValue": 1739,
           "resourcesValuePerArea": 0,
           "mainObjects": [
             {
@@ -1350,11 +1350,11 @@
             "content_limits_side_4_6",
             "content_limits_side_5_6"
           ],
-          "guardedContentValue": 416234,
-          "guardedContentValuePerArea": 2631,
-          "unguardedContentValue": 18499,
-          "unguardedContentValuePerArea": 197,
-          "resourcesValue": 1778,
+          "guardedContentValue": 406985,
+          "guardedContentValuePerArea": 2602,
+          "unguardedContentValue": 18088,
+          "unguardedContentValuePerArea": 195,
+          "resourcesValue": 1739,
           "resourcesValuePerArea": 0,
           "mainObjects": [
             {
@@ -1497,11 +1497,11 @@
             "content_limits_side_4_6",
             "content_limits_side_5_6"
           ],
-          "guardedContentValue": 416234,
-          "guardedContentValuePerArea": 2631,
-          "unguardedContentValue": 18499,
-          "unguardedContentValuePerArea": 197,
-          "resourcesValue": 1778,
+          "guardedContentValue": 406985,
+          "guardedContentValuePerArea": 2602,
+          "unguardedContentValue": 18088,
+          "unguardedContentValuePerArea": 195,
+          "resourcesValue": 1739,
           "resourcesValuePerArea": 0,
           "mainObjects": [
             {
@@ -1644,11 +1644,11 @@
             "content_limits_side_4_6",
             "content_limits_side_5_6"
           ],
-          "guardedContentValue": 416234,
-          "guardedContentValuePerArea": 2631,
-          "unguardedContentValue": 18499,
-          "unguardedContentValuePerArea": 197,
-          "resourcesValue": 1778,
+          "guardedContentValue": 406985,
+          "guardedContentValuePerArea": 2602,
+          "unguardedContentValue": 18088,
+          "unguardedContentValuePerArea": 195,
+          "resourcesValue": 1739,
           "resourcesValuePerArea": 0,
           "mainObjects": [
             {

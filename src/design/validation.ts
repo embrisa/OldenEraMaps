@@ -36,6 +36,8 @@ export function validateDesign(design: TemplateDesign): ValidationResult {
   if (!isFiniteNumber(design.gameEndConditions.cityHoldDays)) errors.push("City Hold days is required.");
   if (!orientationNumberFields.every((field) => isFiniteNumber(design.orientation[field]))) errors.push("Map orientation has incomplete numeric settings.");
   if (!borderNumberFields.every((field) => isFiniteNumber(design.border[field]))) errors.push("Map border has incomplete numeric settings.");
+  if (design.mapWidth < 80 || design.mapHeight < 80) errors.push("Map dimensions must be at least 80x80.");
+  if (design.mapWidth % 16 !== 0 || design.mapHeight % 16 !== 0) errors.push("Map dimensions must be divisible by 16.");
   if (!Array.isArray(design.border.obstaclesNoise) || !design.border.obstaclesNoise.every(isNoiseEntry)) errors.push("Obstacle noise must be a JSON array of objects with numeric amp and freq values.");
   if (!Array.isArray(design.border.waterNoise) || !design.border.waterNoise.every(isNoiseEntry)) errors.push("Water noise must be a JSON array of objects with numeric amp and freq values.");
   if (typeof design.border.waterType !== "string") errors.push("Water type is required.");
@@ -104,7 +106,6 @@ export function validateDesign(design: TemplateDesign): ValidationResult {
   } else if (!isGraphConnected(design)) {
     errors.push("Direct and portal connections must connect every zone.");
   }
-  if (design.mapWidth < 80 || design.mapHeight < 80) errors.push("Map dimensions must be at least 80x80.");
   if (design.mapWidth > 240 || design.mapHeight > 240) warnings.push("Official examples top out at 240x240. Larger or rectangular maps are experimental.");
 
   return { errors, warnings };

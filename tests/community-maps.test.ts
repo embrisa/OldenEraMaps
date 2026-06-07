@@ -139,7 +139,7 @@ describe("community catalog", () => {
 
     const wide = createDefaultDesign();
     wide.templateName = "Wide Council";
-    wide.mapWidth = 216;
+    wide.mapWidth = 224;
     wide.mapHeight = 160;
 
     const catalog = uploadCommunityMap(uploadCommunityMap(emptyCatalog(), duel, {

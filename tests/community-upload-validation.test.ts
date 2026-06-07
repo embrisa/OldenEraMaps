@@ -125,8 +125,8 @@ describe("community upload validation", () => {
 
   it("turns risky but structurally valid maps into warnings", async () => {
     const design = createDefaultDesign();
-    design.mapWidth = 260;
-    design.mapHeight = 260;
+    design.mapWidth = 256;
+    design.mapHeight = 256;
     design.zones[0]!.castleCount = 2;
     design.zones[1]!.castleCount = 2;
     design.zones[2]!.castleCount = 2;

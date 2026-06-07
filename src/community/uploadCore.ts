@@ -266,7 +266,7 @@ function normalizeDesignJson(value: unknown, fallback: TemplateDesign, normalize
   }
 
   const candidateTemplateText = canonicalTemplateTextFromDesign(candidate);
-  if (candidateTemplateText !== normalizedTemplateText) {
+  if (candidateTemplateText !== normalizedTemplateText && !designMatchesImportedTemplate(candidate, fallback)) {
     throw new UploadValidationError("Design JSON does not match the uploaded template JSON.", "invalid_design");
   }
 
@@ -274,6 +274,17 @@ function normalizeDesignJson(value: unknown, fallback: TemplateDesign, normalize
     ...candidate,
     zones: normalizeBoardZonePositions(candidate.zones)
   };
+}
+
+function designMatchesImportedTemplate(candidate: TemplateDesign, imported: TemplateDesign): boolean {
+  return stableStringify(comparableDesignJson(candidate)) === stableStringify(comparableDesignJson(imported));
+}
+
+function comparableDesignJson(design: TemplateDesign): unknown {
+  return JSON.parse(serializeDesignFile({
+    ...design,
+    zones: normalizeBoardZonePositions(design.zones)
+  }));
 }
 
 function parseDesignJson(value: unknown): TemplateDesign | null {

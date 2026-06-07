@@ -10,6 +10,7 @@ import {
   MAX_SPAWN_ZONES,
   moveZone,
   parseDesignOrTemplateFile,
+  normalizeMapDimensions,
   serializeDesignFile,
   setDesignPlayerCount,
   templateToDesign,
@@ -322,11 +323,11 @@ export function useBuilderWorkspace({
   const handleMapDimension = useCallback(
     (key: "mapWidth" | "mapHeight", value: number): void => {
       if (design.lockMapDimensions) {
-        commit({ ...design, mapWidth: value, mapHeight: value });
+        commit({ ...design, ...normalizeMapDimensions({ ...design, mapWidth: value, mapHeight: value }) });
         return;
       }
 
-      commit({ ...design, [key]: value });
+      commit({ ...design, ...normalizeMapDimensions({ ...design, [key]: value }) });
     },
     [design, commit]
   );
@@ -335,8 +336,11 @@ export function useBuilderWorkspace({
     (locked: boolean): void => {
       commit({
         ...design,
-        lockMapDimensions: locked,
-        ...(locked ? { mapHeight: design.mapWidth } : {})
+        ...normalizeMapDimensions({
+          ...design,
+          lockMapDimensions: locked,
+          ...(locked ? { mapHeight: design.mapWidth } : {})
+        })
       });
     },
     [design, commit]

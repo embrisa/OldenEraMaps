@@ -8,7 +8,7 @@ import type {
   TerrainTheme,
   ValidationResult
 } from "./types.ts";
-import { clamp } from "./math.ts";
+import { clamp, clampToStep } from "./math.ts";
 
 export const presetOptions: Array<{ value: MapGenerationPreset; label: string }> = [
   { value: "Custom", label: "Custom" },
@@ -462,6 +462,8 @@ export function applyGenerationPreset(settings: GeneratorSettings): GeneratorSet
     case "Custom":
       break;
   }
+  next.mapWidth = clampMapDimension(next.mapWidth);
+  next.mapHeight = clampMapDimension(next.mapHeight);
   return next;
 }
 
@@ -613,8 +615,8 @@ export function normalizeSettings(settings: GeneratorSettings): GeneratorSetting
     next.playerCount = 3;
   }
   next.playerCount = clampInt(next.playerCount, 2, 8);
-  next.mapWidth = clampInt(next.mapWidth, 96, 512);
-  next.mapHeight = clampInt(next.mapHeight, 96, 512);
+  next.mapWidth = clampMapDimension(next.mapWidth);
+  next.mapHeight = clampMapDimension(next.mapHeight);
   next.borderWaterWidth = clampInt(next.borderWaterWidth, 0, 32);
   next.zoneCfg.neutralZoneCount = clampInt(next.zoneCfg.neutralZoneCount, 0, 24);
   next.zoneCfg.playerZoneCastles = clampInt(next.zoneCfg.playerZoneCastles, 0, 8);
@@ -641,6 +643,7 @@ export function validateSettings(settings: GeneratorSettings): ValidationResult 
   if (!settings.templateName.trim()) errors.push("Template name is required.");
   if (settings.heroSettings.heroCountMin > settings.heroSettings.heroCountMax) errors.push("Initial hero cap cannot be greater than max hero cap.");
   if (settings.mapWidth < 96 || settings.mapHeight < 96) errors.push("Map dimensions must be at least 96x96.");
+  if (!isMapDimension(settings.mapWidth) || !isMapDimension(settings.mapHeight)) errors.push("Map dimensions must be divisible by 16.");
   if (totalZones > 32) errors.push("Generated templates support at most 32 zones.");
   if (settings.tournamentRules.enabled && playerCount !== 2) errors.push("Tournament mode requires exactly 2 players.");
   if (settings.gameEndConditions.cityHold && settings.zoneCfg.neutralZoneCount === 0 && settings.topology !== "HubAndSpoke" && settings.topology !== "Triangle") {
@@ -657,4 +660,12 @@ export function validateSettings(settings: GeneratorSettings): ValidationResult 
 
 function clampInt(value: number, min: number, max: number): number {
   return Math.round(clamp(value, min, max));
+}
+
+function clampMapDimension(value: number): number {
+  return clampToStep(value, 96, 512, 16);
+}
+
+function isMapDimension(value: number): boolean {
+  return Number.isInteger(value) && value % 16 === 0;
 }

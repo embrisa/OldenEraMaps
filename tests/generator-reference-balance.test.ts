@@ -54,7 +54,7 @@ function expectTreasureProfile(zone: Zone): void {
   expect(zoneNumber(zone, "guardMultiplier")).toBeCloseTo(1.6, 5);
   expect(zoneNumber(zone, "guardWeeklyIncrement")).toBeCloseTo(0.15, 5);
   expect(zoneNumber(zone, "guardedContentValue")).toBeGreaterThanOrEqual(600000);
-  expect(zoneNumber(zone, "unguardedContentValue")).toBeLessThanOrEqual(15000);
+  expect(zoneNumber(zone, "unguardedContentValue")).toBeLessThanOrEqual(16000);
   expect(zoneNumber(zone, "resourcesValue")).toBe(0);
   expect(zoneNumber(zone, "guardedContentValue")).toBeGreaterThan(zoneNumber(zone, "unguardedContentValue") * 20);
 }
@@ -113,7 +113,7 @@ function buildHubCityHoldBaseline(): GeneratorSettings {
   settings.seed = 60602;
   settings.playerCount = 2;
   settings.mapWidth = 160;
-  settings.mapHeight = 120;
+  settings.mapHeight = 128;
   settings.topology = "HubAndSpoke";
   settings.zoneCfg.neutralZoneCount = 0;
   settings.zoneCfg.hubZoneCastles = 1;
@@ -128,7 +128,7 @@ function buildHighTreasureNeutralBaseline(): GeneratorSettings {
   settings.seed = 60603;
   settings.playerCount = 2;
   settings.mapWidth = 160;
-  settings.mapHeight = 120;
+  settings.mapHeight = 128;
   settings.topology = "Default";
   settings.noDirectPlayerConnections = true;
   settings.zoneCfg.neutralZoneCount = 0;

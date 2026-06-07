@@ -176,4 +176,26 @@ describe("Tournament Duel Arena template", () => {
     }
     expect(prepared).toBeDefined();
   });
+
+  it("can prepare community upload from the raw generated template file", async () => {
+    const { prepareCommunityUploadCore } = await import("../src/community/uploadCore");
+    const { buildPreviewDesign, PREVIEW_RENDERER_VERSION } = await import("../src/community/previewDesign");
+    const { serializeDesignFile } = await import("../src/design");
+
+    const templateText = readFileSync(templatePath, "utf8");
+    const template = parseRmgTemplate(templateText);
+    const design = templateToDesign(template);
+    const preview = buildPreviewDesign(design);
+
+    await expect(prepareCommunityUploadCore({
+      title: "Tournament Duel Arena",
+      description: "Tested upload",
+      visibility: "public" as const,
+      descriptiveTagSlugs: [],
+      templateJson: JSON.parse(templateText),
+      designJson: JSON.parse(serializeDesignFile(design)),
+      previewDesignJson: preview,
+      previewRendererVersion: PREVIEW_RENDERER_VERSION
+    })).resolves.toBeDefined();
+  });
 });

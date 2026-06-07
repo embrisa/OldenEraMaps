@@ -105,7 +105,7 @@ describe("preset and pace parity", () => {
 
   it.each([
     ["SingleHero", { gameMode: "SingleHero", heroHireBan: true, lostStartHero: true, heroMin: 1, heroMax: 1 }],
-    ["BlitzLike", { mapWidth: 120, mapHeight: 120, noDirectPlayerConnections: false, minNeutralZonesBetweenPlayers: 0, neutralStrength: 130, borderStrength: 140 }],
+    ["BlitzLike", { mapWidth: 128, mapHeight: 128, noDirectPlayerConnections: false, minNeutralZonesBetweenPlayers: 0, neutralStrength: 130, borderStrength: 140 }],
     ["JebusLikeObjective", { topology: "HubAndSpoke", cityHold: true, cityHoldDays: 6, hubZoneCastles: 1 }],
     ["AnarchyLike", { encounterHoles: true, randomPortals: true, guardRandomization: 0.3 }]
   ] as const)("applies expected %s identity rules", (preset, expected) => {

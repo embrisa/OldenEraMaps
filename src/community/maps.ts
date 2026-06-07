@@ -412,15 +412,15 @@ function buildSeedCatalog(): CommunityCatalog {
 
   const mirrored = createDefaultDesign();
   mirrored.templateName = "Crossroads Pressure";
-  mirrored.mapWidth = 200;
-  mirrored.mapHeight = 200;
+  mirrored.mapWidth = 208;
+  mirrored.mapHeight = 208;
   mirrored.connections[0]!.guardStrength = 38000;
   mirrored.connections[1]!.guardStrength = 38000;
   mirrored.gameEndConditions.victoryCondition = "win_condition_1";
 
   const wide = createDefaultDesign();
   wide.templateName = "Merchant Ring";
-  wide.mapWidth = 216;
+  wide.mapWidth = 224;
   wide.mapHeight = 160;
   wide.terrainTheme = "Snow";
   wide.heroSettings.heroCountMax = 5;

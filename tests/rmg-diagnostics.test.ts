@@ -70,6 +70,10 @@ describe("rmg diagnostics", () => {
     const recommended = recommendTemplateSizeAndPacing(template);
     expect(recommended).toEqual([]);
 
+    expect(recommendTemplateSizeAndPacing(minimalTemplate({ sizeX: 192, sizeZ: 192 }))).not.toContainEqual(expect.objectContaining({
+      code: "size_not_known_safe"
+    }));
+
     const oversized = structuredClone(template);
     oversized.sizeX = 208;
     oversized.sizeZ = 208;

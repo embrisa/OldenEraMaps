@@ -21,7 +21,6 @@ export interface RmgDiagnosticSummary {
   infos: RmgDiagnostic[];
 }
 
-const knownSafeSquareSizes = new Set([160, 176, 208]);
 const cityHoldWinCondition = "win_condition_5";
 const knownLegendaryPoolEntry = "classic_template_pool_random_t5_item";
 const guaranteedLegendarySid = "random_item_legendary";
@@ -388,15 +387,6 @@ export function recommendTemplateSizeAndPacing(template: RmgTemplate): RmgDiagno
   const players = detectBattleCityPlayers(zones);
   const isThreePlayerSharedCenter = players.length === 3 && zones.some((zone) => zone.name === "Center");
   const isTwoPlayerBattleCity = players.length === 2 && zones.some((zone) => zone.name === "Center");
-  const square = template.sizeX === template.sizeZ;
-
-  if (square && !knownSafeSquareSizes.has(template.sizeX)) {
-    diagnostics.push({
-      code: "size_not_known_safe",
-      severity: "warning",
-      message: `${template.sizeX}x${template.sizeZ} is not one of the known-safe square sizes (160, 176, 208).`
-    });
-  }
 
   if (isTwoPlayerBattleCity && ![160, 176].includes(template.sizeX)) {
     diagnostics.push({
