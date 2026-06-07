@@ -198,6 +198,26 @@ describe("browse API filters", () => {
     expect(selectedColumns).not.toMatch(/(^|\s|,)template_sha256(\s|,|$)/);
   });
 
+  it("rejects Supabase browse failures instead of falling back to local maps when configured", async () => {
+    const backendError = new Error("RPC unavailable");
+    const query = {
+      select: vi.fn(() => query),
+      eq: vi.fn(() => query),
+      order: vi.fn(() => query),
+      range: vi.fn(() => query),
+      then: (resolve: (value: { data: null; error: Error; count: null }) => void) => Promise.resolve(resolve({ data: null, error: backendError, count: null }))
+    };
+    const client = {
+      rpc: vi.fn(() => query)
+    };
+
+    await expect(listMaps({}, client as never)).rejects.toThrow("RPC unavailable");
+  });
+
+  it("rejects when Supabase is configured but no browser client is available", async () => {
+    await expect(listMaps({}, null)).rejects.toThrow("Supabase is configured");
+  });
+
   it("loads public map detail through the narrow public detail RPC", async () => {
     let selectedColumns = "";
     const query = {
@@ -248,6 +268,21 @@ describe("browse API filters", () => {
     expect(selectedColumns).toContain("design_json");
     expect(selectedColumns).not.toMatch(/(^|\s|,)template_sha256(\s|,|$)/);
     expect(detail?.templateJson).toContain('"name": "Test Template"');
+  });
+
+  it("rejects Supabase detail failures instead of falling back to local maps when configured", async () => {
+    const client = {
+      rpc: vi.fn(() => ({
+        select: vi.fn(() => ({
+          maybeSingle: vi.fn(async () => ({
+            data: null,
+            error: new Error("Detail RPC unavailable")
+          }))
+        }))
+      }))
+    };
+
+    await expect(getMap("test-map-1", client as never)).rejects.toThrow("Detail RPC unavailable");
   });
 
 });

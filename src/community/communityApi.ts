@@ -104,15 +104,15 @@ export async function listMaps(
   const page = Math.max(1, filters.page ?? 1);
   const pageSize = filters.pageSize ?? BROWSE_DEFAULT_PAGE_SIZE;
 
-  if (!client || !isSupabaseConfigured) {
+  if (!client) {
+    if (isSupabaseConfigured) throw new Error("Supabase is configured, but the browser client is unavailable.");
+    return listMapsLocal(filters, page, pageSize);
+  }
+  if (client === supabase && !isSupabaseConfigured) {
     return listMapsLocal(filters, page, pageSize);
   }
 
-  try {
-    return await listMapsFromSupabase(client, filters, page, pageSize);
-  } catch {
-    return listMapsLocal(filters, page, pageSize);
-  }
+  return listMapsFromSupabase(client, filters, page, pageSize);
 }
 
 // ---------------------------------------------------------------------------
@@ -253,49 +253,49 @@ export async function getMap(
   id: string,
   client: SupabaseClient<Database> | null = supabase
 ): Promise<MapDetail | null> {
-  if (!client || !isSupabaseConfigured) {
+  if (!client) {
+    if (isSupabaseConfigured) throw new Error("Supabase is configured, but the browser client is unavailable.");
+    return getMapLocal(id);
+  }
+  if (client === supabase && !isSupabaseConfigured) {
     return getMapLocal(id);
   }
 
-  try {
-    const { data, error } = await client
-      .rpc("public_map_detail", { p_map_id: id })
-      .select(`
-        id,
-        owner_id,
-        slug,
-        title,
-        description,
-        visibility,
-        map_width,
-        map_height,
-        player_count,
-        zone_count,
-        connection_count,
-        win_condition,
-        template_name,
-        preview_design_json,
-        preview_renderer_version,
-        template_json,
-        design_json,
-        download_count,
-        rating_count,
-        rating_average,
-        created_at,
-        updated_at,
-        author_name,
-        tags
-      `)
-      .maybeSingle();
+  const { data, error } = await client
+    .rpc("public_map_detail", { p_map_id: id })
+    .select(`
+      id,
+      owner_id,
+      slug,
+      title,
+      description,
+      visibility,
+      map_width,
+      map_height,
+      player_count,
+      zone_count,
+      connection_count,
+      win_condition,
+      template_name,
+      preview_design_json,
+      preview_renderer_version,
+      template_json,
+      design_json,
+      download_count,
+      rating_count,
+      rating_average,
+      created_at,
+      updated_at,
+      author_name,
+      tags
+    `)
+    .maybeSingle();
 
-    if (error) throw error;
-    if (!data) return await getOwnedMapFromSupabase(id, client);
+  if (error) throw error;
+  if (!data) return await getOwnedMapFromSupabase(id, client);
 
-    const row = data as BrowseDetailRow;
-    return browseDetailRowToMapDetail(row);
-  } catch {
-    return getMapLocal(id);
-  }
+  const row = data as BrowseDetailRow;
+  return browseDetailRowToMapDetail(row);
 }
 
 async function getOwnedMapFromSupabase(

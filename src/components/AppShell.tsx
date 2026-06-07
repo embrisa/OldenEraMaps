@@ -427,6 +427,7 @@ export function AppShell(): JSX.Element {
               browse.setBrowsePage(1);
             }}
             onPageChange={browse.setBrowsePage}
+            onRetry={() => void browse.loadBrowseMaps()}
           />
         ) : route.page === "install" ? (
           <InstallationGuidePage />

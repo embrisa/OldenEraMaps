@@ -219,15 +219,17 @@ export function useCommunityBrowse({
     (map: BrowseMapCard): void => {
       void (async () => {
         setCommunityError(undefined);
-        const detail = await getMap(map.id);
-        if (!detail) return;
-        await downloadCommunityTemplateFile(detail);
-        setCommunityCatalog((current) => recordCommunityDownload(current, map.id));
         try {
+          const detail = await getMap(map.id);
+          if (!detail) {
+            setCommunityError(`Failed to find "${map.title}".`);
+            return;
+          }
+          await downloadCommunityTemplateFile(detail);
+          setCommunityCatalog((current) => recordCommunityDownload(current, map.id));
           await recordDownloadApi(map.id);
         } catch (error: unknown) {
-          const message = error instanceof Error ? error.message : "Failed to record download.";
-          setCommunityError(message);
+          setCommunityError(actionErrorMessage(error, "Failed to download map."));
         }
       })();
     },
@@ -248,19 +250,26 @@ export function useCommunityBrowse({
     (mapId: string, mapTitle: string): void => {
       runAfterDiscardingUnsavedChanges(() => {
         void (async () => {
-          const detail = await getMap(mapId);
-          if (!detail) return;
-          const designResult = parseDesignOrTemplateFileResult(detail.designJson);
-          const templateResult = designResult.ok ? designResult : parseDesignOrTemplateFileResult(detail.templateJson);
-          if (!templateResult.ok) {
-            setCommunityError(`Failed to load "${mapTitle}" into the builder. ${templateResult.errorMessage}`);
-            return;
+          try {
+            const detail = await getMap(mapId);
+            if (!detail) {
+              setCommunityError(`Failed to find "${mapTitle}".`);
+              return;
+            }
+            const designResult = parseDesignOrTemplateFileResult(detail.designJson);
+            const templateResult = designResult.ok ? designResult : parseDesignOrTemplateFileResult(detail.templateJson);
+            if (!templateResult.ok) {
+              setCommunityError(`Failed to load "${mapTitle}" into the builder. ${templateResult.errorMessage}`);
+              return;
+            }
+            const next = templateResult.design;
+            setCommunityError(undefined);
+            if (!commit(next, next.zones[0]?.id ?? "", { allowDirtyJsonOverwrite: true, markDirty: false })) return;
+            setCommunityNotice(`Loaded "${mapTitle}" into the builder.`);
+            navigate("builder");
+          } catch (error: unknown) {
+            setCommunityError(actionErrorMessage(error, `Failed to load "${mapTitle}" into the builder.`));
           }
-          const next = templateResult.design;
-          setCommunityError(undefined);
-          if (!commit(next, next.zones[0]?.id ?? "", { allowDirtyJsonOverwrite: true, markDirty: false })) return;
-          setCommunityNotice(`Loaded "${mapTitle}" into the builder.`);
-          navigate("builder");
         })();
       });
     },
@@ -278,11 +287,14 @@ export function useCommunityBrowse({
     async (map: BrowseMapCard): Promise<void> => {
       setDetailOpen(true);
       setDetailMap(null);
+      setCommunityError(undefined);
       try {
         const detail = await getMap(map.id);
         setDetailMap(detail);
-      } catch {
+        if (!detail) setCommunityError(`Failed to find "${map.title}".`);
+      } catch (error: unknown) {
         setDetailMap(null);
+        setCommunityError(actionErrorMessage(error, "Failed to load map details."));
       }
     },
     []

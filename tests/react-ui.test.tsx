@@ -18,6 +18,8 @@ const authMocks = vi.hoisted(() => ({
 
 const communityApiMocks = vi.hoisted(() => ({
   myMaps: [] as Array<Record<string, unknown>>,
+  listMapsError: null as Error | null,
+  listMapsCalls: 0,
   deletedMapIds: [] as string[],
   updatePatches: [] as Array<{ mapId: string; patch: Record<string, unknown> }>,
   updateError: null as Error | null,
@@ -56,6 +58,11 @@ vi.mock("../src/community/communityApi", async (importOriginal) => {
   const actual = await importOriginal<typeof import("../src/community/communityApi")>();
   return {
     ...actual,
+    listMaps: vi.fn(async (...args: Parameters<typeof actual.listMaps>) => {
+      communityApiMocks.listMapsCalls += 1;
+      if (communityApiMocks.listMapsError) throw communityApiMocks.listMapsError;
+      return actual.listMaps(...args);
+    }),
     listMyMaps: vi.fn(async () => ({ maps: communityApiMocks.myMaps })),
     updateMapListing: vi.fn(async (mapId: string, patch: Record<string, unknown>) => {
       if (communityApiMocks.updateError) throw communityApiMocks.updateError;
@@ -175,6 +182,8 @@ afterEach(() => {
   authMocks.session = null;
   authMocks.listeners = [];
   communityApiMocks.myMaps = [];
+  communityApiMocks.listMapsError = null;
+  communityApiMocks.listMapsCalls = 0;
   communityApiMocks.deletedMapIds = [];
   communityApiMocks.updatePatches = [];
   communityApiMocks.updateError = null;
@@ -2700,6 +2709,23 @@ describe("React UI shell", () => {
     expect(await screen.findByRole("heading", { name: "Browse shared maps" })).toBeTruthy();
     // Eventually maps load
     expect(await screen.findByRole("heading", { name: "Temple Border Clash" })).toBeTruthy();
+  });
+
+  it("surfaces browse backend failures and can retry loading maps", async () => {
+    const user = userEvent.setup();
+    communityApiMocks.listMapsError = new Error("Backend catalog unavailable");
+    render(<AppShell />);
+
+    await user.click(screen.getByRole("button", { name: "Browse" }));
+
+    expect(await screen.findByText("Backend catalog unavailable")).toBeTruthy();
+    expect(screen.queryByRole("heading", { name: "Temple Border Clash" })).toBeNull();
+
+    communityApiMocks.listMapsError = null;
+    await user.click(screen.getByRole("button", { name: "Retry" }));
+
+    expect(await screen.findByRole("heading", { name: "Temple Border Clash" })).toBeTruthy();
+    expect(communityApiMocks.listMapsCalls).toBeGreaterThanOrEqual(2);
   });
 
   it("browse cards render static canvas previews", async () => {

@@ -4504,6 +4504,12 @@ button {
   animation: spin 1s linear infinite;
 }
 
+.community-error-state {
+  display: grid;
+  gap: 12px;
+  justify-items: start;
+}
+
 @keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }

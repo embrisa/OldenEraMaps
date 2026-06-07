@@ -65,7 +65,8 @@ export function BrowsePage({
   onTagRemove,
   onRangeChange,
   onRangeRemove,
-  onPageChange
+  onPageChange,
+  onRetry
 }: {
   status: BrowseStatus;
   result: BrowseResult | null;
@@ -91,6 +92,7 @@ export function BrowsePage({
   onRangeChange(key: BrowseRangeKey, range: BrowseNumericRange): void;
   onRangeRemove(key: BrowseRangeKey): void;
   onPageChange(page: number): void;
+  onRetry(): void;
 }): JSX.Element {
   const tagFilterSections = useMemo(() => buildCommunityTagFilterSections(maps), [maps]);
   const tagFilterGroups = useMemo(() => tagFilterSections.flatMap((section) => section.groups), [tagFilterSections]);
@@ -269,7 +271,10 @@ export function BrowsePage({
       ) : status === "error" ? (
         <Card>
           <CardContent>
-            <div className="alert alert--danger">{errorMessage ?? "Failed to load maps. Please try again."}</div>
+            <div className="community-error-state">
+              <div className="alert alert--danger">{errorMessage ?? "Failed to load maps. Please try again."}</div>
+              <Button variant="primary" onClick={onRetry}>Retry</Button>
+            </div>
           </CardContent>
         </Card>
       ) : displayMaps.length === 0 ? (
