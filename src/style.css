@@ -1987,13 +1987,16 @@ button {
   display: grid;
   gap: 10px;
   grid-template-columns: minmax(0, 1fr) minmax(300px, 360px);
+  grid-template-areas:
+    "messages messages"
+    "json analysis";
   align-items: start;
 }
 
 .messages {
   display: grid;
   gap: 6px;
-  grid-column: 1 / -1;
+  grid-area: messages;
 }
 
 .builder-validation-summary {
@@ -2074,7 +2077,7 @@ button {
   border: 1px solid var(--border);
   border-radius: 6px;
   background: var(--panel-2);
-  grid-column: 1;
+  grid-area: json;
   --jse-theme-color: var(--blue);
   --jse-theme-color-highlight: color-mix(in srgb, var(--blue) 72%, white);
   --jse-background-color: var(--panel-2);
@@ -2109,7 +2112,7 @@ button {
   border-radius: 8px;
   background: color-mix(in srgb, var(--panel-3) 90%, black);
   padding: 12px;
-  grid-column: 2;
+  grid-area: analysis;
   align-self: start;
 }
 
@@ -3071,11 +3074,10 @@ button {
 @media (max-width: 1160px) {
   .output-grid {
     grid-template-columns: minmax(0, 1fr);
-  }
-
-  .map-analysis-panel,
-  .rmg-json-editor {
-    grid-column: 1;
+    grid-template-areas:
+      "messages"
+      "analysis"
+      "json";
   }
 
   .topbar-nav {
