@@ -530,6 +530,7 @@ describe("React UI shell", () => {
     expect(jsonTab.getAttribute("data-state")).toBe("active");
     expect(tabPanelDisplay(screen.getByRole("list", { name: "Schematic board legend", hidden: true }))).toBe("none");
     expect(screen.getByText("Ready to export.")).toBeTruthy();
+    expect(screen.getByRole("heading", { name: "Map analysis" })).toBeTruthy();
     expect(tabPanelDisplay(screen.getByLabelText("RMG JSON editor"))).not.toBe("none");
   });
 
@@ -1149,6 +1150,7 @@ describe("React UI shell", () => {
 
   it("opens an export checklist when only warnings are present", async () => {
     const user = userEvent.setup();
+    const { anchor, anchorClick, createObjectUrl } = mockAnchorDownload();
 
     render(<AppShell />);
 
@@ -1167,7 +1169,16 @@ describe("React UI shell", () => {
     expect(within(dialog).getByRole("heading", { name: "Export checklist" })).toBeTruthy();
     expect(within(dialog).getByText("File name: Custom Template.rmg.json")).toBeTruthy();
     expect(within(dialog).getByRole("link", { name: "Installation Guide" })).toBeTruthy();
+    expect(within(dialog).getByText("Preview PNG: Custom Template.png")).toBeTruthy();
     expect(within(dialog).getByRole("button", { name: "Export JSON" })).toBeTruthy();
+
+    await user.click(within(dialog).getByRole("button", { name: "Export JSON" }));
+
+    await waitFor(() => {
+      expect(anchorClick).toHaveBeenCalledTimes(1);
+      expect(createObjectUrl).toHaveBeenCalledTimes(1);
+    });
+    expect(anchor.download).toBe("Custom Template.rmg.json");
   });
 
   it("downloads a builder preview image with the same base name as the exported template", async () => {
@@ -1341,20 +1352,19 @@ describe("React UI shell", () => {
     expect(within(dialog).getByRole("heading", { name: "Expert Settings" })).toBeTruthy();
 
     const valueOverridesField = within(dialog).getByText("Value Overrides JSON").closest(".config-field") as HTMLElement;
-    const globalBansField = within(dialog).getByText("Global Bans JSON").closest(".config-field") as HTMLElement;
     const valueOverrides = valueOverridesField.querySelector("textarea") as HTMLTextAreaElement;
-    const globalBans = globalBansField.querySelector("textarea") as HTMLTextAreaElement;
 
     fireEvent.change(valueOverrides, {
       target: {
         value: JSON.stringify([{ sid: "artifact_guard", guardValue: 4200 }], null, 2)
       }
     });
-    fireEvent.change(globalBans, {
-      target: {
-        value: JSON.stringify({ heroes: ["hero_1"], items: ["artifact_1"] }, null, 2)
-      }
-    });
+    const bannedItemsField = within(dialog).getByText("Banned Items").closest(".config-field") as HTMLElement;
+    const bannedHeroesField = within(dialog).getByText("Banned Heroes").closest(".config-field") as HTMLElement;
+    await user.click(within(bannedItemsField).getByRole("button", { name: "Add item" }));
+    await user.click(within(bannedHeroesField).getByRole("button", { name: "Add hero" }));
+    fireEvent.change(bannedItemsField.querySelector("input") as HTMLInputElement, { target: { value: "artifact_1" } });
+    fireEvent.change(bannedHeroesField.querySelector("input") as HTMLInputElement, { target: { value: "hero_1" } });
 
     await user.click(within(dialog).getByRole("button", { name: "Apply" }));
 

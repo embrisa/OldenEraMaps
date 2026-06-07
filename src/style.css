@@ -214,12 +214,23 @@ button {
   min-width: 0;
 }
 
+.topbar-actions__group {
+  display: grid;
+  gap: 6px;
+}
+
 .topbar-actions .oe-button {
   justify-content: start;
 }
 
 .studio-shell--builder .topbar-actions {
   width: min(300px, calc(100vw - 48px));
+}
+
+@media (min-width: 1160px) {
+  .topbar-menu__trigger {
+    display: none;
+  }
 }
 
 .studio-toolbar {
@@ -2077,9 +2088,12 @@ button {
   z-index: 51;
   top: 50%;
   left: 50%;
+  display: flex;
+  flex-direction: column;
   width: min(980px, calc(100vw - 28px));
-  max-height: min(760px, calc(100vh - 28px));
+  max-height: 88vh;
   transform: translate(-50%, -50%);
+  overflow: hidden;
   border: 1px solid var(--border-2);
   border-radius: 8px;
   background: var(--panel);
@@ -2089,7 +2103,16 @@ button {
 
 .studio-shell--builder .oe-dialog {
   width: 980px;
-  max-height: 760px;
+  max-height: 88vh;
+}
+
+.oe-dialog__body {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+  overflow: auto;
+  padding-right: 4px;
 }
 
 .oe-dialog__close {
@@ -2373,6 +2396,27 @@ button {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
+}
+
+.structured-list-editor {
+  display: grid;
+  gap: 8px;
+}
+
+.structured-list-editor__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.structured-list-editor__row--numbers {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) auto;
+}
+
+.structured-list-editor__empty {
+  color: var(--muted);
+  font-size: 0.78rem;
 }
 
 .content-limit-list {
@@ -2899,16 +2943,34 @@ button {
 }
 
 @media (max-width: 1160px) {
+  .topbar-nav {
+    display: none;
+  }
+
+  .topbar-menu__trigger {
+    display: inline-flex;
+  }
+
   .studio-shell--builder {
     padding-inline: 14px;
   }
 
   .studio-shell--builder .studio-topbar {
-    grid-template-columns: minmax(13rem, auto) minmax(0, 1fr) auto auto auto;
+    grid-template-columns: minmax(13rem, auto) minmax(0, 1fr) auto;
   }
 
   .studio-shell--builder .studio-topbar .topbar-stats {
     display: none;
+  }
+
+  .studio-shell--builder .topbar-context,
+  .studio-shell--builder .topbar-file-actions {
+    grid-column: 1 / -1;
+  }
+
+  .studio-shell--builder .topbar-file-actions {
+    justify-content: flex-start;
+    flex-wrap: wrap;
   }
 
   .studio-shell--builder .studio-workspace {

@@ -69,8 +69,8 @@ export function parseJsonInput<T>(value: string): { ok: true; value: T | undefin
   if (value.trim() === "") return { ok: true, value: undefined };
   try {
     return { ok: true, value: JSON.parse(value) as T };
-  } catch {
-    return { ok: false, error: "Must be valid JSON." };
+  } catch (error) {
+    return { ok: false, error: formatJsonParseError(error) };
   }
 }
 
@@ -99,4 +99,22 @@ function applySuggestedValue(button: HTMLButtonElement, value: string): void {
   valueSetter?.call(control, value);
   control.dispatchEvent(new Event("input", { bubbles: true }));
   control.dispatchEvent(new Event("change", { bubbles: true }));
+}
+
+function formatJsonParseError(error: unknown): string {
+  if (!(error instanceof Error) || !error.message.trim()) {
+    return "Must be valid JSON.";
+  }
+
+  const columnMatch = error.message.match(/position\s+(\d+)/i);
+  if (!columnMatch) {
+    return `Must be valid JSON. ${error.message}`;
+  }
+
+  const position = Number(columnMatch[1]);
+  if (!Number.isFinite(position) || position < 0) {
+    return error.message;
+  }
+
+  return `Must be valid JSON. ${error.message} (around character ${position + 1})`;
 }

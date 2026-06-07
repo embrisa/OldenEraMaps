@@ -75,15 +75,18 @@ export function useTemplateDownload({
       return;
     }
 
-    if (forceExportJson === "") return;
+    if (exportHasBlockingIssues && forceExportJson === "") return;
+    if (!exportHasBlockingIssues && exportJson === "") return;
     setExportWarningOpen(true);
   }, [validation.errors.length, templateDiagnostics.errors.length, templateDiagnostics.warnings.length, exportJson, exportFileName, forceExportJson]);
 
   const handleForceExportClick = useCallback(async (): Promise<void> => {
-    if (forceExportJson === "") return;
+    const exportHasBlockingIssues = validation.errors.length > 0 || templateDiagnostics.errors.length > 0;
+    const payload = exportHasBlockingIssues ? forceExportJson : exportJson;
+    if (payload === "") return;
     setExportWarningOpen(false);
-    await downloadText(exportFileName, forceExportJson, "application/json", { preferSavePicker: true });
-  }, [exportFileName, forceExportJson]);
+    await downloadText(exportFileName, payload, "application/json", { preferSavePicker: true });
+  }, [exportFileName, exportJson, forceExportJson, templateDiagnostics.errors.length, validation.errors.length]);
 
   const handleExportPreviewImageClick = useCallback(async (): Promise<void> => {
     if (!previewAvailable) return;
