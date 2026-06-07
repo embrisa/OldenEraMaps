@@ -487,7 +487,9 @@ export function templateToDesign(template: RmgTemplate): TemplateDesign {
     mapHeight: template.sizeZ,
     terrainTheme: inferGlobalTerrainTheme(snappedDesignZones) ?? defaults.terrainTheme,
     heroSettings: {
-      heroCountMin: gameRules?.heroCountMin ?? defaults.heroSettings.heroCountMin,
+      heroCountMin: gameRules?.heroCountMin !== undefined
+        ? gameRules.heroCountMin + (gameRules.heroCountIncrement ?? 1)
+        : defaults.heroSettings.heroCountMin,
       heroCountMax: gameRules?.heroCountMax ?? defaults.heroSettings.heroCountMax,
       heroCountIncrement: gameRules?.heroCountIncrement ?? defaults.heroSettings.heroCountIncrement
     },

@@ -34,7 +34,7 @@ export function ValidationOutputPanel({
   onJsonChange
 }: {
   validation: ValidationResult;
-  templateDiagnostics: RmgDiagnosticSummary;
+  templateDiagnostics?: RmgDiagnosticSummary;
   showBuilderValidationMessages?: boolean;
   analysis?: TemplateAnalysis | null;
   jsonValue: string;
@@ -44,6 +44,10 @@ export function ValidationOutputPanel({
   jsonValidationErrors: string[];
   onJsonChange(value: string, parseError?: string): void;
 }): JSX.Element {
+  const diagErrors = templateDiagnostics?.errors ?? [];
+  const diagWarnings = templateDiagnostics?.warnings ?? [];
+  const diagInfos = templateDiagnostics?.infos ?? [];
+
   return (
     <Card>
       <CardHeader>
@@ -52,15 +56,15 @@ export function ValidationOutputPanel({
       <CardContent className="output-grid">
         <div className="messages">
           {showBuilderValidationMessages ? <BuilderValidationMessages validation={validation} /> : null}
-          {templateDiagnostics.errors.map((diagnostic) => <Alert key={`diag-${diagnostic.code}-${diagnostic.message}`} tone="danger">{diagnostic.message}</Alert>)}
-          {templateDiagnostics.warnings.map((diagnostic) => <Alert key={`diag-${diagnostic.code}-${diagnostic.message}`} tone="warning">{diagnostic.message}</Alert>)}
-          {templateDiagnostics.infos.map((diagnostic) => <Alert key={`diag-${diagnostic.code}-${diagnostic.message}`} tone="info">{diagnostic.message}</Alert>)}
+          {diagErrors.map((diagnostic) => <Alert key={`diag-${diagnostic.code}-${diagnostic.message}`} tone="danger">{diagnostic.message}</Alert>)}
+          {diagWarnings.map((diagnostic) => <Alert key={`diag-${diagnostic.code}-${diagnostic.message}`} tone="warning">{diagnostic.message}</Alert>)}
+          {diagInfos.map((diagnostic) => <Alert key={`diag-${diagnostic.code}-${diagnostic.message}`} tone="info">{diagnostic.message}</Alert>)}
           {jsonDirty ? <Alert tone="warning">JSON edits will auto-apply as soon as they parse and validate.</Alert> : null}
           {jsonParseError ? <Alert tone="danger">{jsonParseError}</Alert> : null}
           {jsonApplyError ? <Alert tone="danger">{jsonApplyError}</Alert> : null}
           {jsonValidationErrors.map((message) => <Alert key={`json-${message}`} tone="danger">{message}</Alert>)}
-          {validation.errors.length === 0 && templateDiagnostics.errors.length === 0
-            ? <Alert tone="success">{templateDiagnostics.warnings.length > 0 ? "Ready to export with warnings." : "Ready to export."}</Alert>
+          {validation.errors.length === 0 && diagErrors.length === 0
+            ? <Alert tone="success">{diagWarnings.length > 0 ? "Ready to export with warnings." : "Ready to export."}</Alert>
             : null}
         </div>
         {analysis ? <MapAnalysisPanel analysis={analysis} /> : null}

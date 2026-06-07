@@ -240,7 +240,7 @@ function maxJsonDepth(value: unknown): number {
   return 1 + Math.max(0, ...Object.values(value as Record<string, unknown>).map(maxJsonDepth));
 }
 
-function canonicalizeTemplate(template: RmgTemplate): { json: unknown; text: string } {
+export function canonicalizeTemplate(template: RmgTemplate): { json: unknown; text: string } {
   const json = JSON.parse(serializeRmgTemplate(template));
   return {
     json,
@@ -248,7 +248,7 @@ function canonicalizeTemplate(template: RmgTemplate): { json: unknown; text: str
   };
 }
 
-function canonicalTemplateTextFromDesign(design: TemplateDesign): string {
+export function canonicalTemplateTextFromDesign(design: TemplateDesign): string {
   return canonicalizeTemplate(designToTemplate(design)).text;
 }
 

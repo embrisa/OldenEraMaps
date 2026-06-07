@@ -449,14 +449,21 @@ const template = {
   sizeX: 176,
   sizeZ: 176,
   gameRules: {
-    heroCountMin: 2,
+    heroCountMin: 1,
     heroCountMax: 8,
     heroCountIncrement: 1,
     heroHireBan: false,
     encounterHoles: false,
     factionLawsExpModifier: 1,
     astrologyExpModifier: 1,
-    bonuses: [],
+    bonuses: [
+      {
+        sid: "add_bonus_hero_stat",
+        receiverSide: -1,
+        receiverFilter: "all_heroes",
+        parameters: ["movementBonus", "0"]
+      }
+    ],
     winConditions: {
       classic: true,
       desertion: true,
@@ -469,8 +476,8 @@ const template = {
       tournament: true,
       tournamentPointsToWin: 7,
       tournamentSaveArmy: true,
-      tournamentDays: [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5],
-      tournamentAnnounceDays: [14, 28, 42, 56, 70, 84, 98, 112, 126, 140, 154, 168, 182, 196, 210]
+      tournamentDays: [18, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13],
+      tournamentAnnounceDays: [1, 20, 34, 48, 62, 76, 90, 104, 118, 132, 146, 160, 174]
     }
   },
   variants: [
