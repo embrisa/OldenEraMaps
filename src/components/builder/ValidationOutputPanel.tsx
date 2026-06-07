@@ -58,7 +58,6 @@ export function ValidationOutputPanel({
           {showBuilderValidationMessages ? <BuilderValidationMessages validation={validation} /> : null}
           {diagErrors.map((diagnostic) => <Alert key={`diag-${diagnostic.code}-${diagnostic.message}`} tone="danger">{diagnostic.message}</Alert>)}
           {diagWarnings.map((diagnostic) => <Alert key={`diag-${diagnostic.code}-${diagnostic.message}`} tone="warning">{diagnostic.message}</Alert>)}
-          {diagInfos.map((diagnostic) => <Alert key={`diag-${diagnostic.code}-${diagnostic.message}`} tone="info">{diagnostic.message}</Alert>)}
           {jsonDirty ? <Alert tone="warning">JSON edits will auto-apply as soon as they parse and validate.</Alert> : null}
           {jsonParseError ? <Alert tone="danger">{jsonParseError}</Alert> : null}
           {jsonApplyError ? <Alert tone="danger">{jsonApplyError}</Alert> : null}
@@ -66,6 +65,14 @@ export function ValidationOutputPanel({
           {validation.errors.length === 0 && diagErrors.length === 0
             ? <Alert tone="success">{diagWarnings.length > 0 ? "Ready to export with warnings." : "Ready to export."}</Alert>
             : null}
+          {diagInfos.length > 0 ? (
+            <details className="diagnostic-details">
+              <summary>Troubleshooting</summary>
+              <div className="diagnostic-details__body">
+                {diagInfos.map((diagnostic) => <Alert key={`diag-${diagnostic.code}-${diagnostic.message}`} tone="info">{diagnostic.message}</Alert>)}
+              </div>
+            </details>
+          ) : null}
         </div>
         {analysis ? <MapAnalysisPanel analysis={analysis} /> : null}
         <RmgJsonEditor value={jsonValue} onChange={onJsonChange} />

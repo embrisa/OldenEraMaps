@@ -32,10 +32,28 @@
       "heroLighting": true,
       "heroLightingDay": 1,
       "lostStartCity": false,
+      "lostStartCityDay": 3,
       "lostStartHero": true,
+      "cityHold": false,
+      "cityHoldDays": 6,
+      "championSelectRule": "StartHero",
       "tournament": true,
-      "tournamentPointsToWin": 7,
       "tournamentSaveArmy": true,
+      "tournamentAnnounceDays": [
+        1,
+        20,
+        34,
+        48,
+        62,
+        76,
+        90,
+        104,
+        118,
+        132,
+        146,
+        160,
+        174
+      ],
       "tournamentDays": [
         18,
         13,
@@ -51,21 +69,7 @@
         13,
         13
       ],
-      "tournamentAnnounceDays": [
-        1,
-        20,
-        34,
-        48,
-        62,
-        76,
-        90,
-        104,
-        118,
-        132,
-        146,
-        160,
-        174
-      ]
+      "tournamentPointsToWin": 7
     }
   },
   "variants": [
@@ -103,7 +107,7 @@
           "guardCutoffValue": 4500,
           "guardRandomization": 0.03,
           "guardMultiplier": 3.5,
-          "guardWeeklyIncrement": 0.3,
+          "guardWeeklyIncrement": 0.5,
           "guardReactionDistribution": [
             0,
             5,
@@ -179,13 +183,26 @@
               "Grass"
             ]
           },
-          "crossroadsPosition": 0,
           "roads": [
             {
               "from": {
+                "type": "MandatoryContent",
+                "args": [
+                  "name_center_anchor"
+                ]
+              },
+              "to": {
                 "type": "Connection",
                 "args": [
                   "Treasure-A-Center"
+                ]
+              }
+            },
+            {
+              "from": {
+                "type": "MandatoryContent",
+                "args": [
+                  "name_center_anchor"
                 ]
               },
               "to": {
@@ -563,23 +580,7 @@
               "Spawn-A"
             ]
           },
-          "crossroadsPosition": 0,
-          "roads": [
-            {
-              "from": {
-                "type": "Connection",
-                "args": [
-                  "Spawn-A-Treasure-A"
-                ]
-              },
-              "to": {
-                "type": "Connection",
-                "args": [
-                  "Treasure-A-Center"
-                ]
-              }
-            }
-          ]
+          "roads": []
         },
         {
           "name": "Spawn-B",
@@ -947,23 +948,7 @@
               "Spawn-B"
             ]
           },
-          "crossroadsPosition": 0,
-          "roads": [
-            {
-              "from": {
-                "type": "Connection",
-                "args": [
-                  "Spawn-B-Treasure-B"
-                ]
-              },
-              "to": {
-                "type": "Connection",
-                "args": [
-                  "Treasure-B-Center"
-                ]
-              }
-            }
-          ]
+          "roads": []
         }
       ],
       "connections": [
@@ -1024,7 +1009,7 @@
           "guardEscape": false,
           "simTurnSquad": true,
           "guardValue": 450000,
-          "guardWeeklyIncrement": 0.25,
+          "guardWeeklyIncrement": 0.6,
           "guardMatchGroup": "guard_center_a"
         },
         {
@@ -1036,7 +1021,7 @@
           "guardEscape": false,
           "simTurnSquad": true,
           "guardValue": 450000,
-          "guardWeeklyIncrement": 0.25,
+          "guardWeeklyIncrement": 0.6,
           "guardMatchGroup": "guard_center_b"
         }
       ]
@@ -1353,6 +1338,7 @@
       "name": "mandatory_content_center",
       "content": [
         {
+          "name": "name_center_anchor",
           "includeLists": [
             "basic_content_list_building_hero_stats_and_skills_tier_3"
           ]

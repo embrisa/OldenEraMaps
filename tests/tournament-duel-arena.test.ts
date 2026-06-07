@@ -3,6 +3,7 @@ import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import { templateToDesign } from "../src/design/conversion";
 import { validateDesign } from "../src/design/validation";
+import { collectRmgDiagnostics } from "../src/rmgDiagnostics";
 import { parseRmgTemplate } from "../src/types";
 import { expectDirectAndPortalGraphConnected } from "./template-invariants";
 
@@ -42,7 +43,10 @@ describe("Tournament Duel Arena template", () => {
  
     // 3. Design validation (graph connectivity, matching factions, etc.)
     const validation = validateDesign(importedDesign);
+    const diagnostics = collectRmgDiagnostics(template);
     expect(validation.errors).toEqual([]);
+    expect(diagnostics.errors).toEqual([]);
+    expect(diagnostics.warnings).toEqual([]);
     expect(zones).toHaveLength(7);
     expect(connections).toHaveLength(6);
     expectDirectAndPortalGraphConnected(zones, connections);
@@ -105,7 +109,6 @@ describe("Tournament Duel Arena template", () => {
   });
  
   it("can prepare community upload without preview mismatch error", async () => {
-    const { writeFileSync } = await import("node:fs");
     const { prepareCommunityUploadCore } = await import("../src/community/uploadCore");
     const { buildPreviewDesign, PREVIEW_RENDERER_VERSION } = await import("../src/community/previewDesign");
     const { serializeDesignFile, designToTemplate } = await import("../src/design");
@@ -114,11 +117,10 @@ describe("Tournament Duel Arena template", () => {
     const template = parseRmgTemplate(readFileSync(templatePath, "utf8"));
     const design = templateToDesign(template);
  
-    // Overwrite templatePath with the canonical round-tripped version
+    // Use the canonical round-tripped version without mutating the committed template file.
     const cleanTemplate = designToTemplate(design);
     const cleanTemplateText = serializeTemplate(cleanTemplate);
-    writeFileSync(templatePath, cleanTemplateText, "utf8");
- 
+
     // Re-parse the clean template
     const canonicalTemplate = parseRmgTemplate(cleanTemplateText);
     const cleanDesign = templateToDesign(canonicalTemplate);
@@ -159,4 +161,3 @@ describe("Tournament Duel Arena template", () => {
     expect(prepared).toBeDefined();
   });
 });
-
