@@ -1,7 +1,7 @@
 import { buildGameRules } from "../generator/gameRulesBuilder.ts";
 import { directConnection } from "../generator/connectionBuilder.ts";
 import { computeContentScale, defaultGuardRandomization, sideLayoutName, treasureLayoutName, type GenerationTuning } from "../generator/math.ts";
-import { buildAllMandatoryContent, buildDwellingContentItems, buildHubZone, buildNeutralZone, buildSpawnZone, buildSpecificDwellingContentItems, normalizeDwellingCount } from "../generator/templateContentBuilder.ts";
+import { buildAllMandatoryContent, buildDwellingContentItems, buildHubZone, buildNeutralZone, buildSpawnZone, buildSpecificDwellingContentItems, countDwellingContentItems, dwellingSettingsKey, isDwellingContentItem, normalizeDwellingCount } from "../generator/templateContentBuilder.ts";
 import { applyNeutralCastleRuinsToZone } from "../generator/topologyVariantBuilder.ts";
 import { normalizeBoardZonePositions } from "../boardSlots.ts";
 import { createDefaultSettings } from "../settings.ts";
@@ -24,6 +24,7 @@ import {
   suffixForZone,
   toStringList,
   type DesignConnection,
+  type DesignConnectionType,
   type DesignFile,
   type DesignBorder,
   type DesignOrientation,
@@ -76,7 +77,8 @@ export function designToTemplate(design: TemplateDesign, options: DesignToTempla
   };
   const connsByZone = new Map(design.zones.map((zone) => [zone.id, [] as string[]]));
   for (const connection of design.connections) {
-    if (connection.road) {
+    // Proximity links only mark adjacency; there is no path for a zone road to lead to.
+    if (connection.road && connection.type !== "Proximity") {
       connsByZone.get(connection.from)?.push(connection.name);
       connsByZone.get(connection.to)?.push(connection.name);
     }
@@ -111,12 +113,12 @@ export function designToTemplate(design: TemplateDesign, options: DesignToTempla
     if (design.useCustomMandatoryContent) {
       zone.mandatoryContent = [...designZone.mandatoryContent];
     }
-    zone.guardedContentValue = designZone.guardedContentValue;
-    zone.guardedContentValuePerArea = designZone.guardedContentValuePerArea;
-    zone.unguardedContentValue = designZone.unguardedContentValue;
-    zone.unguardedContentValuePerArea = designZone.unguardedContentValuePerArea;
-    zone.resourcesValue = designZone.resourcesValue;
-    zone.resourcesValuePerArea = designZone.resourcesValuePerArea;
+    zone.guardedContentValue = scaleByZonePercent(designZone.guardedContentValue, designZone.structureDensityPercent);
+    zone.guardedContentValuePerArea = scaleByZonePercent(designZone.guardedContentValuePerArea, designZone.structureDensityPercent);
+    zone.unguardedContentValue = scaleByZonePercent(designZone.unguardedContentValue, designZone.structureDensityPercent);
+    zone.unguardedContentValuePerArea = scaleByZonePercent(designZone.unguardedContentValuePerArea, designZone.structureDensityPercent);
+    zone.resourcesValue = scaleByZonePercent(designZone.resourcesValue, designZone.resourceDensityPercent);
+    zone.resourcesValuePerArea = scaleByZonePercent(designZone.resourcesValuePerArea, designZone.resourceDensityPercent);
     applyZoneRuleOverrides(zone, designZone);
     if (designZone.useCustomMainObjects) {
       zone.mainObjects = cloneCustomMainObjectsForDesignZone(designZone);
@@ -164,6 +166,9 @@ export function designToTemplate(design: TemplateDesign, options: DesignToTempla
         guardWeeklyIncrement: 0.15
       };
       applyConnectionGuardOverrides(templateConnection, connection);
+      if (connection.simTurnSquad !== undefined) {
+        templateConnection.simTurnSquad = connection.simTurnSquad;
+      }
       if (connection.portalPlacementRulesFrom !== undefined) {
         templateConnection.portalPlacementRulesFrom = clonePlacementRules(connection.portalPlacementRulesFrom);
       }
@@ -184,6 +189,10 @@ export function designToTemplate(design: TemplateDesign, options: DesignToTempla
       connection.guardMatchGroup ?? `manual_guard_${connection.id}`,
       defaultTuning
     );
+    if (connection.templateConnectionType) {
+      templateConnection.connectionType = connection.templateConnectionType;
+    }
+    templateConnection.road = connection.road;
     applyConnectionGuardOverrides(templateConnection, connection);
     if (connection.simTurnSquad !== undefined) {
       templateConnection.simTurnSquad = connection.simTurnSquad;
@@ -210,7 +219,7 @@ export function designToTemplate(design: TemplateDesign, options: DesignToTempla
   const generatedMandatoryContent = buildDesignMandatoryContent(design, playerZoneCastles);
 
   const variant = {
-    orientation: exportOrientation(design.orientation, zones[0]?.name),
+    orientation: exportOrientation(design.orientation, zones.map((zone) => zone.name)),
     border: exportBorder(design.border),
     zones,
     connections
@@ -364,13 +373,23 @@ export function mergeImportedDesign(previous: TemplateDesign, imported: Template
       : nextPrefixedId(usedZoneIds, "zone");
 
     usedZoneIds.add(id);
+    const resourceDensityPercent = previousZone?.resourceDensityPercent ?? zone.resourceDensityPercent;
+    const structureDensityPercent = previousZone?.structureDensityPercent ?? zone.structureDensityPercent;
 
     return {
       ...zone,
+      // The applied JSON holds budgets that already include the kept percentages; store them unscaled so the next
+      // export does not apply the percentages twice.
+      guardedContentValue: unscaleByZonePercent(zone.guardedContentValue, structureDensityPercent),
+      guardedContentValuePerArea: unscaleByZonePercent(zone.guardedContentValuePerArea, structureDensityPercent),
+      unguardedContentValue: unscaleByZonePercent(zone.unguardedContentValue, structureDensityPercent),
+      unguardedContentValuePerArea: unscaleByZonePercent(zone.unguardedContentValuePerArea, structureDensityPercent),
+      resourcesValue: unscaleByZonePercent(zone.resourcesValue, resourceDensityPercent),
+      resourcesValuePerArea: unscaleByZonePercent(zone.resourcesValuePerArea, resourceDensityPercent),
       id,
       terrainTheme: previousZone?.terrainTheme ?? zone.terrainTheme,
-      resourceDensityPercent: previousZone?.resourceDensityPercent ?? zone.resourceDensityPercent,
-      structureDensityPercent: previousZone?.structureDensityPercent ?? zone.structureDensityPercent,
+      resourceDensityPercent,
+      structureDensityPercent,
       neutralStackStrengthPercent: previousZone?.neutralStackStrengthPercent ?? zone.neutralStackStrengthPercent,
       footholds: zone.footholds,
       roads: templateZone?.roads !== undefined ? templateZone.roads.length > 0 : (previousZone?.roads ?? zone.roads),
@@ -525,8 +544,8 @@ export function templateToDesign(template: RmgTemplate): TemplateDesign {
     },
     tournamentRules: {
       enabled: winConditions?.tournament ?? gameRules?.tournamentRules ?? defaults.tournamentRules.enabled,
-      firstTournamentDay: inferFirstTournamentDay(winConditions?.tournamentDays, defaults.tournamentRules.firstTournamentDay),
-      interval: inferTournamentInterval(winConditions?.tournamentDays, defaults.tournamentRules.interval),
+      firstTournamentDay: inferFirstTournamentDay(winConditions?.tournamentDays, winConditions?.tournamentAnnounceDays, defaults.tournamentRules.firstTournamentDay),
+      interval: inferTournamentInterval(winConditions?.tournamentDays, winConditions?.tournamentAnnounceDays, defaults.tournamentRules.interval),
       pointsToWin: winConditions?.tournamentPointsToWin ?? defaults.tournamentRules.pointsToWin,
       saveArmy: winConditions?.tournamentSaveArmy ?? defaults.tournamentRules.saveArmy
     },
@@ -549,9 +568,10 @@ export function templateToDesign(template: RmgTemplate): TemplateDesign {
         name: pushUniqueName(usedConnectionNames, connection.name?.trim() || `Path-${connection.from}-${connection.to}`),
         from: idByName.get(connection.from)!,
         to: idByName.get(connection.to)!,
-        type: connection.connectionType === "Portal" ? "Portal" : connection.connectionType === "Proximity" ? "Proximity" : "Direct",
+        type: importedConnectionType(connection.connectionType),
+        ...(isPreservedDirectConnectionType(connection.connectionType) ? { templateConnectionType: connection.connectionType } : {}),
         guardStrength: connection.guardValue ?? 30000,
-        road: connection.road ?? true,
+        road: connection.road ?? connection.connectionType !== "Proximity",
         guardRandomization: connection.guardRandomization,
         guardWeeklyIncrement: connection.guardWeeklyIncrement,
         guardEscape: connection.guardEscape,
@@ -562,6 +582,15 @@ export function templateToDesign(template: RmgTemplate): TemplateDesign {
         portalPlacementRulesTo: clonePlacementRules(connection.portalPlacementRulesTo)
       }))
   });
+}
+
+function importedConnectionType(connectionType: string | undefined): DesignConnectionType {
+  return connectionType === "Portal" ? "Portal" : connectionType === "Proximity" ? "Proximity" : "Direct";
+}
+
+// Walkable connection types the builder edits as Direct but writes back under their original name (e.g. Default, GladiatorArena).
+function isPreservedDirectConnectionType(connectionType: string | undefined): connectionType is string {
+  return typeof connectionType === "string" && connectionType.trim() !== "" && importedConnectionType(connectionType) === "Direct" && connectionType !== "Direct";
 }
 
 function defaultDesignOrientation(zeroAngleZone?: string): DesignOrientation {
@@ -579,9 +608,11 @@ function defaultDesignBorder(): DesignBorder {
   };
 }
 
-function exportOrientation(orientation: DesignOrientation, fallbackZeroAngleZone: string | undefined): Orientation {
+function exportOrientation(orientation: DesignOrientation, zoneNames: string[]): Orientation {
+  // The anchor is stored by name, so a renamed or deleted zone would leave it dangling; fall back to the first zone.
+  const zeroAngleZone = orientation.zeroAngleZone && zoneNames.includes(orientation.zeroAngleZone) ? orientation.zeroAngleZone : zoneNames[0];
   return {
-    zeroAngleZone: orientation.zeroAngleZone || fallbackZeroAngleZone,
+    zeroAngleZone,
     baseAngleMin: orientation.baseAngleMin,
     baseAngleMax: orientation.baseAngleMax,
     randomAngleAmplitude: orientation.randomAngleAmplitude,
@@ -702,7 +733,8 @@ function cloneZoneLayouts(layouts: ZoneLayout[]): ZoneLayout[] {
 }
 
 function cloneContentCountLimits(limits: ContentCountLimit[]): ContentCountLimit[] {
-  return structuredClone(limits);
+  // Clone groups one by one: structuredClone of the whole list would keep arrays shared between groups shared.
+  return limits.map((limit) => structuredClone(limit));
 }
 
 function cloneMandatoryContent(groups: MandatoryContentGroup[]): MandatoryContentGroup[] {
@@ -722,17 +754,34 @@ function buildDesignMandatoryContent(design: TemplateDesign, playerZoneCastles: 
   const neutralPlans = design.zones
     .filter((zone) => zone.role === "Neutral")
     .map((zone) => ({ letter: suffixForZone(zone, "Neutral"), quality: zone.quality, role: "Standard" as const, castleCount: zone.castleCount }));
+  // Key dwelling data the way buildAllMandatoryContent looks it up (by group letter), not by the editable zone name.
+  const letteredZones = design.zones.flatMap((zone) =>
+    zone.role === "Spawn" ? [{ zone, key: dwellingSettingsKey("Spawn", suffixForZone(zone, "Spawn")) }]
+      : zone.role === "Neutral" ? [{ zone, key: dwellingSettingsKey("Neutral", suffixForZone(zone, "Neutral")) }]
+        : []);
   const groups = buildAllMandatoryContent(playerLetters, neutralPlans, {
     zoneCfg: { playerZoneCastles },
+    playerZoneCastlesByLetter: Object.fromEntries(playerZones.map((zone) => [suffixForZone(zone, "Spawn"), zone.castleCount])),
     spawnRemoteFootholds: true,
     naturalExpansionZone: false,
-    dwellingCounts: Object.fromEntries(design.zones.map((zone) => [zone.name, normalizeDwellingCount(zone.dwellingCount, defaultDwellingCountForRole(zone.role))])),
-    dwellingContent: Object.fromEntries(design.zones.map((zone) => [zone.name, buildDwellingContentForZone(zone)]))
+    dwellingCounts: Object.fromEntries(letteredZones.map(({ zone, key }) => [key, normalizeDwellingCount(zone.dwellingCount, defaultDwellingCountForRole(zone.role))])),
+    dwellingContent: Object.fromEntries(letteredZones.map(({ zone, key }) => [key, buildDwellingContentForZone(zone)]))
   });
   groups.push(...design.zones
     .filter((zone) => zone.role === "Hub" && dwellingCountFromSettings(effectiveDwellingSettingsForZone(zone)) > 0)
     .map((zone) => buildZoneDwellingGroup(zone)));
   return groups;
+}
+
+// A zone's Resources % / Structures % scale its stored content budgets on export (100% exports them unchanged).
+function scaleByZonePercent(value: number, percent: number): number {
+  if (!isFiniteNumber(value) || !isFiniteNumber(percent) || percent === 100) return value;
+  return Math.max(0, Math.round(value * percent / 100));
+}
+
+function unscaleByZonePercent(value: number, percent: number): number {
+  if (!isFiniteNumber(value) || !isFiniteNumber(percent) || percent === 100 || percent <= 0) return value;
+  return value * 100 / percent;
 }
 
 function tuningForZone(base: GenerationTuning, zone: DesignZone): GenerationTuning {
@@ -756,11 +805,13 @@ function buildCustomMandatoryContentWithDwellingOverrides(design: TemplateDesign
     for (const zone of exportedZones) {
       zone.mandatoryContent = toStringList(zone.mandatoryContent).filter((name) => name !== groupName);
     }
+    const exportedZone = exportedZonesByName.get(designZone.name);
+    // The customized count replaces the dwellings the zone already gets from its other mandatory content groups.
+    if (exportedZone) groups = removeZoneDwellingContent(groups, exportedZone, exportedZones);
 
     if (dwellingCountFromSettings(effectiveDwellingSettingsForZone(designZone)) === 0) continue;
 
     groups.push(buildZoneDwellingGroup(designZone));
-    const exportedZone = exportedZonesByName.get(designZone.name);
     if (exportedZone) {
       const current = toStringList(exportedZone.mandatoryContent);
       exportedZone.mandatoryContent = current.includes(groupName) ? current : [...current, groupName];
@@ -768,6 +819,35 @@ function buildCustomMandatoryContentWithDwellingOverrides(design: TemplateDesign
   }
 
   return groups;
+}
+
+// Strips dwelling items from the groups a zone references. A group other zones also reference is copied for this
+// zone first, so their dwellings stay untouched.
+function removeZoneDwellingContent(groups: MandatoryContentGroup[], zone: Zone, exportedZones: Zone[]): MandatoryContentGroup[] {
+  const next = [...groups];
+  const references = toStringList(zone.mandatoryContent);
+  zone.mandatoryContent = references.map((name) => {
+    const index = next.findIndex((group) => group.name === name);
+    const group = next[index];
+    if (!group || countDwellingContentItems(group.content) === 0) return name;
+    const stripped = { ...group, content: stripDwellingItems(group.content) };
+    const shared = exportedZones.some((candidate) => candidate !== zone && toStringList(candidate.mandatoryContent).includes(name));
+    if (!shared) {
+      next[index] = stripped;
+      return name;
+    }
+    const copyName = uniqueString(next.map((candidate) => candidate.name), `${name}_${dwellingGroupSlug(zone.name)}`);
+    next.push({ ...stripped, name: copyName });
+    return copyName;
+  });
+  return next;
+}
+
+function stripDwellingItems(content: ContentItem[] | undefined): ContentItem[] | undefined {
+  if (!content) return content;
+  return content
+    .filter((item) => !isDwellingContentItem(item))
+    .map((item) => Array.isArray(item.content) ? { ...item, content: stripDwellingItems(item.content) } : item);
 }
 
 function applyGeneratedDwellingZoneReferences(design: TemplateDesign, exportedZones: Zone[]): void {
@@ -812,8 +892,12 @@ function effectiveDwellingSettingsForZone(zone: Pick<DesignZone, "name" | "role"
 }
 
 function dwellingGroupNameForZone(zoneName: string): string {
+  return `mandatory_content_dwellings_${dwellingGroupSlug(zoneName)}`;
+}
+
+function dwellingGroupSlug(zoneName: string): string {
   const slug = zoneName.trim().toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "");
-  return `mandatory_content_dwellings_${slug || "zone"}`;
+  return slug || "zone";
 }
 
 function inferZoneDwellingSettings(zone: Zone, groups: MandatoryContentGroup[] | undefined, role: DesignZoneRole, quality: NeutralZoneQuality): DwellingSettings {
@@ -1045,14 +1129,22 @@ function inferMovementBonus(bonuses: Bonus[] | Bonus | undefined, fallback: numb
   return Number.isFinite(parsed) ? Math.trunc(parsed) : fallback;
 }
 
-function inferFirstTournamentDay(days: number[] | undefined, fallback: number): number {
-  if (!days || days.length === 0) return fallback;
-  return days[0]! + 1;
+// Battle i happens on tournamentAnnounceDays[i] + tournamentDays[i]. Exports announce on day 1 and on the day after the
+// previous battle, which are also the fallbacks when a template omits announce days.
+function tournamentBattleDay(days: number[], announceDays: number[] | undefined, index: number, fallbackAnnounceDay: number): number {
+  const announceDay = announceDays?.[index];
+  return (isFiniteNumber(announceDay) ? announceDay : fallbackAnnounceDay) + days[index]!;
 }
 
-function inferTournamentInterval(days: number[] | undefined, fallback: number): number {
+function inferFirstTournamentDay(days: number[] | undefined, announceDays: number[] | undefined, fallback: number): number {
+  if (!days || days.length === 0) return fallback;
+  return tournamentBattleDay(days, announceDays, 0, 1);
+}
+
+function inferTournamentInterval(days: number[] | undefined, announceDays: number[] | undefined, fallback: number): number {
   if (!days || days.length < 2) return fallback;
-  return days[1]! + 1;
+  const firstBattleDay = tournamentBattleDay(days, announceDays, 0, 1);
+  return tournamentBattleDay(days, announceDays, 1, firstBattleDay + 1) - firstBattleDay;
 }
 
 function inferZoneTerrainTheme(zone: Zone): TerrainTheme {

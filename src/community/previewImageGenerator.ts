@@ -2,11 +2,20 @@
  * Preview image generator.
  *
  * Generates thumbnail and large preview Blobs from a TemplateDesign.
- * Prefers a cropped schematic board screenshot when one is supplied,
- * and otherwise falls back to the deterministic preview renderer.
+ * When the builder board canvas is supplied as `source`, the schematic board is
+ * re-rendered offscreen from the design and cropped into the preview sizes;
+ * otherwise the deterministic classic preview renderer is used.
  */
 
+import { loadSchematicBoardBackgroundImage } from "@/boardAssets";
+import { buildPreviewDesign } from "@/community/previewDesign";
+import {
+  buildBoardRenderState,
+  renderSchematicBoardPreview,
+  schematicBoardHeightForWidth,
+} from "@/components/designBoardRender";
 import { designToTemplate, type TemplateDesign } from "@/design";
+import { clamp } from "@/math";
 import { renderPreview, type PreviewRenderOptions } from "@/previewRenderer";
 
 // ── Default sizes (task spec) ──────────────────────────────────────────────
@@ -15,6 +24,14 @@ export const PREVIEW_LARGE_WIDTH = 1200;
 export const PREVIEW_LARGE_HEIGHT = 675;
 export const PREVIEW_THUMBNAIL_WIDTH = 480;
 export const PREVIEW_THUMBNAIL_HEIGHT = 270;
+
+/**
+ * CSS width the exported schematic board is laid out at. Zone sizes and fonts are fixed in CSS px,
+ * so this keeps their proportions close to the builder board on a desktop window, independent of
+ * the user's current window size.
+ */
+export const PREVIEW_BOARD_LAYOUT_WIDTH = 960;
+const MAX_PREVIEW_BOARD_SCALE = 4;
 
 export interface PreviewImageResult {
   large: Blob;
@@ -40,7 +57,11 @@ export interface GeneratePreviewOptions {
   format?: "image/webp" | "image/png";
   /** Quality for lossy formats (0–1, default 0.85). */
   quality?: number;
-  /** Optional board screenshot source to crop into the preview sizes. */
+  /**
+   * The builder's board canvas. Supplying it selects the schematic board style. Its pixels are never
+   * copied: the board is re-rendered from `design` without selection, Road Mode handles or drag state,
+   * because the live canvas may be hidden (collapsed to 0 px) or mid-interaction.
+   */
   source?: PreviewImageSource;
   /** Optional title to overlay. */
   title?: string;
@@ -58,7 +79,6 @@ export async function generateMapPreviewImages(
   design: TemplateDesign,
   options: GeneratePreviewOptions = {}
 ): Promise<PreviewImageResult> {
-  const template = designToTemplate(design);
   const format = options.format ?? preferredFormat();
   const quality = options.quality ?? 0.85;
 
@@ -66,22 +86,30 @@ export async function generateMapPreviewImages(
   const largeH = options.largeHeight ?? PREVIEW_LARGE_HEIGHT;
   const thumbW = options.thumbnailWidth ?? PREVIEW_THUMBNAIL_WIDTH;
   const thumbH = options.thumbnailHeight ?? PREVIEW_THUMBNAIL_HEIGHT;
-  const source = options.source;
 
-  const renderOpts: Omit<PreviewRenderOptions, "width" | "height"> = {
-    dpr: 1,
-    title: options.title,
-    metadata: options.metadata,
-  };
-
-  const [large, thumbnail] = await Promise.all([
-    source
-      ? renderSourceToBlob(source, largeW, largeH, format, quality)
-      : renderToBlob({ ...renderOpts, width: largeW, height: largeH }, template, format, quality),
-    source
-      ? renderSourceToBlob(source, thumbW, thumbH, format, quality)
-      : renderToBlob({ ...renderOpts, width: thumbW, height: thumbH }, template, format, quality),
-  ]);
+  let large: Blob;
+  let thumbnail: Blob;
+  if (options.source) {
+    const board = await renderSchematicBoardCanvas(design, [
+      { width: largeW, height: largeH },
+      { width: thumbW, height: thumbH },
+    ]);
+    [large, thumbnail] = await Promise.all([
+      renderSourceToBlob(board, largeW, largeH, format, quality),
+      renderSourceToBlob(board, thumbW, thumbH, format, quality),
+    ]);
+  } else {
+    const template = designToTemplate(design);
+    const renderOpts: Omit<PreviewRenderOptions, "width" | "height"> = {
+      dpr: 1,
+      title: options.title,
+      metadata: options.metadata,
+    };
+    [large, thumbnail] = await Promise.all([
+      renderToBlob({ ...renderOpts, width: largeW, height: largeH }, template, format, quality),
+      renderToBlob({ ...renderOpts, width: thumbW, height: thumbH }, template, format, quality),
+    ]);
+  }
 
   return {
     large,
@@ -94,6 +122,57 @@ export async function generateMapPreviewImages(
 }
 
 // ── Internal rendering ─────────────────────────────────────────────────────
+
+/**
+ * Renders a clean schematic board (no selection or builder UI) at the background's aspect ratio,
+ * with enough resolution that every output's centre crop is drawn at least 1:1.
+ */
+async function renderSchematicBoardCanvas(
+  design: TemplateDesign,
+  outputs: ReadonlyArray<{ width: number; height: number }>
+): Promise<HTMLCanvasElement | OffscreenCanvas> {
+  const width = PREVIEW_BOARD_LAYOUT_WIDTH;
+  const height = schematicBoardHeightForWidth(width);
+  const scale = clamp(
+    Math.max(...outputs.map((output) => {
+      const crop = centerCropRect(width, height, output.width, output.height);
+      return Math.max(output.width / crop.width, output.height / crop.height);
+    })),
+    1,
+    MAX_PREVIEW_BOARD_SCALE
+  );
+  const pixelWidth = Math.round(width * scale);
+  const pixelHeight = Math.round(height * scale);
+  const state = buildBoardRenderState(buildPreviewDesign(design), width, height);
+  const backgroundImage = await loadSchematicBoardBackgroundImage();
+  const paint = (ctx: CanvasRenderingContext2D) => {
+    renderSchematicBoardPreview(ctx, state, { width, height, dpr: scale, backgroundImage });
+  };
+
+  if (typeof OffscreenCanvas !== "undefined") {
+    try {
+      const canvas = new OffscreenCanvas(pixelWidth, pixelHeight);
+      const ctx = canvas.getContext("2d");
+      if (!ctx) throw new Error("Failed to create OffscreenCanvas 2D context.");
+      paint(ctx as unknown as CanvasRenderingContext2D);
+      return canvas;
+    } catch (error) {
+      if (typeof document === "undefined") throw error;
+    }
+  }
+
+  if (typeof document === "undefined") {
+    throw new Error("No DOM canvas fallback is available.");
+  }
+
+  const canvas = document.createElement("canvas");
+  canvas.width = pixelWidth;
+  canvas.height = pixelHeight;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) throw new Error("Failed to create canvas 2D context.");
+  paint(ctx);
+  return canvas;
+}
 
 async function renderSourceToBlob(
   source: PreviewImageSource,
@@ -113,6 +192,7 @@ async function renderSourceToBlob(
       if (typeof canvas.convertToBlob !== "function") {
         throw new Error("OffscreenCanvas convertToBlob is unavailable.");
       }
+      ctx.imageSmoothingQuality = "high";
       ctx.drawImage(source as CanvasImageSource, crop.x, crop.y, crop.width, crop.height, 0, 0, width, height);
       return await canvas.convertToBlob({ type: format, quality });
     } catch (error) {
@@ -129,6 +209,7 @@ async function renderSourceToBlob(
   canvas.height = height;
   const ctx = canvas.getContext("2d");
   if (!ctx) throw new Error("Failed to create canvas 2D context.");
+  ctx.imageSmoothingQuality = "high";
   ctx.drawImage(source as CanvasImageSource, crop.x, crop.y, crop.width, crop.height, 0, 0, width, height);
 
   return await new Promise<Blob>((resolve, reject) => {

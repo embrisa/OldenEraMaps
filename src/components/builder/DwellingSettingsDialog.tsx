@@ -1,10 +1,11 @@
 import { Castle, Minus, Plus, Search, Settings2, X } from "lucide-react";
-import { useMemo, useState, type JSX } from "react";
+import { useEffect, useMemo, useState, type JSX } from "react";
 import { defaultDwellingSettingsForZone, dwellingCountFromSettings, normalizeDwellingSettings, type DesignZone, type DwellingSettings, type DwellingSpecificEntry } from "@/design";
 import { highTierRandomHireList, lowTierRandomHireList, maxDwellingCount } from "@/generator/templateContentBuilder";
 import { Button } from "@/components/ui/button";
 import { Input, SteppedValueSlider } from "@/components/ui/form-controls";
 import { Dialog, DialogContent, DialogDescription, DialogTitle, ScrollArea } from "@/components/ui/radix";
+import { Alert } from "@/components/builder/formHelpers";
 
 interface DwellingCatalogEntry {
   id: string;
@@ -85,6 +86,7 @@ export function DwellingSettingsDialog({
 }): JSX.Element {
   const [query, setQuery] = useState("");
   const [factionFilter, setFactionFilter] = useState("All");
+  const [confirmGeneratedSwitch, setConfirmGeneratedSwitch] = useState(false);
   const settings = normalizeDwellingSettings(zone.dwellingSettings, defaultDwellingSettingsForZone(zone, zone.dwellingCount));
   const selectedById = useMemo(() => new Map(settings.specific.map((entry) => [entry.id, entry])), [settings.specific]);
   const totalCount = dwellingCountFromSettings(settings);
@@ -100,12 +102,26 @@ export function DwellingSettingsDialog({
     });
   }, [factionFilter, query]);
 
+  useEffect(() => {
+    setConfirmGeneratedSwitch(false);
+  }, [open, zone.id]);
+
   function commit(nextSettings: DwellingSettings): void {
     onChange(normalizeDwellingSettings(nextSettings, defaultDwellingSettingsForZone(zone, zone.dwellingCount)));
   }
 
   function setMode(mode: DwellingSettings["mode"]): void {
     if (settings.mode === mode) return;
+    // Generated Mix cannot hold specific picks, so switching drops them: ask first.
+    if (mode === "Generated" && settings.specific.length > 0) {
+      setConfirmGeneratedSwitch(true);
+      return;
+    }
+    applyMode(mode);
+  }
+
+  function applyMode(mode: DwellingSettings["mode"]): void {
+    setConfirmGeneratedSwitch(false);
     commit({
       mode,
       lowTierCount: settings.lowTierCount,
@@ -150,6 +166,7 @@ export function DwellingSettingsDialog({
     });
   }
 
+  const specificPickCount = settings.specific.reduce((sum, entry) => sum + entry.count, 0);
   const previewItems = [
     settings.lowTierCount > 0 ? `${lowTierRandomHireList} x${settings.lowTierCount}` : undefined,
     settings.highTierCount > 0 ? `${highTierRandomHireList} x${settings.highTierCount}` : undefined,
@@ -177,6 +194,16 @@ export function DwellingSettingsDialog({
             <Castle size={14} />Specific Dwellings
           </button>
         </div>
+
+        {confirmGeneratedSwitch && settings.mode === "Specific" && specificPickCount > 0 ? (
+          <Alert tone="warning">
+            <p>Generated Mix removes the {specificPickCount} specific dwelling {specificPickCount === 1 ? "pick" : "picks"}; the low/high-tier counts stay.</p>
+            <div className="dialog-actions dialog-actions--compact">
+              <Button type="button" size="sm" variant="ghost" onClick={() => setConfirmGeneratedSwitch(false)}>Keep Specific Dwellings</Button>
+              <Button type="button" size="sm" variant="danger" onClick={() => applyMode("Generated")}>Remove Picks &amp; Switch</Button>
+            </div>
+          </Alert>
+        ) : null}
 
         {settings.mode === "Generated" ? (
           <div className="dwelling-generated-panel">

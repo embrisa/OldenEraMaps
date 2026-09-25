@@ -46,14 +46,15 @@ export function ContentLibraryPanel({
   onUpdate(mutator: (design: TemplateDesign) => void): void;
   onClose(): void;
 }): JSX.Element {
-  const [contentPoolsDraft, setContentPoolsDraft] = useState<JsonDraft>({ value: "[]" });
-  const [contentListsDraft, setContentListsDraft] = useState<JsonDraft>({ value: "[]" });
+  const [contentPoolsDraft, setContentPoolsDraft] = useState<JsonDraft>(() => ({ value: formatJsonInput(design.contentPools) }));
+  const [contentListsDraft, setContentListsDraft] = useState<JsonDraft>(() => ({ value: formatJsonInput(design.contentLists) }));
 
+  // Reset the staged JSON only when the panel is (re)opened, not on every design update.
   useEffect(() => {
     if (!active) return;
     setContentPoolsDraft({ value: formatJsonInput(design.contentPools) });
     setContentListsDraft({ value: formatJsonInput(design.contentLists) });
-  }, [active, design.contentLists, design.contentPools]);
+  }, [active]);
 
   function handleApply(): void {
     const parsedPools = parseArrayDraft(contentPoolsDraft.value, "Use a JSON array of content pool blocks.");

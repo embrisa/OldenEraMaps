@@ -2741,8 +2741,11 @@ describe("React UI shell", () => {
     expect(canvases.length).toBeGreaterThan(0);
     await waitFor(() => {
       const preview = canvases[0] as HTMLCanvasElement;
-      expect(preview.style.width).toBe(`${COMMUNITY_MAP_CARD_PREVIEW_SIZE.width}px`);
-      expect(preview.style.height).toBe(`${COMMUNITY_MAP_CARD_PREVIEW_SIZE.height}px`);
+      // The bitmap keeps the preview size (jsdom's pixel ratio is 1); CSS scales the element to the card.
+      expect(preview.width).toBe(COMMUNITY_MAP_CARD_PREVIEW_SIZE.width);
+      expect(preview.height).toBe(COMMUNITY_MAP_CARD_PREVIEW_SIZE.height);
+      expect(preview.style.width).toBe("100%");
+      expect(preview.style.height).toBe("auto");
     });
   });
 
@@ -2846,8 +2849,10 @@ describe("React UI shell", () => {
 
     const dialog = await screen.findByRole("dialog");
     const preview = within(dialog).getByRole("img", { name: "Preview of Temple Border Clash" }) as HTMLCanvasElement;
-    expect(preview.style.width).toBe(`${COMMUNITY_MAP_DETAIL_PREVIEW_SIZE.width}px`);
-    expect(preview.style.height).toBe(`${COMMUNITY_MAP_DETAIL_PREVIEW_SIZE.height}px`);
+    expect(preview.width).toBe(COMMUNITY_MAP_DETAIL_PREVIEW_SIZE.width);
+    expect(preview.height).toBe(COMMUNITY_MAP_DETAIL_PREVIEW_SIZE.height);
+    expect(preview.style.width).toBe("100%");
+    expect(preview.style.height).toBe("auto");
     const legend = within(dialog).getByRole("list", { name: "Schematic board legend" });
     expect(within(legend).getByText("Badge: role or player")).toBeTruthy();
     expect(within(legend).getByText("Footholds disabled")).toBeTruthy();
@@ -3057,6 +3062,52 @@ describe("React UI shell", () => {
 
     await waitFor(() => {
       expect(communityApiMocks.deleteAccountCalls).toBe(1);
+    });
+  });
+});
+
+describe("My maps community fixes", () => {
+  async function openMyMaps(user: ReturnType<typeof userEvent.setup>): Promise<void> {
+    await user.click(screen.getByRole("button", { name: "Open header menu" }));
+    await user.click(screen.getByRole("button", { name: "My maps" }));
+  }
+
+  it("reports a missing map when opening an owned listing in the builder", async () => {
+    const user = userEvent.setup();
+    authMocks.session = createAuthSession();
+    communityApiMocks.myMaps = [
+      createManagedMap({ id: "missing-owned-map", title: "Vanished Vale", visibility: "public", status: "published" })
+    ];
+    render(<AppShell />);
+
+    await openMyMaps(user);
+    expect(await screen.findByRole("heading", { name: "Vanished Vale" })).toBeTruthy();
+    await user.click(screen.getByRole("button", { name: "Open in builder" }));
+
+    expect(await screen.findByText('Failed to find "Vanished Vale".')).toBeTruthy();
+    expect(screen.getByRole("heading", { name: "My maps" })).toBeTruthy();
+  });
+
+  it("shows owned listing action failures on the loaded page and lets the user dismiss them", async () => {
+    const user = userEvent.setup();
+    authMocks.session = createAuthSession();
+    communityApiMocks.myMaps = [
+      createManagedMap({ id: "failing-owned-map", title: "Stubborn Road", visibility: "public", status: "published" })
+    ];
+    communityApiMocks.updateError = new Error("Update failed in test");
+    render(<AppShell />);
+
+    await openMyMaps(user);
+    expect(await screen.findByRole("heading", { name: "Stubborn Road" })).toBeTruthy();
+    await user.click(screen.getByRole("button", { name: "Hide" }));
+
+    const alert = (await screen.findByText("Update failed in test")).closest("[role='alert']") as HTMLElement;
+    expect(alert).toBeTruthy();
+    expect(screen.getByRole("heading", { name: "Stubborn Road" })).toBeTruthy();
+
+    await user.click(within(alert).getByRole("button", { name: "Dismiss error" }));
+    await waitFor(() => {
+      expect(screen.queryByText("Update failed in test")).toBeNull();
     });
   });
 });

@@ -1,9 +1,9 @@
 import { BookOpenText, Bug, Compass, Download, FileJson, FolderOpen, HardDriveDownload, Menu, Plus, RotateCcw, Save, Share2, Sparkles, Star, X } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState, type JSX } from "react";
+import { toast, Toaster } from "sonner";
 import { analyzeTemplate } from "@/analysis/templateAnalysis";
 import { getMap } from "@/community/communityApi";
-import { getViewerRating } from "@/community/maps";
-import { downloadText } from "@/components/appShell/templateDownloads";
+import { builderExportBaseName, downloadText } from "@/components/appShell/templateDownloads";
 import { BuilderWorkspacePage } from "@/components/builder/BuilderWorkspacePage";
 import { Alert } from "@/components/builder/formHelpers";
 import { AccountMenu } from "@/components/community/AccountMenu";
@@ -77,8 +77,9 @@ export function AppShell(): JSX.Element {
     if (validation.errors.length > 0) return "";
     try {
       return serializeTemplate(designToTemplate(workspace.design));
-    } catch (error) {
-      return error instanceof Error ? error.message : "";
+    } catch {
+      // An empty payload disables export/share; never ship an error message as template JSON.
+      return "";
     }
   }, [workspace.design, validation.errors.length]);
 
@@ -99,8 +100,10 @@ export function AppShell(): JSX.Element {
     commit: workspace.commit
   });
 
-  const exportFileName = `${workspace.design.templateName.trim() || "Custom Template"}.rmg.json`;
-  const exportPreviewFileName = `${workspace.design.templateName.trim() || "Custom Template"}.png`;
+  const exportBaseName = builderExportBaseName(workspace.design.templateName);
+  const exportFileName = `${exportBaseName}.rmg.json`;
+  const exportPreviewFileName = `${exportBaseName}.png`;
+  const saveFileName = `${exportBaseName}.oetd.json`;
   const previewAvailable = validation.errors.length === 0 && exportJson !== "";
 
   const download = useTemplateDownload({
@@ -112,7 +115,6 @@ export function AppShell(): JSX.Element {
     forceExportJson,
     exportPreviewFileName,
     previewAvailable,
-    historyRevision: workspace.historyRevision,
     designBoardCanvas
   });
 
@@ -136,24 +138,7 @@ export function AppShell(): JSX.Element {
     page: route.page,
     authState: auth.authState,
     requestConfirmation: (confirmation) => download.requestConfirmation(confirmation),
-    openMapInBuilder: (mapId, mapTitle) => {
-      download.runAfterDiscardingUnsavedChanges(() => {
-        void (async () => {
-          const detail = await getMap(mapId);
-          if (!detail) return;
-          const designResult = parseDesignOrTemplateFileResult(detail.designJson);
-          const templateResult = designResult.ok ? designResult : parseDesignOrTemplateFileResult(detail.templateJson);
-          if (!templateResult.ok) {
-            browse.setCommunityError(`Failed to load "${mapTitle}" into the builder. ${templateResult.errorMessage}`);
-            return;
-          }
-          browse.setCommunityError(undefined);
-          if (!workspace.loadDesign(templateResult.design, false)) return;
-          browse.setCommunityNotice(`Loaded "${mapTitle}" into the builder.`);
-          route.navigate("builder");
-        })();
-      }, workspace.dirty || json.jsonDirty);
-    }
+    openMapInBuilder: browse.openMapInBuilder
   });
 
   useEffect(() => {
@@ -177,8 +162,11 @@ export function AppShell(): JSX.Element {
   }, [topbarMenuOpen]);
 
   useEffect(() => {
+    // Builder undo only belongs on the builder page; elsewhere it would silently revert the design.
+    if (route.page !== "builder") return;
+
     function handleKeyDown(event: KeyboardEvent): void {
-      if (!isUndoShortcut(event) || isEditableShortcutTarget(event.target)) return;
+      if (!isUndoShortcut(event) || isTextEditingTarget(event.target)) return;
       if (!workspace.canUndoDesignChange) return;
       event.preventDefault();
       workspace.undoDesignChange();
@@ -186,7 +174,15 @@ export function AppShell(): JSX.Element {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [workspace]);
+  }, [route.page, workspace]);
+
+  const handleSaveDesign = useCallback(async (): Promise<void> => {
+    const savedDesign = workspace.design;
+    const result = await downloadText(saveFileName, serializeDesignFile(savedDesign), "application/json", { preferSavePicker: true });
+    if (result === "cancelled") return;
+    workspace.markSaved(savedDesign);
+    toast.success(result === "saved" ? `Saved ${saveFileName}` : `Downloading ${saveFileName}`);
+  }, [saveFileName, workspace]);
 
   const handleImportFile = useCallback((file: File | undefined): void => {
     if (!file) return;
@@ -205,14 +201,25 @@ export function AppShell(): JSX.Element {
     }, workspace.dirty || json.jsonDirty);
   }, [browse, download, json.jsonDirty, workspace]);
 
-  const fileName = `${workspace.dirty || json.jsonDirty ? "* " : ""}${workspace.design.templateName || "Custom Template"}.oetd.json`;
+  const fileName = `${workspace.dirty || json.jsonDirty ? "* " : ""}${saveFileName}`;
   const exportHasWarnings = templateDiagnostics.warnings.length > 0;
   const showExportChecklist = !exportHasBlockingIssues && exportHasWarnings;
 
   return (
     <TooltipProvider>
+      <Toaster theme="dark" position="bottom-right" closeButton toastOptions={{ className: "oe-toast" }} />
       <main className={`studio-shell studio-shell--${route.page}`}>
-        <input ref={fileInputRef} hidden type="file" accept=".json,.rmg.json,.oetd.json,application/json" onChange={(event) => handleImportFile(event.currentTarget.files?.[0])} />
+        <input
+          ref={fileInputRef}
+          hidden
+          type="file"
+          accept=".json,.rmg.json,.oetd.json,application/json"
+          onChange={(event) => {
+            handleImportFile(event.currentTarget.files?.[0]);
+            // Reset so choosing the same file again still fires a change event.
+            event.currentTarget.value = "";
+          }}
+        />
         <header className="studio-topbar">
           <div className="brand-lockup">
             <img src="/assets/olden-era/factions/temple-icon.png" alt="" />
@@ -256,10 +263,10 @@ export function AppShell(): JSX.Element {
           {route.page === "builder" ? (
             <div className="topbar-file-actions">
               <Button size="sm" onClick={() => fileInputRef.current?.click()}><FolderOpen size={14} />Open</Button>
-              <Button size="sm" onClick={() => void downloadText(`${workspace.design.templateName}.oetd.json`, serializeDesignFile(workspace.design), "application/json", { preferSavePicker: true })}><Save size={14} />Save</Button>
+              <Button size="sm" onClick={() => void handleSaveDesign()}><Save size={14} />Save</Button>
               <Button size="sm" onClick={() => void download.handleExportPreviewImageClick()} disabled={!previewAvailable}>Preview PNG</Button>
               <Button size="sm" variant="blue" onClick={browse.handleShareMapClick} disabled={validation.errors.length > 0}><Share2 size={14} />Share</Button>
-              <Button size="sm" variant="primary" onClick={download.handleExportClick} disabled={validation.errors.length === 0 ? exportJson === "" : forceExportJson === ""}>
+              <Button size="sm" variant="primary" onClick={download.handleExportClick} disabled={download.exportPayload === ""}>
                 <Download size={14} />Export
               </Button>
             </div>
@@ -402,7 +409,7 @@ export function AppShell(): JSX.Element {
             sort={browse.browseSort}
             selectedTagSlugs={browse.browseSelectedTags}
             rangeFilters={browse.browseRangeFilters}
-            getViewerRating={(mapId) => getViewerRating(browse.communityCatalog, mapId, browse.communityViewerId)}
+            getViewerRating={browse.getViewerRating}
             onRate={browse.handleRateMap}
             canRate={auth.authState.status === "signed-in"}
             viewerUserId={auth.authState.profile?.userId ?? null}
@@ -437,6 +444,7 @@ export function AppShell(): JSX.Element {
               status={myMaps.myMapsStatus}
               maps={myMaps.myMaps}
               errorMessage={myMaps.myMapsError}
+              onDismissError={myMaps.dismissMyMapsError}
               onRefresh={() => void myMaps.loadMyMaps()}
               onUpdateListing={myMaps.handleUpdateOwnedMapListing}
               onHide={myMaps.handleHideOwnedMap}
@@ -507,7 +515,7 @@ export function AppShell(): JSX.Element {
                 </div>
                 <div className="dialog-actions">
                   <Button onClick={() => download.setExportWarningOpen(false)}>Cancel</Button>
-                  <Button variant="danger" onClick={() => void download.handleForceExportClick()} disabled={forceExportJson === ""}>
+                  <Button variant="danger" onClick={() => void download.handleForceExportClick()} disabled={download.exportPayload === ""}>
                     <HardDriveDownload size={14} />Force Export
                   </Button>
                 </div>
@@ -603,7 +611,7 @@ export function AppShell(): JSX.Element {
           map={browse.detailMap}
           open={browse.detailOpen}
           onOpenChange={browse.setDetailOpen}
-          viewerRating={browse.detailMap ? getViewerRating(browse.communityCatalog, browse.detailMap.id, browse.communityViewerId) : undefined}
+          viewerRating={browse.detailMap ? browse.getViewerRating(browse.detailMap.id) : undefined}
           canRate={auth.authState.status === "signed-in" && !Boolean(browse.detailMap?.ownerId && auth.authState.profile?.userId === browse.detailMap.ownerId)}
           isOwner={Boolean(browse.detailMap?.ownerId && auth.authState.profile?.userId === browse.detailMap.ownerId)}
           onRate={browse.handleRateMap}
@@ -649,8 +657,11 @@ function isUndoShortcut(event: KeyboardEvent): boolean {
   return event.key.toLowerCase() === "z" && (event.ctrlKey || event.metaKey) && !event.shiftKey && !event.altKey;
 }
 
-function isEditableShortcutTarget(target: EventTarget | null): boolean {
+const TEXT_INPUT_TYPES = new Set(["text", "search", "email", "url", "tel", "password", "number"]);
+
+// Only text fields keep the browser's own undo; sliders, checkboxes and selects defer to builder undo.
+function isTextEditingTarget(target: EventTarget | null): boolean {
   if (!(target instanceof HTMLElement)) return false;
-  if (target.isContentEditable) return true;
-  return target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement || target instanceof HTMLSelectElement;
+  if (target.isContentEditable || target instanceof HTMLTextAreaElement) return true;
+  return target instanceof HTMLInputElement && TEXT_INPUT_TYPES.has(target.type);
 }

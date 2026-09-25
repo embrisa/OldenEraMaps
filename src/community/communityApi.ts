@@ -1,5 +1,3 @@
-import { designToTemplate, parseDesignOrTemplateFile, serializeDesignFile } from "@/design";
-import { serializeTemplate } from "@/generator";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "./databaseTypes";
 import {
@@ -8,13 +6,21 @@ import {
   persistCommunityCatalog,
   visibleCommunityMaps,
   type BrowseRangeFilters,
+  type CommunityCatalogStats,
   type CommunityMapRecord
 } from "./maps";
 import { requireStoredPreviewDesignJson } from "./previewPayload.ts";
 import { requireOptionalReleaseTemplateDescription, requireReleaseTemplateJson, serializeReleaseJsonField, serializeReleaseTemplateJson } from "./releaseRowJson.ts";
-import { resolvePublicAuthorName } from "./authorNames";
+import { ANONYMOUS_AUTHOR_NAME, resolvePublicAuthorName } from "./authorNames";
 import { createTagFromSlug, formatWinConditionLabel, sortTags, type CommunityTag } from "./tags";
-import { validateAuthorDisplayName, validateMapDescription, validateMapTitle } from "./textValidation";
+import {
+  normalizeAuthorDisplayName,
+  normalizeMapDescription,
+  normalizeMapTitle,
+  validateAuthorDisplayName,
+  validateMapDescription,
+  validateMapTitle
+} from "./textValidation";
 import { isSupabaseConfigured, supabase } from "./supabaseClient";
 
 // ---------------------------------------------------------------------------
@@ -91,7 +97,23 @@ export interface MapListingPatch {
   status?: "published" | "hidden";
 }
 
+/** The editable listing fields as shown in an owner's edit form. */
+export interface MapListingDraft {
+  title: string;
+  authorName: string;
+  description: string;
+  visibility: ManagedMapVisibility;
+}
+
+export interface MapRatingStats {
+  averageRating: number;
+  ratingCount: number;
+}
+
 export const BROWSE_DEFAULT_PAGE_SIZE = 24;
+
+/** Columns matched by the browse search box ("Search by name or author"). */
+const BROWSE_SEARCH_COLUMNS = ["title", "description", "template_name", "author_name"] as const;
 
 // ---------------------------------------------------------------------------
 // List maps
@@ -206,11 +228,7 @@ async function listMapsFromSupabase(
     `)
     .eq("visibility", "public");
 
-  if (filters.query?.trim()) {
-    const term = `%${filters.query.trim()}%`;
-    query = query.or(`title.ilike.${term},description.ilike.${term},template_name.ilike.${term}`);
-  }
-
+  query = applySupabaseSearchFilter(query, filters.query);
   query = applySupabaseRangeFilters(query, filters.rangeFilters);
   query = applySupabaseTagFilters(query, filters.selectedTagSlugs);
 
@@ -242,6 +260,75 @@ async function listMapsFromSupabase(
     page,
     pageSize,
     pageCount: Math.max(1, Math.ceil(total / pageSize))
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Browse stats (whole filtered result set, not just the current page)
+// ---------------------------------------------------------------------------
+
+/**
+ * Map count, rating count, and average score over every public map matching the filters.
+ * Returns null when Supabase is not configured; callers summarize the local catalog instead.
+ * The map count is exact; past PostgREST's row cap (Supabase max_rows, 1000 by default) the rating
+ * numbers only cover the rows returned.
+ */
+export async function fetchBrowseStats(
+  filters: Pick<BrowseFilters, "query" | "selectedTagSlugs" | "rangeFilters"> = {},
+  client: SupabaseClient<Database> | null = supabase
+): Promise<CommunityCatalogStats | null> {
+  if (!client || !isSupabaseConfigured) return null;
+
+  let query = client
+    .rpc("public_browse_maps", {}, { count: "exact" })
+    .select("rating_count, rating_average")
+    .eq("visibility", "public");
+  query = applySupabaseSearchFilter(query, filters.query);
+  query = applySupabaseRangeFilters(query, filters.rangeFilters);
+  query = applySupabaseTagFilters(query, filters.selectedTagSlugs);
+
+  const { data, error, count } = await query;
+  if (error) throw error;
+
+  const rows = (data ?? []) as Array<{ rating_count: number; rating_average: number | string }>;
+  return summarizeRatingAggregates(
+    rows.map((row) => ({ ratingCount: row.rating_count, averageRating: Number(row.rating_average) })),
+    count ?? rows.length
+  );
+}
+
+/** Optimistic aggregate after the viewer rates a map (replacing `previousRating` when they had one). */
+export function estimateRatingStatsAfterVote(
+  stats: MapRatingStats,
+  previousRating: number | undefined,
+  nextRating: number
+): MapRatingStats {
+  const total = stats.averageRating * stats.ratingCount;
+  if (previousRating === undefined || stats.ratingCount === 0) {
+    const ratingCount = stats.ratingCount + 1;
+    return { ratingCount, averageRating: roundToHundredth((total + nextRating) / ratingCount) };
+  }
+  return {
+    ratingCount: stats.ratingCount,
+    averageRating: roundToHundredth((total - previousRating + nextRating) / stats.ratingCount)
+  };
+}
+
+function roundToHundredth(value: number): number {
+  return Math.round(value * 100) / 100;
+}
+
+/** Rating-weighted summary of per-map aggregates. */
+export function summarizeRatingAggregates(
+  maps: ReadonlyArray<MapRatingStats>,
+  mapCount = maps.length
+): CommunityCatalogStats {
+  const ratingCount = maps.reduce((sum, map) => sum + map.ratingCount, 0);
+  const ratingTotal = maps.reduce((sum, map) => sum + map.averageRating * map.ratingCount, 0);
+  return {
+    mapCount,
+    ratingCount,
+    averageRating: ratingCount === 0 ? 0 : Math.round((ratingTotal / ratingCount) * 10) / 10
   };
 }
 
@@ -376,6 +463,44 @@ export async function fetchViewerRating(
   return data as number | null;
 }
 
+/** The signed-in viewer's own ratings for a set of maps, keyed by map id (one request per page). */
+export async function fetchViewerRatings(
+  mapIds: readonly string[],
+  userId: string,
+  client: SupabaseClient<Database> | null = supabase
+): Promise<Record<string, number>> {
+  const ids = [...new Set(mapIds.filter(Boolean))];
+  if (!client || !isSupabaseConfigured || !userId || ids.length === 0) return {};
+
+  const { data, error } = await client
+    .from("ratings")
+    .select("map_id, value")
+    .eq("user_id", userId)
+    .in("map_id", ids);
+  if (error) throw error;
+
+  return Object.fromEntries(((data ?? []) as Array<{ map_id: string; value: number }>).map((row) => [row.map_id, row.value]));
+}
+
+/** Fresh rating aggregates for one public map, used to refresh a card after the viewer rates it. */
+export async function fetchMapRatingStats(
+  mapId: string,
+  client: SupabaseClient<Database> | null = supabase
+): Promise<MapRatingStats | null> {
+  if (!client || !isSupabaseConfigured) return null;
+
+  const { data, error } = await client
+    .rpc("public_browse_maps", {})
+    .select("id, rating_count, rating_average")
+    .eq("id", mapId)
+    .maybeSingle();
+  if (error) throw error;
+  if (!data) return null;
+
+  const row = data as { rating_count: number; rating_average: number | string };
+  return { averageRating: Number(row.rating_average), ratingCount: row.rating_count };
+}
+
 // ---------------------------------------------------------------------------
 // Record download
 // ---------------------------------------------------------------------------
@@ -398,6 +523,16 @@ export async function recordDownload(
 // Update map listing (owner only)
 // ---------------------------------------------------------------------------
 
+/** Shown under the description field of listing edit forms; see updateMapListing. */
+export const LISTING_DESCRIPTION_NOTE =
+  "Updates the listing description. Downloaded templates keep the description they were shared with.";
+
+/**
+ * Updates owner-editable listing columns only. template_json (and the design_json that must stay in
+ * sync with it) is derived metadata: the maps_prevent_direct_metadata_update trigger rejects client
+ * writes to it, and a rejected column fails the whole UPDATE. A description edit therefore changes
+ * the listing description; the downloadable template keeps the description it was uploaded with.
+ */
 export async function updateMapListing(
   mapId: string,
   patch: MapListingPatch,
@@ -405,7 +540,7 @@ export async function updateMapListing(
 ): Promise<void> {
   if (!client || !isSupabaseConfigured) return;
 
-  const update: Record<string, unknown> = {};
+  const update: Database["public"]["Tables"]["maps"]["Update"] = {};
   if (patch.title !== undefined) {
     const validation = validateMapTitle(patch.title);
     if (!validation.ok) throw new Error(validation.errors[0]);
@@ -414,36 +549,48 @@ export async function updateMapListing(
   if (patch.authorName !== undefined) {
     const validation = validateAuthorDisplayName(patch.authorName);
     if (!validation.ok) throw new Error(validation.errors[0]);
-    update.author_name = validation.value || "Anonymous Cartographer";
+    update.author_name = validation.value || ANONYMOUS_AUTHOR_NAME;
+  }
+  if (patch.description !== undefined) {
+    const validation = validateMapDescription(patch.description);
+    if (!validation.ok) throw new Error(validation.errors[0]);
+    update.description = validation.value;
   }
   if (patch.visibility !== undefined) update.visibility = patch.visibility;
   if (patch.status !== undefined) update.status = patch.status;
 
-  if (patch.description !== undefined) {
-    const validation = validateMapDescription(patch.description);
-    if (!validation.ok) throw new Error(validation.errors[0]);
-
-    const { data: existing, error: existingError } = await client
-      .from("maps")
-      .select("design_json")
-      .eq("id", mapId)
-      .single<{ design_json: unknown }>();
-    if (existingError) throw existingError;
-
-    update.description = validation.value;
-
-    const synced = syncStoredTemplateDescription(existing?.design_json, validation.value);
-    update.template_json = synced.templateJson;
-    update.design_json = synced.designJson;
-  }
-
   if (Object.keys(update).length > 0) {
     const { error } = await client
       .from("maps")
-      .update(update as Database["public"]["Tables"]["maps"]["Update"])
+      .update(update)
       .eq("id", mapId);
     if (error) throw error;
   }
+}
+
+/**
+ * Builds a patch containing only the listing fields that differ from the current listing, so saving
+ * an edit form never rewrites untouched columns (e.g. the displayed, profile-resolved author name).
+ */
+export function buildMapListingPatch(
+  current: { title: string; authorName: string; summary: string; visibility: ManagedMapVisibility },
+  draft: MapListingDraft
+): MapListingPatch {
+  const patch: MapListingPatch = {};
+
+  const title = normalizeMapTitle(draft.title);
+  if (title && title !== normalizeMapTitle(current.title)) patch.title = title;
+
+  const authorName = normalizeAuthorDisplayName(draft.authorName);
+  if ((authorName || ANONYMOUS_AUTHOR_NAME) !== (normalizeAuthorDisplayName(current.authorName) || ANONYMOUS_AUTHOR_NAME)) {
+    patch.authorName = authorName;
+  }
+
+  const description = normalizeMapDescription(draft.description);
+  if (description !== normalizeMapDescription(current.summary)) patch.description = description;
+
+  if (draft.visibility !== current.visibility) patch.visibility = draft.visibility;
+  return patch;
 }
 
 // ---------------------------------------------------------------------------
@@ -661,7 +808,10 @@ export function browseRowToCard(row: BrowseListRow): BrowseMapCard {
     ownerId: row.owner_id ?? null,
     slug: row.slug,
     title: row.title,
-    summary: templateDescription ?? row.description,
+    // The listing description is what owners edit (template_json is server-derived and read-only to
+    // clients), so it wins over the uploaded template's description. The browse RPC only returns the
+    // listing description, so this keeps cards, details, and My maps consistent.
+    summary: row.description?.trim() ? row.description : templateDescription ?? row.description,
     authorName: resolvePublicAuthorName(row.author_name, row.profiles?.display_name),
     tags: extractRowTags(row),
     visibility: row.visibility === "private" ? "unlisted" : row.visibility,
@@ -746,22 +896,48 @@ function applySupabaseTagFilters<T extends {
   return next;
 }
 
-function syncStoredTemplateDescription(designJson: unknown, description: string): { templateJson: unknown; designJson: unknown } {
-  const nextDescription = description.trim();
-  const design = parseDesignOrTemplateFile(serializeReleaseJsonField(designJson, "design_json"));
-  design.templateDescription = nextDescription;
-  return {
-    designJson: JSON.parse(serializeDesignFile(design)),
-    templateJson: JSON.parse(serializeTemplate(designToTemplate(design)))
-  };
+function applySupabaseSearchFilter<T extends {
+  or(filters: string): T;
+}>(query: T, rawQuery: string | undefined): T {
+  const filter = buildBrowseSearchFilter(rawQuery);
+  return filter ? query.or(filter) : query;
+}
+
+/**
+ * PostgREST `or=(...)` filter for the browse search box. The raw term is escaped for ILIKE and
+ * double-quoted so reserved characters such as `,` `.` `:` `(` `)` stay part of the value.
+ */
+export function buildBrowseSearchFilter(rawQuery: string | undefined): string | null {
+  const term = rawQuery?.trim() ?? "";
+  if (term === "") return null;
+  const pattern = quotePostgrestValue(`%${escapeIlikePattern(term)}%`);
+  return BROWSE_SEARCH_COLUMNS.map((column) => `${column}.ilike.${pattern}`).join(",");
+}
+
+function escapeIlikePattern(value: string): string {
+  // Backslash is PostgreSQL's default LIKE escape. PostgREST rewrites `*` to `%`, so a typed `*`
+  // becomes the single-character wildcard (which still matches a literal `*`) instead of "anything".
+  return value.replace(/[\\%_]/g, (match) => `\\${match}`).replace(/\*/g, "_");
+}
+
+function quotePostgrestValue(value: string): string {
+  return `"${value.replace(/[\\"]/g, (match) => `\\${match}`)}"`;
 }
 
 function getAnonymousId(): string {
   const key = "olden-era-template-generator.anonymous-id";
-  const existing = typeof window !== "undefined" ? window.localStorage.getItem(key) : null;
-  if (existing) return existing;
+  try {
+    const existing = typeof window !== "undefined" ? window.localStorage.getItem(key) : null;
+    if (existing) return existing;
+  } catch {
+    // Storage blocked; fall through to a per-session id.
+  }
   const id = `anon-${Math.random().toString(36).slice(2, 10)}-${Date.now().toString(36)}`;
-  if (typeof window !== "undefined") window.localStorage.setItem(key, id);
+  try {
+    if (typeof window !== "undefined") window.localStorage.setItem(key, id);
+  } catch {
+    // Storage blocked or full.
+  }
   return id;
 }
 

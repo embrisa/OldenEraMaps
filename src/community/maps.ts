@@ -75,6 +75,12 @@ export interface CommunityCatalogStats {
   averageRating: number;
 }
 
+/** The map fields the browse filter panel derives its tag chips and range bounds from. */
+export type BrowseFilterSourceMap = Pick<
+  CommunityMapRecord,
+  "tags" | "playerCount" | "mapWidth" | "mapHeight" | "zoneCount" | "connectionCount"
+>;
+
 export function loadCommunityCatalog(storage: Storage | undefined = browserStorage()): CommunityCatalog {
   const fallback = shouldUseSeedCatalog() ? buildSeedCatalog() : emptyCommunityCatalog();
   if (!storage) return fallback;
@@ -97,7 +103,11 @@ export function loadCommunityCatalog(storage: Storage | undefined = browserStora
 }
 
 export function persistCommunityCatalog(catalog: CommunityCatalog, storage: Storage | undefined = browserStorage()): void {
-  storage?.setItem(COMMUNITY_CATALOG_STORAGE_KEY, JSON.stringify(finalizeCatalog(catalog)));
+  try {
+    storage?.setItem(COMMUNITY_CATALOG_STORAGE_KEY, JSON.stringify(finalizeCatalog(catalog)));
+  } catch {
+    // The local catalog is a cache; a full or blocked storage must not break browsing.
+  }
 }
 
 export function ensureCommunityViewerId(storage: Storage | undefined = browserStorage()): string {
@@ -106,7 +116,11 @@ export function ensureCommunityViewerId(storage: Storage | undefined = browserSt
   if (existing) return existing;
 
   const created = createRecordId("viewer");
-  storage.setItem(COMMUNITY_VIEWER_STORAGE_KEY, created);
+  try {
+    storage.setItem(COMMUNITY_VIEWER_STORAGE_KEY, created);
+  } catch {
+    // Keep the in-memory id for this session.
+  }
   return created;
 }
 
@@ -213,6 +227,19 @@ export function summarizeCommunityCatalog(catalog: CommunityCatalog): CommunityC
   };
 }
 
+/** Stats for a subset of the catalog (e.g. the maps matching the browse filters). */
+export function summarizeCommunityMaps(catalog: CommunityCatalog, maps: readonly CommunityMapRecord[]): CommunityCatalogStats {
+  const mapIds = new Set(maps.map((map) => map.id));
+  const ratings = catalog.ratings.filter((rating) => mapIds.has(rating.mapId));
+  return {
+    mapCount: maps.length,
+    ratingCount: ratings.length,
+    averageRating: ratings.length === 0
+      ? 0
+      : roundToTenth(ratings.reduce((sum, rating) => sum + clampRating(rating.value), 0) / ratings.length)
+  };
+}
+
 export function visibleCommunityMaps(catalog: CommunityCatalog): CommunityMapRecord[] {
   return catalog.maps.filter((map) => map.visibility === "public");
 }
@@ -293,7 +320,7 @@ const DESCRIPTIVE_FILTER_GROUPS: Array<{ category: CommunityTagCategory; label: 
   { category: "layout", label: "Layout" }
 ];
 
-export function buildCommunityTagFilterSections(maps: readonly CommunityMapRecord[]): CommunityTagFilterSection[] {
+export function buildCommunityTagFilterSections(maps: readonly Pick<CommunityMapRecord, "tags">[]): CommunityTagFilterSection[] {
   const allTags = dedupeTags(maps.flatMap((map) => map.tags));
   const factualTags = allTags.filter((tag) => tag.kind === "factual");
   const descriptiveTags = sortTags(dedupeTags([
@@ -567,5 +594,11 @@ function dedupeTags(tags: readonly CommunityTag[]): CommunityTag[] {
 }
 
 function browserStorage(): Storage | undefined {
-  return typeof window === "undefined" ? undefined : window.localStorage;
+  if (typeof window === "undefined") return undefined;
+  try {
+    // Accessing localStorage throws when the browser blocks site data.
+    return window.localStorage;
+  } catch {
+    return undefined;
+  }
 }

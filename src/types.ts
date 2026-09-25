@@ -76,6 +76,8 @@ export interface GeneratorSettings {
   identityPreset?: MapGenerationPreset;
   pacePreset: GamePacePreset;
   connectionStyle: ConnectionStyle;
+  // Set when connectionStyle has already been folded into these settings, so normalizeSettings must not re-apply it.
+  connectionStyleApplied?: boolean;
   contentPreset: ContentPreset;
   templateName: string;
   gameMode: string;

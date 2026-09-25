@@ -168,7 +168,10 @@ export function normalizeTagSlug(value: string): string {
     .replace(/:+$/, "");
 }
 
-export function normalizeTagSlugs(values: readonly string[], maxCount = 8): string[] {
+/** Upload validation keeps at most this many descriptive tags; the share dialog caps selection to match. */
+export const DESCRIPTIVE_TAG_SELECTION_LIMIT = 8;
+
+export function normalizeTagSlugs(values: readonly string[], maxCount = DESCRIPTIVE_TAG_SELECTION_LIMIT): string[] {
   const tags = values.map(normalizeTagSlug).filter(Boolean);
   return [...new Set(tags)].slice(0, maxCount);
 }

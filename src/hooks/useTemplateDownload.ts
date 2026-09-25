@@ -1,5 +1,6 @@
 import { useCallback, useState } from "react";
-import { downloadBlob, downloadText } from "@/components/appShell/templateDownloads";
+import { toast } from "sonner";
+import { downloadBlob, downloadText, type DownloadResult } from "@/components/appShell/templateDownloads";
 import { generateMapPreviewImages } from "@/community/previewImageGenerator";
 import type { TemplateDesign } from "@/design";
 import type { ValidationResult } from "@/types";
@@ -14,6 +15,11 @@ interface PendingConfirmation {
   onConfirm(): void;
 }
 
+function notifyDownload(result: DownloadResult, fileName: string): void {
+  if (result === "cancelled") return;
+  toast.success(result === "saved" ? `Saved ${fileName}` : `Downloading ${fileName}`);
+}
+
 interface UseTemplateDownloadProps {
   design: TemplateDesign;
   validation: ValidationResult;
@@ -23,7 +29,6 @@ interface UseTemplateDownloadProps {
   forceExportJson: string;
   exportPreviewFileName: string;
   previewAvailable: boolean;
-  historyRevision: number;
   designBoardCanvas: HTMLCanvasElement | null;
 }
 
@@ -36,11 +41,13 @@ export function useTemplateDownload({
   forceExportJson,
   exportPreviewFileName,
   previewAvailable,
-  historyRevision,
   designBoardCanvas
 }: UseTemplateDownloadProps) {
   const [exportWarningOpen, setExportWarningOpen] = useState(false);
-  const [lastPreviewExportRevision, setLastPreviewExportRevision] = useState<number | null>(null);
+  // Designs are immutable snapshots, so identity tells whether the exported preview is current.
+  const [lastPreviewExportDesign, setLastPreviewExportDesign] = useState<TemplateDesign | null>(null);
+  // Builder validation errors block the normal serialization; template-diagnostic errors do not.
+  const exportPayload = validation.errors.length > 0 ? forceExportJson : exportJson;
   const [pendingConfirmation, setPendingConfirmation] = useState<PendingConfirmation | null>(null);
 
   const requestConfirmation = useCallback((confirmation: PendingConfirmation): void => {
@@ -68,40 +75,42 @@ export function useTemplateDownload({
   const handleExportClick = useCallback((): void => {
     const exportHasBlockingIssues = validation.errors.length > 0 || templateDiagnostics.errors.length > 0;
     const exportHasWarnings = templateDiagnostics.warnings.length > 0;
+    if (exportPayload === "") return;
 
     if (!exportHasBlockingIssues && !exportHasWarnings) {
-      if (exportJson === "") return;
-      void downloadText(exportFileName, exportJson, "application/json", { preferSavePicker: true });
+      void downloadText(exportFileName, exportPayload, "application/json", { preferSavePicker: true })
+        .then((result) => notifyDownload(result, exportFileName));
       return;
     }
 
-    if (exportHasBlockingIssues && forceExportJson === "") return;
-    if (!exportHasBlockingIssues && exportJson === "") return;
     setExportWarningOpen(true);
-  }, [validation.errors.length, templateDiagnostics.errors.length, templateDiagnostics.warnings.length, exportJson, exportFileName, forceExportJson]);
+  }, [validation.errors.length, templateDiagnostics.errors.length, templateDiagnostics.warnings.length, exportPayload, exportFileName]);
 
   const handleForceExportClick = useCallback(async (): Promise<void> => {
-    const exportHasBlockingIssues = validation.errors.length > 0 || templateDiagnostics.errors.length > 0;
-    const payload = exportHasBlockingIssues ? forceExportJson : exportJson;
-    if (payload === "") return;
+    if (exportPayload === "") return;
     setExportWarningOpen(false);
-    await downloadText(exportFileName, payload, "application/json", { preferSavePicker: true });
-  }, [exportFileName, exportJson, forceExportJson, templateDiagnostics.errors.length, validation.errors.length]);
+    notifyDownload(await downloadText(exportFileName, exportPayload, "application/json", { preferSavePicker: true }), exportFileName);
+  }, [exportFileName, exportPayload]);
 
   const handleExportPreviewImageClick = useCallback(async (): Promise<void> => {
     if (!previewAvailable) return;
-    const preview = await generateMapPreviewImages(design, { format: "image/png", source: designBoardCanvas ?? undefined });
-    await downloadBlob(exportPreviewFileName, preview.large, { preferSavePicker: true });
-    setLastPreviewExportRevision(historyRevision);
-  }, [previewAvailable, design, designBoardCanvas, exportPreviewFileName, historyRevision]);
+    try {
+      const preview = await generateMapPreviewImages(design, { format: "image/png", source: designBoardCanvas ?? undefined });
+      const result = await downloadBlob(exportPreviewFileName, preview.large, { preferSavePicker: true });
+      if (result === "cancelled") return;
+      setLastPreviewExportDesign(design);
+      notifyDownload(result, exportPreviewFileName);
+    } catch (error: unknown) {
+      toast.error(error instanceof Error ? `Preview export failed: ${error.message}` : "Preview export failed.");
+    }
+  }, [previewAvailable, design, designBoardCanvas, exportPreviewFileName]);
 
-  const previewFresh = lastPreviewExportRevision !== null && lastPreviewExportRevision === historyRevision;
+  const previewFresh = lastPreviewExportDesign === design;
 
   return {
     exportWarningOpen,
     setExportWarningOpen,
-    lastPreviewExportRevision,
-    setLastPreviewExportRevision,
+    exportPayload,
     pendingConfirmation,
     setPendingConfirmation,
     requestConfirmation,

@@ -1,6 +1,13 @@
-import { Download, Edit3, Eye, EyeOff, FileJson, Loader2, RefreshCw, Save, Trash2, Upload } from "lucide-react";
+import { Download, Edit3, Eye, EyeOff, FileJson, Loader2, RefreshCw, Save, Trash2, Upload, X } from "lucide-react";
 import { useEffect, useState, type JSX } from "react";
-import type { ManagedMapCard, ManagedMapStatus, ManagedMapVisibility, MapListingPatch } from "@/community/communityApi";
+import {
+  buildMapListingPatch,
+  LISTING_DESCRIPTION_NOTE,
+  type ManagedMapCard,
+  type ManagedMapStatus,
+  type ManagedMapVisibility,
+  type MapListingPatch
+} from "@/community/communityApi";
 import { CommunityMapCanvasPreview, COMMUNITY_MAP_CARD_PREVIEW_SIZE } from "@/components/community/CommunityMapCanvasPreview";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -13,6 +20,7 @@ export function MyMapsPage({
   status,
   maps,
   errorMessage,
+  onDismissError,
   onRefresh,
   onUpdateListing,
   onHide,
@@ -25,6 +33,8 @@ export function MyMapsPage({
   status: MyMapsStatus;
   maps: ManagedMapCard[];
   errorMessage?: string;
+  /** Clears an action error (update, delete, download) shown above the list. */
+  onDismissError?(): void;
   onRefresh(): void;
   onUpdateListing(mapId: string, patch: MapListingPatch): void;
   onHide(mapId: string): void;
@@ -53,12 +63,13 @@ export function MyMapsPage({
   }
 
   function saveEditing(map: ManagedMapCard): void {
-    onUpdateListing(map.id, {
-      title: editTitle.trim() || map.title,
-      authorName: editAuthorName.trim(),
-      description: editDescription.trim(),
+    const patch = buildMapListingPatch(map, {
+      title: editTitle,
+      authorName: editAuthorName,
+      description: editDescription,
       visibility: editVisibility
     });
+    if (Object.keys(patch).length > 0) onUpdateListing(map.id, patch);
     setEditingId(null);
   }
 
@@ -78,6 +89,18 @@ export function MyMapsPage({
           <span><strong>{maps.filter((map) => map.status === "hidden").length}</strong>Hidden</span>
         </CardContent>
       </Card>
+
+      {/* Load failures replace the list below; action failures keep the list and show here. */}
+      {errorMessage && status !== "error" ? (
+        <div className="alert alert--danger" role="alert">
+          {errorMessage}
+          {onDismissError ? (
+            <Button size="sm" variant="ghost" onClick={onDismissError} aria-label="Dismiss error">
+              <X size={14} />
+            </Button>
+          ) : null}
+        </div>
+      ) : null}
 
       {status === "loading" ? (
         <div className="community-loading" role="status" aria-label="Loading my maps">
@@ -138,6 +161,7 @@ export function MyMapsPage({
                       <div className="config-field">
                         <label className="oe-field__label" htmlFor={`my-map-description-${map.id}`}>Template Description</label>
                         <Textarea id={`my-map-description-${map.id}`} rows={4} value={editDescription} onChange={(event) => setEditDescription(event.currentTarget.value)} />
+                        <p className="community-upload-tags-note">{LISTING_DESCRIPTION_NOTE}</p>
                       </div>
                       <div className="config-field">
                         <label className="oe-field__label" htmlFor={`my-map-visibility-${map.id}`}>Visibility</label>
@@ -160,7 +184,7 @@ export function MyMapsPage({
                     <span><strong>{map.zoneCount}</strong> zones</span>
                     <span><strong>{map.connectionCount}</strong> paths</span>
                     <span><strong>{map.downloadCount}</strong> downloads</span>
-                    <span><strong>{map.ratingCount}</strong> ratings</span>
+                    <span><strong>{map.ratingCount}</strong> {map.ratingCount === 1 ? "rating" : "ratings"}</span>
                   </div>
 
                   <div className="dialog-actions my-map-actions">

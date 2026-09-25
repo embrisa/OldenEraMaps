@@ -30,7 +30,7 @@ export function BuilderValidationMessages({ validation }: { validation: Validati
       {validation.errors.map((message) => <Alert key={message} tone="danger">{message}</Alert>)}
       {validation.warnings.map((message) => <Alert key={message} tone="warning">{message}</Alert>)}
       {validation.errors.length > 0 ? (
-        <Alert tone="warning">Fix builder errors to push a fresh JSON snapshot. The editor is showing the last valid builder JSON.</Alert>
+        <Alert tone="warning">Fix builder errors to push a fresh JSON snapshot. Until then the JSON editor is read-only and shows the last valid builder JSON.</Alert>
       ) : null}
     </div>
   );
@@ -62,6 +62,8 @@ export function ValidationOutputPanel({
   const diagErrors = templateDiagnostics?.errors ?? [];
   const diagWarnings = templateDiagnostics?.warnings ?? [];
   const diagInfos = templateDiagnostics?.infos ?? [];
+  const hasJsonIssues = Boolean(jsonParseError || jsonApplyError) || jsonValidationErrors.length > 0;
+  const readyToExport = validation.errors.length === 0 && diagErrors.length === 0 && !hasJsonIssues;
 
   return (
     <Card>
@@ -77,7 +79,7 @@ export function ValidationOutputPanel({
           {jsonParseError ? <Alert tone="danger">{jsonParseError}</Alert> : null}
           {jsonApplyError ? <Alert tone="danger">{jsonApplyError}</Alert> : null}
           {jsonValidationErrors.map((message) => <Alert key={`json-${message}`} tone="danger">{message}</Alert>)}
-          {validation.errors.length === 0 && diagErrors.length === 0
+          {readyToExport
             ? <Alert tone="success">{diagWarnings.length > 0 ? "Ready to export with warnings." : "Ready to export."}</Alert>
             : null}
           {diagInfos.length > 0 ? (
@@ -90,7 +92,7 @@ export function ValidationOutputPanel({
           ) : null}
         </div>
         {analysis ? <MapAnalysisPanel analysis={analysis} /> : null}
-        <RmgJsonEditor value={jsonValue} onChange={onJsonChange} />
+        <RmgJsonEditor value={jsonValue} disabled={validation.errors.length > 0} onChange={onJsonChange} />
       </CardContent>
     </Card>
   );
@@ -155,8 +157,15 @@ function MapAnalysisPanel({ analysis }: { analysis: TemplateAnalysis }): JSX.Ele
               />
             )}
           </svg>
-          <div className="radial-gauge-text">
-            <span className="gauge-score">{scoreLabel}</span>
+          <div className="radial-gauge-text" role="img" aria-label={`Balance score ${scoreLabel}`}>
+            {analysis.balanceScore === null ? (
+              <span className="gauge-score">N/A</span>
+            ) : (
+              <>
+                <span className="gauge-score">{analysis.balanceScore}</span>
+                <span className="gauge-max">/ 100</span>
+              </>
+            )}
           </div>
         </div>
 

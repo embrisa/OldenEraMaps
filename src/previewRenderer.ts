@@ -34,19 +34,34 @@ const NATURAL_ALPHA = 0.55;
 
 // ── Zone helpers ───────────────────────────────────────────────────────────
 
-function zonePlayerIndex(zone: Zone): number | null {
-  if (!zone.name.startsWith("Spawn-")) return null;
-  const suffix = zone.name.slice(6);
+/** "3" → 3, or a single letter "C" → 3 (letter-named spawns); null otherwise. */
+function playerNumberFromSuffix(suffix: string): number | null {
   const numeric = Number(suffix);
-  if (Number.isInteger(numeric) && numeric >= 1) {
-    const idx = numeric - 1;
-    return idx >= 0 && idx < PLAYER_COLORS.length ? idx : null;
-  }
-  if (/^[A-Z]$/.test(suffix)) {
-    const idx = suffix.charCodeAt(0) - 65;
-    return idx >= 0 && idx < PLAYER_COLORS.length ? idx : null;
-  }
+  if (suffix !== "" && Number.isInteger(numeric) && numeric >= 1) return numeric;
+  if (/^[A-Z]$/.test(suffix)) return suffix.charCodeAt(0) - 64;
   return null;
+}
+
+/**
+ * 1-based player of a spawn zone: the player assigned by its Spawn main object ("Player3"), falling
+ * back to the "Spawn-N" name only for templates without that assignment. Zone names are free-form, so
+ * "Spawn-4" can belong to player 3.
+ */
+function zonePlayerNumber(zone: Zone): number | null {
+  const spawn = zone.mainObjects?.find((object) => object.type === "Spawn")?.spawn;
+  const assigned = typeof spawn === "string" ? playerNumberFromSuffix(spawn.trim().replace(/^Player/i, "")) : null;
+  if (assigned !== null) return assigned;
+  return zone.name.startsWith("Spawn-") ? playerNumberFromSuffix(zone.name.slice(6)) : null;
+}
+
+function playerColorIndex(playerNumber: number | null): number | null {
+  if (playerNumber === null) return null;
+  const idx = playerNumber - 1;
+  return idx >= 0 && idx < PLAYER_COLORS.length ? idx : null;
+}
+
+function zonePlayerIndex(zone: Zone): number | null {
+  return playerColorIndex(zonePlayerNumber(zone));
 }
 
 function isHub(zone: Zone): boolean {
@@ -57,26 +72,19 @@ function isNatural(zone: Zone): boolean {
   return zone.name.startsWith("Natural-");
 }
 
-function naturalParentIndex(zone: Zone): number | null {
+/** A "Natural-X" expansion belongs to the "Spawn-X" zone; use that spawn's assigned player. */
+function naturalParentPlayerNumber(zone: Zone, zones: readonly Zone[]): number | null {
   if (!isNatural(zone)) return null;
   const suffix = zone.name.slice(8);
-  const numeric = Number(suffix);
-  if (Number.isInteger(numeric) && numeric >= 1) {
-    const idx = numeric - 1;
-    return idx >= 0 && idx < PLAYER_COLORS.length ? idx : null;
-  }
-  if (/^[A-Z]$/.test(suffix)) {
-    const idx = suffix.charCodeAt(0) - 65;
-    return idx >= 0 && idx < PLAYER_COLORS.length ? idx : null;
-  }
-  return null;
+  const parent = zones.find((candidate) => candidate.name === `Spawn-${suffix}`);
+  return (parent ? zonePlayerNumber(parent) : null) ?? playerNumberFromSuffix(suffix);
 }
 
-function zoneColor(zone: Zone) {
+function zoneColor(zone: Zone, zones: readonly Zone[]) {
   const pi = zonePlayerIndex(zone);
   if (pi !== null) return PLAYER_COLORS[pi];
   if (isHub(zone)) return HUB_COLOR;
-  const ni = naturalParentIndex(zone);
+  const ni = playerColorIndex(naturalParentPlayerNumber(zone, zones));
   if (ni !== null) {
     const parent = PLAYER_COLORS[ni];
     return {
@@ -88,10 +96,12 @@ function zoneColor(zone: Zone) {
   return NEUTRAL_COLOR;
 }
 
-function zoneLabel(zone: Zone): string {
+function zoneLabel(zone: Zone, zones: readonly Zone[]): string {
+  const player = zonePlayerNumber(zone);
+  if (player !== null) return `P${player}`;
   if (zone.name.startsWith("Spawn-")) return `P${zone.name.slice(6)}`;
   if (zone.name.startsWith("Neutral-")) return `N${zone.name.slice(8)}`;
-  if (zone.name.startsWith("Natural-")) return `E${zone.name.slice(8)}`;
+  if (isNatural(zone)) return `E${naturalParentPlayerNumber(zone, zones) ?? zone.name.slice(8)}`;
   if (zone.name === "Hub") return "Hub";
   return zone.name;
 }
@@ -235,7 +245,7 @@ function drawZoneCell(
   const cell = cells[index];
   if (cell.length < 3) return;
   const zone = zones[index];
-  const colors = zoneColor(zone);
+  const colors = zoneColor(zone, zones);
 
   ctx.beginPath();
   for (let i = 0; i < cell.length; i++) {
@@ -348,7 +358,7 @@ function drawZoneLabel(
   if (cell.length < 3) return;
 
   const zone = zones[index];
-  const colors = zoneColor(zone);
+  const colors = zoneColor(zone, zones);
   const centroid = polygonCentroid(cell);
   const cx = ox + centroid.x * w;
   const cy = oy + centroid.y * h;
@@ -360,7 +370,7 @@ function drawZoneLabel(
   const effectiveArea = totalMapArea - 2 * borderWidth * (mapW + mapH - 2 * borderWidth);
   const gridSquares = Math.round((zoneSize / totalWeightForLabels) * Math.max(0, effectiveArea));
 
-  const label = zoneLabel(zone);
+  const label = zoneLabel(zone, zones);
   const sub = zoneSublabel(zone, gridSquares);
   const mainFontSize = clamp(Math.round(w * 0.009), 10, 11);
   const subFontSize = clamp(Math.round(w * 0.0075), 8, 10);

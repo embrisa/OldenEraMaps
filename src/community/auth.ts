@@ -37,16 +37,21 @@ export function communityAuthReducer(state: CommunityAuthState, action: Communit
     return { ...state, status: "loading", error: null };
   }
   if (action.type === "session") {
+    // Supabase re-emits SIGNED_IN/TOKEN_REFRESHED for the same user (e.g. on tab refocus). Keep the
+    // loaded profile object so dialogs seeded from it do not see a new author name and reset.
+    const sameUser = Boolean(action.session && state.profile?.userId === action.session.user.id);
     return {
       status: action.session ? "signed-in" : "signed-out",
       session: action.session,
-      profile: action.session ? profileFromUser(action.session.user) : null,
+      profile: action.session ? (sameUser ? state.profile : profileFromUser(action.session.user)) : null,
       error: null
     };
   }
   if (action.type === "profile") {
     if (!state.session || state.session.user.id !== action.profile.userId) return state;
-    return { ...state, status: "signed-in", profile: action.profile, error: null };
+    const profile = state.profile && sameProfile(state.profile, action.profile) ? state.profile : action.profile;
+    if (profile === state.profile && state.status === "signed-in" && state.error === null) return state;
+    return { ...state, status: "signed-in", profile, error: null };
   }
   if (action.type === "error") {
     return { ...state, status: state.session ? "signed-in" : "signed-out", error: action.error };
@@ -158,6 +163,10 @@ export function profileFromUser(user: User): CommunityAuthProfile {
     displayName: "Anonymous Cartographer",
     avatarUrl: null
   };
+}
+
+function sameProfile(left: CommunityAuthProfile, right: CommunityAuthProfile): boolean {
+  return left.userId === right.userId && left.displayName === right.displayName && left.avatarUrl === right.avatarUrl;
 }
 
 async function propagateDisplayNameToAnonymousMapAuthors(

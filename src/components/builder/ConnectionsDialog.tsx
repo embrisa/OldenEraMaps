@@ -6,14 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Input, NativeSelect, SteppedValueSlider } from "@/components/ui/form-controls";
 import { Dialog, DialogContent, DialogDescription, DialogTitle, ScrollArea } from "@/components/ui/radix";
 import { RmgJsonEditor } from "@/components/builder/RmgJsonEditor";
-import { Alert, CheckField, ConfigField, formatJsonInput, formatNumberInput, parseJsonInput, parseNumberInput } from "@/components/builder/formHelpers";
+import { Alert, CheckField, ConfigField, currentJsonDraft, formatJsonInput, formatNumberInput, jsonDraftBase, parseJsonInput, parseNumberInput, type JsonTextDraft } from "@/components/builder/formHelpers";
 
-interface PortalRuleDraftState {
-  from: string;
-  to: string;
-  fromError?: string;
-  toError?: string;
-}
+type PortalRuleField = "from" | "to";
 
 export function ConnectionsDialog({
   open,
@@ -35,29 +30,28 @@ export function ConnectionsDialog({
   onDelete(connectionId: string): void;
 }): JSX.Element {
   const rowRefs = useRef(new Map<string, HTMLElement>());
-  const [portalRuleDrafts, setPortalRuleDrafts] = useState<Record<string, PortalRuleDraftState>>({});
+  const [portalRuleDrafts, setPortalRuleDrafts] = useState<Record<string, JsonTextDraft>>({});
 
   useEffect(() => {
     if (!open || !selectedConnectionId) return;
     rowRefs.current.get(selectedConnectionId)?.scrollIntoView({ block: "nearest" });
   }, [open, selectedConnectionId]);
 
+  // Start each session from the stored rules; unrelated edits (which re-clone every connection) keep in-progress text.
   useEffect(() => {
-    if (!open) return;
-    setPortalRuleDrafts(Object.fromEntries(design.connections.map((connection) => [connection.id, {
-      from: formatJsonInput(connection.portalPlacementRulesFrom),
-      to: formatJsonInput(connection.portalPlacementRulesTo)
-    }])));
-  }, [design.connections, open]);
+    if (open) setPortalRuleDrafts({});
+  }, [open]);
 
-  function portalRuleDraftFor(connection: DesignConnection): PortalRuleDraftState {
-    return portalRuleDrafts[connection.id] ?? {
-      from: formatJsonInput(connection.portalPlacementRulesFrom),
-      to: formatJsonInput(connection.portalPlacementRulesTo)
-    };
+  function portalRulesValue(connection: DesignConnection, field: PortalRuleField): unknown {
+    return field === "from" ? connection.portalPlacementRulesFrom : connection.portalPlacementRulesTo;
   }
 
-  function updatePortalRules(connection: DesignConnection, field: "from" | "to", value: string): void {
+  function portalRuleDraftFor(connection: DesignConnection, field: PortalRuleField): { value: string; error?: string } {
+    const storedValue = portalRulesValue(connection, field);
+    return currentJsonDraft(portalRuleDrafts[`${connection.id}:${field}`], storedValue) ?? { value: formatJsonInput(storedValue) };
+  }
+
+  function updatePortalRules(connection: DesignConnection, field: PortalRuleField, value: string): void {
     const parsed = parseJsonInput<unknown>(value);
     const parsedValue = parsed.ok ? parsed.value : undefined;
     let error: string | undefined;
@@ -67,14 +61,8 @@ export function ConnectionsDialog({
       error = "Use a JSON array of placement rules.";
     }
 
-    setPortalRuleDrafts((current) => ({
-      ...current,
-      [connection.id]: {
-        ...(current[connection.id] ?? portalRuleDraftFor(connection)),
-        [field]: value,
-        [`${field}Error`]: error
-      }
-    }));
+    const base = jsonDraftBase(error ? portalRulesValue(connection, field) : parsedValue);
+    setPortalRuleDrafts((current) => ({ ...current, [`${connection.id}:${field}`]: { value, error, base } }));
 
     if (error) return;
     onUpdate(connection.id, (draft) => {
@@ -226,6 +214,10 @@ export function ConnectionsDialog({
                           onUpdate(connection.id, (draft) => { draft.guardZone = value || undefined; });
                         }}>
                           <option value="">Default</option>
+                          {/* A stale name is still exported: show it instead of silently displaying "Default". */}
+                          {connection.guardZone && !design.zones.some((zone) => zone.name === connection.guardZone) ? (
+                            <option value={connection.guardZone}>(missing: {connection.guardZone})</option>
+                          ) : null}
                           {design.zones.map((zone) => <option key={zone.id} value={zone.name}>{zone.name}</option>)}
                         </NativeSelect>
                       </ConfigField>
@@ -252,10 +244,18 @@ export function ConnectionsDialog({
                     </div>
                     <div className="form-grid form-grid--two">
                       <ConfigField configKey="connection.guardMatchGroup" label="Guard Match Group">
-                        <Input value={connection.guardMatchGroup ?? ""} onChange={(event) => {
-                          const value = event.currentTarget.value.trim();
-                          onUpdate(connection.id, (draft) => { draft.guardMatchGroup = value || undefined; });
-                        }} />
+                        <Input
+                          value={connection.guardMatchGroup ?? ""}
+                          onChange={(event) => {
+                            const value = event.currentTarget.value;
+                            onUpdate(connection.id, (draft) => { draft.guardMatchGroup = value.trim() ? value : undefined; });
+                          }}
+                          onBlur={(event) => {
+                            const value = event.currentTarget.value;
+                            if (value === value.trim()) return;
+                            onUpdate(connection.id, (draft) => { draft.guardMatchGroup = value.trim() || undefined; });
+                          }}
+                        />
                       </ConfigField>
                     </div>
                     <div className="checks checks--vertical">
@@ -265,7 +265,8 @@ export function ConnectionsDialog({
                       ) : null}
                     </div>
                     {connection.type === "Portal" ? (() => {
-                      const draft = portalRuleDraftFor(connection);
+                      const fromDraft = portalRuleDraftFor(connection, "from");
+                      const toDraft = portalRuleDraftFor(connection, "to");
                       return (
                         <>
                           <div className="form-grid form-grid--two">
@@ -273,7 +274,7 @@ export function ConnectionsDialog({
                               <RmgJsonEditor
                                 ariaLabel={`Portal Rules From JSON editor for ${connection.name}`}
                                 className="rmg-json-editor--mini"
-                                value={draft.from}
+                                value={fromDraft.value}
                                 onChange={(value) => updatePortalRules(connection, "from", value)}
                               />
                             </ConfigField>
@@ -281,13 +282,13 @@ export function ConnectionsDialog({
                               <RmgJsonEditor
                                 ariaLabel={`Portal Rules To JSON editor for ${connection.name}`}
                                 className="rmg-json-editor--mini"
-                                value={draft.to}
+                                value={toDraft.value}
                                 onChange={(value) => updatePortalRules(connection, "to", value)}
                               />
                             </ConfigField>
                           </div>
-                          {draft.fromError ? <Alert tone="danger">Portal Rules From: {draft.fromError}</Alert> : null}
-                          {draft.toError ? <Alert tone="danger">Portal Rules To: {draft.toError}</Alert> : null}
+                          {fromDraft.error ? <Alert tone="danger">Portal Rules From: {fromDraft.error}</Alert> : null}
+                          {toDraft.error ? <Alert tone="danger">Portal Rules To: {toDraft.error}</Alert> : null}
                         </>
                       );
                     })() : null}

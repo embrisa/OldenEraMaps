@@ -1,14 +1,16 @@
-import { ChevronLeft, ChevronRight, Compass, Download, Loader2, Search, Star, Upload, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, Compass, Download, Loader2, Search, Upload, X } from "lucide-react";
 import { useMemo, type JSX } from "react";
 import {
   buildCommunityTagFilterSections,
+  type BrowseFilterSourceMap,
   type BrowseRangeFilters,
   type BrowseNumericRange,
-  type CommunityCatalogStats,
-  type CommunityMapRecord
+  type CommunityCatalogStats
 } from "@/community/maps";
 import type { BrowseMapCard, BrowseResult, BrowseSort } from "@/community/communityApi";
 import { CommunityMapCanvasPreview, COMMUNITY_MAP_CARD_PREVIEW_SIZE } from "@/components/community/CommunityMapCanvasPreview";
+import { showsTemplateNameBadge } from "@/components/community/listingDisplay";
+import { RatingSummary, StarRatingButtons } from "@/components/community/RatingControls";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -22,7 +24,7 @@ interface BrowseRangeDefinition {
   label: string;
   minLabel: string;
   maxLabel: string;
-  mapValue(map: CommunityMapRecord): number;
+  mapValue(map: BrowseFilterSourceMap): number;
   fallbackMin: number;
   fallbackMax: number;
   step: number;
@@ -70,7 +72,8 @@ export function BrowsePage({
 }: {
   status: BrowseStatus;
   result: BrowseResult | null;
-  maps: CommunityMapRecord[];
+  /** Maps the filter chips and range bounds are derived from (not the displayed results). */
+  maps: readonly BrowseFilterSourceMap[];
   stats: CommunityCatalogStats;
   errorMessage?: string;
   query: string;
@@ -278,11 +281,15 @@ export function BrowsePage({
           </CardContent>
         </Card>
       ) : displayMaps.length === 0 ? (
-        <Card>
-          <CardContent>
-            <div className="empty-state">No shared maps match this search yet.</div>
-          </CardContent>
-        </Card>
+        <>
+          <Card>
+            <CardContent>
+              <div className="empty-state">No shared maps match this search yet.</div>
+            </CardContent>
+          </Card>
+          {/* An empty page past the last one must still offer a way back. */}
+          <BrowsePagination result={result} onPageChange={onPageChange} />
+        </>
       ) : (
         <>
           <div className="community-map-grid">
@@ -299,7 +306,7 @@ export function BrowsePage({
                         <CardTitle>{map.title}</CardTitle>
                         <CardDescription>by {map.authorName} · {map.mapWidth}×{map.mapHeight} · {map.playerCount} players</CardDescription>
                       </div>
-                      <Badge className="community-map-title__badge">{map.templateName}</Badge>
+                      {showsTemplateNameBadge(map) ? <Badge className="community-map-title__badge">{map.templateName}</Badge> : null}
                     </button>
                   </CardHeader>
                   <CardContent className="community-map-card__content">
@@ -332,25 +339,20 @@ export function BrowsePage({
                       <span><strong>{map.downloadCount}</strong> downloads</span>
                     </div>
                     <div className="community-rating-row community-map-card__rating-row">
-                      <div className="community-map-card__rating-summary">
-                        <strong><Star size={14} /> {map.averageRating.toFixed(1)} / 5</strong>
-                        <span>{map.ratingCount} ratings{rating ? ` · your score ${rating}` : ""}</span>
-                      </div>
-                      <div className="community-rate-buttons community-map-card__rate-buttons" aria-label={`Rate ${map.title}`}>
-                        {[1, 2, 3, 4, 5].map((value) => (
-                          <Button
-                            key={value}
-                            size="sm"
-                            variant={rating === value ? "gold" : "ghost"}
-                            onClick={() => onRate(map.id, value)}
-                            disabled={!mapCanRate}
-                            title={rateTitle}
-                            aria-label={`Rate ${value} stars for ${map.title}`}
-                          >
-                            {value}
-                          </Button>
-                        ))}
-                      </div>
+                      <RatingSummary
+                        className="community-map-card__rating-summary"
+                        averageRating={map.averageRating}
+                        ratingCount={map.ratingCount}
+                        viewerRating={rating}
+                      />
+                      <StarRatingButtons
+                        className="community-map-card__rate-buttons"
+                        mapTitle={map.title}
+                        viewerRating={rating}
+                        disabled={!mapCanRate}
+                        disabledReason={rateTitle}
+                        onRate={(value) => onRate(map.id, value)}
+                      />
                     </div>
                     <div className="dialog-actions community-map-card__actions">
                       <Button variant="blue" onClick={() => onOpenInBuilder(map)}><Upload size={14} />Open in builder</Button>
@@ -363,38 +365,50 @@ export function BrowsePage({
             })}
           </div>
 
-          {result && result.pageCount > 1 ? (
-            <div className="community-pagination">
-              <Button
-                size="sm"
-                variant="ghost"
-                disabled={result.page <= 1}
-                onClick={() => onPageChange(result.page - 1)}
-                aria-label="Previous page"
-              >
-                <ChevronLeft size={14} />Previous
-              </Button>
-              <span className="community-pagination__info">
-                Page {result.page} of {result.pageCount}
-              </span>
-              <Button
-                size="sm"
-                variant="ghost"
-                disabled={result.page >= result.pageCount}
-                onClick={() => onPageChange(result.page + 1)}
-                aria-label="Next page"
-              >
-                Next<ChevronRight size={14} />
-              </Button>
-            </div>
-          ) : null}
+          <BrowsePagination result={result} onPageChange={onPageChange} />
         </>
       )}
     </section>
   );
 }
 
-function buildRangeBounds(maps: CommunityMapRecord[]): BrowseRangeBounds[] {
+function BrowsePagination({
+  result,
+  onPageChange
+}: {
+  result: BrowseResult | null;
+  onPageChange(page: number): void;
+}): JSX.Element | null {
+  if (!result || result.pageCount <= 1) return null;
+  const page = Math.min(result.page, result.pageCount);
+  return (
+    <div className="community-pagination">
+      <Button
+        size="sm"
+        variant="ghost"
+        disabled={page <= 1}
+        onClick={() => onPageChange(page - 1)}
+        aria-label="Previous page"
+      >
+        <ChevronLeft size={14} />Previous
+      </Button>
+      <span className="community-pagination__info">
+        Page {page} of {result.pageCount}
+      </span>
+      <Button
+        size="sm"
+        variant="ghost"
+        disabled={page >= result.pageCount}
+        onClick={() => onPageChange(page + 1)}
+        aria-label="Next page"
+      >
+        Next<ChevronRight size={14} />
+      </Button>
+    </div>
+  );
+}
+
+function buildRangeBounds(maps: readonly BrowseFilterSourceMap[]): BrowseRangeBounds[] {
   return BROWSE_RANGE_DEFINITIONS.map((definition) => {
     const values = maps.map(definition.mapValue).filter((value) => Number.isFinite(value));
     if (values.length === 0) {

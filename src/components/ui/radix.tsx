@@ -39,10 +39,22 @@ DialogOverlay.displayName = "DialogOverlay";
 export const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
->(({ className, children, ...props }, ref) => (
+>(({ className, children, onOpenAutoFocus, ...props }, ref) => (
   <DialogPortal>
     <DialogOverlay />
-    <DialogPrimitive.Content ref={ref} className={cn("oe-dialog", className)} {...props}>
+    <DialogPrimitive.Content
+      ref={ref}
+      className={cn("oe-dialog", className)}
+      onOpenAutoFocus={(event) => {
+        onOpenAutoFocus?.(event);
+        if (event.defaultPrevented) return;
+        // Focus the dialog itself: the first focusable element is often a help icon,
+        // and focusing it would pop its tooltip over the dialog title.
+        event.preventDefault();
+        if (event.currentTarget instanceof HTMLElement) event.currentTarget.focus({ preventScroll: true });
+      }}
+      {...props}
+    >
       <div className="oe-dialog__body">{children}</div>
       <DialogPrimitive.Close className="oe-dialog__close" aria-label="Close">
         <X size={16} />

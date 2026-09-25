@@ -1,12 +1,12 @@
 import { CirclePlus, Trash2 } from "lucide-react";
-import { useEffect, useState, type JSX } from "react";
+import { useEffect, useRef, useState, type JSX } from "react";
 import type { ContentCountLimit, ContentItem, ContentSidLimit } from "@/types";
 import type { TemplateDesign } from "@/design";
 import { Button } from "@/components/ui/button";
-import { Input, Textarea } from "@/components/ui/form-controls";
+import { Input } from "@/components/ui/form-controls";
 import { Dialog, DialogContent, ScrollArea } from "@/components/ui/radix";
 import { RmgJsonEditor } from "@/components/builder/RmgJsonEditor";
-import { Alert, ConfigField, formatJsonInput, formatLineList, formatNumberInput, parseJsonInput, parseLineList, parseNumberInput } from "@/components/builder/formHelpers";
+import { Alert, ConfigField, currentJsonDraft, formatJsonInput, formatNumberInput, jsonDraftBase, LineListTextarea, parseJsonInput, parseNumberInput, removeIndexedDrafts, type JsonTextDraft } from "@/components/builder/formHelpers";
 
 export function ContentLimitsDialog({
   open,
@@ -37,8 +37,10 @@ export function ContentLimitsPanel({
   design: TemplateDesign;
   onUpdate(mutator: (design: TemplateDesign) => void): void;
 }): JSX.Element {
-  const [contentDrafts, setContentDrafts] = useState<Record<string, { value: string; error?: string }>>({});
+  const [contentDrafts, setContentDrafts] = useState<Record<string, JsonTextDraft>>({});
   const [selectedGroupIndex, setSelectedGroupIndex] = useState(0);
+  // Last non-empty name of a group whose name field is currently cleared; zones still reference it.
+  const clearedNamesRef = useRef(new Map<number, string>());
   const selectedGroup = design.contentCountLimits[selectedGroupIndex] ?? design.contentCountLimits[0];
   const selectedIndex = selectedGroup ? design.contentCountLimits.indexOf(selectedGroup) : -1;
 
@@ -46,6 +48,7 @@ export function ContentLimitsPanel({
     if (!active) return;
     setContentDrafts({});
     setSelectedGroupIndex(0);
+    clearedNamesRef.current.clear();
   }, [active]);
 
   useEffect(() => {
@@ -64,20 +67,33 @@ export function ContentLimitsPanel({
     onUpdate((draft) => {
       const [removed] = draft.contentCountLimits.splice(groupIndex, 1);
       if (!removed) return;
+      const removedName = removed.name.trim() ? removed.name : clearedNamesRef.current.get(groupIndex) ?? removed.name;
       for (const zone of draft.zones) {
-        zone.contentCountLimits = zone.contentCountLimits.filter((name) => name !== removed.name);
+        zone.contentCountLimits = zone.contentCountLimits.filter((name) => name !== removedName);
       }
       setSelectedGroupIndex(Math.max(0, Math.min(groupIndex, draft.contentCountLimits.length - 1)));
     });
+    // Drafts are keyed by position: drop the deleted group's drafts so the next group does not inherit them.
+    setContentDrafts((current) => removeIndexedDrafts(current, [], groupIndex));
+    clearedNamesRef.current.clear();
+  }
+
+  function deleteSidLimit(groupIndex: number, limitIndex: number): void {
+    updateGroup(groupIndex, (draft) => { draft.limits = (draft.limits ?? []).filter((_limit, index) => index !== limitIndex); });
+    setContentDrafts((current) => removeIndexedDrafts(current, [groupIndex], limitIndex));
   }
 
   function updateGroupName(groupIndex: number, value: string): void {
     onUpdate((draft) => {
       const group = draft.contentCountLimits[groupIndex];
       if (!group) return;
-      const previousName = group.name;
+      const previousName = group.name.trim() ? group.name : clearedNamesRef.current.get(groupIndex) ?? group.name;
       group.name = value;
-      if (!value.trim()) return;
+      if (!value.trim()) {
+        clearedNamesRef.current.set(groupIndex, previousName);
+        return;
+      }
+      clearedNamesRef.current.delete(groupIndex);
       for (const zone of draft.zones) {
         zone.contentCountLimits = zone.contentCountLimits.map((name) => name === previousName ? value : name);
       }
@@ -113,7 +129,8 @@ export function ContentLimitsPanel({
       parsedValue = parsed.value;
     }
 
-    setContentDrafts((current) => ({ ...current, [key]: { value, error } }));
+    const base = jsonDraftBase(error ? design.contentCountLimits[groupIndex]?.limits?.[limitIndex]?.content : parsedValue);
+    setContentDrafts((current) => ({ ...current, [key]: { value, error, base } }));
     if (error) return;
 
     updateSidLimit(groupIndex, limitIndex, (limit) => {
@@ -137,7 +154,7 @@ export function ContentLimitsPanel({
               <nav className="content-limit-list" aria-label="Content limit groups">
                 {design.contentCountLimits.map((group, groupIndex) => (
                   <button
-                    key={`${group.name}-${groupIndex}`}
+                    key={groupIndex}
                     type="button"
                     className="content-limit-list__item"
                     data-selected={groupIndex === selectedIndex ? "true" : undefined}
@@ -149,7 +166,7 @@ export function ContentLimitsPanel({
                 ))}
               </nav>
               {selectedGroup && selectedIndex >= 0 ? (
-            <article key={`${selectedGroup.name}-${selectedIndex}`} className="content-limit-group">
+            <article key={selectedIndex} className="content-limit-group">
               <div className="connection-title">
                 <ConfigField configKey="contentCountLimit.name" label="Limit Name">
                   <Input value={selectedGroup.name} onChange={(event) => updateGroupName(selectedIndex, event.currentTarget.value)} />
@@ -175,10 +192,10 @@ export function ContentLimitsPanel({
                 return (
                   <div className="dialog-card-grid content-limit-group__limits">
                     {(selectedGroup.limits ?? []).map((limit, limitIndex) => {
-                      const contentDraft = contentDrafts[draftKey(selectedIndex, limitIndex)];
+                      const contentDraft = currentJsonDraft(contentDrafts[draftKey(selectedIndex, limitIndex)], limit.content);
                       const limitPct = Math.round(((limit.maxCount ?? 0) / maxMaxCount) * 100);
                       return (
-                        <div key={`${limit.sid}-${limitIndex}`} className="content-limit-row dialog-card">
+                        <div key={limitIndex} className="content-limit-row dialog-card">
                           <div className="form-grid form-grid--three">
                             <ConfigField configKey="contentSidLimit.sid" label="SID">
                               <Input value={limit.sid} onChange={(event) => updateSidLimit(selectedIndex, limitIndex, (draft) => { draft.sid = event.currentTarget.value; })} />
@@ -195,7 +212,7 @@ export function ContentLimitsPanel({
                           </div>
                           <div className="form-grid form-grid--two content-limit-row__content-grid">
                             <ConfigField configKey="contentSidLimit.includeLists" label="Include Lists">
-                              <Textarea rows={3} value={formatLineList(limit.includeLists)} onChange={(event) => updateSidLimit(selectedIndex, limitIndex, (draft) => { draft.includeLists = parseLineList(event.currentTarget.value); })} />
+                              <LineListTextarea rows={3} values={limit.includeLists} onValuesChange={(includeLists) => updateSidLimit(selectedIndex, limitIndex, (draft) => { draft.includeLists = includeLists; })} />
                             </ConfigField>
                             <ConfigField configKey="contentSidLimit.content" label="Content JSON">
                               <RmgJsonEditor
@@ -208,7 +225,7 @@ export function ContentLimitsPanel({
                           </div>
                           {contentDraft?.error ? <Alert tone="danger">Content JSON: {contentDraft.error}</Alert> : null}
                           <div className="dialog-actions dialog-actions--compact">
-                            <Button type="button" size="sm" variant="danger" onClick={() => updateGroup(selectedIndex, (draft) => { draft.limits = (draft.limits ?? []).filter((_limit, index) => index !== limitIndex); })}>
+                            <Button type="button" size="sm" variant="danger" onClick={() => deleteSidLimit(selectedIndex, limitIndex)}>
                               <Trash2 size={14} />Delete SID
                             </Button>
                           </div>

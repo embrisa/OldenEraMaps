@@ -1,12 +1,12 @@
 import { CirclePlus, Trash2 } from "lucide-react";
-import { useEffect, useState, type JSX } from "react";
+import { useEffect, useRef, useState, type JSX } from "react";
 import { getDesignMandatoryContentGroups, type TemplateDesign } from "@/design";
 import type { ContentItem, ContentPlacementRule, MandatoryContentGroup } from "@/types";
 import { Button } from "@/components/ui/button";
-import { Input, Textarea } from "@/components/ui/form-controls";
+import { Input } from "@/components/ui/form-controls";
 import { Checkbox, Dialog, DialogContent, ScrollArea } from "@/components/ui/radix";
 import { RmgJsonEditor } from "@/components/builder/RmgJsonEditor";
-import { Alert, CheckField, ConfigField, formatJsonInput, formatLineList, formatNumberInput, parseJsonInput, parseLineList, parseNumberInput } from "@/components/builder/formHelpers";
+import { Alert, CheckField, ConfigField, currentJsonDraft, formatJsonInput, formatNumberInput, jsonDraftBase, LineListTextarea, parseJsonInput, parseNumberInput, removeIndexedDrafts, type JsonTextDraft } from "@/components/builder/formHelpers";
 
 export function MandatoryContentDialog({
   open,
@@ -38,8 +38,10 @@ export function MandatoryContentPanel({
   onUpdate(mutator: (design: TemplateDesign) => void): void;
 }): JSX.Element {
   const groups = getDesignMandatoryContentGroups(design);
-  const [jsonDrafts, setJsonDrafts] = useState<Record<string, { value: string; error?: string }>>({});
+  const [jsonDrafts, setJsonDrafts] = useState<Record<string, JsonTextDraft>>({});
   const [selectedGroupIndex, setSelectedGroupIndex] = useState(0);
+  // Last non-empty name of a group whose name field is currently cleared; zones still reference it.
+  const clearedNamesRef = useRef(new Map<number, string>());
   const selectedGroup = groups[selectedGroupIndex] ?? groups[0];
   const selectedIndex = selectedGroup ? groups.indexOf(selectedGroup) : -1;
 
@@ -47,6 +49,7 @@ export function MandatoryContentPanel({
     if (!active) return;
     setJsonDrafts({});
     setSelectedGroupIndex(0);
+    clearedNamesRef.current.clear();
   }, [active]);
 
   useEffect(() => {
@@ -73,11 +76,20 @@ export function MandatoryContentPanel({
       materialize(draft);
       const [removed] = draft.mandatoryContent.splice(groupIndex, 1);
       if (!removed) return;
+      const removedName = removed.name.trim() ? removed.name : clearedNamesRef.current.get(groupIndex) ?? removed.name;
       for (const zone of draft.zones) {
-        zone.mandatoryContent = zone.mandatoryContent.filter((name) => name !== removed.name);
+        zone.mandatoryContent = zone.mandatoryContent.filter((name) => name !== removedName);
       }
       setSelectedGroupIndex(Math.max(0, Math.min(groupIndex, draft.mandatoryContent.length - 1)));
     });
+    // Drafts are keyed by position: drop the deleted group's drafts so the next group does not inherit them.
+    setJsonDrafts((current) => removeIndexedDrafts(current, [], groupIndex));
+    clearedNamesRef.current.clear();
+  }
+
+  function deleteItem(groupIndex: number, itemIndex: number): void {
+    updateGroup(groupIndex, (draft) => { draft.content = (draft.content ?? []).filter((_item, index) => index !== itemIndex); });
+    setJsonDrafts((current) => removeIndexedDrafts(current, [groupIndex], itemIndex));
   }
 
   function updateGroupName(groupIndex: number, value: string): void {
@@ -85,9 +97,13 @@ export function MandatoryContentPanel({
       materialize(draft);
       const group = draft.mandatoryContent[groupIndex];
       if (!group) return;
-      const previousName = group.name;
+      const previousName = group.name.trim() ? group.name : clearedNamesRef.current.get(groupIndex) ?? group.name;
       group.name = value;
-      if (!value.trim()) return;
+      if (!value.trim()) {
+        clearedNamesRef.current.set(groupIndex, previousName);
+        return;
+      }
+      clearedNamesRef.current.delete(groupIndex);
       for (const zone of draft.zones) {
         zone.mandatoryContent = zone.mandatoryContent.map((name) => name === previousName ? value : name);
       }
@@ -111,7 +127,7 @@ export function MandatoryContentPanel({
     });
   }
 
-  function updateJson<T>(key: string, value: string, validate: (value: unknown) => value is T, errorMessage: string, apply: (parsed: T | undefined) => void): void {
+  function updateJson<T>(key: string, value: string, currentValue: unknown, validate: (value: unknown) => value is T, errorMessage: string, apply: (parsed: T | undefined) => void): void {
     const parsed = parseJsonInput<T>(value);
     let error: string | undefined;
     let parsedValue: T | undefined;
@@ -123,7 +139,8 @@ export function MandatoryContentPanel({
       parsedValue = parsed.value;
     }
 
-    setJsonDrafts((current) => ({ ...current, [key]: { value, error } }));
+    const base = jsonDraftBase(error ? currentValue : parsedValue);
+    setJsonDrafts((current) => ({ ...current, [key]: { value, error, base } }));
     if (!error) apply(parsedValue);
   }
 
@@ -143,7 +160,7 @@ export function MandatoryContentPanel({
               <nav className="content-limit-list" aria-label="Mandatory content groups">
                 {groups.map((group, groupIndex) => (
                   <button
-                    key={`${group.name}-${groupIndex}`}
+                    key={groupIndex}
                     type="button"
                     className="content-limit-list__item"
                     data-selected={groupIndex === selectedIndex ? "true" : undefined}
@@ -155,7 +172,7 @@ export function MandatoryContentPanel({
                 ))}
               </nav>
               {selectedGroup && selectedIndex >= 0 ? (
-                <article key={`${selectedGroup.name}-${selectedIndex}`} className="content-limit-group mandatory-content-group">
+                <article key={selectedIndex} className="content-limit-group mandatory-content-group">
                   <div className="connection-title">
                     <ConfigField configKey="mandatoryContent.name" label="Group Name">
                       <Input value={selectedGroup.name} onChange={(event) => updateGroupName(selectedIndex, event.currentTarget.value)} />
@@ -172,10 +189,10 @@ export function MandatoryContentPanel({
                     {(selectedGroup.content ?? []).map((item, itemIndex) => {
                       const rulesKey = draftKey(selectedIndex, itemIndex, "rules");
                       const contentKey = draftKey(selectedIndex, itemIndex, "content");
-                      const rulesDraft = jsonDrafts[rulesKey];
-                      const contentDraft = jsonDrafts[contentKey];
+                      const rulesDraft = currentJsonDraft(jsonDrafts[rulesKey], item.rules);
+                      const contentDraft = currentJsonDraft(jsonDrafts[contentKey], item.content);
                       return (
-                        <div key={`${item.name ?? item.sid ?? "item"}-${itemIndex}`} className="content-limit-row dialog-card">
+                        <div key={itemIndex} className="content-limit-row dialog-card">
                           <div className="form-grid form-grid--three">
                             <ConfigField configKey="contentItem.name" label="Name">
                               <Input value={item.name ?? ""} onChange={(event) => updateItem(selectedIndex, itemIndex, (draft) => { draft.name = emptyToUndefined(event.currentTarget.value); })} />
@@ -205,7 +222,7 @@ export function MandatoryContentPanel({
                               <Input value={formatOwnerInput(item.owner)} onChange={(event) => updateItem(selectedIndex, itemIndex, (draft) => { draft.owner = parseOwnerInput(event.currentTarget.value); })} />
                             </ConfigField>
                             <ConfigField configKey="contentItem.includeLists" label="Include Lists">
-                              <Textarea rows={2} value={formatLineList(item.includeLists)} onChange={(event) => updateItem(selectedIndex, itemIndex, (draft) => { draft.includeLists = parseLineList(event.currentTarget.value); })} />
+                              <LineListTextarea rows={2} values={item.includeLists} onValuesChange={(includeLists) => updateItem(selectedIndex, itemIndex, (draft) => { draft.includeLists = includeLists; })} />
                             </ConfigField>
                           </div>
                           <div className="form-grid form-grid--two mandatory-content-group__json-grid">
@@ -214,7 +231,7 @@ export function MandatoryContentPanel({
                                 ariaLabel={`Rules JSON editor for ${item.sid ?? item.name ?? "content item"}`}
                                 className="rmg-json-editor--mini"
                                 value={rulesDraft?.value ?? formatJsonInput(item.rules)}
-                                onChange={(value) => updateJson<ContentPlacementRule[]>(rulesKey, value, Array.isArray, "Use a JSON array of placement rules.", (parsed) => updateItem(selectedIndex, itemIndex, (draft) => { draft.rules = parsed; }))}
+                                onChange={(value) => updateJson<ContentPlacementRule[]>(rulesKey, value, item.rules, Array.isArray, "Use a JSON array of placement rules.", (parsed) => updateItem(selectedIndex, itemIndex, (draft) => { draft.rules = parsed; }))}
                               />
                             </ConfigField>
                             <ConfigField configKey="contentItem.content" label="Advanced Content JSON">
@@ -222,14 +239,14 @@ export function MandatoryContentPanel({
                                 ariaLabel={`Advanced Content JSON editor for ${item.sid ?? item.name ?? "content item"}`}
                                 className="rmg-json-editor--mini"
                                 value={contentDraft?.value ?? formatJsonInput(item.content)}
-                                onChange={(value) => updateJson<ContentItem[]>(contentKey, value, Array.isArray, "Use a JSON array of content items.", (parsed) => updateItem(selectedIndex, itemIndex, (draft) => { draft.content = parsed; }))}
+                                onChange={(value) => updateJson<ContentItem[]>(contentKey, value, item.content, Array.isArray, "Use a JSON array of content items.", (parsed) => updateItem(selectedIndex, itemIndex, (draft) => { draft.content = parsed; }))}
                               />
                             </ConfigField>
                           </div>
                           {rulesDraft?.error ? <Alert tone="danger">Rules JSON: {rulesDraft.error}</Alert> : null}
                           {contentDraft?.error ? <Alert tone="danger">Advanced Content JSON: {contentDraft.error}</Alert> : null}
                           <div className="dialog-actions dialog-actions--compact">
-                            <Button type="button" size="sm" variant="danger" onClick={() => updateGroup(selectedIndex, (draft) => { draft.content = (draft.content ?? []).filter((_item, index) => index !== itemIndex); })}>
+                            <Button type="button" size="sm" variant="danger" onClick={() => deleteItem(selectedIndex, itemIndex)}>
                               <Trash2 size={14} />Delete Item
                             </Button>
                           </div>

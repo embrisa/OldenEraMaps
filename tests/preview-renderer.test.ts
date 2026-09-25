@@ -234,7 +234,7 @@ describe("preview image dimensions", () => {
 });
 
 describe("preview image generation", () => {
-  it("crops the schematic board screenshot to the preview aspect ratio when a source canvas is provided", async () => {
+  it("crops a clean offscreen schematic board render (never the live board canvas) to the preview aspect ratio", async () => {
     const drawCalls: Array<{ canvasWidth: number; canvasHeight: number; args: unknown[] }> = [];
     const sourceCanvas = { width: 1448, height: 1086 } as HTMLCanvasElement;
     const originalCreateElement = document.createElement.bind(document) as typeof document.createElement;
@@ -244,9 +244,21 @@ describe("preview image generation", () => {
       const canvas = {
         width: 0,
         height: 0,
-        getContext: () => ({
-          drawImage: (...args: unknown[]) => {
-            drawCalls.push({ canvasWidth: canvas.width, canvasHeight: canvas.height, args });
+        getContext: () => new Proxy({
+          createLinearGradient: () => ({ addColorStop: () => undefined }),
+        } as Record<string, unknown>, {
+          get(target, prop) {
+            if (prop in target) return target[prop as string];
+            if (prop === "drawImage") {
+              return (...args: unknown[]) => {
+                drawCalls.push({ canvasWidth: canvas.width, canvasHeight: canvas.height, args });
+              };
+            }
+            return () => undefined;
+          },
+          set(target, prop, value) {
+            target[prop as string] = value;
+            return true;
           },
         }),
         toBlob: (callback: (blob: Blob | null) => void, type?: string) => {
@@ -269,12 +281,16 @@ describe("preview image generation", () => {
       expect(result.thumbnailHeight).toBe(PREVIEW_THUMBNAIL_HEIGHT);
       expect(drawCalls).toHaveLength(2);
 
+      // The board is rendered at the background aspect ratio (1200 x 900) and centre-cropped to 16:9.
       for (const call of drawCalls) {
-        expect(call.args[0]).toBe(sourceCanvas);
+        const board = call.args[0] as HTMLCanvasElement;
+        expect(board).not.toBe(sourceCanvas);
+        expect(board.width).toBe(PREVIEW_LARGE_WIDTH);
+        expect(board.height).toBe(900);
         expect(call.args[1]).toBe(0);
-        expect(call.args[2]).toBeCloseTo(135.75, 2);
-        expect(call.args[3]).toBe(1448);
-        expect(call.args[4]).toBeCloseTo(814.5, 2);
+        expect(call.args[2]).toBeCloseTo(112.5, 6);
+        expect(call.args[3]).toBe(PREVIEW_LARGE_WIDTH);
+        expect(call.args[4]).toBeCloseTo(PREVIEW_LARGE_HEIGHT, 6);
         expect(call.args[5]).toBe(0);
         expect(call.args[6]).toBe(0);
       }

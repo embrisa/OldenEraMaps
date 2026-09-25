@@ -89,18 +89,18 @@ export const configHelp: Record<string, ConfigHelp> = {
   },
   "global.mapWidth": {
     tooltip: "Horizontal map size in game tiles.",
-    detail: "Smaller maps (120) create tight, fast-paced games. Larger maps (240) suit 4+ players with room for exploration. Official templates cap at 240.",
+    detail: "Sizes snap to multiples of 16. Smaller maps (128) create tight, fast-paced games. Larger maps (240) suit 4+ players with room for exploration. Official templates cap at 240.",
     suggestions: [
-      { label: "Small", value: 120, description: "120 tiles — tight maps for fast 1v1 games" },
+      { label: "Small", value: 128, description: "128 tiles — tight maps for fast 1v1 games" },
       { label: "Standard", value: 160, description: "160 tiles — balanced size for most player counts" },
       { label: "Large", value: 240, description: "240 tiles — spacious maps for 4+ players or exploration-heavy games" }
     ]
   },
   "global.mapHeight": {
     tooltip: "Vertical map size in game tiles.",
-    detail: "Keep equal to width for standard square maps. Rectangular maps (e.g. 240×120) are experimental and may cause layout issues.",
+    detail: "Keep equal to width for standard square maps. Rectangular maps (e.g. 240×128) are experimental and may cause layout issues.",
     suggestions: [
-      { label: "Small", value: 120, description: "120 tiles — tight maps for fast 1v1 games" },
+      { label: "Small", value: 128, description: "128 tiles — tight maps for fast 1v1 games" },
       { label: "Standard", value: 160, description: "160 tiles — balanced size for most player counts" },
       { label: "Large", value: 240, description: "240 tiles — spacious maps for 4+ players or exploration-heavy games" }
     ]

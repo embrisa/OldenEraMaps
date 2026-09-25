@@ -68,6 +68,11 @@ export function useMyMaps({
     setMyMaps((current) => current.map((map) => (map.id === mapId ? { ...map, ...patch } : map)));
   }, []);
 
+  // Action failures keep the list loaded; MyMapsPage shows them as a dismissible banner.
+  const dismissMyMapsError = useCallback((): void => {
+    setMyMapsError(undefined);
+  }, []);
+
   const handleOpenOwnedMap = useCallback(
     (map: ManagedMapCard): void => {
       openMapInBuilder(map.id, map.title);
@@ -77,6 +82,7 @@ export function useMyMaps({
 
   const handleUpdateOwnedMapListing = useCallback(
     (mapId: string, patch: MapListingPatch): void => {
+      setMyMapsError(undefined);
       void updateMapListing(mapId, patch)
         .then(() => {
           patchMyMap(mapId, {
@@ -116,6 +122,7 @@ export function useMyMaps({
         confirmLabel: "Delete listing",
         confirmVariant: "danger",
         onConfirm: () => {
+          setMyMapsError(undefined);
           void deleteMapListing(map.id)
             .then(() => {
               setMyMaps((current) => current.filter((entry) => entry.id !== map.id));
@@ -132,9 +139,17 @@ export function useMyMaps({
   const handleDownloadOwnedMap = useCallback(
     (map: ManagedMapCard): void => {
       void (async () => {
-        const detail = await getMap(map.id);
-        if (!detail) return;
-        await downloadCommunityTemplateFile(detail);
+        setMyMapsError(undefined);
+        try {
+          const detail = await getMap(map.id);
+          if (!detail) {
+            setMyMapsError(`Failed to find "${map.title}".`);
+            return;
+          }
+          await downloadCommunityTemplateFile(detail);
+        } catch (error: unknown) {
+          setMyMapsError(error instanceof Error ? error.message : "Failed to download map.");
+        }
       })();
     },
     []
@@ -155,6 +170,7 @@ export function useMyMaps({
     myMaps,
     setMyMaps,
     myMapsError,
+    dismissMyMapsError,
     loadMyMaps,
     handleOpenOwnedMap,
     handleUpdateOwnedMapListing,

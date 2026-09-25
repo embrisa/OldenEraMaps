@@ -43,21 +43,22 @@ export function AdvancedConfigurationDialog({
             <TabsTrigger value="expert">Expert Settings</TabsTrigger>
             <TabsTrigger value="mandatory">Mandatory Content</TabsTrigger>
           </TabsList>
+          {/* Panels stay mounted and reset their drafts only when the dialog opens, so switching tabs keeps unapplied edits. */}
           <div className="advanced-configuration__panel">
             <TabsContent value="layout" forceMount style={activeTab === "layout" ? undefined : { display: "none" }}>
-              <LayoutProfilesPanel active={open && activeTab === "layout"} design={design} onUpdate={onUpdate} />
+              <LayoutProfilesPanel active={open} design={design} onUpdate={onUpdate} />
             </TabsContent>
             <TabsContent value="content" forceMount style={activeTab === "content" ? undefined : { display: "none" }}>
-              <ContentLibraryPanel active={open && activeTab === "content"} design={design} onUpdate={onUpdate} onClose={() => onOpenChange(false)} />
+              <ContentLibraryPanel active={open} design={design} onUpdate={onUpdate} onClose={() => onOpenChange(false)} />
             </TabsContent>
             <TabsContent value="limits" forceMount style={activeTab === "limits" ? undefined : { display: "none" }}>
-              <ContentLimitsPanel active={open && activeTab === "limits"} design={design} onUpdate={onUpdate} />
+              <ContentLimitsPanel active={open} design={design} onUpdate={onUpdate} />
             </TabsContent>
             <TabsContent value="expert" forceMount style={activeTab === "expert" ? undefined : { display: "none" }}>
-              <ExpertTemplateSettingsPanel active={open && activeTab === "expert"} design={design} onUpdate={onUpdate} onGlobal={onGlobal} onClose={() => onOpenChange(false)} />
+              <ExpertTemplateSettingsPanel active={open} design={design} onUpdate={onUpdate} onGlobal={onGlobal} onClose={() => onOpenChange(false)} />
             </TabsContent>
             <TabsContent value="mandatory" forceMount style={activeTab === "mandatory" ? undefined : { display: "none" }}>
-              <MandatoryContentPanel active={open && activeTab === "mandatory"} design={design} onUpdate={onUpdate} />
+              <MandatoryContentPanel active={open} design={design} onUpdate={onUpdate} />
             </TabsContent>
           </div>
         </Tabs>

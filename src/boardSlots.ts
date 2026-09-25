@@ -56,7 +56,7 @@ export function normalizeBoardZonePositions<T extends { position: Point }>(zones
   return zones.map((zone) => {
     const slot = nearestAvailableBoardSlot(zone.position, occupied);
     occupied.add(slot.index);
-    if (samePoint(zone.position, slot.position)) return zone;
+    if (sameBoardPosition(zone.position, slot.position)) return zone;
     return { ...zone, position: slot.position };
   });
 }
@@ -100,6 +100,7 @@ function squaredDistance(left: Point, right: Point): number {
   return dx * dx + dy * dy;
 }
 
-function samePoint(left: Point, right: Point): boolean {
+/** True when two normalized board positions are the same point (slot math leaves float noise, e.g. 0.49999999999999994). */
+export function sameBoardPosition(left: Point, right: Point): boolean {
   return Math.abs(left.x - right.x) <= SLOT_EPSILON && Math.abs(left.y - right.y) <= SLOT_EPSILON;
 }

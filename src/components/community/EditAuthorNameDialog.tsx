@@ -1,5 +1,5 @@
 import { Pencil } from "lucide-react";
-import { useEffect, useState, type JSX } from "react";
+import { useEffect, useRef, useState, type JSX } from "react";
 import { validateAuthorDisplayName } from "@/community/textValidation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/form-controls";
@@ -20,11 +20,24 @@ export function EditAuthorNameDialog({
   error?: string;
   onSubmit(displayName: string): void;
 }): JSX.Element {
-  const [displayName, setDisplayName] = useState(currentName);
+  const [displayName, setDisplayName] = useState(() => editableName(currentName));
+  const wasOpenRef = useRef(false);
+  const currentNameRef = useRef(currentName);
 
+  // Seed the field only when the dialog opens; auth events that rebuild the profile while it is open
+  // must not wipe what the user typed.
   useEffect(() => {
-    if (!open) return;
-    setDisplayName(currentName === "Anonymous Cartographer" ? "" : currentName);
+    const opening = open && !wasOpenRef.current;
+    wasOpenRef.current = open;
+    if (opening) setDisplayName(editableName(currentName));
+  }, [currentName, open]);
+
+  // A name that finishes loading after the dialog opened still fills an untouched field.
+  useEffect(() => {
+    const previousName = currentNameRef.current;
+    currentNameRef.current = currentName;
+    if (!open || previousName === currentName) return;
+    setDisplayName((value) => (value === editableName(previousName) ? editableName(currentName) : value));
   }, [currentName, open]);
 
   const validation = validateAuthorDisplayName(displayName);
@@ -68,4 +81,8 @@ export function EditAuthorNameDialog({
       </DialogContent>
     </Dialog>
   );
+}
+
+function editableName(name: string): string {
+  return name === "Anonymous Cartographer" ? "" : name;
 }

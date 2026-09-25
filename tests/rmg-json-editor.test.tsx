@@ -14,7 +14,7 @@ afterEach(() => {
 });
 
 describe("RmgJsonEditor", () => {
-  it("defaults to text mode, keeps JSON collapsed, and disables tree/table modes", async () => {
+  it("defaults to text mode, folds nested JSON under an open root, and disables tree/table modes", async () => {
     const value = `{
   "name": "Custom Template"
 }`;
@@ -61,7 +61,8 @@ describe("RmgJsonEditor", () => {
     };
     expect(initialProps.mode).toBe(Mode.text);
     await waitFor(() => {
-      expect(collapse).toHaveBeenCalledWith([], true);
+      // Folding starts at the first top-level key so the root stays open and its keys stay visible.
+      expect(collapse).toHaveBeenCalledWith(["name"], true);
     });
     expect(expand).not.toHaveBeenCalled();
     expect(initialProps.onRenderMenu?.([
@@ -84,7 +85,7 @@ describe("RmgJsonEditor", () => {
     await waitFor(() => {
       expect(updateProps).toHaveBeenCalledWith(expect.objectContaining({ mode: Mode.text }));
     });
-    expect(collapse).toHaveBeenCalledWith([], true);
+    expect(collapse).toHaveBeenCalledWith(["name"], true);
     expect(expand).not.toHaveBeenCalled();
 
     act(() => {
@@ -106,5 +107,16 @@ describe("RmgJsonEditor", () => {
     });
     expect(collapse).toHaveBeenCalledTimes(1);
     expect(expand).not.toHaveBeenCalled();
+  });
+
+  it("finds the first top-level key to fold from", async () => {
+    const { firstTopLevelKey } = await import("@/components/builder/RmgJsonEditor");
+
+    expect(firstTopLevelKey('{ "name": "A", "sizeX": 160 }')).toBe("name");
+    expect(firstTopLevelKey("[{ \"a\": 1 }]")).toBe("0");
+    expect(firstTopLevelKey("{}")).toBeUndefined();
+    expect(firstTopLevelKey("[]")).toBeUndefined();
+    expect(firstTopLevelKey("42")).toBeUndefined();
+    expect(firstTopLevelKey("{ not json")).toBeUndefined();
   });
 });

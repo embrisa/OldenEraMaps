@@ -187,9 +187,13 @@ function guardPressure(zone: DesignZone): number {
   return zone.neutralStackStrengthPercent * Math.max(0.1, zone.guardMultiplier) * (1 + Math.max(0, zone.guardWeeklyIncrement) * 0.5);
 }
 
+// Index 100 is the builder's standard start-zone resource budget (a new Spawn zone's resourcesValue / resourcesValuePerArea).
+const standardResourcesValue = 15000;
+const standardResourcesValuePerArea = 120;
+
 function resourceRichness(zone: DesignZone): number {
-  const direct = zone.resourcesValue > 0 ? (zone.resourcesValue / 40) * 100 : 100;
-  const perArea = zone.resourcesValuePerArea > 0 ? (zone.resourcesValuePerArea / 4) * 100 : 100;
+  const direct = zone.resourcesValue > 0 ? (zone.resourcesValue / standardResourcesValue) * 100 : 100;
+  const perArea = zone.resourcesValuePerArea > 0 ? (zone.resourcesValuePerArea / standardResourcesValuePerArea) * 100 : 100;
   return (zone.resourceDensityPercent * 0.5) + (direct * 0.25) + (perArea * 0.25);
 }
 

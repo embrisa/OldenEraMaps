@@ -1,17 +1,12 @@
 import { CirclePlus, Trash2 } from "lucide-react";
-import { useEffect, useState, type JSX } from "react";
+import { useEffect, useRef, useState, type JSX } from "react";
 import type { TemplateDesign } from "@/design";
 import type { AmbientPickupDistribution, ElevationMode, GuardedEncounterResourceFractions, ZoneLayout } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/form-controls";
 import { Dialog, DialogContent, ScrollArea } from "@/components/ui/radix";
 import { RmgJsonEditor } from "@/components/builder/RmgJsonEditor";
-import { Alert, ConfigField, formatJsonInput, formatNumberInput, parseJsonInput, parseNumberInput } from "@/components/builder/formHelpers";
-
-interface JsonDraft {
-  value: string;
-  error?: string;
-}
+import { Alert, ConfigField, currentJsonDraft, formatJsonInput, formatNumberInput, jsonDraftBase, parseJsonInput, parseNumberInput, removeIndexedDrafts, type JsonTextDraft } from "@/components/builder/formHelpers";
 
 export function LayoutProfilesDialog({
   open,
@@ -43,11 +38,16 @@ export function LayoutProfilesPanel({
   onUpdate(mutator: (design: TemplateDesign) => void): void;
 }): JSX.Element {
   const [selectedProfileIndex, setSelectedProfileIndex] = useState(0);
-  const [elevationDrafts, setElevationDrafts] = useState<Record<number, JsonDraft>>({});
-  const [guardedFractionsDrafts, setGuardedFractionsDrafts] = useState<Record<number, JsonDraft>>({});
-  const [ambientDrafts, setAmbientDrafts] = useState<Record<number, JsonDraft>>({});
+  const [elevationDrafts, setElevationDrafts] = useState<Record<string, JsonTextDraft>>({});
+  const [guardedFractionsDrafts, setGuardedFractionsDrafts] = useState<Record<string, JsonTextDraft>>({});
+  const [ambientDrafts, setAmbientDrafts] = useState<Record<string, JsonTextDraft>>({});
+  // Last non-empty name of a profile whose name field is currently cleared; zones still reference it.
+  const clearedNamesRef = useRef(new Map<number, string>());
   const selectedProfile = design.zoneLayouts[selectedProfileIndex] ?? design.zoneLayouts[0];
   const selectedIndex = selectedProfile ? design.zoneLayouts.indexOf(selectedProfile) : -1;
+  const elevationDraft = selectedProfile ? currentJsonDraft(elevationDrafts[selectedIndex], selectedProfile.elevationModes) : undefined;
+  const guardedFractionsDraft = selectedProfile ? currentJsonDraft(guardedFractionsDrafts[selectedIndex], selectedProfile.guardedEncounterResourceFractions) : undefined;
+  const ambientDraft = selectedProfile ? currentJsonDraft(ambientDrafts[selectedIndex], selectedProfile.ambientPickupDistribution) : undefined;
 
   useEffect(() => {
     if (!active) return;
@@ -55,6 +55,7 @@ export function LayoutProfilesPanel({
     setElevationDrafts({});
     setGuardedFractionsDrafts({});
     setAmbientDrafts({});
+    clearedNamesRef.current.clear();
   }, [active]);
 
   useEffect(() => {
@@ -70,27 +71,38 @@ export function LayoutProfilesPanel({
   }
 
   function deleteProfile(profileIndex: number): void {
+    if (design.zoneLayouts.length <= 1) return;
     onUpdate((draft) => {
       if (draft.zoneLayouts.length <= 1) return;
       const fallbackName = draft.zoneLayouts.find((_profile, index) => index !== profileIndex)?.name;
       const [removed] = draft.zoneLayouts.splice(profileIndex, 1);
       if (!removed || !fallbackName) return;
+      const removedName = removed.name.trim() ? removed.name : clearedNamesRef.current.get(profileIndex) ?? removed.name;
       for (const zone of draft.zones) {
-        if (zone.layout === removed.name) {
+        if (zone.layout === removedName) {
           zone.layout = fallbackName;
         }
       }
       setSelectedProfileIndex(Math.max(0, Math.min(profileIndex, draft.zoneLayouts.length - 1)));
     });
+    // Drafts are keyed by position: drop the deleted profile's drafts so the next profile does not inherit them.
+    setElevationDrafts((current) => removeIndexedDrafts(current, [], profileIndex));
+    setGuardedFractionsDrafts((current) => removeIndexedDrafts(current, [], profileIndex));
+    setAmbientDrafts((current) => removeIndexedDrafts(current, [], profileIndex));
+    clearedNamesRef.current.clear();
   }
 
   function updateProfileName(profileIndex: number, value: string): void {
     onUpdate((draft) => {
       const profile = draft.zoneLayouts[profileIndex];
       if (!profile) return;
-      const previousName = profile.name;
+      const previousName = profile.name.trim() ? profile.name : clearedNamesRef.current.get(profileIndex) ?? profile.name;
       profile.name = value;
-      if (!value.trim()) return;
+      if (!value.trim()) {
+        clearedNamesRef.current.set(profileIndex, previousName);
+        return;
+      }
+      clearedNamesRef.current.delete(profileIndex);
       for (const zone of draft.zones) {
         if (zone.layout === previousName) {
           zone.layout = value;
@@ -119,7 +131,8 @@ export function LayoutProfilesPanel({
       parsedValue = parsed.value;
     }
 
-    setElevationDrafts((current) => ({ ...current, [profileIndex]: { value, error } }));
+    const base = jsonDraftBase(error ? design.zoneLayouts[profileIndex]?.elevationModes : parsedValue);
+    setElevationDrafts((current) => ({ ...current, [profileIndex]: { value, error, base } }));
     if (error) return;
 
     updateProfile(profileIndex, (profile) => {
@@ -139,7 +152,8 @@ export function LayoutProfilesPanel({
       parsedValue = parsed.value;
     }
 
-    setGuardedFractionsDrafts((current) => ({ ...current, [profileIndex]: { value, error } }));
+    const base = jsonDraftBase(error ? design.zoneLayouts[profileIndex]?.guardedEncounterResourceFractions : parsedValue);
+    setGuardedFractionsDrafts((current) => ({ ...current, [profileIndex]: { value, error, base } }));
     if (error) return;
 
     updateProfile(profileIndex, (profile) => {
@@ -159,7 +173,8 @@ export function LayoutProfilesPanel({
       parsedValue = parsed.value;
     }
 
-    setAmbientDrafts((current) => ({ ...current, [profileIndex]: { value, error } }));
+    const base = jsonDraftBase(error ? design.zoneLayouts[profileIndex]?.ambientPickupDistribution : parsedValue);
+    setAmbientDrafts((current) => ({ ...current, [profileIndex]: { value, error, base } }));
     if (error) return;
 
     updateProfile(profileIndex, (profile) => {
@@ -183,7 +198,7 @@ export function LayoutProfilesPanel({
               <nav className="content-limit-list" aria-label="Layout profiles">
                 {design.zoneLayouts.map((profile, profileIndex) => (
                   <button
-                    key={`${profile.name}-${profileIndex}`}
+                    key={profileIndex}
                     type="button"
                     className="content-limit-list__item"
                     data-selected={profileIndex === selectedIndex ? "true" : undefined}
@@ -195,7 +210,7 @@ export function LayoutProfilesPanel({
                 ))}
               </nav>
               {selectedProfile && selectedIndex >= 0 ? (
-                <article key={`${selectedProfile.name}-${selectedIndex}`} className="content-limit-group">
+                <article key={selectedIndex} className="content-limit-group">
                   <div className="connection-title">
                     <ConfigField configKey="zoneLayout.name" label="Layout Name">
                       <Input value={selectedProfile.name} onChange={(event) => updateProfileName(selectedIndex, event.currentTarget.value)} />
@@ -230,29 +245,29 @@ export function LayoutProfilesPanel({
                     <RmgJsonEditor
                       ariaLabel="Elevation Modes JSON editor"
                       className="rmg-json-editor--mini"
-                      value={elevationDrafts[selectedIndex]?.value ?? formatJsonInput(selectedProfile.elevationModes)}
+                      value={elevationDraft?.value ?? formatJsonInput(selectedProfile.elevationModes)}
                       onChange={(value) => updateElevationModes(selectedIndex, value)}
                     />
                   </ConfigField>
-                  {elevationDrafts[selectedIndex]?.error ? <Alert tone="danger">Elevation Modes JSON: {elevationDrafts[selectedIndex]?.error}</Alert> : null}
+                  {elevationDraft?.error ? <Alert tone="danger">Elevation Modes JSON: {elevationDraft.error}</Alert> : null}
                   <ConfigField configKey="zoneLayout.guardedEncounterResourceFractions" label="Guarded Encounter Fractions JSON">
                     <RmgJsonEditor
                       ariaLabel="Guarded Encounter Fractions JSON editor"
                       className="rmg-json-editor--mini"
-                      value={guardedFractionsDrafts[selectedIndex]?.value ?? formatJsonInput(selectedProfile.guardedEncounterResourceFractions)}
+                      value={guardedFractionsDraft?.value ?? formatJsonInput(selectedProfile.guardedEncounterResourceFractions)}
                       onChange={(value) => updateGuardedFractions(selectedIndex, value)}
                     />
                   </ConfigField>
-                  {guardedFractionsDrafts[selectedIndex]?.error ? <Alert tone="danger">Guarded Encounter Fractions JSON: {guardedFractionsDrafts[selectedIndex]?.error}</Alert> : null}
+                  {guardedFractionsDraft?.error ? <Alert tone="danger">Guarded Encounter Fractions JSON: {guardedFractionsDraft.error}</Alert> : null}
                   <ConfigField configKey="zoneLayout.ambientPickupDistribution" label="Ambient Pickup Distribution JSON">
                     <RmgJsonEditor
                       ariaLabel="Ambient Pickup Distribution JSON editor"
                       className="rmg-json-editor--mini"
-                      value={ambientDrafts[selectedIndex]?.value ?? formatJsonInput(selectedProfile.ambientPickupDistribution)}
+                      value={ambientDraft?.value ?? formatJsonInput(selectedProfile.ambientPickupDistribution)}
                       onChange={(value) => updateAmbientDistribution(selectedIndex, value)}
                     />
                   </ConfigField>
-                  {ambientDrafts[selectedIndex]?.error ? <Alert tone="danger">Ambient Pickup Distribution JSON: {ambientDrafts[selectedIndex]?.error}</Alert> : null}
+                  {ambientDraft?.error ? <Alert tone="danger">Ambient Pickup Distribution JSON: {ambientDraft.error}</Alert> : null}
                 </article>
               ) : null}
             </div>

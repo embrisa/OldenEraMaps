@@ -11,8 +11,8 @@ describe("zone hints", () => {
       guardMultiplier: 1.5,
       guardWeeklyIncrement: 0.4,
       resourceDensityPercent: 180,
-      resourcesValue: 120,
-      resourcesValuePerArea: 12,
+      resourcesValue: 45000,
+      resourcesValuePerArea: 360,
       structureDensityPercent: 150,
     });
 
@@ -32,8 +32,8 @@ describe("zone hints", () => {
     const quiet = createZone("zone-quiet", "Spawn-A", "Spawn", {
       player: 1,
       resourceDensityPercent: 100,
-      resourcesValue: 40,
-      resourcesValuePerArea: 4,
+      resourcesValue: 15000,
+      resourcesValuePerArea: 120,
     });
     expect(zoneBoardMarkers(quiet)).toEqual([]);
 
@@ -42,8 +42,8 @@ describe("zone hints", () => {
       neutralStackStrengthPercent: 150,
       guardMultiplier: 1.5,
       resourceDensityPercent: 100,
-      resourcesValue: 40,
-      resourcesValuePerArea: 4,
+      resourcesValue: 15000,
+      resourcesValuePerArea: 120,
       holdCity: true,
       roads: false,
       footholds: false,
@@ -72,8 +72,8 @@ describe("zone hints", () => {
       guardMultiplier: 0.8,
       guardWeeklyIncrement: 0,
       resourceDensityPercent: 45,
-      resourcesValue: 12,
-      resourcesValuePerArea: 1,
+      resourcesValue: 4500,
+      resourcesValuePerArea: 30,
       structureDensityPercent: 40,
       castleCount: 2,
       neutralCastlesAsRuins: true,

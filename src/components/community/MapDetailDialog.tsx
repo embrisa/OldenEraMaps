@@ -1,8 +1,10 @@
-import { Download, Edit3, Eye, EyeOff, Star, Trash2, Upload } from "lucide-react";
+import { Download, Edit3, Eye, EyeOff, Trash2, Upload } from "lucide-react";
 import { useEffect, useState, type JSX } from "react";
-import type { MapDetail, MapListingPatch } from "@/community/communityApi";
+import { buildMapListingPatch, LISTING_DESCRIPTION_NOTE, type MapDetail, type MapListingPatch } from "@/community/communityApi";
 import { SchematicBoardLegend } from "@/components/DesignBoardCanvas";
 import { CommunityMapCanvasPreview, COMMUNITY_MAP_DETAIL_PREVIEW_SIZE } from "@/components/community/CommunityMapCanvasPreview";
+import { showsTemplateNameBadge } from "@/components/community/listingDisplay";
+import { RatingSummary, StarRatingButtons } from "@/components/community/RatingControls";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -67,12 +69,13 @@ export function MapDetailDialog({
 
   function handleSaveEdits(): void {
     if (!map || !onUpdateListing) return;
-    onUpdateListing(map.id, {
-      title: editTitle.trim() || map.title,
-      authorName: editAuthorName.trim(),
-      description: editDescription.trim(),
+    const patch = buildMapListingPatch(map, {
+      title: editTitle,
+      authorName: editAuthorName,
+      description: editDescription,
       visibility: editVisibility
     });
+    if (Object.keys(patch).length > 0) onUpdateListing(map.id, patch);
     setEditing(false);
   }
 
@@ -84,7 +87,7 @@ export function MapDetailDialog({
             <DialogTitle>{map.title}</DialogTitle>
             <DialogDescription>by {map.authorName} · {map.mapWidth}×{map.mapHeight} · {map.playerCount} players</DialogDescription>
           </div>
-          <Badge>{map.templateName}</Badge>
+          {showsTemplateNameBadge(map) ? <Badge>{map.templateName}</Badge> : null}
         </div>
 
         <div className="community-detail-body">
@@ -114,6 +117,7 @@ export function MapDetailDialog({
               <div className="config-field">
                 <label className="oe-field__label" htmlFor="detail-edit-description">Template Description</label>
                 <Textarea id="detail-edit-description" rows={4} value={editDescription} onChange={(e) => setEditDescription(e.currentTarget.value)} />
+                <p className="community-upload-tags-note">{LISTING_DESCRIPTION_NOTE}</p>
               </div>
               <div className="config-field">
                 <label className="oe-field__label" htmlFor="detail-edit-visibility">Visibility</label>
@@ -162,25 +166,14 @@ export function MapDetailDialog({
           </Card>
 
           <div className="community-rating-row">
-            <div>
-              <strong><Star size={14} /> {map.averageRating.toFixed(1)} / 5</strong>
-              <span>{map.ratingCount} ratings{viewerRating ? ` · your score ${viewerRating}` : ""}</span>
-            </div>
-            <div className="community-rate-buttons" aria-label={`Rate ${map.title}`}>
-              {[1, 2, 3, 4, 5].map((value) => (
-                <Button
-                  key={value}
-                  size="sm"
-                  variant={viewerRating === value ? "gold" : "ghost"}
-                  onClick={() => onRate(map.id, value)}
-                  disabled={!canRate}
-                  title={canRate ? undefined : isOwner ? "You cannot rate your own map" : "Sign in to rate maps"}
-                  aria-label={`Rate ${value} stars for ${map.title}`}
-                >
-                  {value}
-                </Button>
-              ))}
-            </div>
+            <RatingSummary averageRating={map.averageRating} ratingCount={map.ratingCount} viewerRating={viewerRating} />
+            <StarRatingButtons
+              mapTitle={map.title}
+              viewerRating={viewerRating}
+              disabled={!canRate}
+              disabledReason={isOwner ? "You cannot rate your own map" : "Sign in to rate maps"}
+              onRate={(value) => onRate(map.id, value)}
+            />
           </div>
 
           <div className="dialog-actions">

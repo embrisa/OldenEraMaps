@@ -5,16 +5,10 @@ import type { MainObject, TypedSelector } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/form-controls";
 import { RmgJsonEditor } from "@/components/builder/RmgJsonEditor";
-import { Alert, CheckField, ConfigField, formatJsonInput, formatNumberInput, parseJsonInput, parseNumberInput } from "@/components/builder/formHelpers";
+import { Alert, CheckField, ConfigField, currentJsonDraft, formatJsonInput, formatNumberInput, jsonDraftBase, parseJsonInput, parseNumberInput, removeIndexedDrafts, type JsonTextDraft } from "@/components/builder/formHelpers";
 
-interface MainObjectJsonDraft {
-  faction: string;
-  factions: string;
-  placementArgs: string;
-  factionError?: string;
-  factionsError?: string;
-  placementArgsError?: string;
-}
+type MainObjectJsonField = "faction" | "factions" | "placementArgs";
+type MainObjectTextField = "spawn" | "buildingsConstructionSid" | "placement";
 
 export function MainObjectsEditor({
   zone,
@@ -23,11 +17,17 @@ export function MainObjectsEditor({
   zone: DesignZone;
   onUpdate(mutator: (zone: DesignZone) => void): void;
 }): JSX.Element {
-  const [drafts, setDrafts] = useState<MainObjectJsonDraft[]>(() => buildDrafts(zone.customMainObjects));
+  // JSON text drafts keyed "index:field". Only a zone switch resets them: every zone edit re-clones
+  // customMainObjects, and stale drafts (undo, import) are ignored via their base value.
+  const [drafts, setDrafts] = useState<Record<string, JsonTextDraft>>({});
 
   useEffect(() => {
-    setDrafts(buildDrafts(zone.customMainObjects));
-  }, [zone.id, zone.customMainObjects]);
+    setDrafts({});
+  }, [zone.id]);
+
+  function jsonDraftFor(index: number, field: MainObjectJsonField, mainObject: MainObject): { value: string; error?: string } {
+    return currentJsonDraft(drafts[`${index}:${field}`], mainObject[field]) ?? { value: formatJsonInput(mainObject[field]) };
+  }
 
   function updateMainObject(index: number, mutator: (mainObject: MainObject) => void): void {
     onUpdate((draftZone) => {
@@ -39,7 +39,7 @@ export function MainObjectsEditor({
     });
   }
 
-  function updateJsonField(index: number, field: "faction" | "factions" | "placementArgs", value: string): void {
+  function updateJsonField(index: number, field: MainObjectJsonField, value: string): void {
     const parsed = parseJsonInput<unknown>(value);
     const parsedValue = parsed.ok ? parsed.value : undefined;
     let error: string | undefined;
@@ -51,15 +51,8 @@ export function MainObjectsEditor({
       error = "Use a JSON array.";
     }
 
-    setDrafts((current) => {
-      const next = [...current];
-      next[index] = {
-        ...(next[index] ?? emptyDraft()),
-        [field]: value,
-        [`${field}Error`]: error
-      };
-      return next;
-    });
+    const base = jsonDraftBase(error ? zone.customMainObjects[index]?.[field] : parsedValue);
+    setDrafts((current) => ({ ...current, [`${index}:${field}`]: { value, error, base } }));
 
     if (error) return;
     updateMainObject(index, (mainObject) => {
@@ -73,6 +66,17 @@ export function MainObjectsEditor({
     onUpdate((draftZone) => {
       draftZone.customMainObjects = draftZone.customMainObjects.filter((_, objectIndex) => objectIndex !== index);
     });
+    setDrafts((current) => removeIndexedDrafts(current, [], index));
+  }
+
+  // Text fields keep what is typed (including spaces) and are trimmed once the field is left.
+  function updateTextField(index: number, field: MainObjectTextField, value: string): void {
+    updateMainObject(index, (draft) => { draft[field] = value.trim() ? value : undefined; });
+  }
+
+  function trimTextField(index: number, field: MainObjectTextField, value: string): void {
+    if (value === value.trim()) return;
+    updateMainObject(index, (draft) => { draft[field] = value.trim() || undefined; });
   }
 
   const enabled = zone.useCustomMainObjects;
@@ -97,7 +101,9 @@ export function MainObjectsEditor({
             draft.customMainObjects = [...draft.customMainObjects, defaultMainObjectForZone(draft)];
           })}><CirclePlus size={14} />Add Main Object</Button>
           {mainObjects.length === 0 ? <div className="empty-state">No custom main objects.</div> : mainObjects.map((mainObject, index) => {
-            const draft = drafts[index] ?? emptyDraft();
+            const factionDraft = jsonDraftFor(index, "faction", mainObject);
+            const factionsDraft = jsonDraftFor(index, "factions", mainObject);
+            const placementArgsDraft = jsonDraftFor(index, "placementArgs", mainObject);
             return (
               <article className="main-object-row" key={index}>
                 <div className="main-object-row__title">
@@ -112,16 +118,25 @@ export function MainObjectsEditor({
                     }} />
                   </ConfigField>
                   <ConfigField configKey="zone.mainObjects.spawn" label="Spawn">
-                    <Input value={mainObject.spawn ?? ""} onChange={(event) => {
-                      const value = event.currentTarget.value.trim();
-                      updateMainObject(index, (draft) => { draft.spawn = value || undefined; });
-                    }} />
+                    <Input
+                      value={mainObject.spawn ?? ""}
+                      onChange={(event) => updateTextField(index, "spawn", event.currentTarget.value)}
+                      onBlur={(event) => trimTextField(index, "spawn", event.currentTarget.value)}
+                    />
                   </ConfigField>
                   <ConfigField configKey="zone.mainObjects.owner" label="Owner">
-                    <Input value={formatOwner(mainObject.owner)} onChange={(event) => {
-                      const value = event.currentTarget.value.trim();
-                      updateMainObject(index, (draft) => { draft.owner = parseOwner(value); });
-                    }} />
+                    <Input
+                      value={formatOwner(mainObject.owner)}
+                      onChange={(event) => {
+                        const value = event.currentTarget.value;
+                        updateMainObject(index, (draft) => { draft.owner = parseOwner(value); });
+                      }}
+                      onBlur={(event) => {
+                        const value = event.currentTarget.value;
+                        if (value === value.trim()) return;
+                        updateMainObject(index, (draft) => { draft.owner = parseOwner(value.trim()); });
+                      }}
+                    />
                   </ConfigField>
                 </div>
                 <div className="form-grid form-grid--three">
@@ -133,24 +148,26 @@ export function MainObjectsEditor({
                   <NumberInput label="Guard Weekly Increment" value={mainObject.guardWeeklyIncrement} onChange={(value) => updateMainObject(index, (draft) => { draft.guardWeeklyIncrement = value; })} />
                   <NumberInput label="Initial Unit Increment" value={mainObject.initialUnitIncrement} onChange={(value) => updateMainObject(index, (draft) => { draft.initialUnitIncrement = value; })} />
                   <ConfigField configKey="zone.mainObjects.buildingsConstructionSid" label="Buildings Construction SID">
-                    <Input value={mainObject.buildingsConstructionSid ?? ""} onChange={(event) => {
-                      const value = event.currentTarget.value.trim();
-                      updateMainObject(index, (draft) => { draft.buildingsConstructionSid = value || undefined; });
-                    }} />
+                    <Input
+                      value={mainObject.buildingsConstructionSid ?? ""}
+                      onChange={(event) => updateTextField(index, "buildingsConstructionSid", event.currentTarget.value)}
+                      onBlur={(event) => trimTextField(index, "buildingsConstructionSid", event.currentTarget.value)}
+                    />
                   </ConfigField>
                 </div>
                 <div className="form-grid form-grid--three">
                   <ConfigField configKey="zone.mainObjects.placement" label="Placement">
-                    <Input value={mainObject.placement ?? ""} onChange={(event) => {
-                      const value = event.currentTarget.value.trim();
-                      updateMainObject(index, (draft) => { draft.placement = value || undefined; });
-                    }} />
+                    <Input
+                      value={mainObject.placement ?? ""}
+                      onChange={(event) => updateTextField(index, "placement", event.currentTarget.value)}
+                      onBlur={(event) => trimTextField(index, "placement", event.currentTarget.value)}
+                    />
                   </ConfigField>
                   <ConfigField configKey="zone.mainObjects.faction" label="Faction Selector JSON">
                     <RmgJsonEditor
                       ariaLabel={`Faction Selector JSON editor for main object ${index + 1}`}
                       className="rmg-json-editor--mini"
-                      value={draft.faction}
+                      value={factionDraft.value}
                       onChange={(value) => updateJsonField(index, "faction", value)}
                     />
                   </ConfigField>
@@ -158,7 +175,7 @@ export function MainObjectsEditor({
                     <RmgJsonEditor
                       ariaLabel={`Factions Selector JSON editor for main object ${index + 1}`}
                       className="rmg-json-editor--mini"
-                      value={draft.factions}
+                      value={factionsDraft.value}
                       onChange={(value) => updateJsonField(index, "factions", value)}
                     />
                   </ConfigField>
@@ -167,7 +184,7 @@ export function MainObjectsEditor({
                   <RmgJsonEditor
                     ariaLabel={`Placement Args JSON editor for main object ${index + 1}`}
                     className="rmg-json-editor--mini"
-                    value={draft.placementArgs}
+                    value={placementArgsDraft.value}
                     onChange={(value) => updateJsonField(index, "placementArgs", value)}
                   />
                 </ConfigField>
@@ -177,9 +194,9 @@ export function MainObjectsEditor({
                   <CheckField checked={mainObject.enableWeeklyUnitIncrement === true} onCheckedChange={(checked) => updateMainObject(index, (draft) => { draft.enableWeeklyUnitIncrement = checked; })}>Enable weekly unit increment</CheckField>
                   <CheckField checked={mainObject.isKeyObject === true} onCheckedChange={(checked) => updateMainObject(index, (draft) => { draft.isKeyObject = checked; })}>Is key object</CheckField>
                 </div>
-                {draft.factionError ? <Alert tone="danger">Faction Selector JSON: {draft.factionError}</Alert> : null}
-                {draft.factionsError ? <Alert tone="danger">Factions Selector JSON: {draft.factionsError}</Alert> : null}
-                {draft.placementArgsError ? <Alert tone="danger">Placement Args JSON: {draft.placementArgsError}</Alert> : null}
+                {factionDraft.error ? <Alert tone="danger">Faction Selector JSON: {factionDraft.error}</Alert> : null}
+                {factionsDraft.error ? <Alert tone="danger">Factions Selector JSON: {factionsDraft.error}</Alert> : null}
+                {placementArgsDraft.error ? <Alert tone="danger">Placement Args JSON: {placementArgsDraft.error}</Alert> : null}
               </article>
             );
           })}
@@ -195,18 +212,6 @@ function NumberInput({ label, value, onChange }: { label: string; value: number 
       <Input type="number" step="0.01" value={formatNumberInput(value)} onChange={(event) => onChange(parseNumberInput(event.currentTarget.value))} />
     </ConfigField>
   );
-}
-
-function buildDrafts(mainObjects: MainObject[]): MainObjectJsonDraft[] {
-  return mainObjects.map((mainObject) => ({
-    faction: formatJsonInput(mainObject.faction),
-    factions: formatJsonInput(mainObject.factions),
-    placementArgs: formatJsonInput(mainObject.placementArgs)
-  }));
-}
-
-function emptyDraft(): MainObjectJsonDraft {
-  return { faction: "", factions: "", placementArgs: "" };
 }
 
 function defaultMainObjectForZone(zone: DesignZone): MainObject {
@@ -231,7 +236,7 @@ function defaultMainObjectForZone(zone: DesignZone): MainObject {
 }
 
 function parseOwner(value: string): number | string | undefined {
-  if (!value) return undefined;
+  if (!value.trim()) return undefined;
   const parsed = Number(value);
   return Number.isFinite(parsed) && String(parsed) === value ? parsed : value;
 }

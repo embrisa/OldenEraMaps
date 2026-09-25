@@ -119,33 +119,25 @@ describe("signed-in map management API", () => {
     expect(deleteBuilder.eq).toHaveBeenCalledWith("id", "map-123");
   });
 
-  it("updates descriptions from structured design_json without reading legacy template_json", async () => {
-    const row = createMapRow();
-    let selectedColumns = "";
-    const readBuilder = {
-      select: vi.fn((columns: string) => {
-        selectedColumns = columns;
-        return readBuilder;
-      }),
-      eq: vi.fn(() => readBuilder),
-      single: vi.fn(async () => ({ data: { design_json: row.design_json }, error: null }))
-    };
+  // The maps_prevent_direct_metadata_update trigger rejects client writes to template_json, which used to
+  // fail every description save (and any title/visibility change sent with it). Descriptions now update
+  // the listing column only and never read or rewrite the stored template/design JSON.
+  it("updates descriptions through the listing column without touching template_json or design_json", async () => {
     const updateBuilder = {
+      select: vi.fn(),
       update: vi.fn(() => updateBuilder),
       eq: vi.fn(async () => ({ error: null }))
     };
     const client = {
-      from: vi.fn(() => client.from.mock.calls.length === 1 ? readBuilder : updateBuilder)
+      from: vi.fn(() => updateBuilder)
     };
 
-    await updateMapListing("map-1", { description: "Updated description." }, client as never);
+    await updateMapListing("map-1", { description: "  Updated   description.  " }, client as never);
 
-    expect(selectedColumns).toBe("design_json");
-    expect(updateBuilder.update).toHaveBeenCalledWith(expect.objectContaining({
-      description: "Updated description.",
-      design_json: expect.any(Object),
-      template_json: expect.objectContaining({ description: "Updated description." })
-    }));
+    expect(client.from).toHaveBeenCalledTimes(1);
+    expect(updateBuilder.select).not.toHaveBeenCalled();
+    expect(updateBuilder.update).toHaveBeenCalledWith({ description: "Updated description." });
+    expect(updateBuilder.eq).toHaveBeenCalledWith("id", "map-1");
   });
 
   it("normalizes listing titles before update", async () => {
@@ -193,23 +185,19 @@ describe("signed-in map management API", () => {
     expect(updateBuilder.eq).toHaveBeenCalledWith("id", "map-1");
   });
 
-  it("rejects stringified design_json during description sync", async () => {
-    const readBuilder = {
-      select: vi.fn(() => readBuilder),
-      eq: vi.fn(() => readBuilder),
-      single: vi.fn(async () => ({ data: { design_json: JSON.stringify(createMapRow().design_json) }, error: null }))
-    };
+  it("sends only the patched listing columns in a single update", async () => {
     const updateBuilder = {
       update: vi.fn(() => updateBuilder),
       eq: vi.fn(async () => ({ error: null }))
     };
     const client = {
-      from: vi.fn(() => client.from.mock.calls.length === 1 ? readBuilder : updateBuilder)
+      from: vi.fn(() => updateBuilder)
     };
 
-    await expect(updateMapListing("map-1", { description: "Updated description." }, client as never))
-      .rejects.toThrow("legacy stringified design_json");
-    expect(updateBuilder.update).not.toHaveBeenCalled();
+    await updateMapListing("map-1", { title: "Renamed", visibility: "unlisted", description: "New text." }, client as never);
+
+    expect(updateBuilder.update).toHaveBeenCalledTimes(1);
+    expect(updateBuilder.update).toHaveBeenCalledWith({ title: "Renamed", description: "New text.", visibility: "unlisted" });
   });
 
   it("invokes delete-account and signs out after success", async () => {

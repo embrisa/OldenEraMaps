@@ -73,7 +73,7 @@ export const RmgJsonEditor = forwardRef<RmgJsonEditorHandle, RmgJsonEditorProps>
 
   useEffect(() => {
     if (USE_TEXTAREA_FALLBACK || !editorRef.current) return;
-    collapseJsonViewer(editorRef.current, mode);
+    collapseJsonViewer(editorRef.current, mode, latestValueRef.current);
   }, [mode]);
 
   if (USE_TEXTAREA_FALLBACK) {
@@ -95,11 +95,24 @@ export const RmgJsonEditor = forwardRef<RmgJsonEditorHandle, RmgJsonEditorProps>
   return <div ref={containerRef} className={["rmg-json-editor jse-theme-dark", className].filter(Boolean).join(" ")} aria-label={ariaLabel} />;
 });
 
-function collapseJsonViewer(editor: JsonEditor, mode: Mode): void {
-  editor.collapse([], true);
+function collapseJsonViewer(editor: JsonEditor, mode: Mode, text: string): void {
+  // Keep the root open so the top-level keys stay visible; fold everything nested below them.
+  const firstKey = firstTopLevelKey(text);
+  editor.collapse(firstKey === undefined ? [] : [firstKey], true);
   if (mode === Mode.tree) {
     editor.expand([], expandNone);
   }
+}
+
+export function firstTopLevelKey(text: string): string | undefined {
+  try {
+    const parsed: unknown = JSON.parse(text);
+    if (Array.isArray(parsed)) return parsed.length > 0 ? "0" : undefined;
+    if (parsed && typeof parsed === "object") return Object.keys(parsed)[0];
+  } catch {
+    return undefined;
+  }
+  return undefined;
 }
 
 function buildEditorProps(

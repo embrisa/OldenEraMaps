@@ -15,16 +15,29 @@ import {
 
 const POST_SIGN_IN_UPLOAD_KEY = "olden-era-template-generator.post-sign-in-upload";
 
+// sessionStorage access throws when the browser blocks site data; the resume-upload flag is best-effort.
 function writePostSignInUpload(): void {
-  window.sessionStorage.setItem(POST_SIGN_IN_UPLOAD_KEY, "1");
+  try {
+    window.sessionStorage.setItem(POST_SIGN_IN_UPLOAD_KEY, "1");
+  } catch {
+    // Ignore.
+  }
 }
 
 function readPostSignInUpload(): boolean {
-  return window.sessionStorage.getItem(POST_SIGN_IN_UPLOAD_KEY) === "1";
+  try {
+    return window.sessionStorage.getItem(POST_SIGN_IN_UPLOAD_KEY) === "1";
+  } catch {
+    return false;
+  }
 }
 
 function clearPostSignInUpload(): void {
-  window.sessionStorage.removeItem(POST_SIGN_IN_UPLOAD_KEY);
+  try {
+    window.sessionStorage.removeItem(POST_SIGN_IN_UPLOAD_KEY);
+  } catch {
+    // Ignore.
+  }
 }
 
 function authErrorMessage(error: unknown): string {

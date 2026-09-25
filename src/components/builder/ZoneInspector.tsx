@@ -5,7 +5,7 @@ import { defaultDwellingCountForRole, defaultDwellingSettingsForZone, dwellingCo
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input, NativeSelect, SteppedValueSlider, Textarea } from "@/components/ui/form-controls";
+import { Input, NativeSelect, SteppedValueSlider } from "@/components/ui/form-controls";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/radix";
 import { BiomeField } from "@/components/builder/BiomeField";
 import { ContentPoolField, SidListField } from "@/components/builder/ContentPoolField";
@@ -14,8 +14,7 @@ import { MainObjectsEditor } from "@/components/builder/MainObjectsEditor";
 import {
   CheckField,
   ConfigField,
-  formatNumberList,
-  parseNumberList
+  NumberListTextarea
 } from "@/components/builder/formHelpers";
 
 export function ZoneInspector({
@@ -125,9 +124,10 @@ export function ZoneInspector({
           </button>
         </div>
 
+        {/* Sections holding typed drafts are keyed by zone so a draft never carries over to the next selected zone. */}
         {activeTab === "general" && (
           <div className="tab-pane">
-            <div className="zone-general-grid">
+            <div className="zone-general-grid" key={`${zone.id}:general`}>
               <ConfigField configKey="zone.name" label="Name" className="zone-general-grid__wide">
                 <Input value={zone.name} onChange={(event) => {
                   const value = event.currentTarget.value;
@@ -144,7 +144,7 @@ export function ZoneInspector({
                     if (draft.role !== "Neutral") draft.matchAdjacentNeutralCastleFactions = false;
                     if (draft.role !== "Neutral") draft.neutralCastlesAsRuins = false;
                     if (draft.role !== "Neutral") draft.naturalExpansion = false;
-                    if (draft.role === "Hub") draft.name = draft.name.startsWith("Hub") ? draft.name : "Hub";
+                    if (draft.role === "Hub") draft.name = hubZoneName(draft.name, draft.id, zones);
                     draft.dwellingCount = defaultDwellingCountForRole(draft.role);
                     draft.dwellingSettings = defaultDwellingSettingsForZone(draft, draft.dwellingCount);
                     draft.dwellingCountCustomized = true;
@@ -209,7 +209,7 @@ export function ZoneInspector({
               </ConfigField>
             </div>
 
-            <div className="dialog-section" style={{ marginTop: "12px" }}>
+            <div className="dialog-section" style={{ marginTop: "12px" }} key={`${zone.id}:biomes`}>
               <h3 className="dialog-section__heading">Biome Overrides</h3>
               <BiomeField label="Zone Biome" value={zone.zoneBiome} onChange={(value) => onUpdate((draft) => { draft.zoneBiome = value; })} />
               <BiomeField label="Content Biome" value={zone.contentBiome} onChange={(value) => onUpdate((draft) => { draft.contentBiome = value; })} />
@@ -235,7 +235,7 @@ export function ZoneInspector({
         )}
 
         {activeTab === "guardsRules" && (
-          <div className="tab-pane">
+          <div className="tab-pane" key={`${zone.id}:guards`}>
             <div className="dialog-section">
               <h3 className="dialog-section__heading">Guard Settings</h3>
               <NumberGrid zone={zone} fields={[
@@ -248,8 +248,7 @@ export function ZoneInspector({
               ]} onUpdate={onUpdate} />
               <div style={{ marginTop: "8px" }}>
                 <ConfigField configKey="zone.guardReactionDistribution" label="Guard Reaction Distribution" className="zone-general-grid__wide">
-                  <Textarea rows={2} value={formatNumberList(zone.guardReactionDistribution)} onChange={(event) => {
-                    const value = parseNumberList(event.currentTarget.value);
+                  <NumberListTextarea rows={2} values={zone.guardReactionDistribution} onValuesChange={(value) => {
                     onUpdate((draft) => { draft.guardReactionDistribution = value; });
                   }} />
                 </ConfigField>
@@ -310,7 +309,7 @@ export function ZoneInspector({
 
         {activeTab === "content" && settings && (
           <div className="tab-pane">
-            <div className="dialog-section">
+            <div className="dialog-section" key={`${zone.id}:density`}>
               <h3 className="dialog-section__heading">Density &amp; Value</h3>
               
               <div className="zone-dwellings-summary">
@@ -330,50 +329,42 @@ export function ZoneInspector({
 
               <div className="dialog-section__subheading zone-dwellings-heading">Configured Dwellings</div>
               <div className="dwelling-cards-list">
-                {settings.mode === "Generated" ? (
-                  <>
-                    {settings.lowTierCount > 0 && (
-                      <div className="dwelling-card-summary">
-                        <Home size={14} className="text-gold" />
-                        <div className="dwelling-card-summary__body">
-                          <span className="dwelling-card-summary__title">Low-tier</span>
-                          <span className="dwelling-card-summary__count">Count: {settings.lowTierCount}</span>
-                        </div>
+                {/* Generated low/high-tier dwellings are exported in both modes, so always list them. */}
+                {settings.lowTierCount > 0 && (
+                  <div className="dwelling-card-summary">
+                    <Home size={14} className="text-gold" />
+                    <div className="dwelling-card-summary__body">
+                      <span className="dwelling-card-summary__title">Low-tier</span>
+                      <span className="dwelling-card-summary__count">Count: {settings.lowTierCount}</span>
+                    </div>
+                  </div>
+                )}
+                {settings.highTierCount > 0 && (
+                  <div className="dwelling-card-summary">
+                    <Castle size={14} className="text-gold" />
+                    <div className="dwelling-card-summary__body">
+                      <span className="dwelling-card-summary__title">High-tier</span>
+                      <span className="dwelling-card-summary__count">Count: {settings.highTierCount}</span>
+                    </div>
+                  </div>
+                )}
+                {settings.mode === "Specific" && settings.specific.map((entry) => {
+                  const isNeutral = entry.faction === "Neutral";
+                  const IconComponent = isNeutral ? Home : Castle;
+                  return (
+                    <div key={entry.id} className="dwelling-card-summary">
+                      <IconComponent size={14} className="text-gold dwelling-card-summary__icon" />
+                      <div className="dwelling-card-summary__body">
+                        <span className="dwelling-card-summary__title" title={entry.title}>
+                          {entry.title}
+                        </span>
+                        <span className="dwelling-card-summary__count">Count: {entry.count}</span>
                       </div>
-                    )}
-                    {settings.highTierCount > 0 && (
-                      <div className="dwelling-card-summary">
-                        <Castle size={14} className="text-gold" />
-                        <div className="dwelling-card-summary__body">
-                          <span className="dwelling-card-summary__title">High-tier</span>
-                          <span className="dwelling-card-summary__count">Count: {settings.highTierCount}</span>
-                        </div>
-                      </div>
-                    )}
-                    {settings.lowTierCount === 0 && settings.highTierCount === 0 && (
-                      <span className="dwelling-card-summary__empty">No generated dwellings.</span>
-                    )}
-                  </>
-                ) : (
-                  settings.specific.length === 0 ? (
-                    <span className="dwelling-card-summary__empty">No specific dwellings.</span>
-                  ) : (
-                    settings.specific.map((entry) => {
-                      const isNeutral = entry.faction === "Neutral";
-                      const IconComponent = isNeutral ? Home : Castle;
-                      return (
-                        <div key={entry.id} className="dwelling-card-summary">
-                          <IconComponent size={14} className="text-gold dwelling-card-summary__icon" />
-                          <div className="dwelling-card-summary__body">
-                            <span className="dwelling-card-summary__title" title={entry.title}>
-                              {entry.title}
-                            </span>
-                            <span className="dwelling-card-summary__count">Count: {entry.count}</span>
-                          </div>
-                        </div>
-                      );
-                    })
-                  )
+                    </div>
+                  );
+                })}
+                {dwellingCountFromSettings(settings) === 0 && (
+                  <span className="dwelling-card-summary__empty">{settings.mode === "Generated" ? "No generated dwellings." : "No specific dwellings."}</span>
                 )}
               </div>
 
@@ -471,6 +462,17 @@ export function ZoneInspector({
       />
     </Card>
   );
+}
+
+/** Keeps an existing unique "Hub..." name, otherwise picks the next free "Hub", "Hub-2", ... like adding a hub does. */
+function hubZoneName(currentName: string, zoneId: string, zones: DesignZone[]): string {
+  const usedNames = new Set(zones.filter((candidate) => candidate.id !== zoneId).map((candidate) => candidate.name));
+  if (currentName.startsWith("Hub") && !usedNames.has(currentName)) return currentName;
+  if (!usedNames.has("Hub")) return "Hub";
+  for (let suffix = 2; ; suffix++) {
+    const candidate = `Hub-${suffix}`;
+    if (!usedNames.has(candidate)) return candidate;
+  }
 }
 
 function layoutOptionsForZone(layoutProfileNames: string[], currentLayout: string): string[] {

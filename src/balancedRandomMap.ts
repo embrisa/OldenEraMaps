@@ -239,6 +239,13 @@ export function buildBalancedRandomMapSettings(draft: BalancedRandomMapDraft): G
   settings.tournamentRules.enabled = tournament;
   if (tournament) applyTournamentLength(settings, draft.gameLength);
 
+  // Fold the connection style in once, over the balanced defaults above but under the explicit choices below,
+  // and mark it applied so generateTemplate's normalizeSettings does not re-apply it over those choices.
+  settings = applyConnectionStyle(settings);
+  settings.connectionStyleApplied = true;
+  if (draft.randomPortals) {
+    settings.randomPortals = true;
+  }
   if (draft.maxPortalConnections !== undefined) {
     settings.maxPortalConnections = Math.max(0, Math.round(draft.maxPortalConnections));
   }

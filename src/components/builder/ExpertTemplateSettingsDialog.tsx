@@ -1,5 +1,5 @@
 import { Ban, Search, X } from "lucide-react";
-import { useEffect, useMemo, useState, type JSX } from "react";
+import { useEffect, useMemo, useState, type InputHTMLAttributes, type JSX } from "react";
 import type { TemplateDesign } from "@/design";
 import type { GlobalBans, NoiseEntry, ValueOverride } from "@/types";
 import { HERO_BAN_CATALOG, ITEM_BAN_CATALOG, ITEM_RARITY_ORDER, type HeroFaction, type ItemRarity } from "@/components/builder/banCatalogs";
@@ -7,16 +7,11 @@ import { Button } from "@/components/ui/button";
 import { Input, SteppedValueSlider } from "@/components/ui/form-controls";
 import { Dialog, DialogContent } from "@/components/ui/radix";
 import { RmgJsonEditor } from "@/components/builder/RmgJsonEditor";
-import { Alert, ConfigField, formatJsonInput, parseJsonInput } from "@/components/builder/formHelpers";
+import { Alert, ConfigField, formatJsonInput, parseJsonInput, parseNumberInput } from "@/components/builder/formHelpers";
 
 interface JsonDraft {
   value: string;
   error?: string;
-}
-
-interface NoiseDraftState {
-  obstacles: NoiseEntry[];
-  water: NoiseEntry[];
 }
 
 interface GlobalBansDraftState {
@@ -64,22 +59,21 @@ export function ExpertTemplateSettingsPanel({
   onGlobal<K extends keyof TemplateDesign>(key: K, value: TemplateDesign[K]): void;
   onClose(): void;
 }): JSX.Element {
-  const [valueOverridesDraft, setValueOverridesDraft] = useState<JsonDraft>({ value: "[]" });
+  const [valueOverridesDraft, setValueOverridesDraft] = useState<JsonDraft>(() => ({ value: formatJsonInput(design.valueOverrides) }));
   const [globalBansDraft, setGlobalBansDraft] = useState<GlobalBansDraftState>(() => toGlobalBansDraft(design.globalBans));
-  const [noiseDrafts, setNoiseDrafts] = useState<NoiseDraftState>(() => ({
+  // Noise entries save live, so they are read straight from the design (each cell keeps its own text draft).
+  const noiseEntries = {
     obstacles: cloneNoiseEntries(design.border.obstaclesNoise),
     water: cloneNoiseEntries(design.border.waterNoise)
-  }));
+  };
 
+  // Reset staged drafts only when the panel is (re)opened. Depending on design values here would wipe
+  // staged bans/overrides whenever a live setting (orientation, border, noise) saves and re-clones the design.
   useEffect(() => {
     if (!active) return;
     setValueOverridesDraft({ value: formatJsonInput(design.valueOverrides) });
     setGlobalBansDraft(toGlobalBansDraft(design.globalBans));
-    setNoiseDrafts({
-      obstacles: cloneNoiseEntries(design.border.obstaclesNoise),
-      water: cloneNoiseEntries(design.border.waterNoise)
-    });
-  }, [active, design.globalBans, design.valueOverrides, design.border.obstaclesNoise, design.border.waterNoise]);
+  }, [active]);
 
   function updateOrientation<K extends keyof TemplateDesign["orientation"]>(key: K, value: TemplateDesign["orientation"][K]): void {
     onGlobal("orientation", { ...design.orientation, [key]: value });
@@ -90,16 +84,12 @@ export function ExpertTemplateSettingsPanel({
   }
 
   function syncNoise(field: "obstacles" | "water", nextEntries: NoiseEntry[]): void {
-    setNoiseDrafts((current) => ({ ...current, [field]: nextEntries }));
     updateBorder(field === "obstacles" ? "obstaclesNoise" : "waterNoise", nextEntries);
   }
 
-  function updateNoiseEntry(field: "obstacles" | "water", index: number, key: keyof NoiseEntry, value: string): void {
-    const parsed = Number(value);
-    const nextEntries = noiseDrafts[field].map((entry, entryIndex) => (
-      entryIndex === index
-        ? { ...entry, [key]: Number.isFinite(parsed) ? parsed : 0 }
-        : entry
+  function updateNoiseEntry(field: "obstacles" | "water", index: number, key: keyof NoiseEntry, value: number): void {
+    const nextEntries = noiseEntries[field].map((entry, entryIndex) => (
+      entryIndex === index ? { ...entry, [key]: value } : entry
     ));
     syncNoise(field, nextEntries);
   }
@@ -121,7 +111,7 @@ export function ExpertTemplateSettingsPanel({
       <div className="dialog-heading">
         <div>
           <h3>Expert Settings</h3>
-          <p>Map geometry, orientation, bans, and JSON overrides.</p>
+          <p>Map orientation and border changes apply immediately. Global bans and JSON overrides are staged until you click Apply.</p>
         </div>
       </div>
         <div className="dialog-section">
@@ -167,17 +157,17 @@ export function ExpertTemplateSettingsPanel({
           <div className="form-grid form-grid--two">
             <ConfigField configKey="global.border.obstaclesNoise" label="Obstacle Noise">
               <NoiseEntryEditor
-                entries={noiseDrafts.obstacles}
-                onAdd={() => syncNoise("obstacles", [...noiseDrafts.obstacles, { amp: 0.2, freq: 1 }])}
-                onRemove={(index) => syncNoise("obstacles", noiseDrafts.obstacles.filter((_entry, entryIndex) => entryIndex !== index))}
+                entries={noiseEntries.obstacles}
+                onAdd={() => syncNoise("obstacles", [...noiseEntries.obstacles, { amp: 0.2, freq: 1 }])}
+                onRemove={(index) => syncNoise("obstacles", noiseEntries.obstacles.filter((_entry, entryIndex) => entryIndex !== index))}
                 onChange={(index, key, value) => updateNoiseEntry("obstacles", index, key, value)}
               />
             </ConfigField>
             <ConfigField configKey="global.border.waterNoise" label="Water Noise">
               <NoiseEntryEditor
-                entries={noiseDrafts.water}
-                onAdd={() => syncNoise("water", [...noiseDrafts.water, { amp: 0.2, freq: 1 }])}
-                onRemove={(index) => syncNoise("water", noiseDrafts.water.filter((_entry, entryIndex) => entryIndex !== index))}
+                entries={noiseEntries.water}
+                onAdd={() => syncNoise("water", [...noiseEntries.water, { amp: 0.2, freq: 1 }])}
+                onRemove={(index) => syncNoise("water", noiseEntries.water.filter((_entry, entryIndex) => entryIndex !== index))}
                 onChange={(index, key, value) => updateNoiseEntry("water", index, key, value)}
               />
             </ConfigField>
@@ -228,8 +218,15 @@ export function ExpertTemplateSettingsPanel({
         </div>
         {valueOverridesDraft.error ? <Alert tone="danger">Value Overrides JSON: {valueOverridesDraft.error}</Alert> : null}
         <div className="dialog-actions">
-          <Button type="button" variant="ghost" onClick={onClose}>Cancel</Button>
-          <Button type="button" variant="blue" onClick={handleApply}>Apply</Button>
+          <Button
+            type="button"
+            variant="ghost"
+            title="Close without applying the staged ban and JSON override edits. Orientation and border changes are already applied."
+            onClick={onClose}
+          >
+            Discard Staged Changes
+          </Button>
+          <Button type="button" variant="blue" title="Apply the staged global bans and JSON overrides." onClick={handleApply}>Apply</Button>
         </div>
     </>
   );
@@ -617,19 +614,53 @@ function NoiseEntryEditor({
   entries: NoiseEntry[];
   onAdd(): void;
   onRemove(index: number): void;
-  onChange(index: number, key: keyof NoiseEntry, value: string): void;
+  onChange(index: number, key: keyof NoiseEntry, value: number): void;
 }): JSX.Element {
   return (
     <div className="structured-list-editor">
       {entries.length === 0 ? <div className="structured-list-editor__empty">No noise entries.</div> : null}
       {entries.map((entry, index) => (
         <div key={`noise-${index}`} className="structured-list-editor__row structured-list-editor__row--numbers">
-          <Input type="number" step="0.01" aria-label={`Noise amplitude ${index + 1}`} value={String(entry.amp)} onChange={(event) => onChange(index, "amp", event.currentTarget.value)} />
-          <Input type="number" step="0.01" aria-label={`Noise frequency ${index + 1}`} value={String(entry.freq)} onChange={(event) => onChange(index, "freq", event.currentTarget.value)} />
+          <NoiseNumberInput step="0.01" aria-label={`Noise amplitude ${index + 1}`} value={entry.amp} onValueChange={(value) => onChange(index, "amp", value)} />
+          <NoiseNumberInput step="0.01" aria-label={`Noise frequency ${index + 1}`} value={entry.freq} onValueChange={(value) => onChange(index, "freq", value)} />
           <Button type="button" size="sm" variant="danger" onClick={() => onRemove(index)}>Remove</Button>
         </div>
       ))}
       <Button type="button" size="sm" variant="blue" onClick={onAdd}>Add entry</Button>
     </div>
+  );
+}
+
+/**
+ * Number box with its own text draft: partial input such as "1." or "" reads as "" from a number
+ * input, so only complete numbers are stored and the typed text is kept until the field is left.
+ */
+function NoiseNumberInput({
+  value,
+  onValueChange,
+  ...props
+}: Omit<InputHTMLAttributes<HTMLInputElement>, "value" | "onChange" | "type"> & {
+  value: number;
+  onValueChange(value: number): void;
+}): JSX.Element {
+  const [text, setText] = useState(() => String(value));
+
+  useEffect(() => {
+    setText((current) => parseNumberInput(current) === value ? current : String(value));
+  }, [value]);
+
+  return (
+    <Input
+      {...props}
+      type="number"
+      value={text}
+      onChange={(event) => {
+        const nextText = event.currentTarget.value;
+        setText(nextText);
+        const parsed = parseNumberInput(nextText);
+        if (parsed !== undefined && parsed !== value) onValueChange(parsed);
+      }}
+      onBlur={() => setText(String(value))}
+    />
   );
 }

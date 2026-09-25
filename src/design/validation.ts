@@ -21,6 +21,7 @@ export function validateDesign(design: TemplateDesign): ValidationResult {
   if (expectedPlayers >= 2 && expectedPlayers <= 8 && spawnCount !== expectedPlayers) errors.push(`Player count is ${expectedPlayers}, so the design must have exactly ${expectedPlayers} spawn zones.`);
   if (design.zones.length > 48) errors.push("Templates support at most 48 zones.");
   if (new Set(names).size !== names.length) errors.push("Zone names must be unique.");
+  if (zoneIds.size !== design.zones.length) errors.push("Zone ids must be unique.");
   if (new Set(connectionNames).size !== connectionNames.length) errors.push("Connection names must be unique.");
   if (names.length !== design.zones.length) errors.push("Every zone needs a name.");
   if (connectionNames.length !== design.connections.length) errors.push("Every connection needs a name.");
@@ -153,7 +154,8 @@ function isAmbientPickupDistribution(value: unknown): value is AmbientPickupDist
 }
 
 function isGraphConnected(design: TemplateDesign): boolean {
-  return connectionComponents(design, ["Direct", "Portal", "Proximity"]).length === 1;
+  // Proximity links only mark adjacency; they do not give players a path between zones.
+  return connectionComponents(design, ["Direct", "Portal"]).length === 1;
 }
 
 function hasValidTournamentLaneGraph(design: TemplateDesign): boolean {

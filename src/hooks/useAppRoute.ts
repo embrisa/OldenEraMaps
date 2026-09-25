@@ -70,9 +70,17 @@ function pageSeoMetadata(page: AppPage): SeoMetadata {
   };
 }
 
+const PAGE_PATHS: Record<AppPage, string> = {
+  builder: "/",
+  browse: "/browse",
+  reference: "/reference",
+  install: "/install",
+  "my-maps": "/my-maps"
+};
+
 function syncSeoMetadata(page: AppPage): void {
   const metadata = pageSeoMetadata(page);
-  const canonicalUrl = new URL(window.location.pathname || "/", window.location.origin).toString();
+  const canonicalUrl = new URL(PAGE_PATHS[page], window.location.origin).toString();
 
   document.title = metadata.title;
   ensureHeadMeta("description", metadata.description);
@@ -84,12 +92,15 @@ function syncSeoMetadata(page: AppPage): void {
   ensureCanonicalLink(canonicalUrl);
 }
 
+export function pageFromPathname(pathname: string): AppPage {
+  // Hosting rewrites every path to the app, so tolerate trailing slashes like "/browse/".
+  const normalized = pathname.replace(/\/+$/, "") || "/";
+  const match = (Object.keys(PAGE_PATHS) as AppPage[]).find((page) => PAGE_PATHS[page] === normalized);
+  return match ?? "builder";
+}
+
 function readPageFromLocation(): AppPage {
-  if (window.location.pathname === "/browse") return "browse";
-  if (window.location.pathname === "/reference") return "reference";
-  if (window.location.pathname === "/install") return "install";
-  if (window.location.pathname === "/my-maps") return "my-maps";
-  return "builder";
+  return pageFromPathname(window.location.pathname);
 }
 
 export function useAppRoute() {
@@ -109,18 +120,12 @@ export function useAppRoute() {
   }, [page]);
 
   function navigate(nextPage: AppPage): void {
-    const nextPath = nextPage === "browse"
-      ? "/browse"
-      : nextPage === "reference"
-        ? "/reference"
-        : nextPage === "install"
-          ? "/install"
-          : nextPage === "my-maps"
-            ? "/my-maps"
-            : "/";
+    const nextPath = PAGE_PATHS[nextPage];
     if (window.location.pathname !== nextPath) {
       window.history.pushState({}, "", nextPath);
     }
+    // Start new pages at the top (e.g. when navigating from the footer).
+    if (nextPage !== page) document.scrollingElement?.scrollTo?.({ top: 0 });
     setPage(nextPage);
   }
 

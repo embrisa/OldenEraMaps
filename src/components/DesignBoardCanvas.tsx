@@ -1,10 +1,10 @@
 import { Pencil, Trash2 } from "lucide-react";
-import { useEffect, useMemo, useRef, useState, type JSX } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type JSX } from "react";
 import {
   addConnectionBetween,
   type TemplateDesign,
 } from "@/design";
-import { DesignBoard } from "@/components/designBoard";
+import { clampConnectionMenuPoint, DesignBoard, type BoardSize } from "@/components/designBoard";
 import { ZoneHoverCard, type ZoneHoverState } from "@/components/ZoneHoverCard";
 import type { Point } from "@/types";
 import { Button } from "@/components/ui/button";
@@ -38,9 +38,13 @@ export function DesignBoardCanvas({
 }: DesignBoardCanvasProps): JSX.Element {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const boardRef = useRef<DesignBoard | null>(null);
+  const connectionMenuRef = useRef<HTMLDivElement>(null);
   const [hover, setHover] = useState<ZoneHoverState | null>(null);
   const [hoverCardAnchorRect, setHoverCardAnchorRect] = useState({ left: 0, top: 0, width: 0, height: 0 });
-  const [connectionMenu, setConnectionMenu] = useState<{ connectionId: string; point: Point } | null>(null);
+  /** `anchor` is a board fraction so the menu follows the connection when the board is resized. */
+  const [connectionMenu, setConnectionMenu] = useState<{ connectionId: string; anchor: Point } | null>(null);
+  const [boardSize, setBoardSize] = useState<BoardSize>({ width: 0, height: 0 });
+  const [connectionMenuSize, setConnectionMenuSize] = useState<BoardSize>({ width: 0, height: 0 });
   const callbacksRef = useRef({ onSelectZone, onSelectConnection, onMoveZone, onConnectZones, onEditConnection, onDeleteConnection });
   callbacksRef.current = { onSelectZone, onSelectConnection, onMoveZone, onConnectZones, onEditConnection, onDeleteConnection };
   const hoveredZone = useMemo(
@@ -65,14 +69,17 @@ export function DesignBoardCanvas({
         clearHover();
         callbacksRef.current.onSelectZone(zoneId);
       },
-      selectConnection(connectionId, point) {
+      selectConnection(connectionId, anchor) {
         if (connectionId) clearHover();
         callbacksRef.current.onSelectConnection(connectionId);
-        if (!connectionId || !point) {
+        if (!connectionId || !anchor) {
           setConnectionMenu(null);
           return;
         }
-        setConnectionMenu({ connectionId, point });
+        setConnectionMenu({ connectionId, anchor });
+      },
+      resized(width, height) {
+        setBoardSize((current) => current.width === width && current.height === height ? current : { width, height });
       },
       moveZone(zoneId, position) {
         callbacksRef.current.onMoveZone(zoneId, position);
@@ -124,14 +131,28 @@ export function DesignBoardCanvas({
     setConnectionMenu((current) => current?.connectionId === selectedConnectionId ? current : null);
   }, [selectedConnection, selectedConnectionId]);
 
+  const connectionMenuOpen = Boolean(connectionMenu && selectedConnection);
+  useLayoutEffect(() => {
+    const menu = connectionMenuRef.current;
+    if (!menu) return;
+    const next = { width: menu.offsetWidth, height: menu.offsetHeight };
+    setConnectionMenuSize((current) => current.width === next.width && current.height === next.height ? current : next);
+  }, [connectionMenuOpen, selectedConnection?.name]);
+
+  const connectionMenuPoint = connectionMenu
+    ? clampConnectionMenuPoint(connectionMenu.anchor, boardSize, connectionMenuSize)
+    : null;
+
   return (
     <>
       <div className="design-board-wrap">
         <canvas ref={canvasRef} className="design-board" aria-label="Schematic design board" />
-        {connectionMenu && selectedConnection ? (
+        {connectionMenuPoint && selectedConnection ? (
           <div
+            ref={connectionMenuRef}
             className="board-connection-actions"
-            style={{ left: connectionMenu.point.x, top: connectionMenu.point.y }}
+            // max-content keeps the measured width independent of how close to the edge the menu sits.
+            style={{ left: connectionMenuPoint.x, top: connectionMenuPoint.y, width: "max-content" }}
             role="group"
             aria-label={`Actions for ${selectedConnection.name}`}
             onPointerDown={(event) => event.stopPropagation()}

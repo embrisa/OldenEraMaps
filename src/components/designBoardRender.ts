@@ -68,6 +68,11 @@ export function schematicBoardHeightForWidth(width: number): number {
   return Math.max(1, Math.round((width * SCHEMATIC_BOARD_BACKGROUND_HEIGHT) / SCHEMATIC_BOARD_BACKGROUND_WIDTH));
 }
 
+/** Radius of the zone circle as drawn (before its outer stroke); hit-testing uses the same value. */
+export function boardZoneBadgeRadius(layout: Pick<BoardRenderZoneLayout, "badgeSize">): number {
+  return layout.badgeSize / 2 + 4;
+}
+
 export function buildBoardRenderState(preview: PreviewDesign, width: number, height: number): BoardRenderState {
   const colorsBySignature = new Map<string, BoardZoneColor>();
   const zoneLayoutsById = new Map<string, BoardRenderZoneLayout>();
@@ -234,9 +239,9 @@ function drawZone(
     showSpawnKeepMarkers: boolean;
   },
 ): void {
-  const { box, color, badgeSize, zone } = layout;
+  const { box, color, zone } = layout;
   const hintStyle = zoneHintStyle(toDesignZoneLike(zone));
-  const badgeRadius = badgeSize / 2 + 4;
+  const badgeRadius = boardZoneBadgeRadius(layout);
 
   ctx.save();
   if (options.selected) {

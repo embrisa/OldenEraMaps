@@ -270,7 +270,7 @@ export function buildHubZone(spokeConns: string[], tuning: GenerationTuning, isH
     size,
     layout: scaledProfile.layout,
     guardCutoffValue: scaledProfile.guardCutoffValue,
-    guardRandomization: 0.05,
+    guardRandomization: tuning.guardRandomization,
     guardMultiplier: scaledProfile.guardMultiplier,
     guardWeeklyIncrement: scaledProfile.guardWeeklyIncrement,
     guardReactionDistribution: scaledProfile.guardReactionDistribution,
@@ -488,26 +488,31 @@ function buildZoneLayout(name: string, obstaclesFill: number, obstaclesFillVoid:
 }
 
 export interface MandatoryContentDwellingSettings {
+  // Keyed by dwellingSettingsKey(kind, letter), i.e. the generated zone name for that letter.
   dwellingCounts?: Record<string, number | undefined>;
   dwellingContent?: Record<string, ContentItem[] | undefined>;
+}
+
+export function dwellingSettingsKey(kind: "Spawn" | "Natural" | "Neutral", letter: string): string {
+  return `${kind}-${letter}`;
 }
 
 export function buildAllMandatoryContent(
   playerLetters: string[],
   neutralZones: NeutralZonePlan[],
-  settings: { zoneCfg: { playerZoneCastles: number }, spawnRemoteFootholds: boolean, naturalExpansionZone: boolean } & MandatoryContentDwellingSettings,
+  settings: { zoneCfg: { playerZoneCastles: number }, playerZoneCastlesByLetter?: Record<string, number | undefined>, spawnRemoteFootholds: boolean, naturalExpansionZone: boolean } & MandatoryContentDwellingSettings,
   tuning?: Pick<GenerationTuning, "neutralStackStrengthMultiplier">
 ): MandatoryContentGroup[] {
   const groups = playerLetters.map((letter) => ({
     name: `mandatory_content_side_${letter}`,
-    content: buildPlayerZoneMandatoryContent(settings.zoneCfg.playerZoneCastles, settings.spawnRemoteFootholds, dwellingContentFor(settings, `Spawn-${letter}`, 1, "Low"))
+    content: buildPlayerZoneMandatoryContent(settings.playerZoneCastlesByLetter?.[letter] ?? settings.zoneCfg.playerZoneCastles, settings.spawnRemoteFootholds, dwellingContentFor(settings, dwellingSettingsKey("Spawn", letter), 1, "Low"))
   }));
   if (settings.naturalExpansionZone) groups.push(...playerLetters.map((letter) => ({
     name: `mandatory_content_natural_${letter}`,
-    content: buildLowNeutralMandatoryContent(1, settings.spawnRemoteFootholds, dwellingContentFor(settings, `Natural-${letter}`, 1, "Low"))
+    content: buildLowNeutralMandatoryContent(1, settings.spawnRemoteFootholds, dwellingContentFor(settings, dwellingSettingsKey("Natural", letter), 1, "Low"))
   })));
   groups.push(...neutralZones.map((zone) => {
-    const zoneName = `Neutral-${zone.letter}`;
+    const zoneName = dwellingSettingsKey("Neutral", zone.letter);
     return {
       name: `mandatory_content_neutral_${zone.letter}`,
       content: zone.role === "Connector"
@@ -622,8 +627,9 @@ function foothold(castleCount: number, spawnFootholds: boolean): ContentItem[] {
 }
 
 export function buildAllContentCountLimits(): ContentCountLimit[] {
-  const sidLimits = ["black_tower", "fountain", "fountain_2", "mana_well", "market", "forge", "stables", "watchtower", "wind_rose", "university", "wise_owl", "pandora_box"].map((sid) => ({ sid, maxCount: sid === "black_tower" ? 0 : sid === "market" || sid === "stables" || sid === "wind_rose" ? 1 : sid === "pandora_box" ? 4 : 2 }));
-  const limits: ContentCountLimit[] = [{ name: "content_limits_side", limits: sidLimits }, { name: "content_limits_side_0_0", playerMin: 0, playerMax: 0, limits: sidLimits }];
-  for (let a = 1; a <= 5; a++) for (let b = a + 1; b <= 6; b++) limits.push({ name: `content_limits_side_${a}_${b}`, playerMin: a, playerMax: b, limits: sidLimits });
+  // Each group gets its own entries; a shared array would make an edit to one group change every group.
+  const sidLimits = () => ["black_tower", "fountain", "fountain_2", "mana_well", "market", "forge", "stables", "watchtower", "wind_rose", "university", "wise_owl", "pandora_box"].map((sid) => ({ sid, maxCount: sid === "black_tower" ? 0 : sid === "market" || sid === "stables" || sid === "wind_rose" ? 1 : sid === "pandora_box" ? 4 : 2 }));
+  const limits: ContentCountLimit[] = [{ name: "content_limits_side", limits: sidLimits() }, { name: "content_limits_side_0_0", playerMin: 0, playerMax: 0, limits: sidLimits() }];
+  for (let a = 1; a <= 5; a++) for (let b = a + 1; b <= 6; b++) limits.push({ name: `content_limits_side_${a}_${b}`, playerMin: a, playerMax: b, limits: sidLimits() });
   return limits;
 }

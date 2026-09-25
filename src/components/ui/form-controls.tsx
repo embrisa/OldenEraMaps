@@ -107,6 +107,12 @@ function formatSliderValue(value: NumericAttribute, precision = 0): string {
   return parsed.toFixed(precision).replace(/(?:\.0+|(?:(\.\d*?)0+))$/, "$1");
 }
 
+function parseDraftValue(draft: string): number | undefined {
+  if (draft.trim() === "") return undefined;
+  const parsed = Number(draft);
+  return Number.isFinite(parsed) ? parsed : undefined;
+}
+
 function clampDraftValue(rawValue: number, min: number | undefined): number {
   return min === undefined ? rawValue : Math.max(rawValue, min);
 }
@@ -150,25 +156,44 @@ export function SteppedValueSlider({
   const [draftValue, setDraftValue] = React.useState(formattedValue);
 
   React.useEffect(() => {
-    setDraftValue(formattedValue);
-  }, [formattedValue]);
+    // Keep the typed text while it still means the stored value ("1.0", "05"); anything else
+    // (slider drag, undo, a different zone) replaces it.
+    setDraftValue((current) => {
+      const parsed = parseDraftValue(current);
+      return parsed !== undefined && formatSliderValue(parsed, precision) === formattedValue ? current : formattedValue;
+    });
+  }, [formattedValue, precision]);
 
-  const commitDraftValue = React.useCallback(() => {
-    const parsed = Number(draftValue);
-    if (!Number.isFinite(parsed)) {
-      setDraftValue(formattedValue);
-      return;
-    }
-
-    const normalized = clampDraftValue(parsed, minValue);
-    const nextValue = formatSliderValue(normalized, precision);
-    setDraftValue(nextValue);
-
+  const emitValue = (nextValue: string): void => {
     onChange?.({
       currentTarget: { value: nextValue },
       target: { value: nextValue }
     } as React.ChangeEvent<HTMLInputElement>);
-  }, [draftValue, formattedValue, minValue, onChange, precision]);
+  };
+
+  const handleDraftChange = (rawValue: string): void => {
+    setDraftValue(rawValue);
+    // Commit usable values while typing so they land on the item being edited even if the
+    // surrounding form switches items (e.g. a board click) before this box blurs.
+    // Values below the minimum wait for blur/Enter, where they are clamped.
+    const parsed = parseDraftValue(rawValue);
+    if (parsed === undefined || (minValue !== undefined && parsed < minValue)) return;
+    const nextValue = formatSliderValue(parsed, precision);
+    if (nextValue !== formattedValue) emitValue(nextValue);
+  };
+
+  const commitDraftValue = (): void => {
+    const parsed = parseDraftValue(draftValue);
+    if (parsed === undefined) {
+      setDraftValue(formattedValue);
+      return;
+    }
+
+    const nextValue = formatSliderValue(clampDraftValue(parsed, minValue), precision);
+    setDraftValue(nextValue);
+    // Tabbing through an untouched box must not rewrite (and round) the stored value.
+    if (nextValue !== formattedValue) emitValue(nextValue);
+  };
 
   const rangeValue = React.useMemo(() => {
     const numericValue = parseNumericAttribute(value);
@@ -225,9 +250,7 @@ export function SteppedValueSlider({
             commitDraftValue();
             onBlur?.(event);
           }}
-          onChange={(event) => {
-            setDraftValue(event.currentTarget.value);
-          }}
+          onChange={(event) => handleDraftChange(event.currentTarget.value)}
           onKeyDown={(event) => {
             if (event.key === "Enter") {
               commitDraftValue();

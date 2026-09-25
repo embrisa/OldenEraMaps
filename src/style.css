@@ -151,25 +151,6 @@ button {
   flex-wrap: wrap;
 }
 
-.topbar-stats span {
-  display: grid;
-  min-width: 78px;
-  gap: 1px;
-  border: 1px solid rgba(147, 161, 175, 0.2);
-  border-radius: 6px;
-  background: rgba(7, 11, 16, 0.42);
-  padding: 6px 8px;
-  color: var(--muted);
-  font-size: 0.68rem;
-  font-weight: 700;
-  text-transform: uppercase;
-}
-
-.topbar-stats strong {
-  color: var(--text);
-  font-size: 0.9rem;
-}
-
 .topbar-context {
   min-width: 0;
 }
@@ -825,12 +806,14 @@ button {
 
 .config-field {
   display: grid;
+  align-content: start;
   gap: 6px;
   min-width: 0;
 }
 
 .oe-field {
   display: grid;
+  align-content: start;
   gap: 5px;
   min-width: 0;
 }
@@ -1359,6 +1342,17 @@ button {
   background: var(--gold);
 }
 
+.oe-checkbox:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.checkline:has(.oe-checkbox:disabled) {
+  cursor: not-allowed;
+  color: var(--muted);
+  opacity: 0.7;
+}
+
 .design-board-shell {
   padding: 0;
 }
@@ -1367,12 +1361,22 @@ button {
   align-items: center;
 }
 
-.board-widget-actions,
-.advanced-settings-actions {
+.board-widget-actions {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
   gap: 8px;
+}
+
+.advanced-settings-actions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.advanced-settings-actions .oe-button {
+  width: 100%;
+  min-height: 38px;
 }
 
 .advanced-settings-shell {
@@ -1879,6 +1883,10 @@ button {
 .oe-tab {
   --tab-accent: var(--gold);
   --tab-accent-soft: rgba(214, 180, 94, 0.12);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
   border: 0;
   border-bottom: 2px solid transparent;
   background: transparent;
@@ -2173,7 +2181,20 @@ button {
 .messages {
   display: grid;
   gap: 6px;
+}
+
+/* Named areas only exist in the output grid; applying them elsewhere creates implicit columns. */
+.output-grid > .messages {
   grid-area: messages;
+}
+
+.output-grid > .map-analysis-panel {
+  grid-area: analysis;
+}
+
+.output-grid > .rmg-json-editor,
+.output-grid > .rmg-json-editor__fallback {
+  grid-area: json;
 }
 
 .builder-validation-summary {
@@ -2194,6 +2215,18 @@ button {
   border-radius: 6px;
   padding: 8px 10px;
   font-size: 0.8rem;
+}
+
+/* Alerts with an inline dismiss button keep the message and the button on one row. */
+.alert:has(> .oe-button) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.alert > .oe-button {
+  flex: none;
 }
 
 .alert--success {
@@ -2247,43 +2280,44 @@ button {
   font-weight: 700;
 }
 
-.rmg-json-editor,
 .rmg-json-editor__fallback {
   min-height: 360px;
 }
 
-.rmg-json-editor--compact,
-.rmg-json-editor--compact.rmg-json-editor__fallback,
-.rmg-json-editor--compact :where(.jse-main) {
+.rmg-json-editor--compact.rmg-json-editor__fallback {
   min-height: 260px;
 }
 
-.rmg-json-editor--mini,
-.rmg-json-editor--mini.rmg-json-editor__fallback,
-.rmg-json-editor--mini :where(.jse-main) {
+.rmg-json-editor--mini.rmg-json-editor__fallback {
   min-height: 150px;
 }
 
 .rmg-json-editor {
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
   min-width: 0;
+  height: clamp(420px, 64vh, 760px);
   border: 1px solid var(--border);
   border-radius: 6px;
   background: var(--panel-2);
-  grid-area: json;
-  --jse-theme-color: var(--blue);
-  --jse-theme-color-highlight: color-mix(in srgb, var(--blue) 72%, white);
+  --jse-theme-color: #141d2a;
+  --jse-theme-color-highlight: rgba(214, 180, 94, 0.16);
   --jse-background-color: var(--panel-2);
   --jse-main-border: none;
   --jse-text-color: var(--text);
-  --jse-menu-color: var(--text);
+  --jse-menu-color: #d6b45e;
+  --jse-font-size-mono: 13px;
   --jse-panel-background: var(--panel-3);
+  --jse-panel-color-readonly: #6f7e8d;
   --jse-panel-background-border: 1px solid var(--border);
-  --jse-panel-border: 1px solid var(--border);
+  --jse-panel-border: 1px solid rgba(181, 140, 68, 0.22);
   --jse-navigation-bar-background: color-mix(in srgb, var(--panel-3) 82%, white);
   --jse-navigation-bar-background-highlight: color-mix(in srgb, var(--panel-3) 65%, white);
   --jse-context-menu-background: var(--panel-3);
   --jse-context-menu-background-highlight: color-mix(in srgb, var(--panel-3) 70%, white);
+  --jse-active-line-background-color: rgba(214, 180, 94, 0.06);
+  --jse-selection-background-color: rgba(111, 147, 184, 0.28);
   --jse-key-color: #8fc5ff;
   --jse-value-color-number: #b8d995;
   --jse-value-color-string: #d6a07e;
@@ -2293,8 +2327,21 @@ button {
   --jse-input-border: 1px solid var(--border);
 }
 
-.rmg-json-editor :where(.jse-main) {
-  min-height: 360px;
+.rmg-json-editor--compact {
+  height: 280px;
+}
+
+.rmg-json-editor--mini {
+  height: 170px;
+}
+
+.rmg-json-editor > :where(.jse-main) {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.rmg-json-editor :where(.jse-menu) {
+  border-bottom: 1px solid rgba(181, 140, 68, 0.22);
 }
 
 .map-analysis-panel {
@@ -2305,7 +2352,6 @@ button {
   border-radius: 8px;
   background: color-mix(in srgb, var(--panel-3) 90%, black);
   padding: 12px;
-  grid-area: analysis;
   align-self: start;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
@@ -2367,10 +2413,20 @@ button {
 }
 
 .gauge-score {
-  font-size: 0.95rem;
+  font-size: 1.15rem;
   font-weight: 850;
+  line-height: 1;
   color: var(--text);
   letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.gauge-max {
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
 }
 
 .map-analysis-status {
@@ -2613,7 +2669,7 @@ button {
 }
 
 .analysis-tab-content {
-  min-height: 220px;
+  min-height: 150px;
 }
 
 .findings-list {
@@ -3817,9 +3873,11 @@ button {
   align-items: start;
 }
 
-.content-limit-row__json-editor,
-.content-limit-row__json-editor.rmg-json-editor__fallback,
-.content-limit-row__json-editor :where(.jse-main) {
+.content-limit-row__json-editor.rmg-json-editor {
+  height: 260px;
+}
+
+.content-limit-row__json-editor.rmg-json-editor__fallback {
   min-height: 260px;
 }
 
@@ -3880,8 +3938,41 @@ button {
 
 .community-hero {
   display: grid;
-  grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.7fr);
+  grid-template-columns: minmax(0, 1fr);
   gap: 12px;
+}
+
+/* The catalog hero is a single banner: title on the left, catalog stats on the right. */
+.community-hero .community-stats-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background:
+    radial-gradient(120% 160% at 0% 0%, rgba(214, 180, 94, 0.12), transparent 55%),
+    var(--panel-overlay);
+}
+
+.community-hero .community-stats-card .oe-card__header {
+  border-bottom: 0;
+  padding: 14px 16px;
+}
+
+.community-hero .community-stats-card .oe-card__title {
+  font-size: 1.1rem;
+}
+
+.community-hero .community-stat-strip {
+  flex-wrap: nowrap;
+  padding: 12px 16px;
+}
+
+.community-hero .community-stat-strip span {
+  min-width: 96px;
+}
+
+.community-hero .community-stat-strip strong {
+  font-size: 1.05rem;
 }
 
 .community-highlight-card,
@@ -4052,7 +4143,7 @@ button {
 }
 
 .community-filter-section--ranges {
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
 }
 
 .community-filter-section h3,
@@ -5768,4 +5859,116 @@ button {
   color: #cbd6e1;
   padding: 4px 8px;
   font-size: 0.68rem;
+}
+
+/* Star ratings on community cards and the map detail dialog */
+.community-rating-summary {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.community-rating-summary__score {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text);
+  font-size: 0.95rem;
+}
+
+.community-rating-summary__score svg {
+  color: var(--gold);
+  fill: currentColor;
+}
+
+.star-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.star-rating__star {
+  display: inline-grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: rgba(147, 161, 175, 0.6);
+  transition: color 120ms ease, background 120ms ease, transform 120ms ease;
+}
+
+.star-rating__star--filled {
+  color: var(--gold);
+}
+
+.star-rating__star--filled svg {
+  fill: currentColor;
+}
+
+/* Hovering previews the score: light every star up to the hovered one. */
+.star-rating:has(.star-rating__star:enabled:hover) .star-rating__star {
+  color: var(--gold);
+}
+
+.star-rating .star-rating__star:enabled:hover ~ .star-rating__star {
+  color: rgba(147, 161, 175, 0.6);
+}
+
+.star-rating__star:enabled:hover {
+  background: rgba(214, 180, 94, 0.12);
+  transform: translateY(-1px);
+}
+
+.star-rating__star:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 1px;
+}
+
+.star-rating__star:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Toast notifications (sonner) */
+.oe-toast {
+  border: 1px solid var(--border-2) !important;
+  border-radius: 8px !important;
+  background: color-mix(in srgb, var(--panel-3) 94%, black) !important;
+  color: var(--text) !important;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.42) !important;
+  font-family: inherit !important;
+}
+
+.oe-toast [data-icon] {
+  color: var(--gold);
+}
+
+.oe-toast[data-type="error"] {
+  border-color: rgba(189, 107, 97, 0.7) !important;
+}
+
+.oe-toast[data-type="error"] [data-icon] {
+  color: #e2a097;
+}
+
+/* Stacked fields inside plain block sections (e.g. zone biome overrides) need breathing room. */
+.dialog-section > .oe-field + .oe-field,
+.dialog-section > .config-field + .config-field {
+  margin-top: 12px;
+}
+
+/* Visible keyboard focus for custom controls that otherwise show none. */
+.oe-tab:focus-visible,
+.analysis-tab-btn:focus-visible,
+.suggestion-chip:focus-visible,
+.community-filter-chip:focus-visible,
+.community-selected-filter:focus-visible,
+.oe-help:focus-visible,
+.oe-checkbox:focus-visible,
+.oe-slider:focus-visible,
+.show-all-zones-btn:focus-visible {
+  outline: 2px solid rgba(234, 211, 149, 0.82);
+  outline-offset: 2px;
 }

@@ -19,6 +19,9 @@ export interface DownloadOptions {
   preferSavePicker?: boolean;
 }
 
+/** "saved" = written through the save picker, "downloaded" = browser download started, "cancelled" = user dismissed the picker. */
+export type DownloadResult = "saved" | "downloaded" | "cancelled";
+
 type SaveFilePickerFunction = (options: SaveFilePickerOptions) => Promise<SaveFilePickerHandle>;
 
 export function builderExportBaseName(templateName: string): string {
@@ -29,13 +32,14 @@ export function communityDownloadBaseName(map: { title?: string; templateName?: 
   return normalizeDownloadBaseName(map.title ?? map.templateName ?? map.slug ?? "") || "map";
 }
 
-export async function downloadText(name: string, content: string, type: string, options?: DownloadOptions): Promise<void> {
-  await downloadBlob(name, new Blob([content], { type }), options);
+export async function downloadText(name: string, content: string, type: string, options?: DownloadOptions): Promise<DownloadResult> {
+  return downloadBlob(name, new Blob([content], { type }), options);
 }
 
-export async function downloadBlob(name: string, blob: Blob, options?: DownloadOptions): Promise<void> {
-  if (options?.preferSavePicker && await writeBlobWithSavePicker(name, blob)) {
-    return;
+export async function downloadBlob(name: string, blob: Blob, options?: DownloadOptions): Promise<DownloadResult> {
+  if (options?.preferSavePicker) {
+    const pickerResult = await writeBlobWithSavePicker(name, blob);
+    if (pickerResult) return pickerResult;
   }
 
   const url = URL.createObjectURL(blob);
@@ -44,6 +48,7 @@ export async function downloadBlob(name: string, blob: Blob, options?: DownloadO
   anchor.download = name;
   anchor.click();
   URL.revokeObjectURL(url);
+  return "downloaded";
 }
 
 function normalizeDownloadBaseName(value: string): string {
@@ -78,9 +83,9 @@ function pickerTypesForMimeType(type: string): SaveFilePickerOptions["types"] | 
   return undefined;
 }
 
-async function writeBlobWithSavePicker(name: string, blob: Blob): Promise<boolean> {
+async function writeBlobWithSavePicker(name: string, blob: Blob): Promise<"saved" | "cancelled" | null> {
   const showSaveFilePicker = saveFilePicker();
-  if (!showSaveFilePicker) return false;
+  if (!showSaveFilePicker) return null;
 
   try {
     const handle = await showSaveFilePicker({
@@ -90,11 +95,11 @@ async function writeBlobWithSavePicker(name: string, blob: Blob): Promise<boolea
     const writable = await handle.createWritable();
     await writable.write(blob);
     await writable.close();
-    return true;
+    return "saved";
   } catch (error: unknown) {
     if (error instanceof DOMException && error.name === "AbortError") {
-      return true;
+      return "cancelled";
     }
-    return false;
+    return null;
   }
 }

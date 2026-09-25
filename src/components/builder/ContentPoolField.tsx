@@ -1,7 +1,6 @@
 import type { JSX } from "react";
 import { configHelp } from "@/configHelp";
-import { Textarea } from "@/components/ui/form-controls";
-import { formatLineList, parseLineList } from "@/components/builder/formHelpers";
+import { LineListTextarea, parseLineList } from "@/components/builder/formHelpers";
 import { displayNameForSid } from "@/displayNames";
 
 interface ContentPoolCardOption {
@@ -48,7 +47,7 @@ export function ContentPoolField({ label, configKey, values, onChange }: { label
       </div>
       <details className="raw-details">
         <summary>Show IDs</summary>
-        <Textarea rows={3} value={formatLineList(values)} onChange={(event) => onChange(parseLineList(event.currentTarget.value))} />
+        <LineListTextarea rows={3} values={values} onValuesChange={onChange} />
       </details>
     </div>
   );
@@ -101,7 +100,7 @@ export function SidListField({
       </div>
       <details className="raw-details">
         <summary>Show IDs</summary>
-        <Textarea rows={3} value={formatLineList(values)} onChange={(event) => onChange(parseLineList(event.currentTarget.value))} />
+        <LineListTextarea rows={3} values={values} onValuesChange={onChange} />
       </details>
     </div>
   );

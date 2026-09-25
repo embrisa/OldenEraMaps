@@ -260,19 +260,20 @@ export function validateRouteAndRoadConsistency(template: RmgTemplate): RmgDiagn
     for (const road of zone.roads ?? []) {
       const connected = referencedConnectionNames(road);
       if (connected.length < 2) continue;
-      for (const [leftIndex, leftName] of connected.entries()) {
-        for (const rightName of connected.slice(leftIndex + 1)) {
-          if (!graphPairs.has(pairKeyForConnectionNames(connections, leftName, rightName))) {
-            diagnostics.push({
-              code: "route_road_without_graph_path",
-              severity: "warning",
-              message: `Zone ${zone.name} draws a road between ${leftName} and ${rightName}, but the connection graph does not expose that path.`,
-              zoneName: zone.name,
-              roadEndpoint: `${leftName} -> ${rightName}`
-            });
-          }
-        }
-      }
+      // A road between two connections runs through this zone, so it is only a real path when both connections
+      // border this zone. Unknown connection names are reported as road_missing_connection instead.
+      const detached = [...new Set(connected)].filter((name) => {
+        const connection = connections.find((candidate) => candidate.name === name);
+        return connection !== undefined && connection.from !== zone.name && connection.to !== zone.name;
+      });
+      if (detached.length === 0) continue;
+      diagnostics.push({
+        code: "route_road_without_graph_path",
+        severity: "warning",
+        message: `Zone ${zone.name} draws a road between ${connected.join(" and ")}, but ${detached.join(" and ")} ${detached.length === 1 ? "does" : "do"} not connect to ${zone.name}, so the connection graph does not expose that path.`,
+        zoneName: zone.name,
+        roadEndpoint: connected.join(" -> ")
+      });
     }
   }
 
@@ -583,19 +584,6 @@ function referencedConnectionNames(road: Road): string[] {
 
 function pairKey(left: string, right: string): string {
   return left < right ? `${left}|${right}` : `${right}|${left}`;
-}
-
-function pairKeyForConnectionNames(connections: Connection[], leftName: string, rightName: string): string {
-  const left = connections.find((connection) => connection.name === leftName);
-  const right = connections.find((connection) => connection.name === rightName);
-  if (!left || !right) return `${leftName}|${rightName}`;
-
-  const names = [left.from, left.to, right.from, right.to];
-  const shared = names.find((name, index) => names.indexOf(name) !== index);
-  if (!shared) return `${leftName}|${rightName}`;
-  const endpoints = [left.from, left.to, right.from, right.to].filter((name) => name !== shared);
-  if (endpoints.length < 2) return `${leftName}|${rightName}`;
-  return pairKey(endpoints[0], endpoints[1]);
 }
 
 function detectBattleCityPlayers(zones: Zone[]): string[] {

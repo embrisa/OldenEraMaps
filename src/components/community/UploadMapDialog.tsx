@@ -1,7 +1,7 @@
 import { Share2 } from "lucide-react";
-import { useEffect, useState, type JSX } from "react";
+import { useEffect, useRef, useState, type JSX } from "react";
 import type { CommunityUploadDraft } from "@/community/maps";
-import { getAllowedDescriptiveTags } from "@/community/tags";
+import { DESCRIPTIVE_TAG_SELECTION_LIMIT, getAllowedDescriptiveTags } from "@/community/tags";
 import {
   MAP_DESCRIPTION_MAX_LENGTH,
   normalizeMapDescription,
@@ -41,13 +41,29 @@ export function UploadMapDialog({
   onSubmit(draft: CommunityUploadDraft): void;
 }): JSX.Element {
   const [draft, setDraft] = useState<CommunityUploadDraft>(() => createDraft(templateName, templateDescription, defaultAuthorName));
+  const wasOpenRef = useRef(false);
+  const defaultAuthorNameRef = useRef(defaultAuthorName);
   const descriptiveTags = getAllowedDescriptiveTags();
   const descriptiveTagLabels = new Map(descriptiveTags.map((tag) => [tag.slug, tag.label]));
+  const tagLimitReached = draft.descriptiveTagSlugs.length >= DESCRIPTIVE_TAG_SELECTION_LIMIT;
 
+  // Seed the draft only when the dialog opens. Props also change while it is open (auth events rebuild
+  // the profile, sharing commits the description), and re-seeding then would wipe what the user typed.
   useEffect(() => {
-    if (!open) return;
-    setDraft(createDraft(templateName, templateDescription, defaultAuthorName));
+    const opening = open && !wasOpenRef.current;
+    wasOpenRef.current = open;
+    if (opening) setDraft(createDraft(templateName, templateDescription, defaultAuthorName));
   }, [defaultAuthorName, open, templateDescription, templateName]);
+
+  // A profile that finishes loading after the dialog opened still fills an untouched author field.
+  useEffect(() => {
+    const previousDefault = defaultAuthorNameRef.current;
+    defaultAuthorNameRef.current = defaultAuthorName;
+    if (!open || previousDefault === defaultAuthorName) return;
+    setDraft((current) => current.authorName === authorNameOrAnonymous(previousDefault)
+      ? { ...current, authorName: authorNameOrAnonymous(defaultAuthorName) }
+      : current);
+  }, [defaultAuthorName, open]);
 
   const titleValidation = validateMapTitle(draft.title);
   const authorValidation = validateAuthorDisplayName(draft.authorName);
@@ -109,7 +125,7 @@ export function UploadMapDialog({
           <div className="config-field">
             <span className="oe-field__label">Descriptive tags</span>
             <p className="community-upload-tags-note">
-              Select gameplay descriptors only. Player count, map size, win condition, zones, and reliable topology tags are derived automatically after upload.
+              Select up to {DESCRIPTIVE_TAG_SELECTION_LIMIT} gameplay descriptors. Player count, map size, win condition, zones, and reliable topology tags are derived automatically after upload.
             </p>
             <div className="community-upload-tag-grid">
               {descriptiveTags.map((tag) => {
@@ -118,17 +134,24 @@ export function UploadMapDialog({
                   <label key={tag.slug} className="checkline">
                     <Checkbox
                       checked={checked}
-                      onCheckedChange={(value) => setDraft((current) => ({
-                        ...current,
-                        descriptiveTagSlugs: value === true
-                          ? [...current.descriptiveTagSlugs, tag.slug]
-                          : current.descriptiveTagSlugs.filter((slug) => slug !== tag.slug)
-                      }))}
+                      disabled={!checked && tagLimitReached}
+                      onCheckedChange={(value) => setDraft((current) => {
+                        if (value !== true) {
+                          return { ...current, descriptiveTagSlugs: current.descriptiveTagSlugs.filter((slug) => slug !== tag.slug) };
+                        }
+                        if (current.descriptiveTagSlugs.includes(tag.slug) || current.descriptiveTagSlugs.length >= DESCRIPTIVE_TAG_SELECTION_LIMIT) {
+                          return current;
+                        }
+                        return { ...current, descriptiveTagSlugs: [...current.descriptiveTagSlugs, tag.slug] };
+                      })}
                     />
                     <span>{tag.label}</span>
                   </label>
                 );
               })}
+            </div>
+            <div className="community-upload-field-meta">
+              <span>{draft.descriptiveTagSlugs.length} / {DESCRIPTIVE_TAG_SELECTION_LIMIT} tags</span>
             </div>
           </div>
           <div className="form-grid form-grid--two">
@@ -180,8 +203,12 @@ function createDraft(templateName: string, templateDescription: string, defaultA
   return {
     title: templateName || "Untitled template",
     summary: templateDescription,
-    authorName: defaultAuthorName || "Anonymous Cartographer",
+    authorName: authorNameOrAnonymous(defaultAuthorName),
     descriptiveTagSlugs: [],
     visibility: "public"
   };
+}
+
+function authorNameOrAnonymous(authorName: string): string {
+  return authorName || "Anonymous Cartographer";
 }

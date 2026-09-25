@@ -1255,7 +1255,7 @@ describe("manual template design", () => {
     expect(imported.zones.find((zone) => zone.name === "Spawn-2")?.dwellingCount).toBe(1);
   });
 
-  it("adds a separate dwellings group without rewriting custom mandatory content", () => {
+  it("replaces a zone's custom dwellings with a separate dwellings group and keeps its other custom mandatory content", () => {
     const imported = templateToDesign(parseRmgTemplate(`{
       "name": "Custom Dwelling Preservation",
       "sizeX": 160,
@@ -1288,12 +1288,12 @@ describe("manual template design", () => {
     expect(originalGroup).toEqual({
       name: "mandatory_content_custom_spawn",
       content: [
-        { sid: "market", isGuarded: true },
-        { sid: "random_hire_1" }
+        { sid: "market", isGuarded: true }
       ]
     });
     expect(dwellingGroup?.content).toEqual([{ sid: "random_hire_4" }, { sid: "random_hire_4" }]);
     expect(exportedSpawn?.mandatoryContent).toEqual(["mandatory_content_custom_spawn", "mandatory_content_dwellings_spawn_1"]);
+    expect(templateToDesign(exported).zones.find((zone) => zone.name === "Spawn-1")?.dwellingCount).toBe(2);
   });
 
   it("round-trips new design files", () => {

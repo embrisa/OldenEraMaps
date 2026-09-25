@@ -1,4 +1,4 @@
-import { findOpenBoardSlotPosition, normalizeBoardZonePositions } from "../boardSlots.ts";
+import { findOpenBoardSlotPosition, normalizeBoardZonePositions, sameBoardPosition } from "../boardSlots.ts";
 import { clamp } from "../math.ts";
 import { zoneSuffixes } from "../generator/math.ts";
 import type { Point } from "../types.ts";
@@ -72,6 +72,8 @@ export function moveZone(design: TemplateDesign, zoneId: string, position: Point
       ...reorderedZones.filter((zone) => zone.id !== zoneId),
     ]).map((zone) => [zone.id, zone.position])
   );
+  // A drop that leaves every zone in place is not an edit (no undo entry, no unsaved marker).
+  if (design.zones.every((zone) => sameBoardPosition(normalizedById.get(zone.id) ?? zone.position, zone.position))) return design;
 
   next.zones = next.zones.map((zone) => {
     const normalizedPosition = normalizedById.get(zone.id);
@@ -194,8 +196,16 @@ function addConnectionToDesign(design: TemplateDesign, from: DesignZone, to: Des
 }
 
 function nextUnusedSuffix(design: TemplateDesign): string {
-  const used = new Set(design.zones.map((zone) => zone.name.split("-").at(-1)));
-  return zoneSuffixes.find((suffix) => !used.has(suffix)) ?? String(design.zones.length + 1);
+  // The suffix becomes both the new zone id (`zone-<suffix>`) and name (`<Role>-<suffix>`), so it must be free in both;
+  // imported or renamed zones can hold ids that no longer match their names.
+  const usedNameSuffixes = new Set(design.zones.map((zone) => zone.name.split("-").at(-1)));
+  const usedIds = new Set(design.zones.map((zone) => zone.id));
+  const isFree = (suffix: string) => !usedNameSuffixes.has(suffix) && !usedIds.has(`zone-${suffix}`);
+  const preferred = zoneSuffixes.find(isFree);
+  if (preferred) return preferred;
+  for (let index = zoneSuffixes.length + 1; ; index++) {
+    if (isFree(String(index))) return String(index);
+  }
 }
 
 function uniqueName(existing: string[], base: string): string {

@@ -125,6 +125,9 @@ export interface DesignConnection {
   from: string;
   to: string;
   type: DesignConnectionType;
+  // Original connectionType of an imported walkable connection the builder edits as Direct (e.g. "Default",
+  // "GladiatorArena"); written back on export while the type stays Direct.
+  templateConnectionType?: string;
   guardStrength: number;
   road: boolean;
   guardRandomization?: number;
@@ -384,7 +387,8 @@ export function cloneZoneLayouts(layouts: ZoneLayout[]): ZoneLayout[] {
 }
 
 export function cloneContentCountLimits(limits: ContentCountLimit[]): ContentCountLimit[] {
-  return structuredClone(limits);
+  // Clone groups one by one: structuredClone of the whole list would keep arrays shared between groups shared.
+  return limits.map((limit) => structuredClone(limit));
 }
 
 export function cloneMandatoryContent(groups: MandatoryContentGroup[]): MandatoryContentGroup[] {

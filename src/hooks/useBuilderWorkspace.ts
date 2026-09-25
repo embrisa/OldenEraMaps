@@ -59,14 +59,39 @@ function createInitialDesign(): TemplateDesign {
   return createDefaultDesign();
 }
 
+// Storage can be unavailable (blocked site data) or full; autosave is best-effort and must never crash the builder.
+function readAutosaveText(): string | null {
+  try {
+    return window.localStorage.getItem(AUTOSAVE_KEY);
+  } catch {
+    return null;
+  }
+}
+
+function writeAutosave(text: string): void {
+  try {
+    window.localStorage.setItem(AUTOSAVE_KEY, text);
+  } catch {
+    // Ignore quota/security errors.
+  }
+}
+
+function clearAutosave(): void {
+  try {
+    window.localStorage.removeItem(AUTOSAVE_KEY);
+  } catch {
+    // Ignore security errors.
+  }
+}
+
 function readAutosave(): AutosaveRecovery | null {
-  const text = window.localStorage.getItem(AUTOSAVE_KEY);
+  const text = readAutosaveText();
   if (!text) return null;
   try {
     const design = parseDesignOrTemplateFile(text);
     return { design };
   } catch {
-    window.localStorage.removeItem(AUTOSAVE_KEY);
+    clearAutosave();
     return null;
   }
 }
@@ -95,6 +120,15 @@ function shouldRenameRoleChangedZone(previousRole: DesignZoneRole, previousName:
   if (!trimmed) return true;
   if (previousRole === "Hub" && trimmed === "Hub") return true;
   return trimmed === previousName && trimmed.startsWith(`${previousRole}-`);
+}
+
+// Connections' guard zones and the map orientation refer to zones by name, so they must follow renames.
+export function followZoneRename(design: TemplateDesign, fromName: string | undefined, toName: string): void {
+  if (!fromName?.trim() || !toName.trim() || fromName === toName) return;
+  for (const connection of design.connections) {
+    if (connection.guardZone === fromName) connection.guardZone = toName;
+  }
+  if (design.orientation.zeroAngleZone === fromName) design.orientation.zeroAngleZone = toName;
 }
 
 function uniqueZoneName(design: TemplateDesign, zoneId: string, baseName: string): string {
@@ -169,6 +203,10 @@ export function useBuilderWorkspace({
   const [historyRevision, setHistoryRevision] = useState(0);
 
   const designHistoryRef = useRef<DesignHistoryEntry[]>([]);
+  // While a zone's name field is cleared, remember the name its references still use.
+  const clearedZoneNamesRef = useRef(new Map<string, string>());
+  const latestDesignRef = useRef(design);
+  latestDesignRef.current = design;
 
   const selectedZone = design.zones.find((zone) => zone.id === selectedZoneId);
   const zoneLimitReached = design.zones.length >= zoneSuffixes.length;
@@ -180,7 +218,7 @@ export function useBuilderWorkspace({
 
   useEffect(() => {
     if (!dirty) return;
-    window.localStorage.setItem(AUTOSAVE_KEY, serializeDesignFile(design));
+    writeAutosave(serializeDesignFile(design));
   }, [design, dirty]);
 
   const pushDesignHistory = useCallback((entry: DesignHistoryEntry) => {
@@ -301,8 +339,15 @@ export function useBuilderWorkspace({
   }, [autosaveRecovery, runAfterDiscardingUnsavedChanges, clearJsonMessages, syncJsonSnapshot, resetDesignHistory]);
 
   const handleDismissRecovery = useCallback((): void => {
-    window.localStorage.removeItem(AUTOSAVE_KEY);
+    clearAutosave();
     setAutosaveRecovery(null);
+  }, []);
+
+  const markSaved = useCallback((savedDesign: TemplateDesign): void => {
+    // The design may have changed while an async save picker was open; only the saved snapshot is clean.
+    if (latestDesignRef.current !== savedDesign) return;
+    setDirty(false);
+    clearAutosave();
   }, []);
 
   const handleGlobal = useCallback(
@@ -373,6 +418,12 @@ export function useBuilderWorkspace({
       const previousName = zone.name;
       mutator(zone);
       reconcileRoleChange(next, zone, previousRole, previousName);
+      if (!zone.name.trim()) {
+        if (previousName.trim()) clearedZoneNamesRef.current.set(zone.id, previousName);
+      } else {
+        followZoneRename(next, previousName.trim() ? previousName : clearedZoneNamesRef.current.get(zone.id), zone.name);
+        clearedZoneNamesRef.current.delete(zone.id);
+      }
       commit(next, zone.id);
     },
     [design, selectedZoneId, commit]
@@ -531,6 +582,7 @@ export function useBuilderWorkspace({
     setSelectedConnectionId,
     dirty,
     setDirty,
+    markSaved,
     autosaveRecovery,
     setAutosaveRecovery,
     historyRevision,

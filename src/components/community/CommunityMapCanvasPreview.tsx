@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, type JSX } from "react";
-import { SCHEMATIC_BOARD_BACKGROUND_SOURCE } from "@/boardAssets";
+import { getSchematicBoardBackgroundImage } from "@/boardAssets";
 import { parsePreviewDesignJson } from "@/community/previewDesign";
 import {
   buildBoardRenderState,
@@ -26,8 +26,6 @@ interface CommunityMapCanvasPreviewProps {
   showSpawnKeepMarkers?: boolean;
 }
 
-let schematicBoardBackground: HTMLImageElement | null = null;
-
 export function CommunityMapCanvasPreview({
   previewDesignJson,
   width,
@@ -49,10 +47,9 @@ export function CommunityMapCanvasPreview({
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
     const dpr = Math.min(typeof window === "undefined" ? 1 : window.devicePixelRatio || 1, 2);
+    // Only the pixel buffer is sized here; the element scales to its container (see `style` below).
     canvas.width = Math.round(width * dpr);
     canvas.height = Math.round(height * dpr);
-    canvas.style.width = `${width}px`;
-    canvas.style.height = `${height}px`;
 
     const paint = () => {
       if (!preview) {
@@ -64,7 +61,7 @@ export function CommunityMapCanvasPreview({
         width,
         height,
         dpr,
-        backgroundImage: getSchematicBoardBackground(),
+        backgroundImage: getSchematicBoardBackgroundImage(),
         presentation,
         showSpawnKeepMarkers,
         simplify,
@@ -72,7 +69,7 @@ export function CommunityMapCanvasPreview({
     };
 
     paint();
-    const background = getSchematicBoardBackground();
+    const background = getSchematicBoardBackgroundImage();
     if (!background || background.complete) return;
     background.addEventListener("load", paint);
     background.addEventListener("error", paint);
@@ -86,20 +83,12 @@ export function CommunityMapCanvasPreview({
     <canvas
       ref={canvasRef}
       className={className}
+      // Fill the card/dialog width; the height follows the CSS aspect-ratio (or the bitmap's ratio).
+      style={{ width: "100%", height: "auto" }}
       title={title}
       aria-hidden={decorative || undefined}
       aria-label={decorative ? undefined : ariaLabel}
       role={decorative ? undefined : "img"}
     />
   );
-}
-
-function getSchematicBoardBackground(): HTMLImageElement | null {
-  if (typeof Image === "undefined") return null;
-  if (!schematicBoardBackground) {
-    schematicBoardBackground = new Image();
-    schematicBoardBackground.decoding = "async";
-    schematicBoardBackground.src = SCHEMATIC_BOARD_BACKGROUND_SOURCE;
-  }
-  return schematicBoardBackground;
 }

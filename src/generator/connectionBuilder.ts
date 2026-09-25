@@ -95,12 +95,14 @@ function buildNonAdjacentDerangement(count: number, rng: RandomSource): number[]
 export function ensurePlayerZonesConnected(playerLetters: string[], zones: Zone[], connections: Connection[], tuning: GenerationTuning, generateRoads: boolean): void {
   if (playerLetters.length < 2) return;
   const names = new Set(connections.map((connection) => connection.name).filter(Boolean));
+  const hasConnection = (letter: string) => connections.some((connection) => connection.from === `Spawn-${letter}` || connection.to === `Spawn-${letter}`);
   for (const letter of playerLetters) {
     const zone = zones.find((candidate) => candidate.name === `Spawn-${letter}`);
     if (!zone) continue;
     if (connections.some((connection) => connection.from === zone.name || connection.to === zone.name)) continue;
+    // Prefer a partner that is already attached to the graph, so two isolated spawns do not pair up into an island.
     const partner = playerLetters.filter((candidate) => candidate !== letter)
-      .sort((a, b) => Number(connections.some((connection) => connection.from === `Spawn-${a}` || connection.to === `Spawn-${a}`)) - Number(connections.some((connection) => connection.from === `Spawn-${b}` || connection.to === `Spawn-${b}`)))[0];
+      .sort((a, b) => Number(hasConnection(b)) - Number(hasConnection(a)))[0];
     if (!partner) continue;
     const pair = zoneSuffixPair(letter, partner);
     const fallbackName = `Fallback-${pair}`;
@@ -114,6 +116,81 @@ export function ensurePlayerZonesConnected(playerLetters: string[], zones: Zone[
       }
     }
   }
+  bridgeDisconnectedComponents(zones, connections, tuning, generateRoads);
+}
+
+// Skipping player-to-player links can still split a ring or chain into separate runs, and random portals can pair
+// spawns off before the fallback above runs. Join any remaining direct/portal components, preferring links that
+// avoid player-to-player routes.
+function bridgeDisconnectedComponents(zones: Zone[], connections: Connection[], tuning: GenerationTuning, generateRoads: boolean): void {
+  const names = new Set(connections.map((connection) => connection.name).filter(Boolean));
+  const indexByName = new Map(zones.map((zone, index) => [zone.name, index]));
+  for (;;) {
+    const components = walkableComponents(zones, connections);
+    if (components.length <= 1) return;
+    let best: { from: Zone; to: Zone; spawnEnds: number; distance: number } | undefined;
+    for (const from of components[0]) {
+      for (const component of components.slice(1)) {
+        for (const to of component) {
+          const spawnEnds = Number(from.name.startsWith("Spawn-")) + Number(to.name.startsWith("Spawn-"));
+          const distance = zoneDistance(from, to, indexByName, zones.length);
+          if (!best || spawnEnds < best.spawnEnds || (spawnEnds === best.spawnEnds && distance < best.distance)) best = { from, to, spawnEnds, distance };
+        }
+      }
+    }
+    if (!best) return;
+    const pair = zoneSuffixPair(zoneSuffix(best.from.name), zoneSuffix(best.to.name));
+    let name = `Bridge-${pair}`;
+    for (let copy = 2; names.has(name); copy++) name = `Bridge-${pair}-${copy}`;
+    names.add(name);
+    connections.push(directConnection(name, best.from.name, best.to.name, best.from.name, 30000, `bridge_guard_${pair}`, tuning));
+    if (generateRoads) {
+      addRoadEndpoint(zones, best.from.name, name);
+      addRoadEndpoint(zones, best.to.name, name);
+    }
+  }
+}
+
+function walkableComponents(zones: Zone[], connections: Connection[]): Zone[][] {
+  const zonesByName = new Map(zones.map((zone) => [zone.name, zone]));
+  const graph = new Map(zones.map((zone) => [zone.name, [] as string[]]));
+  for (const connection of connections) {
+    if (connection.connectionType !== "Direct" && connection.connectionType !== "Portal") continue;
+    graph.get(connection.from)?.push(connection.to);
+    graph.get(connection.to)?.push(connection.from);
+  }
+  const visited = new Set<string>();
+  const components: Zone[][] = [];
+  for (const zone of zones) {
+    if (visited.has(zone.name)) continue;
+    const component: Zone[] = [];
+    const queue = [zone.name];
+    visited.add(zone.name);
+    while (queue.length > 0) {
+      const current = queue.shift()!;
+      component.push(zonesByName.get(current)!);
+      for (const next of graph.get(current) ?? []) {
+        if (visited.has(next) || !zonesByName.has(next)) continue;
+        visited.add(next);
+        queue.push(next);
+      }
+    }
+    components.push(component);
+  }
+  return components;
+}
+
+function zoneDistance(left: Zone, right: Zone, indexByName: Map<string, number>, zoneCount: number): number {
+  if (left.generatorPosition && right.generatorPosition) {
+    return (left.generatorPosition.x - right.generatorPosition.x) ** 2 + (left.generatorPosition.y - right.generatorPosition.y) ** 2;
+  }
+  const gap = Math.abs((indexByName.get(left.name) ?? 0) - (indexByName.get(right.name) ?? 0));
+  return Math.min(gap, zoneCount - gap) / Math.max(1, zoneCount);
+}
+
+function zoneSuffix(zoneName: string): string {
+  const index = zoneName.indexOf("-");
+  return index >= 0 ? zoneName.slice(index + 1) : zoneName;
 }
 
 export function addAlternateNeutralRoutes(playerLetters: string[], orderedLetters: string[], zones: Zone[], connections: Connection[], tuning: GenerationTuning, generateRoads: boolean, maxCount = 8): void {

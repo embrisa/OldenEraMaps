@@ -606,7 +606,7 @@ export function applyContentPreset(settings: GeneratorSettings): GeneratorSettin
 export function normalizeSettings(settings: GeneratorSettings): GeneratorSettings {
   let next = applyGenerationPreset(settings);
   next = applyPacePreset(next);
-  next = applyConnectionStyle(next);
+  if (!next.connectionStyleApplied) next = applyConnectionStyle(next);
   next = applyContentPreset(next);
   if (next.gameEndConditions.victoryCondition === "win_condition_5") {
     next.gameEndConditions.cityHold = true;
